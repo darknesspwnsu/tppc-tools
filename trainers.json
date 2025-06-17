@@ -9,9 +9,9 @@
     {
       "name": "GratzMatt",
       "number": 3476575,
-      "expDay": 12119250,
-      "expNight": 12119250,
-      "level": "10000-10200"
+      "expDay": 13718986,
+      "expNight": 13718986,
+      "level": "10000-1221"
     },
     {
       "name": "TR Gym L7500",
@@ -462,10 +462,18 @@
       "level": "4"
     },
     {
-      "name": "illuzion lv5 MILOTIC ONLY",
-      "number": 24659,
+      "name": "300 XP Gym",
+      "number": 3487664,
+      "expDay": 1800,
+      "expNight": 1800,
+      "level": "5"
+    },
+    {
+      "name": "300 XP Gym SINGLE",
+      "number": 3487664,
       "expDay": 300,
-      "expNight": 300
+      "expNight": 300,
+      "level": "4"
     },
     {
       "name": "1 XP Gym",

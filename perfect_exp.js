@@ -65,7 +65,7 @@ function getPerfectExp(level, ceil = true) {
 
 async function prefetchTable() {
   // Bypass CORS issue with url
-  const url = "https://proxy.cors.sh/https://wiki.tppc.info/Training_Accounts";
+  const url = "https://wiki.tppc.info/Training_Accounts?ass=randomstirng";
   // Make a GET request to the URL and get the response
   return fetch(url, {
     headers: {
@@ -187,7 +187,7 @@ async function main() {
   try {
     table = await prefetchTable();
   } catch (error) {
-    table = await loadTableFromJson();
+    // table = await loadTableFromJson();
   }
   updateTrainerSelectDropdown(table);
 
