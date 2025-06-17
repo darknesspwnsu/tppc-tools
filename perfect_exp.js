@@ -187,7 +187,7 @@ async function main() {
   try {
     table = await prefetchTable();
   } catch (error) {
-    // table = await loadTableFromJson();
+    table = await loadTableFromJson();
   }
   updateTrainerSelectDropdown(table);
 
