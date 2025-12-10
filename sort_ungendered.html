@@ -181,49 +181,20 @@ function compareTuple(a, b) {
 // Fetch helpers (may hit CORS)
 // ===============================
 
-// 1) PokémonDB dex table
+// 1) PokémonDB dex table – now from local JSON built by build_dex_json.py
 async function fetchDexMapping() {
-  // ⚠️ If CORS fails, you can replace this with a local JSON file
-  // e.g. const res = await fetch("pokemon_dex.json");
-  // and store an array of {dex: number, name: string}.
-  const res = await fetch("https://pokemondb.net/pokedex/all");
+  // name_to_dex.json lives alongside index.html in your repo
+  const res = await fetch("name_to_dex.json");
   if (!res.ok) {
-    throw new Error("Failed to fetch pokemondb.net/pokedex/all");
+    throw new Error("Failed to fetch name_to_dex.json");
   }
-  const html = await res.text();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+  const obj = await res.json();
 
-  // PokémonDB's main table usually has class "data-table" or id "pokedex"
-  const table =
-    doc.querySelector("table#pokedex") ||
-    doc.querySelector("table.data-table") ||
-    doc.querySelector("table");
-
-  if (!table) {
-    throw new Error("Could not find Dex table on PokémonDB.");
-  }
-
-  const rows = Array.from(table.querySelectorAll("tbody tr"));
-  const dexToBaseName = {};
-  for (const tr of rows) {
-    const cells = tr.querySelectorAll("td");
-    if (cells.length < 2) continue;
-    const dexStr = cells[0].textContent.trim().replace("#", "");
-    const name = cells[1].textContent.trim();
-    const dex = parseInt(dexStr, 10);
-    if (!Number.isFinite(dex)) continue;
-    if (!(dex in dexToBaseName)) {
-      dexToBaseName[dex] = name;
-    }
-  }
-
+  // Ensure values are numbers
   const nameToDex = {};
-  for (const [dex, baseName] of Object.entries(dexToBaseName)) {
-    const key = canonicalKey(baseName);
-    nameToDex[key] = parseInt(dex, 10);
+  for (const [k, v] of Object.entries(obj)) {
+    nameToDex[k] = Number(v);
   }
-
   return nameToDex;
 }
 
