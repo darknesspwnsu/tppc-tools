@@ -178,10 +178,10 @@ function compareTuple(a, b) {
 }
 
 // ===============================
-// Fetch helpers (may hit CORS)
+// Fetch helpers (local JSON / TXT)
 // ===============================
 
-// 1) PokémonDB dex table – now from local JSON built by build_dex_json.py
+// 1) PokémonDB dex table – from local JSON built by build_dex_json.py
 async function fetchDexMapping() {
   // name_to_dex.json lives alongside index.html in your repo
   const res = await fetch("name_to_dex.json");
@@ -208,43 +208,31 @@ async function fetchEvolutionData() {
   return res.json();
 }
 
-// 3) UE/UG list from tppc.electa.buzz
+// 3) UE/UG list – now from local text file ueug_list.txt
+const UEUG_LIST_PATH = "ueug_list.txt";
+
 async function fetchUEUGSet() {
-  // ⚠️ If CORS fails, you can save this page as ue-ug.html in your repo
-  // and fetch("./ue-ug.html") instead.
-  const UEUG_URL = "https://tppc.electa.buzz/ue-ug";
-  const res = await fetch(UEUG_URL);
+  const res = await fetch(UEUG_LIST_PATH);
   if (!res.ok) {
-    throw new Error("Failed to fetch UE/UG page");
+    throw new Error("Failed to fetch UE/UG list from " + UEUG_LIST_PATH);
   }
-  const html = await res.text();
-  const m = html.match(/<p>(Aipom<br>[\s\S]*?)<\/p>/);
-  if (!m) {
-    throw new Error("Could not find UE/UG <p> block in HTML.");
+
+  const text = await res.text();
+  const lines = text.split(/\r?\n/);
+
+  const names = [];
+  for (const raw of lines) {
+    const name = raw.trim();
+    if (!name) continue; // skip empty lines
+    names.push(name);
   }
-  const block = m[1];
-  const parts = block.split("<br>");
-  const ueugNames = [];
-  for (const part of parts) {
-    const txt = part.trim();
-    if (!txt) continue;
-    const decoded = txt
-      .replace(/&eacute;/g, "é")
-      .replace(/&amp;/g, "&")
-      .replace(/&apos;/g, "'")
-      .replace(/&quot;/g, '"')
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">");
-    ueugNames.push(decoded);
-  }
-  const ueugSet = new Set(ueugNames.map((n) => canonicalKey(n)));
-  return ueugSet;
+
+  // Canonical keys for matching
+  return new Set(names.map((n) => canonicalKey(n)));
 }
 
-// 4) TPPC rarity table
+// 4) TPPC rarity table (still remote; can be frozen later if CORS is an issue)
 async function fetchRarityTable() {
-  // ⚠️ If CORS fails, you can save rarity.html in your repo
-  // and change this to fetch("./rarity.html").
   const res = await fetch("https://www.tppcrpg.net/rarity.html");
   if (!res.ok) {
     throw new Error("Failed to fetch TPPC rarity list.");
@@ -545,8 +533,8 @@ async function runDexSorter({
     return compareTuple(keyA, keyB);
   });
 
-  // Fetch UE/UG list
-  statusEl.textContent = "Fetching UE/UG list...";
+  // Fetch UE/UG list from local txt
+  statusEl.textContent = "Loading UE/UG list...";
   const ueugSet = await fetchUEUGSet();
 
   // Build BBCode output (decorated names)
@@ -768,5 +756,6 @@ backButton.addEventListener("click", () => {
   statusEl.textContent = "";
 });
 </script>
+
 </body>
 </html>
