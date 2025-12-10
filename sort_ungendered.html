@@ -233,11 +233,13 @@ async function fetchUEUGSet() {
 
 // 4) TPPC rarity table (still remote; can be frozen later if CORS is an issue)
 async function fetchRarityTable() {
-  const res = await fetch("https://www.tppcrpg.net/rarity.html");
+  // Now we read the copy that GitHub Actions keeps up to date.
+  const res = await fetch("./rarity.html");
   if (!res.ok) {
-    throw new Error("Failed to fetch TPPC rarity list.");
+    throw new Error("Failed to fetch local rarity.html");
   }
   const html = await res.text();
+
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
@@ -251,12 +253,15 @@ async function fetchRarityTable() {
     throw new Error("No rows in rarity table.");
   }
 
-  // Assume header row then data rows
   const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) =>
     c.textContent.trim()
   );
-  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
-  const idxUng = headerCells.findIndex((h) => h.toLowerCase().startsWith("ungendered"));
+  const idxPokemon = headerCells.findIndex((h) =>
+    h.toLowerCase().startsWith("pok")
+  );
+  const idxUng = headerCells.findIndex((h) =>
+    h.toLowerCase().startsWith("ungendered")
+  );
 
   if (idxPokemon === -1 || idxUng === -1) {
     throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
@@ -274,6 +279,7 @@ async function fetchRarityTable() {
 
   return out;
 }
+
 
 // ===============================
 // Main logic (ported from Python)
