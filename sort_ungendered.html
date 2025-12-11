@@ -371,22 +371,68 @@ async function runDexSorter({
   statusEl.textContent = "Parsing input list...";
   const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
   const rows = [];
-  const lines = inputText.split(/\r?\n/);
 
-  for (const rawLine of lines) {
+  // --- Detect and preprocess compact "(Level: N)" format ---
+  const raw = inputText.trim();
+
+  // Count how many "(Level: N)" patterns we see (with optional commas)
+  const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
+  const lineCount = raw.split(/\r?\n/).length;
+  const isCompact = lineCount < 2 && levelMatches.length >= 2;
+
+  let logicalLines = [];
+
+  if (isCompact) {
+    // Example blob:
+    // "Abra (?) (Level: 9)ShinyAbra (?) (Level: 5)ShinyAbsol (?) (Level: 5)..."
+    statusEl.textContent = "Detected compact '(Level: N)' format, pre-splitting...";
+
+    // Matches: "<name> (?) (Level: <digits/commas>)"
+    const compactEntryRegex = /(.+?\(\?\))\s*\(Level:\s*([\d,]+)\)/gi;
+    let m;
+    while ((m = compactEntryRegex.exec(raw)) !== null) {
+      const name = m[1].trim();    // e.g. "DarkLugia (?)"
+      const lvlRaw = m[2];         // e.g. "3,499" or "12000"
+
+      // Strip commas, parse as int
+      const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+
+      // Re-add commas every thousandth place
+      const lvlFmt = Number.isFinite(lvlInt)
+        ? lvlInt.toLocaleString("en-US")
+        : lvlRaw;
+
+      // Normalize into the same shape as your old lines:
+      //   "DarkLugia (?) 3,499"
+      logicalLines.push(`${name} ${lvlFmt}`);
+    }
+  } else {
+    // Normal multi-line format
+    logicalLines = raw.split(/\r?\n/);
+  }
+
+  // --- Now parse logicalLines like before ---
+  for (const rawLine of logicalLines) {
     const line = rawLine.trimEnd();
     if (!line) continue;
-    // 1) Skip gendered lines: only keep lines that contain "(?)"
+
+    // Skip gendered lines: only keep "(?)"
     if (!line.includes("(?)")) continue;
 
     const m = line.match(nameRegex);
     if (!m) continue;
+
     const fullName = m[1].trim();
     rows.push({
       line,
       full_name: fullName,
     });
   }
+
+  if (rows.length === 0) {
+    throw new Error("No valid Pokémon lines with '(?)' found in input.");
+  }
+
 
   if (rows.length === 0) {
     throw new Error("No valid Pokémon lines with '(?)' found in input.");
