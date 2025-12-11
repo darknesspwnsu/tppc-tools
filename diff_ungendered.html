@@ -73,6 +73,38 @@
 // Same name regex as sorter page
 const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
 
+// Simple color classifier by prefix
+function colorCategory(name) {
+  const n = (name || "").trim().toLowerCase();
+  if (n.startsWith("golden")) return "golden";
+  if (n.startsWith("shiny"))  return "shiny";
+  if (n.startsWith("dark"))   return "dark";
+  return "normal";
+}
+
+// Rank for ordering variants in the output lists
+// Golden (0) < Shiny (1) < Dark (2) < Normal (3)
+function dupVariantRank(name) {
+  const cat = colorCategory(name);
+  if (cat === "golden") return 0;
+  if (cat === "shiny")  return 1;
+  if (cat === "dark")   return 2;
+  return 3;
+}
+
+// Sorter used for BOTH uniques and duplicates
+function sortNamesByVariantThenName(a, b) {
+  const ra = dupVariantRank(a);
+  const rb = dupVariantRank(b);
+  if (ra !== rb) return ra - rb;
+
+  const la = a.toLowerCase();
+  const lb = b.toLowerCase();
+  if (la < lb) return -1;
+  if (la > lb) return 1;
+  return 0;
+}
+
 /**
  * Preprocess input text into an array of entries.
  * - Supports:
@@ -150,7 +182,6 @@ function preprocessEntries(inputText) {
   return entries;
 }
 
-
 /**
  * Given entries array, build:
  * - nameSet: Set of unique full_name
@@ -175,12 +206,15 @@ function buildSets(entries) {
 
 /**
  * Build result text for one box:
- * - unique to this box (vs otherSet)
- * - duplicates within this box (dupSet)
+ * - unique to this box (vs otherSet) → sorted by variant, then name
+ * - duplicates within this box (dupSet) → sorted by variant, then name
  */
 function buildResultText(boxLabel, nameSet, otherSet, dupSet) {
-  const unique = [...nameSet].filter((n) => !otherSet.has(n)).sort();
-  const dups = [...dupSet].sort();
+  const unique = [...nameSet]
+    .filter((n) => !otherSet.has(n))
+    .sort(sortNamesByVariantThenName);
+
+  const dups = [...dupSet].sort(sortNamesByVariantThenName);
 
   const lines = [];
   lines.push(`=== Results for ${boxLabel} ===`);
@@ -265,7 +299,7 @@ runButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness Tools — All rights reserved.
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
 </footer>
 
 <script>
