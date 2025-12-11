@@ -890,4 +890,22 @@ backButton.addEventListener("click", () => {
 
 
 </body>
+
+<footer style="
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+">
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
+</footer>
+
+<script>
+  // Auto-updates the year
+  document.getElementById("copyright-year").textContent =
+    new Date().getFullYear();
+</script>
+
 </html>
