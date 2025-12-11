@@ -372,12 +372,17 @@ async function runDexSorter({
   const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
   const rows = [];
 
-  // --- Detect and preprocess compact "(Level: N)" format ---
-  const raw = inputText.trim();
+  // --- Normalize raw input ---
+  const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
+
+  // Early out if nothing
+  if (!raw) {
+    throw new Error("No input provided.");
+  }
 
   // Count how many "(Level: N)" patterns we see (with optional commas)
   const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
-  const lineCount = raw.split(/\r?\n/).length;
+  const lineCount = raw.split(/\n/).length;
   const isCompact = lineCount < 2 && levelMatches.length >= 2;
 
   let logicalLines = [];
@@ -387,12 +392,15 @@ async function runDexSorter({
     // "Abra (?) (Level: 9)ShinyAbra (?) (Level: 5)ShinyAbsol (?) (Level: 5)..."
     statusEl.textContent = "Detected compact '(Level: N)' format, pre-splitting...";
 
-    // Matches: "<name> (?) (Level: <digits/commas>)"
-    const compactEntryRegex = /(.+?\(\?\))\s*\(Level:\s*([\d,]+)\)/gi;
+    // Stricter compact matcher:
+    //   "<Name (optional form)> (?) (Level: <digits/commas>)"
+    const compactEntryRegex =
+      /([A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))\s*\(Level:\s*([\d,]+)\)/g;
+
     let m;
     while ((m = compactEntryRegex.exec(raw)) !== null) {
-      const name = m[1].trim();    // e.g. "DarkLugia (?)"
-      const lvlRaw = m[2];         // e.g. "3,499" or "12000"
+      const name = m[1].trim();   // e.g. "DarkLugia (?)"
+      const lvlRaw = m[2];        // e.g. "3,499" or "12000"
 
       // Strip commas, parse as int
       const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
@@ -400,7 +408,10 @@ async function runDexSorter({
       // Re-add commas every thousandth place
       const lvlFmt = Number.isFinite(lvlInt)
         ? lvlInt.toLocaleString("en-US")
-        : lvlRaw;
+        : lvlRaw.replace(/\s+/g, "");
+
+      // Extra safety: only keep ungendered "(?)" mons
+      if (!name.includes("(?)")) continue;
 
       // Normalize into the same shape as your old lines:
       //   "DarkLugia (?) 3,499"
@@ -408,13 +419,13 @@ async function runDexSorter({
     }
   } else {
     // Normal multi-line format
-    logicalLines = raw.split(/\r?\n/);
+    logicalLines = raw.split("\n");
   }
 
   // --- Now parse logicalLines like before ---
   for (const rawLine of logicalLines) {
-    const line = rawLine.trimEnd();
-    if (!line) continue;
+    const line = rawLine.trim();
+    if (!line) continue;              // drop blank lines
 
     // Skip gendered lines: only keep "(?)"
     if (!line.includes("(?)")) continue;
@@ -433,10 +444,6 @@ async function runDexSorter({
     throw new Error("No valid Pokémon lines with '(?)' found in input.");
   }
 
-
-  if (rows.length === 0) {
-    throw new Error("No valid Pokémon lines with '(?)' found in input.");
-  }
 
   // Attach species + dex
   const uniqueSpecies = new Set();
