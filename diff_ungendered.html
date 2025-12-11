@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TPPC List Diffchecker</title>
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+    textarea {
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="mb-4">TPPC List Diffchecker</h1>
+
+  <!-- Input row -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="input1" class="form-label">Input Box 1</label>
+      <textarea
+        id="input1"
+        class="form-control"
+        rows="12"
+        placeholder="Paste TPPC list here (multi-line or squished '(Level: N)' format)"
+      ></textarea>
+    </div>
+    <div class="col-md-6">
+      <label for="input2" class="form-label">Input Box 2</label>
+      <textarea
+        id="input2"
+        class="form-control"
+        rows="12"
+        placeholder="Paste TPPC list here (multi-line or squished '(Level: N)' format)"
+      ></textarea>
+    </div>
+  </div>
+
+  <button id="runButton" class="btn btn-primary">
+    Compare Lists
+  </button>
+  <span id="status" class="ms-3 small text-muted"></span>
+
+  <!-- Output row -->
+  <div id="output-section" class="row mt-4 d-none">
+    <div class="col-md-6">
+      <label for="output1" class="form-label">Results for Box 1</label>
+      <textarea id="output1" class="form-control" rows="16" readonly></textarea>
+    </div>
+    <div class="col-md-6">
+      <label for="output2" class="form-label">Results for Box 2</label>
+      <textarea id="output2" class="form-control" rows="16" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===============================
+// Shared utility: preprocessing
+// ===============================
+
+// Same name regex as sorter page
+const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
+
+/**
+ * Preprocess input text into an array of entries.
+ * - Supports:
+ *   * Multi-line format: one Pokémon per line.
+ *   * Compact squished format: "... (?) (Level: N)..."
+ * - Keeps only lines with "(?)" (ungendered).
+ * - Returns array of { full_name, line }.
+ *   full_name includes the "(?)" bit, no level.
+ */
+function preprocessEntries(inputText) {
+  const raw = inputText.trim();
+  if (!raw) return [];
+
+  // Detect compact "(Level: N)" format:
+  //   - very few newlines
+  //   - 2+ occurrences of "(Level: N)"
+  const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
+  const lineCount = raw.split(/\r?\n/).length;
+  const isCompact = lineCount < 2 && levelMatches.length >= 2;
+
+  let logicalLines = [];
+
+  if (isCompact) {
+    // Example:
+    // "Abra (?) (Level: 9)ShinyAbra (?) (Level: 5)..."
+    const compactEntryRegex = /(.+?\(\?\))\s*\(Level:\s*([\d,]+)\)/gi;
+    let m;
+    while ((m = compactEntryRegex.exec(raw)) !== null) {
+      const name = m[1].trim();   // "DarkLugia (?)"
+      const lvlRaw = m[2];        // "3,499" or "12000"
+
+      // Parse / normalize level, though we don't output it in diff
+      const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+      const lvlFmt = Number.isFinite(lvlInt)
+        ? lvlInt.toLocaleString("en-US")
+        : lvlRaw;
+
+      if (!name.includes("(?)")) {
+        continue; // skip gendered
+      }
+
+      // Normalized line (if we ever want it): "DarkLugia (?) 3,499"
+      const line = `${name} ${lvlFmt}`;
+
+      logicalLines.push(line);
+    }
+  } else {
+    // Normal multi-line list
+    logicalLines = raw.split(/\r?\n/);
+  }
+
+  const entries = [];
+
+  for (const rawLine of logicalLines) {
+    const line = rawLine.trimEnd();
+    if (!line) continue;
+
+    // Only keep ungendered "(?)" lines
+    if (!line.includes("(?)")) continue;
+
+    const m = line.match(nameRegex);
+    if (!m) continue;
+
+    const fullName = m[1].trim(); // e.g. "DarkSquirtle (?)"
+    entries.push({
+      full_name: fullName,
+      line: line,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Given entries array, build:
+ * - nameSet: Set of unique full_name
+ * - dupSet:  Set of full_name that appear 2+ times
+ */
+function buildSets(entries) {
+  const counts = new Map();
+  for (const e of entries) {
+    const key = e.full_name; // ignore level for diff and duplicates
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+
+  const nameSet = new Set(counts.keys());
+  const dupSet = new Set(
+    [...counts.entries()]
+      .filter(([_, c]) => c > 1)
+      .map(([name]) => name)
+  );
+
+  return { nameSet, dupSet };
+}
+
+/**
+ * Build result text for one box:
+ * - unique to this box (vs otherSet)
+ * - duplicates within this box (dupSet)
+ */
+function buildResultText(boxLabel, nameSet, otherSet, dupSet) {
+  const unique = [...nameSet].filter((n) => !otherSet.has(n)).sort();
+  const dups = [...dupSet].sort();
+
+  const lines = [];
+  lines.push(`=== Results for ${boxLabel} ===`);
+  lines.push("");
+
+  lines.push("=== Unique to this box (compared to the other) ===");
+  if (unique.length === 0) {
+    lines.push("None");
+  } else {
+    for (const name of unique) {
+      lines.push(name);
+    }
+  }
+
+  lines.push("");
+  lines.push("=== Duplicates within this box (ignoring level) ===");
+  if (dups.length === 0) {
+    lines.push("None");
+  } else {
+    for (const name of dups) {
+      lines.push(name);
+    }
+  }
+
+  return lines.join("\n");
+}
+
+// ===============================
+// UI wiring
+// ===============================
+
+const input1El = document.getElementById("input1");
+const input2El = document.getElementById("input2");
+const output1El = document.getElementById("output1");
+const output2El = document.getElementById("output2");
+const statusEl = document.getElementById("status");
+const runButton = document.getElementById("runButton");
+const outputSection = document.getElementById("output-section");
+
+runButton.addEventListener("click", () => {
+  const text1 = input1El.value.trim();
+  const text2 = input2El.value.trim();
+
+  if (!text1 && !text2) {
+    statusEl.textContent = "Please paste a list into at least one box.";
+    return;
+  }
+
+  statusEl.textContent = "Parsing & comparing...";
+  runButton.disabled = true;
+
+  try {
+    const entries1 = preprocessEntries(text1);
+    const entries2 = preprocessEntries(text2);
+
+    const { nameSet: set1, dupSet: dup1 } = buildSets(entries1);
+    const { nameSet: set2, dupSet: dup2 } = buildSets(entries2);
+
+    const result1 = buildResultText("Box 1", set1, set2, dup1);
+    const result2 = buildResultText("Box 2", set2, set1, dup2);
+
+    output1El.value = result1;
+    output2El.value = result2;
+
+    outputSection.classList.remove("d-none");
+    statusEl.textContent = "Done.";
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Error: " + err.message;
+  } finally {
+    runButton.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
