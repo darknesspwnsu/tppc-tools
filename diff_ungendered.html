@@ -80,63 +80,67 @@ const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
  *   * Compact squished format: "... (?) (Level: N)..."
  * - Keeps only lines with "(?)" (ungendered).
  * - Returns array of { full_name, line }.
- *   full_name includes the "(?)" bit, no level.
+ *   full_name includes the "(?)" bit, no money.
  */
 function preprocessEntries(inputText) {
-  const raw = inputText.trim();
+  const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
   if (!raw) return [];
-
-  // Detect compact "(Level: N)" format:
-  //   - very few newlines
-  //   - 2+ occurrences of "(Level: N)"
-  const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
-  const lineCount = raw.split(/\r?\n/).length;
-  const isCompact = lineCount < 2 && levelMatches.length >= 2;
-
-  let logicalLines = [];
-
-  if (isCompact) {
-    // Example:
-    // "Abra (?) (Level: 9)ShinyAbra (?) (Level: 5)..."
-    const compactEntryRegex = /(.+?\(\?\))\s*\(Level:\s*([\d,]+)\)/gi;
-    let m;
-    while ((m = compactEntryRegex.exec(raw)) !== null) {
-      const name = m[1].trim();   // "DarkLugia (?)"
-      const lvlRaw = m[2];        // "3,499" or "12000"
-
-      // Parse / normalize level, though we don't output it in diff
-      const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
-      const lvlFmt = Number.isFinite(lvlInt)
-        ? lvlInt.toLocaleString("en-US")
-        : lvlRaw;
-
-      if (!name.includes("(?)")) {
-        continue; // skip gendered
-      }
-
-      // Normalized line (if we ever want it): "DarkLugia (?) 3,499"
-      const line = `${name} ${lvlFmt}`;
-
-      logicalLines.push(line);
-    }
-  } else {
-    // Normal multi-line list
-    logicalLines = raw.split(/\r?\n/);
-  }
 
   const entries = [];
 
+  // --- 1) Try compact "(Level: N)" parsing over the entire text ---
+  // Example segment:
+  //   "DarkLugia (?) (Level: 3,499)"
+  const compactEntryRegex =
+    /([A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))\s*\(Level:\s*([\d,]+)\)/g;
+
+  let hadCompactMatch = false;
+  let m;
+  while ((m = compactEntryRegex.exec(raw)) !== null) {
+    hadCompactMatch = true;
+
+    const name = m[1].trim();      // e.g. "DarkLugia (?)"
+    const lvlRaw = m[2];           // e.g. "3,499" or "12000"
+
+    // Normalize level number (add commas if 4+ digits)
+    const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+    const lvlFmt = Number.isFinite(lvlInt)
+      ? lvlInt.toLocaleString("en-US")
+      : lvlRaw.replace(/\s+/g, "");
+
+    // Only keep ungendered "(?)" mons
+    if (!name.includes("(?)")) {
+      continue;
+    }
+
+    // Normalized line if we ever want to show it: "DarkLugia (?) 3,499"
+    const line = `${name} ${lvlFmt}`;
+
+    entries.push({
+      full_name: name,
+      line: line,
+    });
+  }
+
+  // If we found at least one compact match, we assume the whole blob
+  // is in that format and we're done.
+  if (hadCompactMatch) {
+    return entries;
+  }
+
+  // --- 2) Fallback: normal multi-line / clipboard list ---
+  const logicalLines = raw.split("\n");
+
   for (const rawLine of logicalLines) {
-    const line = rawLine.trimEnd();
-    if (!line) continue;
+    const line = rawLine.trim();
+    if (!line) continue;               // remove blank lines
+    if (!line.includes("(?)")) continue; // skip gendered mons
 
-    // Only keep ungendered "(?)" lines
-    if (!line.includes("(?)")) continue;
+    const m2 = line.match(nameRegex);
+    if (!m2) continue;
 
-    const m = line.match(nameRegex);
-    if (!m) continue;
+    const fullName = m2[1].trim();     // e.g. "DarkSquirtle (?)"
 
-    const fullName = m[1].trim(); // e.g. "DarkSquirtle (?)"
     entries.push({
       full_name: fullName,
       line: line,
@@ -145,6 +149,7 @@ function preprocessEntries(inputText) {
 
   return entries;
 }
+
 
 /**
  * Given entries array, build:
