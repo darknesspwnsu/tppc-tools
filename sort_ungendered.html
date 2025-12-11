@@ -68,6 +68,48 @@
         </div>
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-md-3 mb-3 mb-md-0">
+        <label for="colorGolden" class="form-label">Golden color</label>
+        <input
+          type="text"
+          class="form-control"
+          id="colorGolden"
+          value="gold"
+          placeholder='e.g. gold or #FFD700'
+        />
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <label for="colorShiny" class="form-label">Shiny color</label>
+        <input
+          type="text"
+          class="form-control"
+          id="colorShiny"
+          value="magenta"
+          placeholder='e.g. magenta or #FF00FF'
+        />
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <label for="colorDark" class="form-label">Dark color</label>
+        <input
+          type="text"
+          class="form-control"
+          id="colorDark"
+          value="blue"
+          placeholder='e.g. blue or #0000FF'
+        />
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <label for="colorNormal" class="form-label">Normal color</label>
+        <input
+          type="text"
+          class="form-control"
+          id="colorNormal"
+          value=""
+          placeholder='leave blank = no color'
+        />
+      </div>
+    </div>
 
     <button id="runButton" class="btn btn-primary">
       Generate BBCode & Stats
@@ -82,12 +124,18 @@
     <p class="text-muted">
       Copy this text to your TPPC forum post / notes.
     </p>
-    <textarea id="outputText" class="form-control" rows="25"></textarea>
+
+    <label for="outputText" class="form-label">Summary + Sorted BBCode</label>
+    <textarea id="outputText" class="form-control mb-3" rows="20"></textarea>
+
+    <label for="outputMissing" class="form-label mt-3">Missing list (per variant)</label>
+    <textarea id="outputMissing" class="form-control" rows="12"></textarea>
 
     <button id="backButton" class="btn btn-secondary mt-3">
       Back to input
     </button>
   </div>
+
 </div>
 
 <script>
@@ -177,19 +225,18 @@ function compareTuple(a, b) {
 }
 
 // ===============================
-// Fetch helpers (local JSON / TXT)
+// Fetch helpers
+// (Assuming name_to_dex.json, pokemon_evolution.json, ueug_list.txt,
+//  and a rarity proxy or frozen rarity file are set up as earlier.)
 // ===============================
 
-// 1) PokémonDB dex table – from local JSON built by build_dex_json.py
+// 1) PokémonDB dex table – from local JSON
 async function fetchDexMapping() {
-  // name_to_dex.json lives alongside index.html in your repo
   const res = await fetch("name_to_dex.json");
   if (!res.ok) {
     throw new Error("Failed to fetch name_to_dex.json");
   }
   const obj = await res.json();
-
-  // Ensure values are numbers
   const nameToDex = {};
   for (const [k, v] of Object.entries(obj)) {
     nameToDex[k] = Number(v);
@@ -197,9 +244,8 @@ async function fetchDexMapping() {
   return nameToDex;
 }
 
-// 2) Evolution JSON (local file in your repo)
+// 2) Evolution JSON (local)
 async function fetchEvolutionData() {
-  // Put pokemon_evolution.json in the same folder as this index.html
   const res = await fetch("pokemon_evolution.json");
   if (!res.ok) {
     throw new Error("Failed to fetch pokemon_evolution.json");
@@ -207,38 +253,33 @@ async function fetchEvolutionData() {
   return res.json();
 }
 
-// 3) UE/UG list – now from local text file ueug_list.txt
-const UEUG_LIST_PATH = "ueug_list.txt";
-
+// 3) UE/UG list from local text file (one name per line)
 async function fetchUEUGSet() {
-  const res = await fetch(UEUG_LIST_PATH);
+  // ueug_list.txt should be UTF-8 text, one Pokémon name (with form) per line.
+  const res = await fetch("ueug_list.txt");
   if (!res.ok) {
-    throw new Error("Failed to fetch UE/UG list from " + UEUG_LIST_PATH);
+    throw new Error("Failed to fetch ueug_list.txt");
   }
-
   const text = await res.text();
   const lines = text.split(/\r?\n/);
-
-  const names = [];
-  for (const raw of lines) {
-    const name = raw.trim();
-    if (!name) continue; // skip empty lines
-    names.push(name);
+  const ueugNames = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    ueugNames.push(trimmed);
   }
-
-  // Canonical keys for matching
-  return new Set(names.map((n) => canonicalKey(n)));
+  const ueugSet = new Set(ueugNames.map((n) => canonicalKey(n)));
+  return ueugSet;
 }
 
-// 4) TPPC rarity table (still remote; can be frozen later if CORS is an issue)
+// 4) TPPC rarity table (from your proxy / static mirror)
+// If you're using a Cloudflare Worker / proxy, replace this URL accordingly.
 async function fetchRarityTable() {
-  // Now we read the copy that GitHub Actions keeps up to date.
-  const res = await fetch("./rarity.html");
+  const res = await fetch("rarity-proxy.html"); // or your proxied URL
   if (!res.ok) {
-    throw new Error("Failed to fetch local rarity.html");
+    throw new Error("Failed to fetch TPPC rarity list.");
   }
   const html = await res.text();
-
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
@@ -255,12 +296,8 @@ async function fetchRarityTable() {
   const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) =>
     c.textContent.trim()
   );
-  const idxPokemon = headerCells.findIndex((h) =>
-    h.toLowerCase().startsWith("pok")
-  );
-  const idxUng = headerCells.findIndex((h) =>
-    h.toLowerCase().startsWith("ungendered")
-  );
+  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
+  const idxUng = headerCells.findIndex((h) => h.toLowerCase().startsWith("ungendered"));
 
   if (idxPokemon === -1 || idxUng === -1) {
     throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
@@ -279,7 +316,6 @@ async function fetchRarityTable() {
   return out;
 }
 
-
 // ===============================
 // Main logic (ported from Python)
 // ===============================
@@ -289,6 +325,7 @@ async function runDexSorter({
   minUngendered,
   maxMissing,
   includeGolds,
+  colors,
   statusEl,
 }) {
   statusEl.textContent = "Fetching Dex mapping...";
@@ -300,7 +337,6 @@ async function runDexSorter({
   const evolutionsMap = evoData["evolutions"];
 
   statusEl.textContent = "Building evolution graph...";
-  // Build graph, children, parents, evo_depth
   const graph = new Map();    // undirected adjacency
   const children = new Map(); // base -> set of evolutions
   const parents = new Map();  // evolution -> set of bases
@@ -321,11 +357,9 @@ async function runDexSorter({
       const evoName = evo["pokemon_name"];
       const evoKey = canonicalKey(evoName);
 
-      // Undirected
       ensureSet(graph, baseKey).add(evoKey);
       ensureSet(graph, evoKey).add(baseKey);
 
-      // Directed
       ensureSet(children, baseKey).add(evoKey);
       ensureSet(parents, evoKey).add(baseKey);
     }
@@ -335,7 +369,6 @@ async function runDexSorter({
   }
 
   statusEl.textContent = "Parsing input list...";
-  // Parse user input lines
   const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
   const rows = [];
   const lines = inputText.split(/\r?\n/);
@@ -343,6 +376,9 @@ async function runDexSorter({
   for (const rawLine of lines) {
     const line = rawLine.trimEnd();
     if (!line) continue;
+    // 1) Skip gendered lines: only keep lines that contain "(?)"
+    if (!line.includes("(?)")) continue;
+
     const m = line.match(nameRegex);
     if (!m) continue;
     const fullName = m[1].trim();
@@ -353,7 +389,7 @@ async function runDexSorter({
   }
 
   if (rows.length === 0) {
-    throw new Error("No valid Pokémon lines found in input.");
+    throw new Error("No valid Pokémon lines with '(?)' found in input.");
   }
 
   // Attach species + dex
@@ -380,7 +416,6 @@ async function runDexSorter({
   }
 
   statusEl.textContent = "Computing evo families & depths...";
-  // Build set of species keys that appear in user's list
   const rowSpeciesKeys = new Set();
   for (const r of rows) {
     const k = canonicalKey(r.species);
@@ -390,15 +425,12 @@ async function runDexSorter({
     }
   }
 
-  // Family anchor (min dex within user's subset)
   const familyAnchor = {}; // canonical_key -> family_id
   const visited = new Set();
 
-  const graphKeys = Array.from(graph.keys());
   for (const start of rowSpeciesKeys) {
     if (visited.has(start)) continue;
 
-    // DFS / BFS to find component
     const stack = [start];
     const component = new Set();
 
@@ -538,29 +570,35 @@ async function runDexSorter({
     return compareTuple(keyA, keyB);
   });
 
-  // Fetch UE/UG list from local txt
-  statusEl.textContent = "Loading UE/UG list...";
+  // Fetch UE/UG list
+  statusEl.textContent = "Fetching UE/UG list...";
   const ueugSet = await fetchUEUGSet();
 
-  // Build BBCode output (decorated names)
+  // Build BBCode output (decorated names), with configurable colors
   function decorateName(fullName) {
     const cat = colorCategory(fullName);
     const baseForUeug = stripPrefixes(fullName);
     const key = canonicalKey(baseForUeug);
     const isUeugNormal = cat === "normal" && ueugSet.has(key);
 
+    const wrapColor = (color, text) =>
+      color && color.trim().length > 0
+        ? `[color="${color.trim()}"]${text}[/color]`
+        : text;
+
     if (cat === "dark") {
-      return `[color="blue"]${fullName}[/color]`;
+      return wrapColor(colors.dark, fullName);
     } else if (cat === "shiny") {
-      return `[color="magenta"]${fullName}[/color]`;
+      return wrapColor(colors.shiny, fullName);
     } else if (cat === "golden") {
-      return `[color="gold"]${fullName}[/color]`;
+      return wrapColor(colors.golden, fullName);
     } else {
+      // normal
+      let name = fullName;
       if (isUeugNormal) {
-        return `[B]${fullName}[/B]`;
-      } else {
-        return fullName;
+        name = `[B]${name}[/B]`;
       }
+      return wrapColor(colors.normal, name);
     }
   }
 
@@ -597,7 +635,7 @@ async function runDexSorter({
 
   const finalSortedOutput = linesOut.join("\n");
 
-  // Summary stats (Unowns counted once)
+  // Summary stats (Unowns counted only once)
   statusEl.textContent = "Computing summary stats...";
   const shinyKeys = new Set();
   const darkKeys = new Set();
@@ -639,7 +677,7 @@ async function runDexSorter({
 
   const bbcodeBlock = ["[code]", finalSortedOutput, "[/code]"].join("\n");
 
-  // Missing Ungendered
+  // Missing Ungendered (per variant)
   statusEl.textContent = "Fetching rarity & computing missing list...";
   const rarityRows = await fetchRarityTable();
 
@@ -651,61 +689,80 @@ async function runDexSorter({
     .filter((row) => row.ungendered > minUngendered)
     .sort((a, b) => b.ungendered - a.ungendered);
 
-  const missingAll = [];
+  const missingByVariant = {
+    golden: [],
+    shiny: [],
+    dark: [],
+    normal: [],
+  };
+
   for (const row of candidates) {
     const pokeName = row.pokemon;
-    if (!includeGolds && isGoldenName(pokeName)) {
+    const cat = colorCategory(pokeName);
+
+    if (!includeGolds && cat === "golden") {
       continue;
     }
-    const key = canonicalKey(pokeName); // keep Shiny/Dark/Golden/forms distinct
+
+    const key = canonicalKey(pokeName);
     if (!haveKeys.has(key)) {
-      missingAll.push({ name: pokeName, u: row.ungendered });
+      missingByVariant[cat].push({ name: pokeName, u: row.ungendered });
     }
   }
 
-  const totalMissing = missingAll.length;
-  let missingToShow;
-  let shownStr;
-  if (maxMissing && maxMissing > 0) {
-    missingToShow = missingAll.slice(0, maxMissing);
-    shownStr = `up to ${maxMissing} shown`;
-  } else {
-    missingToShow = missingAll;
-    shownStr = "all shown";
+  // Apply maxMissing per variant
+  function sliceVariant(list) {
+    if (maxMissing && maxMissing > 0) {
+      return list.slice(0, maxMissing);
+    }
+    return list;
   }
 
   const missingLines = [];
-  missingLines.push("");
   missingLines.push(
-    `=== Missing Ungendered > ${minUngendered} (${shownStr}) ===`
+    `=== Missing Ungendered > ${minUngendered} (per variant; ${
+      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per variant" : "all shown"
+    }) ===`
   );
   if (includeGolds) {
-    missingLines.push(
-      `Total missing (Ungendered > ${minUngendered}, including Goldens): ${totalMissing}`
-    );
+    missingLines.push("Goldens are included (see Golden section).");
   } else {
-    missingLines.push(
-      `Total missing (Ungendered > ${minUngendered}, excluding Goldens): ${totalMissing}`
-    );
+    missingLines.push("Goldens are excluded from this missing list.");
   }
 
-  if (missingToShow.length === 0) {
-    missingLines.push("You have all of them.");
-  } else {
-    for (const { name, u } of missingToShow) {
-      missingLines.push(`${name}: Ungendered = ${u}`);
+  function emitVariant(label, variantKey, showOnlyIfGoldFlag = false) {
+    const all = missingByVariant[variantKey];
+    if (showOnlyIfGoldFlag && !includeGolds) return;
+    if (!all || all.length === 0) return;
+
+    const shown = sliceVariant(all);
+
+    missingLines.push("");
+    missingLines.push(`--- ${label} ---`);
+    missingLines.push(`Total missing ${label.toLowerCase()}: ${all.length}`);
+
+    if (shown.length === 0) {
+      missingLines.push("You have all of them.");
+    } else {
+      for (const { name, u } of shown) {
+        missingLines.push(`${name}: Ungendered = ${u}`);
+      }
     }
   }
 
-  statusEl.textContent = "Done.";
-  const finalText =
-    summaryLines.join("\n") +
-    "\n" +
-    bbcodeBlock +
-    "\n" +
-    missingLines.join("\n");
+  // Print in order: Golden, Shiny, Dark, Normal
+  emitVariant("Golden", "golden", true);
+  emitVariant("Shiny", "shiny");
+  emitVariant("Dark", "dark");
+  emitVariant("Normal", "normal");
 
-  return finalText;
+  statusEl.textContent = "Done.";
+
+  const mainText =
+    summaryLines.join("\n") + "\n" + bbcodeBlock;
+  const missingText = missingLines.join("\n");
+
+  return { mainText, missingText };
 }
 
 // ===============================
@@ -719,9 +776,16 @@ const inputView = document.getElementById("input-view");
 const outputView = document.getElementById("output-view");
 const inputListEl = document.getElementById("inputList");
 const outputTextEl = document.getElementById("outputText");
+const outputMissingEl = document.getElementById("outputMissing");
 const minUngEl = document.getElementById("minUngendered");
 const maxMissEl = document.getElementById("maxMissing");
 const includeGoldsEl = document.getElementById("includeGolds");
+
+// New color inputs
+const colorGoldenEl = document.getElementById("colorGolden");
+const colorShinyEl = document.getElementById("colorShiny");
+const colorDarkEl = document.getElementById("colorDark");
+const colorNormalEl = document.getElementById("colorNormal");
 
 runButton.addEventListener("click", async () => {
   const inputText = inputListEl.value.trim();
@@ -734,17 +798,26 @@ runButton.addEventListener("click", async () => {
   const maxMissing = parseInt(maxMissEl.value, 10);
   const includeGolds = includeGoldsEl.checked;
 
+  const colors = {
+    golden: colorGoldenEl.value || "",
+    shiny: colorShinyEl.value || "",
+    dark: colorDarkEl.value || "",
+    normal: colorNormalEl.value || "",
+  };
+
   runButton.disabled = true;
   statusEl.textContent = "Running sorter...";
   try {
-    const result = await runDexSorter({
+    const { mainText, missingText } = await runDexSorter({
       inputText,
       minUngendered: Number.isFinite(minUngendered) ? minUngendered : 10,
       maxMissing: Number.isFinite(maxMissing) ? maxMissing : 20,
       includeGolds,
+      colors,
       statusEl,
     });
-    outputTextEl.value = result;
+    outputTextEl.value = mainText;
+    outputMissingEl.value = missingText;
     inputView.classList.add("d-none");
     outputView.classList.remove("d-none");
   } catch (err) {
@@ -761,6 +834,7 @@ backButton.addEventListener("click", () => {
   statusEl.textContent = "";
 });
 </script>
+
 
 </body>
 </html>
