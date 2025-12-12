@@ -45,16 +45,16 @@ ShinyMagnemite  5  $630"></textarea>
 
     <div class="row mb-3">
       <div class="col-md-4 mb-3 mb-md-0">
-        <label for="minUngendered" class="form-label">Min Ungendered (rarity)</label>
+        <label for="minRarity" class="form-label">Min Rarity to check</label>
         <input
           type="number"
           class="form-control"
-          id="minUngendered"
+          id="minRarity"
           value="10"
           min="0"
         />
         <div class="form-text">
-          Only show missing with Ungendered &gt; this value.
+          Only show missing with Rarity &gt; this value.
         </div>
       </div>
       <div class="col-md-4 mb-3 mb-md-0">
@@ -331,7 +331,7 @@ function parseInputList(inputText) {
 
 async function runRainbowDexChecklist({
   inputText,
-  minUngendered,
+  minRarity,
   maxMissing,
   includeGolds,
   statusEl,
@@ -531,7 +531,7 @@ async function runRainbowDexChecklist({
     const overall = row.overall || 0;
 
     // Re-using your existing input as a threshold, but it now means "min overall rarity"
-    if (overall <= minUngendered) continue;
+    if (overall <= minRarity) continue;
 
     // Gender-agnostic: rarity names have no gender, input keys are based on variantName only
     const key = canonicalKey(name);
@@ -547,7 +547,7 @@ async function runRainbowDexChecklist({
 
   const extrasLines = [];
   extrasLines.push(
-    `=== Missing (overall rarity > ${minUngendered}) per variant; ${
+    `=== Missing (overall rarity > ${minRarity}) per variant; ${
       maxMissing && maxMissing > 0
         ? "up to " + maxMissing + " shown per variant"
         : "all shown"
@@ -620,7 +620,7 @@ const outputView = document.getElementById("output-view");
 const inputListEl = document.getElementById("inputList");
 const outputChecklistEl = document.getElementById("outputChecklist");
 const outputExtrasEl = document.getElementById("outputExtras");
-const minUngEl = document.getElementById("minUngendered");
+const minRarityEl = document.getElementById("minRarity");
 const maxMissEl = document.getElementById("maxMissing");
 const includeGoldsEl = document.getElementById("includeGolds");
 
@@ -631,7 +631,7 @@ runButton.addEventListener("click", async () => {
     return;
   }
 
-  const minUngendered = parseInt(minUngEl.value, 10);
+  const minRarity = parseInt(minRarityEl.value, 10);
   const maxMissing = parseInt(maxMissEl.value, 10);
   const includeGolds = includeGoldsEl.checked;
 
@@ -640,7 +640,7 @@ runButton.addEventListener("click", async () => {
   try {
     const { checklistText, extrasText } = await runRainbowDexChecklist({
       inputText,
-      minUngendered: Number.isFinite(minUngendered) ? minUngendered : 10,
+      minRarity: Number.isFinite(minRarity) ? minRarity : 10,
       maxMissing: Number.isFinite(maxMissing) ? maxMissing : 20,
       includeGolds,
       statusEl,
