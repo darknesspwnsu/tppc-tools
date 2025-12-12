@@ -114,6 +114,32 @@ ShinyMagnemite  5  $630"></textarea>
 // Utility helpers
 // ===============================
 
+const GEN_BREAKPOINTS = [
+  { gen: 1, start: 1,   label: "Generation 1" },
+  { gen: 2, start: 152, label: "Generation 2" },
+  { gen: 3, start: 252, label: "Generation 3" },
+  { gen: 4, start: 387, label: "Generation 4" },
+  { gen: 5, start: 494, label: "Generation 5" },
+  { gen: 6, start: 650, label: "Generation 6" },
+  { gen: 7, start: 722, label: "Generation 7" },
+  { gen: 8, start: 810, label: "Generation 8" },
+  { gen: 9, start: 906, label: "Generation 9" },
+];
+
+function genForDex(dex) {
+  // dex may be 9999 for unknowns; treat as Gen 9 bucket at end
+  let current = GEN_BREAKPOINTS[0];
+  for (const bp of GEN_BREAKPOINTS) {
+    if (dex >= bp.start) current = bp;
+    else break;
+  }
+  return current.gen;
+}
+
+function genTitle(genNum) {
+  return `[b][color="red"][size="5"]Generation ${genNum}[/size][/color][/b]`;
+}
+
 function stripPrefixes(name) {
   // Remove color prefixes (Shiny/Dark/Golden) for species/sorting/rarity matching.
   return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
@@ -184,37 +210,41 @@ async function fetchRarityTable() {
   const doc = parser.parseFromString(html, "text/html");
 
   const table = doc.querySelector("table");
-  if (!table) {
-    throw new Error("Could not find rarity table.");
-  }
+  if (!table) throw new Error("Could not find rarity table.");
 
   const rows = Array.from(table.querySelectorAll("tr"));
-  if (rows.length < 2) {
-    throw new Error("No rows in rarity table.");
-  }
+  if (rows.length < 2) throw new Error("No rows in rarity table.");
 
   const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) =>
     c.textContent.trim()
   );
-  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
-  const idxUng = headerCells.findIndex((h) => h.toLowerCase().startsWith("ungendered"));
 
-  if (idxPokemon === -1 || idxUng === -1) {
-    throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
+  const idxPokemon = headerCells.findIndex((h) =>
+    h.toLowerCase().startsWith("pok")
+  );
+  if (idxPokemon === -1) {
+    throw new Error("Could not locate Pokémon column in rarity table.");
   }
+
+  // Overall rarity is the LAST column on the right (per your requirement)
+  const idxOverall = headerCells.length - 1;
 
   const out = [];
   for (let i = 1; i < rows.length; i++) {
     const cells = Array.from(rows[i].querySelectorAll("td"));
-    if (cells.length <= Math.max(idxPokemon, idxUng)) continue;
+    if (cells.length <= Math.max(idxPokemon, idxOverall)) continue;
+
     const pokemon = cells[idxPokemon].textContent.trim();
-    const ungStr = cells[idxUng].textContent.replace(/,/g, "").trim();
-    const ung = parseInt(ungStr, 10) || 0;
-    out.push({ pokemon, ungendered: ung });
+
+    const overallStr = cells[idxOverall].textContent.replace(/,/g, "").trim();
+    const overall = parseInt(overallStr, 10) || 0;
+
+    out.push({ pokemon, overall });
   }
 
   return out;
 }
+
 
 // ===============================
 // Parsing input list
@@ -413,10 +443,14 @@ async function runRainbowDexChecklist({
 
   statusEl.textContent = "Formatting checklist...";
 
-  const checklistLines = [];
+  const blocksByGen = new Map(); // gen -> array of lines
+
   const dexList = Array.from(dexMap.keys()).sort((a, b) => a - b);
 
   for (const dex of dexList) {
+    const g = genForDex(dex);
+    if (!blocksByGen.has(g)) blocksByGen.set(g, []);
+
     const formMap = dexMap.get(dex);
     const formRecords = Array.from(formMap.values()).sort((a, b) =>
       a.baseFormLabel.localeCompare(b.baseFormLabel)
@@ -424,24 +458,35 @@ async function runRainbowDexChecklist({
 
     for (const rec of formRecords) {
       const dexStr =
-        dex >= 0 && dex < 1000
-          ? dex.toString().padStart(3, "0")
-          : String(dex);
+        dex >= 0 && dex < 1000 ? dex.toString().padStart(3, "0") : String(dex);
       const dexLabel = `[B][color="red"]#${dexStr}[/color][/b]`;
 
       const normalCell = renderCell(rec.variants.normal);
-      const shinyCell = renderCell(rec.variants.shiny);
-      const darkCell = renderCell(rec.variants.dark);
+      const shinyCell  = renderCell(rec.variants.shiny);
+      const darkCell   = renderCell(rec.variants.dark);
       const goldenCell = renderCell(rec.variants.golden);
 
-      const cells = [normalCell, shinyCell, darkCell, goldenCell];
-
-      const rowLine = `${dexLabel} - ${cells.join(" | ")}`.trimEnd();
-      checklistLines.push(rowLine);
+      const rowLine = `${dexLabel} - ${[normalCell, shinyCell, darkCell, goldenCell].join(" | ")}`.trimEnd();
+      blocksByGen.get(g).push(rowLine);
     }
   }
 
-  const checklistText = ["[code]", ...checklistLines, "[/code]"].join("\n");
+  // Emit in gen order
+  const checklistParts = [];
+  for (const bp of GEN_BREAKPOINTS) {
+    const genNum = bp.gen;
+    const lines = blocksByGen.get(genNum) || [];
+    if (lines.length === 0) continue;
+
+    checklistParts.push(genTitle(genNum));
+    checklistParts.push("[code]");
+    checklistParts.push(...lines);
+    checklistParts.push("[/code]");
+    checklistParts.push(""); // spacer line between gens
+  }
+
+  const checklistText = checklistParts.join("\n").trim();
+
 
   // ===============================
   // High-rarity missing list + dupes
@@ -449,6 +494,7 @@ async function runRainbowDexChecklist({
 
   statusEl.textContent = "Computing high-rarity missing list...";
 
+  // NOTE: fetchRarityTable() now returns { pokemon, overall }
   const missingByVariant = {
     normal: [],
     shiny: [],
@@ -463,43 +509,43 @@ async function runRainbowDexChecklist({
     const cat = colorCategory(name);
     if (!includeGolds && cat === "golden") continue;
 
-    const u = row.ungendered || 0;
-    if (u <= minUngendered) continue;
+    const overall = row.overall || 0;
 
+    // Re-using your existing input as a threshold, but it now means "min overall rarity"
+    if (overall <= minUngendered) continue;
+
+    // Gender-agnostic: rarity names have no gender, input keys are based on variantName only
     const key = canonicalKey(name);
-    if (inputByKey.has(key)) continue; // you have it (at least one copy)
+    if (inputByKey.has(key)) continue;
 
-    missingByVariant[cat].push({ name, u });
+    missingByVariant[cat].push({ name, overall });
   }
 
   function sliceVariantList(list) {
-    if (maxMissing && maxMissing > 0) {
-      return list.slice(0, maxMissing);
-    }
+    if (maxMissing && maxMissing > 0) return list.slice(0, maxMissing);
     return list;
   }
 
   const extrasLines = [];
   extrasLines.push(
-    `=== Missing Ungendered > ${minUngendered} (per variant; ${
+    `=== Missing (overall rarity > ${minUngendered}) per variant; ${
       maxMissing && maxMissing > 0
         ? "up to " + maxMissing + " shown per variant"
         : "all shown"
-    }) ===`
+    } ===`
   );
-  if (includeGolds) {
-    extrasLines.push("Goldens are included in the missing list.");
-  } else {
-    extrasLines.push("Goldens are excluded from the missing list.");
-  }
+  extrasLines.push(includeGolds
+    ? "Goldens are included in the missing list."
+    : "Goldens are excluded from the missing list."
+  );
 
   function emitMissingVariant(label, catKey) {
     const all = missingByVariant[catKey];
     if (!all || all.length === 0) return;
 
-    // Sort desc by ungendered, then by name
+    // Sort desc by overall rarity, then by name
     all.sort((a, b) => {
-      if (b.u !== a.u) return b.u - a.u;
+      if (b.overall !== a.overall) return b.overall - a.overall;
       return a.name.localeCompare(b.name);
     });
 
@@ -512,8 +558,8 @@ async function runRainbowDexChecklist({
     if (shown.length === 0) {
       extrasLines.push("You have all of them in this range.");
     } else {
-      for (const { name, u } of shown) {
-        extrasLines.push(`${name}: Ungendered = ${u}`);
+      for (const { name, overall } of shown) {
+        extrasLines.push(`${name}: Rarity = ${overall.toLocaleString("en-US")}`);
       }
     }
   }
