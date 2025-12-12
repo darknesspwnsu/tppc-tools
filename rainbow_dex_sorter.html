@@ -141,7 +141,9 @@ function genTitle(genNum) {
 }
 
 function stripPrefixes(name) {
-  // Remove color prefixes (Shiny/Dark/Golden) for species/sorting/rarity matching.
+  // Special-case Darkrai: do NOT strip "Dark"
+  if (/^darkrai\b/i.test(name)) return name.trim();
+
   return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
 }
 
@@ -153,23 +155,41 @@ function speciesFromFullName(fullName) {
 }
 
 function canonicalKey(name) {
-  // Normalize accents, casing, symbols, and collapse Unown variants to "unown"
-  let norm = name.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
-  norm = norm.replace("♀", "F").replace("♂", "M");
-  norm = norm.toLowerCase();
+  let norm = name.normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace("♀", "F")
+    .replace("♂", "M")
+    .toLowerCase();
+
+  // Darkrai must remain darkrai
+  if (norm.startsWith("darkrai")) return "darkrai";
+
   const stripped = norm.replace(/[^a-z0-9]/g, "");
+
   if (stripped.startsWith("unown") && stripped.length > "unown".length) {
     return "unown";
   }
   return stripped;
 }
 
+
 function colorCategory(name) {
-  const n = name.trim().toLowerCase();
-  if (n.startsWith("golden")) return "golden";
-  if (n.startsWith("shiny")) return "shiny";
-  if (n.startsWith("dark")) return "dark";
+  const n = name.trim();
+
+  // --- Special case: Darkrai is NOT a Dark variant ---
+  // Allow ShinyDarkrai / DarkDarkrai / GoldenDarkrai to still work
+  if (/^darkrai\b/i.test(n)) return "normal";
+  if (/^shinydarkrai\b/i.test(n)) return "shiny";
+  if (/^darkdarkrai\b/i.test(n)) return "dark";
+  if (/^goldendarkrai\b/i.test(n)) return "golden";
+
+  const lower = n.toLowerCase();
+  if (lower.startsWith("golden")) return "golden";
+  if (lower.startsWith("shiny")) return "shiny";
+  if (lower.startsWith("dark")) return "dark";
   return "normal";
+}
+
 }
 
 // For sorting by color group (Gold, Shiny, Dark, Normal)
