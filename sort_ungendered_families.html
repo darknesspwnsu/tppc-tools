@@ -1071,7 +1071,7 @@ async function runDexSorter({
       missingLines.push("You have all of them.");
     } else {
       for (const { name, u } of shown) {
-        missingLines.push(`${name}: Ungendered = ${u}`);
+        missingLines.push(`${name} (?) (${u}ig)`);
       }
     }
   }
