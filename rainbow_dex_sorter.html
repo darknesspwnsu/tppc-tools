@@ -127,7 +127,6 @@ const GEN_BREAKPOINTS = [
 ];
 
 function genForDex(dex) {
-  // dex may be 9999 for unknowns; treat as Gen 9 bucket at end
   let current = GEN_BREAKPOINTS[0];
   for (const bp of GEN_BREAKPOINTS) {
     if (dex >= bp.start) current = bp;
@@ -137,13 +136,13 @@ function genForDex(dex) {
 }
 
 function genTitle(genNum) {
-  return `[b][u][size="5"]Generation ${genNum}[/size][/u][/b]`;
+  // Per your requirement
+  return `[b][color="red"][size="5"]Generation ${genNum}[/size][/color][/b]`;
 }
 
 function stripPrefixes(name) {
   // Special-case Darkrai: do NOT strip "Dark"
   if (/^darkrai\b/i.test(name)) return name.trim();
-
   return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
 }
 
@@ -154,24 +153,30 @@ function speciesFromFullName(fullName) {
   return base;
 }
 
-function canonicalKey(name) {
+// ---------- KEY FIX: split canonical keys ----------
+// Use *EXACT* keys for checklist identity, missing, dupes, presence checks.
+// Use *DEX* keys only for name_to_dex lookup (collapses Unown variants).
+
+function canonicalKeyExact(name) {
   let norm = name.normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace("♀", "F")
     .replace("♂", "M")
     .toLowerCase();
 
-  // Darkrai must remain darkrai
+  // Keep Darkrai stable
   if (norm.startsWith("darkrai")) return "darkrai";
 
-  const stripped = norm.replace(/[^a-z0-9]/g, "");
-
-  if (stripped.startsWith("unown") && stripped.length > "unown".length) {
-    return "unown";
-  }
-  return stripped;
+  // Keep Unown variants distinct; allow ! and ?
+  return norm.replace(/[^a-z0-9!?]/g, "");
 }
 
+function canonicalKeyDex(name) {
+  // Collapse Unown variants ONLY for dex lookup
+  const exact = canonicalKeyExact(name);
+  if (exact.startsWith("unown") && exact.length > "unown".length) return "unown";
+  return exact;
+}
 
 function colorCategory(name) {
   const n = name.trim();
@@ -190,40 +195,32 @@ function colorCategory(name) {
   return "normal";
 }
 
-
 // For sorting by color group (Gold, Shiny, Dark, Normal)
 function colorOrderIndex(name) {
   const cat = colorCategory(name);
   if (cat === "golden") return 0;
   if (cat === "shiny") return 1;
   if (cat === "dark") return 2;
-  return 3; // normal
+  return 3;
 }
 
 // ===============================
 // Fetch helpers
 // ===============================
 
-// 1) Dex mapping from local JSON
 async function fetchDexMapping() {
   const res = await fetch("name_to_dex.json");
-  if (!res.ok) {
-    throw new Error("Failed to fetch name_to_dex.json");
-  }
+  if (!res.ok) throw new Error("Failed to fetch name_to_dex.json");
   const obj = await res.json();
   const nameToDex = {};
-  for (const [k, v] of Object.entries(obj)) {
-    nameToDex[k] = Number(v);
-  }
+  for (const [k, v] of Object.entries(obj)) nameToDex[k] = Number(v);
   return nameToDex;
 }
 
-// 2) TPPC rarity table (local mirror or proxy)
 async function fetchRarityTable() {
   const res = await fetch("rarity.html");
-  if (!res.ok) {
-    throw new Error("Failed to fetch TPPC rarity list.");
-  }
+  if (!res.ok) throw new Error("Failed to fetch TPPC rarity list.");
+
   const html = await res.text();
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
@@ -238,14 +235,10 @@ async function fetchRarityTable() {
     c.textContent.trim()
   );
 
-  const idxPokemon = headerCells.findIndex((h) =>
-    h.toLowerCase().startsWith("pok")
-  );
-  if (idxPokemon === -1) {
-    throw new Error("Could not locate Pokémon column in rarity table.");
-  }
+  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
+  if (idxPokemon === -1) throw new Error("Could not locate Pokémon column in rarity table.");
 
-  // Overall rarity is the LAST column on the right (per your requirement)
+  // Overall rarity is the LAST column
   const idxOverall = headerCells.length - 1;
 
   const out = [];
@@ -254,7 +247,6 @@ async function fetchRarityTable() {
     if (cells.length <= Math.max(idxPokemon, idxOverall)) continue;
 
     const pokemon = cells[idxPokemon].textContent.trim();
-
     const overallStr = cells[idxOverall].textContent.replace(/,/g, "").trim();
     const overall = parseInt(overallStr, 10) || 0;
 
@@ -264,62 +256,35 @@ async function fetchRarityTable() {
   return out;
 }
 
-
 // ===============================
 // Parsing input list
 // ===============================
 
-/**
- * Parse rainbow list lines.
- * Accepts:
- *   - Any gender: ♂ / ♀ / (?)
- *   - Genderless
- *   - Level with or without commas
- * Example lines:
- *   ShinyAbomasnow ♂ 5 $630
- *   GoldenMagnemite    5    $630
- *   Exeggutor (Alola) (?) 100 $5,054,785
- *
- * Returns array of:
- *   { variantName, gender, levelInt, levelStr }
- */
 function parseInputList(inputText) {
   const rows = [];
   const rawLines = (inputText || "").replace(/\r\n/g, "\n").split("\n");
 
-  // Capture:
-  //  group1: full variant name (with color + form, no gender)
-  //  group2: optional gender symbol ♂ / ♀
-  //  group3: level (digits+commas)
-  const lineRegex =
-    /^(.+?)(?:\s+([♂♀])|\s+\(\?\))?\s+([\d,]+)\b/;
+  // group1: variant name (with color + form)
+  // group2: optional gender symbol ♂ / ♀
+  // group3: level (digits+commas)
+  const lineRegex = /^(.+?)(?:\s+([♂♀])|\s+\(\?\))?\s+([\d,]+)\b/;
 
   for (const rawLine of rawLines) {
     const line = rawLine.trim();
-    if (!line) continue; // skip blanks
+    if (!line) continue;
 
     const m = line.match(lineRegex);
     if (!m) continue;
 
     let variantName = m[1].trim();
     let gender = m[2] || "";
-    if (!gender && /\(\?\)/.test(line)) {
-      gender = "(?)";
-    }
+    if (!gender && /\(\?\)/.test(line)) gender = "(?)";
 
     const lvlRaw = m[3];
     const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
-    const levelStr = Number.isFinite(lvlInt)
-      ? lvlInt.toLocaleString("en-US")
-      : lvlRaw.replace(/\s+/g, "");
+    const levelStr = Number.isFinite(lvlInt) ? lvlInt.toLocaleString("en-US") : lvlRaw.replace(/\s+/g, "");
 
-    rows.push({
-      line,
-      variantName,
-      gender,
-      levelInt: lvlInt,
-      levelStr,
-    });
+    rows.push({ line, variantName, gender, levelInt: lvlInt, levelStr });
   }
 
   return rows;
@@ -329,13 +294,7 @@ function parseInputList(inputText) {
 // Main logic
 // ===============================
 
-async function runRainbowDexChecklist({
-  inputText,
-  minRarity,
-  maxMissing,
-  includeGolds,
-  statusEl,
-}) {
+async function runRainbowDexChecklist({ inputText, minRarity, maxMissing, includeGolds, statusEl }) {
   statusEl.textContent = "Parsing input list...";
   const parsedRows = parseInputList(inputText);
 
@@ -345,12 +304,12 @@ async function runRainbowDexChecklist({
 
   statusEl.textContent = "Building best-entry map + duplicates...";
 
-  // Build best entry per variant + duplicates (ignoring gender/level)
-  const inputByKey = new Map(); // canonical variant key -> best row (by level)
-  const countsByKey = new Map(); // canonical variant key -> count
+  // IMPORTANT: Use EXACT keys (do not collapse Unown variants)
+  const inputByKey = new Map();    // exact variant key -> best row by level
+  const countsByKey = new Map();   // exact variant key -> count
 
   for (const r of parsedRows) {
-    const key = canonicalKey(r.variantName);
+    const key = canonicalKeyExact(r.variantName);
     countsByKey.set(key, (countsByKey.get(key) || 0) + 1);
 
     const existing = inputByKey.get(key);
@@ -359,9 +318,7 @@ async function runRainbowDexChecklist({
     } else {
       const newL = Number.isFinite(r.levelInt) ? r.levelInt : -1;
       const oldL = Number.isFinite(existing.levelInt) ? existing.levelInt : -1;
-      if (newL > oldL) {
-        inputByKey.set(key, r);
-      }
+      if (newL > oldL) inputByKey.set(key, r);
     }
   }
 
@@ -372,7 +329,6 @@ async function runRainbowDexChecklist({
       duplicates.push(bestRow.variantName);
     }
   }
-  // Sort dupes by color group then name
   duplicates.sort((a, b) => {
     const oa = colorOrderIndex(a);
     const ob = colorOrderIndex(b);
@@ -387,83 +343,73 @@ async function runRainbowDexChecklist({
   const rarityRows = await fetchRarityTable();
 
   statusEl.textContent = "Building dex -> form checklist...";
-
-  // Build dex -> baseFormKey -> record
-  // record = { dex, baseFormLabel, variants: { normal, shiny, dark, golden } }
-  const dexMap = new Map();
+  const dexMap = new Map(); // dex -> (baseFormKeyExact -> record)
 
   for (const row of rarityRows) {
     const rarityName = row.pokemon;
     if (!rarityName) continue;
 
-    const cat = colorCategory(rarityName); // normal/shiny/dark/golden
+    const cat = colorCategory(rarityName);
 
-    const baseSpecies = speciesFromFullName(rarityName); // for dex lookup
-    const speciesKeyForDex = canonicalKey(baseSpecies);
+    const baseSpecies = speciesFromFullName(rarityName);
+    const speciesKeyForDex = canonicalKeyDex(baseSpecies);
     const dex = nameToDex[speciesKeyForDex] ?? 9999;
 
-    const baseFormLabel = stripPrefixes(rarityName); // "Bulbasaur", "Exeggutor (Alola)"
-    const baseFormKey = canonicalKey(baseFormLabel);
+    const baseFormLabel = stripPrefixes(rarityName); // keeps UnownA distinct, etc.
+    const baseFormKey = canonicalKeyExact(baseFormLabel); // IMPORTANT: exact (no Unown collapse)
 
-    if (!dexMap.has(dex)) {
-      dexMap.set(dex, new Map());
-    }
+    if (!dexMap.has(dex)) dexMap.set(dex, new Map());
     const formMap = dexMap.get(dex);
+
     if (!formMap.has(baseFormKey)) {
       formMap.set(baseFormKey, {
         dex,
         baseFormLabel,
-        variants: {
-          normal: null,
-          shiny: null,
-          dark: null,
-          golden: null,
-        },
+        variants: { normal: null, shiny: null, dark: null, golden: null },
       });
     }
+
     const rec = formMap.get(baseFormKey);
 
-    // Save the rarity variant we saw for this color category
+    // Store this variant (exists in rarity) and its overall rarity
     if (!rec.variants[cat]) {
       rec.variants[cat] = {
         rarityName,
-        ungendered: row.ungendered,
+        overall: row.overall || 0,
       };
     }
   }
 
-  // Helper to render a cell for a given variant record
+  // Dex completion counters (counts only variants that exist in rarity table)
+  let totalSlots = 0;
+  let filledSlots = 0;
+
   function renderCell(variantInfo) {
-    if (!variantInfo) {
-      // Variant does not exist at all in rarity (e.g., no Golden form).
-      return "";
-    }
+    if (!variantInfo) return ""; // variant does not exist at all in rarity
 
     const rarityName = variantInfo.rarityName;
-    const key = canonicalKey(rarityName);
-    const present = inputByKey.get(key);
+    const keyExact = canonicalKeyExact(rarityName);
+
+    totalSlots += 1;
+    const present = inputByKey.get(keyExact);
+    if (present) filledSlots += 1;
 
     if (present) {
-      // Have it: magenta, show variantName + gender + level
+      // Have it: magenta, show variantName + optional gender + level
       let txt = present.variantName;
-      if (present.gender && present.levelStr) {
-        txt = `${present.variantName} ${present.gender} ${present.levelStr}`;
-      } else if (present.gender) {
-        txt = `${present.variantName} ${present.gender}`;
-      } else if (present.levelStr) {
-        txt = `${present.variantName} ${present.levelStr}`;
-      }
+      if (present.gender && present.levelStr) txt = `${present.variantName} ${present.gender} ${present.levelStr}`;
+      else if (present.gender) txt = `${present.variantName} ${present.gender}`;
+      else if (present.levelStr) txt = `${present.variantName} ${present.levelStr}`;
       return `[color="magenta"]${txt}[/color]`;
-    } else {
-      // Missing: slategray, show canonical rarity name only
-      return `[color="slategray"]${rarityName}[/color]`;
     }
+
+    // Missing: slategray, show rarityName only (no gender/level)
+    return `[color="slategray"]${rarityName}[/color]`;
   }
 
   statusEl.textContent = "Formatting checklist...";
 
-  const blocksByGen = new Map(); // gen -> array of lines
-
+  const blocksByGen = new Map();
   const dexList = Array.from(dexMap.keys()).sort((a, b) => a - b);
 
   for (const dex of dexList) {
@@ -476,8 +422,7 @@ async function runRainbowDexChecklist({
     );
 
     for (const rec of formRecords) {
-      const dexStr =
-        dex >= 0 && dex < 1000 ? dex.toString().padStart(3, "0") : String(dex);
+      const dexStr = dex >= 0 && dex < 1000 ? dex.toString().padStart(3, "0") : String(dex);
       const dexLabel = `[B][color="red"]#${dexStr}[/color][/b]`;
 
       const normalCell = renderCell(rec.variants.normal);
@@ -490,8 +435,14 @@ async function runRainbowDexChecklist({
     }
   }
 
+  const pct = totalSlots > 0 ? (filledSlots / totalSlots) * 100 : 0;
+  const pctStr = (Math.round(pct * 100) / 100).toFixed(2); // 2 decimals
+
   // Emit in gen order
   const checklistParts = [];
+  checklistParts.push(`Dex Completion: ${pctStr}%`);
+  checklistParts.push(""); // spacer
+
   for (const bp of GEN_BREAKPOINTS) {
     const genNum = bp.gen;
     const lines = blocksByGen.get(genNum) || [];
@@ -501,11 +452,10 @@ async function runRainbowDexChecklist({
     checklistParts.push("[code]");
     checklistParts.push(...lines);
     checklistParts.push("[/code]");
-    checklistParts.push(""); // spacer line between gens
+    checklistParts.push("");
   }
 
   const checklistText = checklistParts.join("\n").trim();
-
 
   // ===============================
   // High-rarity missing list + dupes
@@ -513,13 +463,7 @@ async function runRainbowDexChecklist({
 
   statusEl.textContent = "Computing high-rarity missing list...";
 
-  // NOTE: fetchRarityTable() now returns { pokemon, overall }
-  const missingByVariant = {
-    normal: [],
-    shiny: [],
-    dark: [],
-    golden: [],
-  };
+  const missingByVariant = { normal: [], shiny: [], dark: [], golden: [] };
 
   for (const row of rarityRows) {
     const name = row.pokemon;
@@ -529,13 +473,11 @@ async function runRainbowDexChecklist({
     if (!includeGolds && cat === "golden") continue;
 
     const overall = row.overall || 0;
-
-    // Re-using your existing input as a threshold, but it now means "min overall rarity"
     if (overall <= minRarity) continue;
 
-    // Gender-agnostic: rarity names have no gender, input keys are based on variantName only
-    const key = canonicalKey(name);
-    if (inputByKey.has(key)) continue;
+    // Gender-agnostic + Unown-safe: use EXACT key
+    const keyExact = canonicalKeyExact(name);
+    if (inputByKey.has(keyExact)) continue;
 
     missingByVariant[cat].push({ name, overall });
   }
@@ -548,9 +490,7 @@ async function runRainbowDexChecklist({
   const extrasLines = [];
   extrasLines.push(
     `=== Missing (overall rarity > ${minRarity}) per variant; ${
-      maxMissing && maxMissing > 0
-        ? "up to " + maxMissing + " shown per variant"
-        : "all shown"
+      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per variant" : "all shown"
     } ===`
   );
   extrasLines.push(includeGolds
@@ -562,7 +502,6 @@ async function runRainbowDexChecklist({
     const all = missingByVariant[catKey];
     if (!all || all.length === 0) return;
 
-    // Sort desc by overall rarity, then by name
     all.sort((a, b) => {
       if (b.overall !== a.overall) return b.overall - a.overall;
       return a.name.localeCompare(b.name);
@@ -591,16 +530,9 @@ async function runRainbowDexChecklist({
 
   // Duplicates
   extrasLines.push("");
-  extrasLines.push(
-    "=== Duplicates in input (ignoring gender and level, aggregated by mon) ==="
-  );
-  if (duplicates.length === 0) {
-    extrasLines.push("None");
-  } else {
-    for (const name of duplicates) {
-      extrasLines.push(name);
-    }
-  }
+  extrasLines.push("=== Duplicates in input (ignoring gender and level, aggregated by mon) ===");
+  if (duplicates.length === 0) extrasLines.push("None");
+  else for (const name of duplicates) extrasLines.push(name);
 
   const extrasText = extrasLines.join("\n");
 
@@ -663,6 +595,7 @@ backButton.addEventListener("click", () => {
   statusEl.textContent = "";
 });
 </script>
+
 
 <footer style="
   margin-top: 3rem;
