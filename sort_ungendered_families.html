@@ -1084,6 +1084,9 @@ async function runDexSorter({
 
   statusEl.textContent = "Done.";
 
+  const familiesBbcodeBlock = ["[code]", familiesSortedOutput, "[/code]"].join("\n");
+  const singlesBbcodeBlock  = ["[code]", singlesSortedOutput,  "[/code]"].join("\n");
+
   let familiesBlockOut = familiesBbcodeBlock;
   let singlesBlockOut = singlesBbcodeBlock;
 
@@ -1101,8 +1104,6 @@ async function runDexSorter({
     summaryLines.join("\n") + "\n" + familiesBlockOut;
 
   const secondaryText = partitionOutput ? singlesBlockOut : "";
-
-  const missingText = missingLines.join("\n");
 
   return { mainText, missingText, secondaryText };
 }
@@ -1237,7 +1238,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.8
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.8.1
 </footer>
 
 <script>
