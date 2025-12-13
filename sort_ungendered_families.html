@@ -921,7 +921,7 @@ async function runDexSorter({
     // NEW: bold levels 4 / 5
     if (remainder) remainder = boldLowLevels(remainder);
 
-    return remainder ? `${decorated} ${remainder}` : decorated;
+    return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
   }
 
   // Group existing rows by family
