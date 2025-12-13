@@ -114,8 +114,9 @@
       </div>
     </div>
 
+    <!-- FIXED GRID: 4 options in one row (col-md-3 each) -->
     <div class="row mb-3">
-      <div class="col-md-4 mb-2 mb-md-0">
+      <div class="col-md-3 mb-2 mb-md-0">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="showLevelLabel" />
           <label class="form-check-label" for="showLevelLabel">
@@ -124,7 +125,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-2 mb-md-0">
+      <div class="col-md-3 mb-2 mb-md-0">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="dropDuplicates" checked />
           <label class="form-check-label" for="dropDuplicates">
@@ -133,8 +134,7 @@
         </div>
       </div>
 
-      <!-- NEW: highlight rarity -->
-      <div class="col-md-4">
+      <div class="col-md-3 mb-2 mb-md-0">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="highlightRarity" checked />
           <label class="form-check-label" for="highlightRarity">
@@ -143,11 +143,11 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="omitSummaryStats" />
           <label class="form-check-label" for="omitSummaryStats">
-            OMIT SUMMARY STATS
+            Omit summary stats
           </label>
         </div>
       </div>
@@ -290,8 +290,9 @@ function parseLeadingLevelFromRemainder(remainder) {
   return Number.isFinite(n) ? { levelNum: n, levelStr: s } : { levelNum: null, levelStr: s };
 }
 
+// Return raw text; caller decides how to wrap (color/strike nesting matters)
 function decorateMissingInline(text) {
-  return `[color="red"]${text}[/color]`;
+  return text;
 }
 
 function isVariantFiltered(cat, flags) {
@@ -674,7 +675,7 @@ async function runDexSorter({
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
-  // --- NEW: rarity lookup + base-evolution resolver + base-variant rarity (for strike + highlight) ---
+  // --- Rarity lookup + base-evolution resolver + (FORM-AWARE) rarity for highlight/strike ---
   const rarityByKey = new Map(); // canonicalKey(pokemonName) -> ungendered count
   for (const rr of rarityRowsAll) {
     rarityByKey.set(canonicalKey(rr.pokemon), rr.ungendered);
@@ -717,16 +718,18 @@ async function runDexSorter({
 
   // Find rarity of "base form", but if base form variant doesn't exist (0),
   // use the youngest stage (from base->children) where it DOES exist.
-  const baseRarityMemo = new Map(); // key: `${prefix}|${speciesKey}` -> number
-  function baseVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName) {
-    const memoKey = `${variantPrefix}|${speciesKey}`;
+  // FORM-AWARE: if form is "Alola", we look up "GoldenVulpix (Alola)" etc.
+  const baseRarityMemo = new Map(); // key: `${prefix}|${form}|${speciesKey}` -> number
+  function baseVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName, form) {
+    const memoKey = `${variantPrefix}|${(form || "").toLowerCase()}|${speciesKey}`;
     if (baseRarityMemo.has(memoKey)) return baseRarityMemo.get(memoKey);
 
     const baseKey = baseEvolutionKey(speciesKey);
 
     function rarityForSpeciesKey(sk) {
       const sName = speciesDisplayByKey[sk] ?? fallbackSpeciesName;
-      const lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+      let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+      if (form) lookup += ` (${form})`;
       return rarityByKey.get(canonicalKey(lookup)) ?? 0;
     }
 
@@ -764,15 +767,17 @@ async function runDexSorter({
     return 0;
   }
 
-  function rarityForVariantAtSpeciesKey(speciesKey, variantPrefix, fallbackSpeciesName) {
+  function rarityForVariantAtSpeciesKey(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     const sName = speciesDisplayByKey[speciesKey] ?? fallbackSpeciesName;
-    const lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+    let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+    if (form) lookup += ` (${form})`;
     return rarityByKey.get(canonicalKey(lookup)) ?? 0;
   }
 
   // cumulative rarity = rarity(species) + rarity(all pre-evos in chain)
   // If a pre-evo variant doesn't exist (rarity 0), it contributes 0.
-  function cumulativeVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName) {
+  // FORM-AWARE: if current is "(Alola)", we keep "(Alola)" for all lookups so we DON'T pull in non-form pre-evos.
+  function cumulativeVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     let total = 0;
     let cur = speciesKey;
 
@@ -783,7 +788,7 @@ async function runDexSorter({
       if (seen.has(cur)) break;
       seen.add(cur);
 
-      total += rarityForVariantAtSpeciesKey(cur, variantPrefix, fallbackSpeciesName);
+      total += rarityForVariantAtSpeciesKey(cur, variantPrefix, fallbackSpeciesName, form);
 
       const pset = parents.get(cur);
       if (!pset || pset.size === 0) break;
@@ -802,11 +807,11 @@ async function runDexSorter({
     return total;
   }
 
-
   function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
     const prefix = variantPrefixFromName(missingFullName);
     const sk = canonicalKey(missingSpecies);
-    const r = baseVariantRarityForSpecies(sk, prefix, missingSpecies);
+    const form = extractForm(missingFullName);
+    const r = baseVariantRarityForSpecies(sk, prefix, missingSpecies, form);
     return r > 0 && r <= 10;
   }
 
@@ -820,8 +825,7 @@ async function runDexSorter({
     }
     return bbcodeText;
   }
-
-  // --- END NEW BLOCK ---
+  // --- END Rarity block ---
 
   // Species present in rarity list at all (respecting variant filters)
   const raritySpeciesKeysPresent = new Set();
@@ -905,10 +909,11 @@ async function runDexSorter({
     const afterName = origLine.slice(m[0].length).trim();
     const decorated = decorateName(r.full_name);
 
-    // NEW: rarity highlight applies to NAME portion only
+    // rarity highlight applies to NAME portion only (FORM-AWARE)
     const sk = canonicalKey(r.species);
     const prefix = variantPrefixFromName(r.full_name);
-    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species);
+    const form = extractForm(r.full_name);
+    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species, form);
     const decoratedSized = wrapRaritySizeIfNeeded(decorated, cumR);
 
     let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
@@ -918,7 +923,7 @@ async function runDexSorter({
     let remainder = restParts.join(" ");
     if (showLevelLabel && remainder) remainder = applyLevelLabelToRemainder(remainder);
 
-    // NEW: bold levels 4 / 5
+    // bold levels 4 / 5
     if (remainder) remainder = boldLowLevels(remainder);
 
     return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
@@ -989,7 +994,6 @@ async function runDexSorter({
       const species = speciesFromFullName(miss.name);
       const dex = nameToDex[canonicalKey(species)] ?? 9999;
 
-      // IMPORTANT: full_name includes "(?)" so existing & missing use the same form parsing
       items.push({
         kind: "missing",
         full_name: `${miss.name} (?)`,
@@ -1002,16 +1006,14 @@ async function runDexSorter({
     items.sort(cmpItems);
 
     for (const it of items) {
-      if (it.kind === "have") target.push(formatExistingRow(it.row));
-      else {
-        // Build missing inline line: red + optional rarity size + optional strike
-        let out = decorateMissingInline(it.display);
-
+      if (it.kind === "have") {
+        target.push(formatExistingRow(it.row));
+      } else {
         // IMPORTANT: do NOT apply rarity size highlights to inline missing items
-
-        if (shouldStrikeInlineMissing(it.full_name, it.species)) {
-          out = `[color="red"][s]${out}[/s][/color]`;
-        }
+        const raw = decorateMissingInline(it.display);
+        const out = shouldStrikeInlineMissing(it.full_name, it.species)
+          ? `[color="red"][s]${raw}[/s][/color]`
+          : `[color="red"]${raw}[/color]`;
         target.push(out);
       }
     }
@@ -1163,11 +1165,11 @@ const filterDarksEl = document.getElementById("filterDarks");
 const missingOnlyFamilyNeededEl = document.getElementById("missingOnlyFamilyNeeded");
 const addMissingInlineEl = document.getElementById("addMissingInline");
 const noGroupSpacingEl = document.getElementById("noGroupSpacing");
-const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
 const showLevelLabelEl = document.getElementById("showLevelLabel");
 const dropDuplicatesEl = document.getElementById("dropDuplicates");
-const highlightRarityEl = document.getElementById("highlightRarity"); // NEW
+const highlightRarityEl = document.getElementById("highlightRarity");
+const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
@@ -1266,7 +1268,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v7.1
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v7.3
 </footer>
 
 <script>
