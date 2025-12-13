@@ -1105,6 +1105,8 @@ async function runDexSorter({
 
   const secondaryText = partitionOutput ? singlesBlockOut : "";
 
+  const missingText = missingLines.join("\n");
+
   return { mainText, missingText, secondaryText };
 }
 
@@ -1238,7 +1240,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.8.1
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.8.2
 </footer>
 
 <script>
