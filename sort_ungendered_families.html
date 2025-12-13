@@ -629,6 +629,62 @@ async function runDexSorter({
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
+  // --- NEW: rarity lookup + base-evolution resolver (for inline missing strike-through) ---
+  const rarityByKey = new Map(); // canonicalKey(pokemonName) -> ungendered count
+  for (const rr of rarityRowsAll) {
+    rarityByKey.set(canonicalKey(rr.pokemon), rr.ungendered);
+  }
+
+  // canonical species key -> a nice display name (from evo json), fallback handled later
+  const speciesDisplayByKey = {};
+  for (const nm of Object.values(pokemonNameMap)) {
+    const k = canonicalKey(nm);
+    if (!(k in speciesDisplayByKey)) speciesDisplayByKey[k] = nm;
+  }
+
+  // Walk "parents" to find the base evolution species key.
+  // If multiple parents exist, pick the one with the lowest dex (stable tie-break).
+  function baseEvolutionKey(speciesKey) {
+    let cur = speciesKey;
+    while (true) {
+      const pset = parents.get(cur);
+      if (!pset || pset.size === 0) break;
+
+      let best = null;
+      let bestDex = Infinity;
+      for (const p of pset) {
+        const d = nameToDex[p] ?? 9999;
+        if (d < bestDex) { bestDex = d; best = p; }
+      }
+      if (!best) break;
+      cur = best;
+    }
+    return cur;
+  }
+
+  function variantPrefixFromName(fullName) {
+    const cat = colorCategory(fullName);
+    if (cat === "golden") return "Golden";
+    if (cat === "shiny") return "Shiny";
+    if (cat === "dark") return "Dark";
+    return ""; // normal
+  }
+
+  function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
+    // missingFullName is like "ShinyNidorina (?)"
+    const prefix = variantPrefixFromName(missingFullName); // "Shiny" / "Dark" / "Golden" / ""
+    const sk = canonicalKey(missingSpecies);
+    const baseKey = baseEvolutionKey(sk);
+    const baseSpeciesName = speciesDisplayByKey[baseKey] ?? missingSpecies;
+
+    const lookupName = prefix ? `${prefix}${baseSpeciesName}` : baseSpeciesName;
+    const baseRarity = rarityByKey.get(canonicalKey(lookupName));
+
+    return Number.isFinite(baseRarity) && baseRarity <= 10;
+  }
+  // --- END NEW BLOCK ---
+
+
   // Species present in rarity list at all (respecting variant filters)
   const raritySpeciesKeysPresent = new Set();
   for (const rr of rarityRowsAll) {
@@ -800,7 +856,13 @@ async function runDexSorter({
 
     for (const it of items) {
       if (it.kind === "have") target.push(formatExistingRow(it.row));
-      else target.push(decorateMissingInline(it.display));
+      else {
+        let out = decorateMissingInline(it.display);
+        if (shouldStrikeInlineMissing(it.full_name, it.species)) {
+          out = `[s]${out}[/s]`;
+        }
+        target.push(out);
+      }
     }
   }
 
@@ -1030,7 +1092,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v3
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4
 </footer>
 
 <script>
