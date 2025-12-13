@@ -440,7 +440,7 @@ async function runRainbowDexChecklist({ inputText, minRarity, maxMissing, includ
 
   // Emit in gen order
   const checklistParts = [];
-  checklistParts.push(`Dex Completion: ${pctStr}%`);
+  checklistParts.push(`Dex Completion: ${pctStr}% (${filledSlots} / ${totalSlots})`);
   checklistParts.push(""); // spacer
 
   for (const bp of GEN_BREAKPOINTS) {
