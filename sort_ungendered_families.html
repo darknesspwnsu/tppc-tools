@@ -132,6 +132,16 @@
           </label>
         </div>
       </div>
+
+      <!-- NEW: highlight rarity -->
+      <div class="col-md-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="highlightRarity" checked />
+          <label class="form-check-label" for="highlightRarity">
+            Highlight rarity
+          </label>
+        </div>
+      </div>
     </div>
 
     <!-- Colors -->
@@ -352,7 +362,8 @@ async function runDexSorter({
   showLevelLabel,
   dropDuplicates,
   addMissingInline,
-  noGroupSpacing
+  noGroupSpacing,
+  highlightRarity
 }) {
   statusEl.textContent = "Fetching Dex mapping...";
   const nameToDex = await fetchDexMapping();
@@ -625,11 +636,11 @@ async function runDexSorter({
     return wrapColor(colors.normal, name);
   }
 
-  // Fetch rarity early (for family-vs-single based on rarity existence + for inline missing)
+  // Fetch rarity early (for family-vs-single based on rarity existence + for inline missing strike-through + rarity highlighting)
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
-  // --- NEW: rarity lookup + base-evolution resolver (for inline missing strike-through) ---
+  // --- NEW: rarity lookup + base-evolution resolver + base-variant rarity (for strike + highlight) ---
   const rarityByKey = new Map(); // canonicalKey(pokemonName) -> ungendered count
   for (const rr of rarityRowsAll) {
     rarityByKey.set(canonicalKey(rr.pokemon), rr.ungendered);
@@ -670,61 +681,69 @@ async function runDexSorter({
     return ""; // normal
   }
 
-  function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
-    // missingFullName is like "ShinyNidorina (?)"
-    const prefix = variantPrefixFromName(missingFullName); // "Shiny" / "Dark" / "Golden" / ""
-    const sk = canonicalKey(missingSpecies);
+  // Find rarity of "base form", but if base form variant doesn't exist (0),
+  // use the youngest stage (from base->children) where it DOES exist.
+  const baseRarityMemo = new Map(); // key: `${prefix}|${speciesKey}` -> number
+  function baseVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName) {
+    const memoKey = `${variantPrefix}|${speciesKey}`;
+    if (baseRarityMemo.has(memoKey)) return baseRarityMemo.get(memoKey);
 
-    // Start from true base evo key (via parents), but if that variant doesn't exist,
-    // walk forward (youngest -> older) until we find the first evolution stage that DOES exist.
-    const baseKey = baseEvolutionKey(sk);
+    const baseKey = baseEvolutionKey(speciesKey);
 
-    function rarityForSpeciesKey(speciesKey) {
-      const speciesName = speciesDisplayByKey[speciesKey] ?? missingSpecies;
-      const lookupName = prefix ? `${prefix}${speciesName}` : speciesName;
-      return rarityByKey.get(canonicalKey(lookupName)) ?? 0;
+    function rarityForSpeciesKey(sk) {
+      const sName = speciesDisplayByKey[sk] ?? fallbackSpeciesName;
+      const lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+      return rarityByKey.get(canonicalKey(lookup)) ?? 0;
     }
 
-    // BFS by evolution depth from baseKey to find the *youngest* stage where this variant exists.
-    // Tie-break: prefer lower dex if multiple exist at same depth (stable).
+    // BFS by depth from baseKey (youngest first) until we find rarity > 0
     const q = [baseKey];
     const seen = new Set();
     while (q.length) {
       const layerSize = q.length;
       const layer = [];
       for (let i = 0; i < layerSize; i++) {
-        const node = q.shift();
-        if (seen.has(node)) continue;
-        seen.add(node);
-        layer.push(node);
+        const n = q.shift();
+        if (seen.has(n)) continue;
+        seen.add(n);
+        layer.push(n);
       }
 
-      // sort this layer by dex for stable tie-break
+      // stable tie-break inside a layer
       layer.sort((a, b) => (nameToDex[a] ?? 9999) - (nameToDex[b] ?? 9999));
 
-      // check rarity existence in this layer
-      for (const node of layer) {
-        const r = rarityForSpeciesKey(node);
+      for (const n of layer) {
+        const r = rarityForSpeciesKey(n);
         if (r > 0) {
-          return r <= 10;
+          baseRarityMemo.set(memoKey, r);
+          return r;
         }
       }
 
-      // enqueue next layer (children)
-      for (const node of layer) {
-        const childSet = children.get(node) || new Set();
-        for (const c of childSet) {
-          if (!seen.has(c)) q.push(c);
-        }
+      for (const n of layer) {
+        const childSet = children.get(n) || new Set();
+        for (const c of childSet) if (!seen.has(c)) q.push(c);
       }
     }
 
-    // If we never find an existing stage for that variant, don't strike.
-    return false;
+    baseRarityMemo.set(memoKey, 0);
+    return 0;
   }
 
-  // --- END NEW BLOCK ---
+  function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
+    const prefix = variantPrefixFromName(missingFullName);
+    const sk = canonicalKey(missingSpecies);
+    const r = baseVariantRarityForSpecies(sk, prefix, missingSpecies);
+    return r > 0 && r <= 10;
+  }
 
+  function wrapRaritySizeIfNeeded(bbcodeText, rarity) {
+    if (!highlightRarity) return bbcodeText;
+    if (rarity >= 1 && rarity <= 10) return `[size="5"]${bbcodeText}[/size]`;
+    if (rarity >= 11 && rarity <= 50) return `[size="4"]${bbcodeText}[/size]`;
+    return bbcodeText;
+  }
+  // --- END NEW BLOCK ---
 
   // Species present in rarity list at all (respecting variant filters)
   const raritySpeciesKeysPresent = new Set();
@@ -808,6 +827,12 @@ async function runDexSorter({
     const afterName = origLine.slice(m[0].length).trim();
     const decorated = decorateName(r.full_name);
 
+    // NEW: rarity highlight applies to NAME portion only
+    const sk = canonicalKey(r.species);
+    const prefix = variantPrefixFromName(r.full_name);
+    const baseR = baseVariantRarityForSpecies(sk, prefix, r.species);
+    const decoratedSized = wrapRaritySizeIfNeeded(decorated, baseR);
+
     let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
     if (restParts.length > 0 && restParts[restParts.length - 1].startsWith("$")) {
       restParts = restParts.slice(0, -1);
@@ -815,7 +840,7 @@ async function runDexSorter({
     let remainder = restParts.join(" ");
     if (showLevelLabel && remainder) remainder = applyLevelLabelToRemainder(remainder);
 
-    return remainder ? `${decorated} ${remainder}` : decorated;
+    return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
   }
 
   // Group existing rows by family
@@ -898,7 +923,15 @@ async function runDexSorter({
     for (const it of items) {
       if (it.kind === "have") target.push(formatExistingRow(it.row));
       else {
+        // Build missing inline line: red + optional rarity size + optional strike
         let out = decorateMissingInline(it.display);
+
+        // NEW: rarity highlight for inline missing (based on base form rarity w/ special-case)
+        const sk = canonicalKey(it.species);
+        const prefix = variantPrefixFromName(it.full_name);
+        const baseR = baseVariantRarityForSpecies(sk, prefix, it.species);
+        out = wrapRaritySizeIfNeeded(out, baseR);
+
         if (shouldStrikeInlineMissing(it.full_name, it.species)) {
           out = `[s]${out}[/s]`;
         }
@@ -967,6 +1000,7 @@ async function runDexSorter({
   if (flags.filterShinys) filterNotes.push("Shinys filtered");
   if (flags.filterDarks) filterNotes.push("Darks filtered");
   if (dropDuplicates) filterNotes.push("Duplicates dropped");
+  if (highlightRarity) filterNotes.push("Rarity highlighted");
   if (filterNotes.length) missingLines.push(`Filters: ${filterNotes.join(", ")}.`);
   if (missingOnlyFamilyNeeded) missingLines.push("Filter: only missing entries that belong to incomplete multi-species families.");
   if (addMissingInline) missingLines.push('Note: Missing items are also added inline in the Families output (in red).');
@@ -1039,6 +1073,7 @@ const noGroupSpacingEl = document.getElementById("noGroupSpacing");
 
 const showLevelLabelEl = document.getElementById("showLevelLabel");
 const dropDuplicatesEl = document.getElementById("dropDuplicates");
+const highlightRarityEl = document.getElementById("highlightRarity"); // NEW
 
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
@@ -1068,6 +1103,7 @@ runButton.addEventListener("click", async () => {
   const dropDuplicates = dropDuplicatesEl.checked;
   const addMissingInline = addMissingInlineEl.checked;
   const noGroupSpacing = noGroupSpacingEl.checked;
+  const highlightRarity = highlightRarityEl.checked;
 
   const colors = {
     golden: colorGoldenEl.value || "",
@@ -1092,7 +1128,8 @@ runButton.addEventListener("click", async () => {
       showLevelLabel,
       dropDuplicates,
       addMissingInline,
-      noGroupSpacing
+      noGroupSpacing,
+      highlightRarity
     });
 
     outputTextEl.value = mainText;
@@ -1133,7 +1170,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4.1
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5
 </footer>
 
 <script>
