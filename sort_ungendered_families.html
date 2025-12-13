@@ -926,14 +926,10 @@ async function runDexSorter({
         // Build missing inline line: red + optional rarity size + optional strike
         let out = decorateMissingInline(it.display);
 
-        // NEW: rarity highlight for inline missing (based on base form rarity w/ special-case)
-        const sk = canonicalKey(it.species);
-        const prefix = variantPrefixFromName(it.full_name);
-        const baseR = baseVariantRarityForSpecies(sk, prefix, it.species);
-        out = wrapRaritySizeIfNeeded(out, baseR);
+        // IMPORTANT: do NOT apply rarity size highlights to inline missing items
 
         if (shouldStrikeInlineMissing(it.full_name, it.species)) {
-          out = `[s]${out}[/s]`;
+          out = `[color="red"][s]${out}[/s][/color]`;
         }
         target.push(out);
       }
@@ -1170,7 +1166,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.1
 </footer>
 
 <script>
