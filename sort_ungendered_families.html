@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>TPPC (?) Dex Sorter & Stats (Web)</title>
+  <!-- Bootstrap CSS (CDN) -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
@@ -39,17 +40,25 @@
       </div>
       <div class="col-md-4 d-flex align-items-end">
         <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="partitionOutput" />
+          <label class="form-check-label" for="partitionOutput">
+            Partition sorted output into Families vs Singles/Sets
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-3">
+      <div class="col-md-3 mb-2 mb-md-0">
+        <div class="form-check">
           <input class="form-check-input" type="checkbox" id="filterGolds" />
           <label class="form-check-label" for="filterGolds">
             Filter out Goldens (also exclude Goldens in missing list)
           </label>
         </div>
       </div>
-    </div>
-
-    <!-- Options row -->
-    <div class="row mb-3">
-      <div class="col-md-4 mb-2 mb-md-0">
+      <div class="col-md-3 mb-2 mb-md-0">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="filterNormals" />
           <label class="form-check-label" for="filterNormals">
@@ -57,17 +66,27 @@
           </label>
         </div>
       </div>
-
-      <div class="col-md-4 mb-2 mb-md-0">
+      <div class="col-md-3 mb-2 mb-md-0">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="partitionOutput" />
-          <label class="form-check-label" for="partitionOutput">
-            Partition sorted output into Families vs Singles/Sets
+          <input class="form-check-input" type="checkbox" id="filterShinys" />
+          <label class="form-check-label" for="filterShinys">
+            Filter out Shinys (also exclude Shinys in missing list)
           </label>
         </div>
       </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="filterDarks" />
+          <label class="form-check-label" for="filterDarks">
+            Filter out Darks (also exclude Darks in missing list)
+          </label>
+        </div>
+      </div>
+    </div>
 
-      <div class="col-md-4">
+    <!-- Options -->
+    <div class="row mb-3">
+      <div class="col-md-4 mb-2 mb-md-0">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="missingOnlyFamilyNeeded" />
           <label class="form-check-label" for="missingOnlyFamilyNeeded">
@@ -75,9 +94,26 @@
           </label>
         </div>
       </div>
+
+      <div class="col-md-4 mb-2 mb-md-0">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="addMissingInline" />
+          <label class="form-check-label" for="addMissingInline">
+            Add missing items inline (in Families output)
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="noGroupSpacing" />
+          <label class="form-check-label" for="noGroupSpacing">
+            No space between familys/individuals
+          </label>
+        </div>
+      </div>
     </div>
 
-    <!-- Options row 2 -->
     <div class="row mb-3">
       <div class="col-md-4 mb-2 mb-md-0">
         <div class="form-check">
@@ -96,17 +132,9 @@
           </label>
         </div>
       </div>
-
-      <div class="col-md-4">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="addMissingInline" />
-          <label class="form-check-label" for="addMissingInline">
-            Add missing items inline (in Families output)
-          </label>
-        </div>
-      </div>
     </div>
 
+    <!-- Colors -->
     <div class="row mb-3">
       <div class="col-md-3 mb-3 mb-md-0">
         <label for="colorGolden" class="form-label">Golden color</label>
@@ -155,11 +183,13 @@
 // Utility helpers
 // ===============================
 
+// Remove color prefixes (Shiny/Dark/Golden) whether it's "DarkFoo" or "Dark Foo"
 function stripPrefixes(name) {
-  // Remove Shiny/Dark/Golden whether it's "DarkFoo" or "Dark Foo"
-  return name.replace(/^(shiny|dark|golden)\s*/i, "").replace(/^(shiny|dark|golden)/i, "").trim();
+  return name
+    .replace(/^(shiny|dark|golden)\s*/i, "")
+    .replace(/^(shiny|dark|golden)/i, "")
+    .trim();
 }
-
 
 function speciesFromFullName(fullName) {
   const noPrefix = stripPrefixes(fullName);
@@ -180,11 +210,10 @@ function extractForm(fullName) {
   const m = noPrefix.match(/\(([^)]+)\)/);
   if (!m) return "";
   const form = m[1].trim();
-  // "(?)" is the ungendered marker, NOT a form
+  // "(?)" is the ungendered marker, not a form
   if (form === "?") return "";
   return form;
 }
-
 
 const FORM_PRIORITY = { "": 0, "normal": 0, "alola": 1, "galarian": 2, "hisui": 3, "paldea": 4 };
 function formRank(form) { return FORM_PRIORITY[form.toLowerCase()] ?? 10; }
@@ -198,6 +227,7 @@ function colorCategory(name) {
 }
 
 function colorRank(name) {
+  // Normal (0) < Dark (1) < Shiny (2) < Golden (3)
   const cat = colorCategory(name);
   if (cat === "golden") return 3;
   if (cat === "shiny") return 2;
@@ -224,7 +254,6 @@ function applyLevelLabelToRemainder(remainder) {
 }
 
 function parseLeadingLevelFromRemainder(remainder) {
-  // Returns { levelNum, levelStr } or { null, null }
   const m = (remainder || "").match(/^(\d[\d,]*)\b/);
   if (!m) return { levelNum: null, levelStr: null };
   const s = m[1];
@@ -234,6 +263,14 @@ function parseLeadingLevelFromRemainder(remainder) {
 
 function decorateMissingInline(text) {
   return `[color="red"]${text}[/color]`;
+}
+
+function isVariantFiltered(cat, flags) {
+  if (cat === "golden" && flags.filterGolds) return true;
+  if (cat === "normal" && flags.filterNormals) return true;
+  if (cat === "shiny"  && flags.filterShinys) return true;
+  if (cat === "dark"   && flags.filterDarks) return true;
+  return false;
 }
 
 // ===============================
@@ -283,7 +320,9 @@ async function fetchRarityTable() {
   const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) => c.textContent.trim());
   const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
   const idxUng = headerCells.findIndex((h) => h.toLowerCase().startsWith("ungendered"));
-  if (idxPokemon === -1 || idxUng === -1) throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
+  if (idxPokemon === -1 || idxUng === -1) {
+    throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
+  }
 
   const out = [];
   for (let i = 1; i < rows.length; i++) {
@@ -305,8 +344,7 @@ async function runDexSorter({
   inputText,
   minUngendered,
   maxMissing,
-  filterGolds,
-  filterNormals,
+  flags, // {filterGolds, filterNormals, filterShinys, filterDarks}
   colors,
   statusEl,
   partitionOutput,
@@ -314,6 +352,7 @@ async function runDexSorter({
   showLevelLabel,
   dropDuplicates,
   addMissingInline,
+  noGroupSpacing
 }) {
   statusEl.textContent = "Fetching Dex mapping...";
   const nameToDex = await fetchDexMapping();
@@ -353,6 +392,7 @@ async function runDexSorter({
   const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
   if (!raw) throw new Error("No input provided.");
 
+  // Detect compact "(Level: N)" blob format
   const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
   const lineCount = raw.split(/\n/).length;
   const isCompact = lineCount < 2 && levelMatches.length >= 2;
@@ -376,7 +416,7 @@ async function runDexSorter({
     logicalLines = raw.split("\n");
   }
 
-  // Build rows (with level parsed), apply gold/normal filters, optionally drop duplicates
+  // Parse rows + apply filters + parse level for dedupe
   const tempRows = [];
   for (const rawLine of logicalLines) {
     const line = rawLine.trim();
@@ -388,9 +428,7 @@ async function runDexSorter({
 
     const fullName = m[1].trim();
     const cat = colorCategory(fullName);
-
-    if (filterGolds && cat === "golden") continue;
-    if (filterNormals && cat === "normal") continue;
+    if (isVariantFiltered(cat, flags)) continue;
 
     const afterName = line.slice(m[0].length).trim();
     let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
@@ -401,10 +439,10 @@ async function runDexSorter({
     const { levelNum, levelStr } = parseLeadingLevelFromRemainder(remainder);
 
     tempRows.push({
-      line,                  // original
-      full_name: fullName,   // parsed name (includes prefixes/forms, may include "(?)")
-      levelNum,              // numeric for dedupe (lowest wins)
-      levelStr,              // as written (with commas)
+      line,
+      full_name: fullName,
+      levelNum,
+      levelStr,
     });
   }
 
@@ -414,7 +452,7 @@ async function runDexSorter({
 
   let rows;
   if (dropDuplicates) {
-    const best = new Map(); // key -> row
+    const best = new Map(); // canonical(full_name) -> row
     for (const r of tempRows) {
       const key = canonicalKey(r.full_name);
       if (!best.has(key)) {
@@ -422,7 +460,6 @@ async function runDexSorter({
         continue;
       }
       const cur = best.get(key);
-      // Keep the lowest levelNum; if one is null, prefer the one with a number; otherwise keep existing
       const a = r.levelNum;
       const b = cur.levelNum;
       const chooseNew =
@@ -453,6 +490,7 @@ async function runDexSorter({
     console.warn("WARNING: Could not find dex for:", Array.from(new Set(missingSpecies)));
   }
 
+  // Compute evolution families (components) and depths (from evolution JSON)
   statusEl.textContent = "Computing evo families & depths...";
   const rowSpeciesKeys = new Set();
   for (const r of rows) {
@@ -541,7 +579,7 @@ async function runDexSorter({
     return d !== undefined ? d : 9999;
   }
 
-  // Sort rows (same as before)
+  // Sort rows (dex+family+depth+forms+colors)
   statusEl.textContent = "Sorting Pokémon...";
   const rowsSorted = rows.slice().sort((a, b) => {
     const familyA = getFamilyId(a.species);
@@ -559,11 +597,13 @@ async function runDexSorter({
     const crA = colorRank(a.full_name);
     const crB = colorRank(b.full_name);
 
-    const keyA = [familyA, depthA, a.dex, baseA.toLowerCase(), frA, crA, a.full_name];
-    const keyB = [familyB, depthB, b.dex, baseB.toLowerCase(), frB, crB, b.full_name];
+    // Ensure color ordering is respected before name tie-breakers
+    const keyA = [familyA, depthA, a.dex, frA, crA, baseA.toLowerCase(), a.full_name];
+    const keyB = [familyB, depthB, b.dex, frB, crB, baseB.toLowerCase(), b.full_name];
     return compareTuple(keyA, keyB);
   });
 
+  // UE/UG list
   statusEl.textContent = "Fetching UE/UG list...";
   const ueugSet = await fetchUEUGSet();
 
@@ -585,26 +625,21 @@ async function runDexSorter({
     return wrapColor(colors.normal, name);
   }
 
-  // Fetch rarity early so we can:
-  // - decide "family vs single" based on whether *ungendered entries exist in rarity* for other members
-  // - build missingByFamily for inline injection
+  // Fetch rarity early (for family-vs-single based on rarity existence + for inline missing)
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
-  // Build a set of species keys that actually exist in the rarity list (ungendered entries exist at all),
-  // respecting filters (filterGolds/filterNormals) because those variants are excluded from your world.
+  // Species present in rarity list at all (respecting variant filters)
   const raritySpeciesKeysPresent = new Set();
   for (const rr of rarityRowsAll) {
     const cat = colorCategory(rr.pokemon);
-    if (filterGolds && cat === "golden") continue;
-    if (filterNormals && cat === "normal") continue;
+    if (isVariantFiltered(cat, flags)) continue;
     const sk = canonicalKey(speciesFromFullName(rr.pokemon));
     raritySpeciesKeysPresent.add(sk);
   }
 
-  // For each familyId (component), compute "rarity family size" = how many species in this component
-  // have any ungendered entry in the rarity list.
-  const rarityFamilySize = new Map(); // famId -> size
+  // For each component familyId: how many species in that component have ANY ungendered entry in rarity list
+  const rarityFamilySize = new Map(); // famId -> count
   for (const [famId, members] of familyMembers.entries()) {
     let c = 0;
     for (const sk of members) if (raritySpeciesKeysPresent.has(sk)) c++;
@@ -612,25 +647,22 @@ async function runDexSorter({
   }
 
   // ===============================
-  // Missing list
+  // Missing list computation
   // ===============================
-
   statusEl.textContent = "Computing missing list...";
+
   const haveKeys = new Set(rowsSorted.map((r) => canonicalKey(r.full_name)));
 
   const candidates = rarityRowsAll
     .filter((row) => row.ungendered > minUngendered)
     .sort((a, b) => b.ungendered - a.ungendered);
 
-  // A family is "incomplete" if any rarity-candidate entry in that family is missing
-  // (and family must be multi-species *in the rarity list*).
+  // Incomplete families (multi-species in rarity) = any missing entry (any allowed variant) in that family
   const incompleteFamilyIds = new Set();
   for (const row of candidates) {
     const pokeName = row.pokemon;
     const cat = colorCategory(pokeName);
-
-    if (filterGolds && cat === "golden") continue;
-    if (filterNormals && cat === "normal") continue;
+    if (isVariantFiltered(cat, flags)) continue;
 
     const key = canonicalKey(pokeName);
     if (haveKeys.has(key)) continue;
@@ -641,14 +673,12 @@ async function runDexSorter({
   }
 
   const missingByVariant = { golden: [], shiny: [], dark: [], normal: [] };
-  const missingByFamily = new Map(); // famId -> array of { name, u } for inline injection
+  const missingByFamily = new Map(); // famId -> array of { name, u }
 
   for (const row of candidates) {
     const pokeName = row.pokemon;
     const cat = colorCategory(pokeName);
-
-    if (filterGolds && cat === "golden") continue;
-    if (filterNormals && cat === "normal") continue;
+    if (isVariantFiltered(cat, flags)) continue;
 
     const key = canonicalKey(pokeName);
     if (haveKeys.has(key)) continue;
@@ -668,12 +698,11 @@ async function runDexSorter({
   }
 
   // ===============================
-  // Formatting output (with optional partition + optional inline missing)
+  // Output formatting
   // ===============================
 
   statusEl.textContent = "Formatting sorted output...";
 
-  // Helper to build a display line from an input row
   function formatExistingRow(r) {
     const origLine = r.line;
     const m = origLine.match(nameRegex);
@@ -692,66 +721,58 @@ async function runDexSorter({
     return remainder ? `${decorated} ${remainder}` : decorated;
   }
 
-  // Build per-family groups of existing rows
-  const rowsByFamily = new Map(); // famId -> array of rows
+  // Group existing rows by family
+  const rowsByFamily = new Map();
   for (const r of rowsSorted) {
     const famId = getFamilyId(r.species);
     if (!rowsByFamily.has(famId)) rowsByFamily.set(famId, []);
     rowsByFamily.get(famId).push(r);
   }
 
-  // Sort-key generator shared by existing rows and missing pseudo-rows
+  // Sort-key used when merging existing+missing inline
   function sortKeyForItem(item) {
-    // item: { kind, full_name, species, dex, depth, formRank, colorRank }
     const familyId = getFamilyId(item.species);
     const depth = evoDepth[canonicalKey(item.species)] ?? 0;
-    const base = speciesFromFullName(item.full_name);
+    const dex = item.dex ?? (nameToDex[canonicalKey(item.species)] ?? 9999);
     const fr = formRank(extractForm(item.full_name));
     const cr = colorRank(item.full_name);
+    const base = speciesFromFullName(item.full_name);
 
-    return [
-      familyId,
-      depth,
-      item.dex ?? (nameToDex[canonicalKey(item.species)] ?? 9999),
-      fr,
-      cr,
-      base.toLowerCase(),
-      item.full_name
-    ];
+    // Color comes before base tie-breakers to guarantee normal->dark->shiny->golden
+    return [familyId, depth, dex, fr, cr, base.toLowerCase(), item.full_name];
   }
 
   function cmpItems(a, b) {
     return compareTuple(sortKeyForItem(a), sortKeyForItem(b));
   }
 
-  // Emit families + singles with blank lines between families
   const familyLines = [];
   const singleLines = [];
 
   const famIdsInOrder = Array.from(rowsByFamily.keys()).sort((a, b) => a - b);
 
   for (const famId of famIdsInOrder) {
-    const famSize = rarityFamilySize.get(famId) ?? 1;
-    const isSingleSet = partitionOutput && famSize <= 1;
+    const famSizeRarity = rarityFamilySize.get(famId) ?? 1;
+    const isSingleSet = partitionOutput && famSizeRarity <= 1;
     const target = isSingleSet ? singleLines : familyLines;
 
-    if (target.length > 0) target.push(""); // blank line between groups
+    if (!noGroupSpacing && target.length > 0) target.push("");
 
     const existing = rowsByFamily.get(famId) || [];
 
-    if (!addMissingInline || isSingleSet || famSize <= 1) {
-      // Just output the existing rows
+    // If not adding inline, or it's a single-set group, just output what we have
+    if (!addMissingInline || isSingleSet || famSizeRarity <= 1) {
       for (const r of existing) target.push(formatExistingRow(r));
       continue;
     }
 
-    // Add missing inline (families only): merge existing + missing entries, sort, and output
+    // Merge existing + missing-in-family, sort, output (missing in red)
     const items = [];
 
     for (const r of existing) {
       items.push({
         kind: "have",
-        full_name: r.full_name,
+        full_name: r.full_name, // includes (?) marker already
         species: r.species,
         dex: r.dex,
         row: r,
@@ -760,14 +781,15 @@ async function runDexSorter({
 
     const missingListForFamily = missingByFamily.get(famId) || [];
     for (const miss of missingListForFamily) {
-      // Display as "VariantName (?)" (no level)
+      // Display: "VariantName (?)" (no level)
       const displayName = `${miss.name} (?)`;
       const species = speciesFromFullName(miss.name);
       const dex = nameToDex[canonicalKey(species)] ?? 9999;
 
+      // IMPORTANT: full_name includes "(?)" so existing & missing use the same form parsing
       items.push({
         kind: "missing",
-        full_name: `${miss.name} (?)`,  // match existing rows so keys behave the same
+        full_name: `${miss.name} (?)`,
         display: displayName,
         species,
         dex,
@@ -777,12 +799,8 @@ async function runDexSorter({
     items.sort(cmpItems);
 
     for (const it of items) {
-      if (it.kind === "have") {
-        target.push(formatExistingRow(it.row));
-      } else {
-        // Missing inline in red
-        target.push(decorateMissingInline(it.display));
-      }
+      if (it.kind === "have") target.push(formatExistingRow(it.row));
+      else target.push(decorateMissingInline(it.display));
     }
   }
 
@@ -792,8 +810,8 @@ async function runDexSorter({
   // ===============================
   // Summary stats
   // ===============================
-
   statusEl.textContent = "Computing summary stats...";
+
   const shinyKeys = new Set();
   const darkKeys = new Set();
   const goldenKeys = new Set();
@@ -828,7 +846,6 @@ async function runDexSorter({
   // ===============================
   // Missing list output text
   // ===============================
-
   function sliceVariant(list) {
     if (maxMissing && maxMissing > 0) return list.slice(0, maxMissing);
     return list;
@@ -842,18 +859,20 @@ async function runDexSorter({
   );
 
   const filterNotes = [];
-  if (filterGolds) filterNotes.push("Goldens filtered");
-  if (filterNormals) filterNotes.push("Normals filtered");
+  if (flags.filterGolds) filterNotes.push("Goldens filtered");
+  if (flags.filterNormals) filterNotes.push("Normals filtered");
+  if (flags.filterShinys) filterNotes.push("Shinys filtered");
+  if (flags.filterDarks) filterNotes.push("Darks filtered");
   if (dropDuplicates) filterNotes.push("Duplicates dropped");
   if (filterNotes.length) missingLines.push(`Filters: ${filterNotes.join(", ")}.`);
   if (missingOnlyFamilyNeeded) missingLines.push("Filter: only missing entries that belong to incomplete multi-species families.");
-  if (addMissingInline) missingLines.push("Note: Missing items are also added inline in the Families output (in red).");
+  if (addMissingInline) missingLines.push('Note: Missing items are also added inline in the Families output (in red).');
 
   function emitVariant(label, variantKey) {
     const all = missingByVariant[variantKey];
     if (!all || all.length === 0) return;
-
     const shown = sliceVariant(all);
+
     missingLines.push("");
     missingLines.push(`--- ${label} ---`);
     missingLines.push(`Total missing ${label.toLowerCase()}: ${all.length}`);
@@ -867,10 +886,10 @@ async function runDexSorter({
     }
   }
 
-  if (!filterGolds) emitVariant("Golden", "golden");
-  emitVariant("Shiny", "shiny");
-  emitVariant("Dark", "dark");
-  if (!filterNormals) emitVariant("Normal", "normal");
+  if (!flags.filterGolds)  emitVariant("Golden", "golden");
+  if (!flags.filterShinys) emitVariant("Shiny", "shiny");
+  if (!flags.filterDarks)  emitVariant("Dark", "dark");
+  if (!flags.filterNormals) emitVariant("Normal", "normal");
 
   statusEl.textContent = "Done.";
 
@@ -891,46 +910,61 @@ async function runDexSorter({
 const runButton = document.getElementById("runButton");
 const backButton = document.getElementById("backButton");
 const statusEl = document.getElementById("status");
+
 const inputView = document.getElementById("input-view");
 const outputView = document.getElementById("output-view");
+
 const inputListEl = document.getElementById("inputList");
 const outputTextEl = document.getElementById("outputText");
 const outputMissingEl = document.getElementById("outputMissing");
+const outputSinglesEl = document.getElementById("outputSingles");
+const familiesSinglesBlock = document.getElementById("familiesSinglesBlock");
+
 const minUngEl = document.getElementById("minUngendered");
 const maxMissEl = document.getElementById("maxMissing");
 
+const partitionOutputEl = document.getElementById("partitionOutput");
+
 const filterGoldsEl = document.getElementById("filterGolds");
 const filterNormalsEl = document.getElementById("filterNormals");
+const filterShinysEl = document.getElementById("filterShinys");
+const filterDarksEl = document.getElementById("filterDarks");
 
-const partitionOutputEl = document.getElementById("partitionOutput");
 const missingOnlyFamilyNeededEl = document.getElementById("missingOnlyFamilyNeeded");
+const addMissingInlineEl = document.getElementById("addMissingInline");
+const noGroupSpacingEl = document.getElementById("noGroupSpacing");
+
 const showLevelLabelEl = document.getElementById("showLevelLabel");
 const dropDuplicatesEl = document.getElementById("dropDuplicates");
-const addMissingInlineEl = document.getElementById("addMissingInline");
 
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
 const colorDarkEl = document.getElementById("colorDark");
 const colorNormalEl = document.getElementById("colorNormal");
 
-const familiesSinglesBlock = document.getElementById("familiesSinglesBlock");
-const outputSinglesEl = document.getElementById("outputSingles");
-
 runButton.addEventListener("click", async () => {
   const inputText = inputListEl.value.trim();
-  if (!inputText) { statusEl.textContent = "Please paste your list first."; return; }
+  if (!inputText) {
+    statusEl.textContent = "Please paste your list first.";
+    return;
+  }
 
   const minUngendered = parseInt(minUngEl.value, 10);
   const maxMissing = parseInt(maxMissEl.value, 10);
 
-  const filterGolds = filterGoldsEl.checked;
-  const filterNormals = filterNormalsEl.checked;
+  const flags = {
+    filterGolds: filterGoldsEl.checked,
+    filterNormals: filterNormalsEl.checked,
+    filterShinys: filterShinysEl.checked,
+    filterDarks: filterDarksEl.checked,
+  };
 
   const partitionOutput = partitionOutputEl.checked;
   const missingOnlyFamilyNeeded = missingOnlyFamilyNeededEl.checked;
   const showLevelLabel = showLevelLabelEl.checked;
   const dropDuplicates = dropDuplicatesEl.checked;
   const addMissingInline = addMissingInlineEl.checked;
+  const noGroupSpacing = noGroupSpacingEl.checked;
 
   const colors = {
     golden: colorGoldenEl.value || "",
@@ -941,13 +975,13 @@ runButton.addEventListener("click", async () => {
 
   runButton.disabled = true;
   statusEl.textContent = "Running sorter...";
+
   try {
     const { mainText, missingText, secondaryText } = await runDexSorter({
       inputText,
       minUngendered: Number.isFinite(minUngendered) ? minUngendered : 10,
       maxMissing: Number.isFinite(maxMissing) ? maxMissing : 20,
-      filterGolds,
-      filterNormals,
+      flags,
       colors,
       statusEl,
       partitionOutput,
@@ -955,6 +989,7 @@ runButton.addEventListener("click", async () => {
       showLevelLabel,
       dropDuplicates,
       addMissingInline,
+      noGroupSpacing
     });
 
     outputTextEl.value = mainText;
@@ -995,7 +1030,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v3
 </footer>
 
 <script>
