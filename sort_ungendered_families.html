@@ -178,8 +178,13 @@ function canonicalKey(name) {
 function extractForm(fullName) {
   const noPrefix = stripPrefixes(fullName);
   const m = noPrefix.match(/\(([^)]+)\)/);
-  return m ? m[1].trim() : "";
+  if (!m) return "";
+  const form = m[1].trim();
+  // "(?)" is the ungendered marker, NOT a form
+  if (form === "?") return "";
+  return form;
 }
+
 
 const FORM_PRIORITY = { "": 0, "normal": 0, "alola": 1, "galarian": 2, "hisui": 3, "paldea": 4 };
 function formRank(form) { return FORM_PRIORITY[form.toLowerCase()] ?? 10; }
@@ -762,8 +767,8 @@ async function runDexSorter({
 
       items.push({
         kind: "missing",
-        full_name: miss.name,   // for sorting/variant/form logic
-        display: displayName,   // what we actually print
+        full_name: `${miss.name} (?)`,  // match existing rows so keys behave the same
+        display: displayName,
         species,
         dex,
       });
@@ -990,7 +995,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2
 </footer>
 
 <script>
