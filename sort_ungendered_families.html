@@ -142,6 +142,15 @@
           </label>
         </div>
       </div>
+
+      <div class="col-md-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="omitSummaryStats" />
+          <label class="form-check-label" for="omitSummaryStats">
+            OMIT SUMMARY STATS
+          </label>
+        </div>
+      </div>
     </div>
 
     <!-- Colors -->
@@ -373,7 +382,8 @@ async function runDexSorter({
   dropDuplicates,
   addMissingInline,
   noGroupSpacing,
-  highlightRarity
+  highlightRarity,
+  omitSummaryStats
 }) {
   statusEl.textContent = "Fetching Dex mapping...";
   const nameToDex = await fetchDexMapping();
@@ -1113,8 +1123,8 @@ async function runDexSorter({
       singlesBbcodeBlock;
   }
 
-  const mainText =
-    summaryLines.join("\n") + "\n" + familiesBlockOut;
+  const summaryText = omitSummaryStats ? "" : (summaryLines.join("\n") + "\n");
+  const mainText = summaryText + familiesBlockOut;
 
   const secondaryText = partitionOutput ? singlesBlockOut : "";
 
@@ -1153,6 +1163,7 @@ const filterDarksEl = document.getElementById("filterDarks");
 const missingOnlyFamilyNeededEl = document.getElementById("missingOnlyFamilyNeeded");
 const addMissingInlineEl = document.getElementById("addMissingInline");
 const noGroupSpacingEl = document.getElementById("noGroupSpacing");
+const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
 const showLevelLabelEl = document.getElementById("showLevelLabel");
 const dropDuplicatesEl = document.getElementById("dropDuplicates");
@@ -1187,6 +1198,7 @@ runButton.addEventListener("click", async () => {
   const addMissingInline = addMissingInlineEl.checked;
   const noGroupSpacing = noGroupSpacingEl.checked;
   const highlightRarity = highlightRarityEl.checked;
+  const omitSummaryStats = omitSummaryStatsEl.checked;
 
   const colors = {
     golden: colorGoldenEl.value || "",
@@ -1212,7 +1224,8 @@ runButton.addEventListener("click", async () => {
       dropDuplicates,
       addMissingInline,
       noGroupSpacing,
-      highlightRarity
+      highlightRarity,
+      omitSummaryStats
     });
 
     outputTextEl.value = mainText;
@@ -1253,7 +1266,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v6
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v7
 </footer>
 
 <script>
