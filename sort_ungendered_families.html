@@ -156,8 +156,10 @@
 // ===============================
 
 function stripPrefixes(name) {
-  return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
+  // Remove Shiny/Dark/Golden whether it's "DarkFoo" or "Dark Foo"
+  return name.replace(/^(shiny|dark|golden)\s*/i, "").replace(/^(shiny|dark|golden)/i, "").trim();
 }
+
 
 function speciesFromFullName(fullName) {
   const noPrefix = stripPrefixes(fullName);
@@ -706,9 +708,9 @@ async function runDexSorter({
       familyId,
       depth,
       item.dex ?? (nameToDex[canonicalKey(item.species)] ?? 9999),
-      base.toLowerCase(),
       fr,
       cr,
+      base.toLowerCase(),
       item.full_name
     ];
   }
