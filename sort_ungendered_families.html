@@ -398,7 +398,8 @@ async function runDexSorter({
   }
 
   statusEl.textContent = "Parsing input list...";
-  const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
+  // Capture: Name + optional (Form) + required (?) marker as part of the "full name"
+  const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))/;
 
   const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
   if (!raw) throw new Error("No input provided.");
