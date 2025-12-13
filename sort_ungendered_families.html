@@ -730,6 +730,45 @@ async function runDexSorter({
     return 0;
   }
 
+  function rarityForVariantAtSpeciesKey(speciesKey, variantPrefix, fallbackSpeciesName) {
+    const sName = speciesDisplayByKey[speciesKey] ?? fallbackSpeciesName;
+    const lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+    return rarityByKey.get(canonicalKey(lookup)) ?? 0;
+  }
+
+  // cumulative rarity = rarity(species) + rarity(all pre-evos in chain)
+  // If a pre-evo variant doesn't exist (rarity 0), it contributes 0.
+  function cumulativeVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName) {
+    let total = 0;
+    let cur = speciesKey;
+
+    // protect against weird loops
+    const seen = new Set();
+
+    while (true) {
+      if (seen.has(cur)) break;
+      seen.add(cur);
+
+      total += rarityForVariantAtSpeciesKey(cur, variantPrefix, fallbackSpeciesName);
+
+      const pset = parents.get(cur);
+      if (!pset || pset.size === 0) break;
+
+      // if multiple parents exist, pick lowest dex as you already do elsewhere
+      let best = null;
+      let bestDex = Infinity;
+      for (const p of pset) {
+        const d = nameToDex[p] ?? 9999;
+        if (d < bestDex) { bestDex = d; best = p; }
+      }
+      if (!best) break;
+      cur = best;
+    }
+
+    return total;
+  }
+
+
   function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
     const prefix = variantPrefixFromName(missingFullName);
     const sk = canonicalKey(missingSpecies);
@@ -737,12 +776,17 @@ async function runDexSorter({
     return r > 0 && r <= 10;
   }
 
-  function wrapRaritySizeIfNeeded(bbcodeText, rarity) {
+  function wrapRaritySizeIfNeeded(bbcodeText, cumulativeRarity) {
     if (!highlightRarity) return bbcodeText;
-    if (rarity >= 1 && rarity <= 10) return `[size="5"]${bbcodeText}[/size]`;
-    if (rarity >= 11 && rarity <= 50) return `[size="4"]${bbcodeText}[/size]`;
+    if (cumulativeRarity >= 1 && cumulativeRarity <= 20) {
+      return `[b][size="5"]${bbcodeText}[/size][/b]`;
+    }
+    if (cumulativeRarity >= 21 && cumulativeRarity <= 100) {
+      return `[b][size="4"]${bbcodeText}[/size][/b]`;
+    }
     return bbcodeText;
   }
+
   // --- END NEW BLOCK ---
 
   // Species present in rarity list at all (respecting variant filters)
@@ -830,8 +874,8 @@ async function runDexSorter({
     // NEW: rarity highlight applies to NAME portion only
     const sk = canonicalKey(r.species);
     const prefix = variantPrefixFromName(r.full_name);
-    const baseR = baseVariantRarityForSpecies(sk, prefix, r.species);
-    const decoratedSized = wrapRaritySizeIfNeeded(decorated, baseR);
+    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species);
+    const decoratedSized = wrapRaritySizeIfNeeded(decorated, cumR);
 
     let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
     if (restParts.length > 0 && restParts[restParts.length - 1].startsWith("$")) {
