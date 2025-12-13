@@ -674,14 +674,55 @@ async function runDexSorter({
     // missingFullName is like "ShinyNidorina (?)"
     const prefix = variantPrefixFromName(missingFullName); // "Shiny" / "Dark" / "Golden" / ""
     const sk = canonicalKey(missingSpecies);
+
+    // Start from true base evo key (via parents), but if that variant doesn't exist,
+    // walk forward (youngest -> older) until we find the first evolution stage that DOES exist.
     const baseKey = baseEvolutionKey(sk);
-    const baseSpeciesName = speciesDisplayByKey[baseKey] ?? missingSpecies;
 
-    const lookupName = prefix ? `${prefix}${baseSpeciesName}` : baseSpeciesName;
-    const baseRarity = rarityByKey.get(canonicalKey(lookupName));
+    function rarityForSpeciesKey(speciesKey) {
+      const speciesName = speciesDisplayByKey[speciesKey] ?? missingSpecies;
+      const lookupName = prefix ? `${prefix}${speciesName}` : speciesName;
+      return rarityByKey.get(canonicalKey(lookupName)) ?? 0;
+    }
 
-    return Number.isFinite(baseRarity) && baseRarity <= 10;
+    // BFS by evolution depth from baseKey to find the *youngest* stage where this variant exists.
+    // Tie-break: prefer lower dex if multiple exist at same depth (stable).
+    const q = [baseKey];
+    const seen = new Set();
+    while (q.length) {
+      const layerSize = q.length;
+      const layer = [];
+      for (let i = 0; i < layerSize; i++) {
+        const node = q.shift();
+        if (seen.has(node)) continue;
+        seen.add(node);
+        layer.push(node);
+      }
+
+      // sort this layer by dex for stable tie-break
+      layer.sort((a, b) => (nameToDex[a] ?? 9999) - (nameToDex[b] ?? 9999));
+
+      // check rarity existence in this layer
+      for (const node of layer) {
+        const r = rarityForSpeciesKey(node);
+        if (r > 0) {
+          return r <= 10;
+        }
+      }
+
+      // enqueue next layer (children)
+      for (const node of layer) {
+        const childSet = children.get(node) || new Set();
+        for (const c of childSet) {
+          if (!seen.has(c)) q.push(c);
+        }
+      }
+    }
+
+    // If we never find an existing stage for that variant, don't strike.
+    return false;
   }
+
   // --- END NEW BLOCK ---
 
 
@@ -1092,7 +1133,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4.1
 </footer>
 
 <script>
