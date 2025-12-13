@@ -465,7 +465,20 @@ async function runDexSorter({
   if (dropDuplicates) {
     const best = new Map(); // canonical(full_name) -> row
     for (const r of tempRows) {
-      const key = canonicalKey(r.full_name);
+      // Dedupe key: keep Unown letters distinct (canonicalKey() collapses Unown* -> "unown")
+      let key;
+      const rawKey = r.full_name.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      if (rawKey.replace(/[^a-z0-9]/g, "").startsWith("unown")) {
+        // For Unown: do NOT collapse variants; treat UnownA, UnownB, etc as distinct
+        // Canonicalize spacing/punctuation but keep the full string identity
+        key = rawKey
+          .replace("♀", "f").replace("♂", "m")
+          .replace(/\s+/g, " ")
+          .trim();
+      } else {
+        key = canonicalKey(r.full_name);
+      }
+
       if (!best.has(key)) {
         best.set(key, r);
         continue;
@@ -1210,7 +1223,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.2
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.3
 </footer>
 
 <script>
