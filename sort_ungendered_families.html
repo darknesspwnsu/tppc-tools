@@ -263,6 +263,16 @@ function applyLevelLabelToRemainder(remainder) {
   return tail ? `(Level: ${lvl}) ${tail}` : `(Level: ${lvl})`;
 }
 
+function boldLowLevels(remainder) {
+  // Handles:
+  //  "4"
+  //  "(Level: 4)"
+  //  "(Level: 4) extra"
+  return remainder
+    .replace(/\(Level:\s*(4|5)\)/g, '(Level: [B]$1[/B])')
+    .replace(/^([45])\b/, '[B]$1[/B]');
+}
+
 function parseLeadingLevelFromRemainder(remainder) {
   const m = (remainder || "").match(/^(\d[\d,]*)\b/);
   if (!m) return { levelNum: null, levelStr: null };
@@ -898,7 +908,10 @@ async function runDexSorter({
     let remainder = restParts.join(" ");
     if (showLevelLabel && remainder) remainder = applyLevelLabelToRemainder(remainder);
 
-    return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
+    // NEW: bold levels 4 / 5
+    if (remainder) remainder = boldLowLevels(remainder);
+
+    return remainder ? `${decorated} ${remainder}` : decorated;
   }
 
   // Group existing rows by family
@@ -1240,7 +1253,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v5.8.2
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v6
 </footer>
 
 <script>
