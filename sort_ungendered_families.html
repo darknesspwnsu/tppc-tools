@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>TPPC (?) Enhanced Dex Sorter & Stats</title>
+
   <!-- Bootstrap CSS (CDN) -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -13,196 +14,272 @@
   <style>
     body { padding-top: 1.5rem; padding-bottom: 1.5rem; }
     textarea { font-family: monospace; font-size: 0.9rem; }
+    .small-note { font-size: 0.9rem; color: #666; }
+
+    /* Soft tinted panels */
+    .panel-input {
+      background: rgba(13, 202, 240, 0.12);
+      border: 1px solid rgba(13, 202, 240, 0.25);
+    }
+    .panel-output {
+      background: rgba(25, 135, 84, 0.12);
+      border: 1px solid rgba(25, 135, 84, 0.25);
+    }
+    .panel {
+      border-radius: 1rem;
+      padding: 1rem;
+    }
   </style>
 </head>
 
 <body>
 <div class="container" id="app">
-  <!-- Input view -->
-  <div id="input-view">
-    <h1 class="mb-3">TPPC (?) Enhanced Dex Sorter & Stats (Web)</h1>
 
-    <div class="mb-3">
-      <label for="inputList" class="form-label">Paste your TPPC Pokémon list here</label>
-      <textarea id="inputList" class="form-control" rows="15"
-        placeholder='Example:&#10;DarkBulbasaur (?) 20 $40,005&#10;ShinyBulbasaur (?) 20 $40,005&#10;Bulbasaur (?) 4 $625'></textarea>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="minUngendered" class="form-label">Min Ungendered</label>
-        <input type="number" class="form-control" id="minUngendered" value="10" min="0" />
-      </div>
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="maxMissing" class="form-label">Max Missing</label>
-        <input type="number" class="form-control" id="maxMissing" value="20" min="0" />
-        <div class="form-text">0 = show all missing entries</div>
-      </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="partitionOutput" />
-          <label class="form-check-label" for="partitionOutput">
-            Partition sorted output into Families vs Singles/Sets
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="row mb-3">
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="filterGolds" />
-          <label class="form-check-label" for="filterGolds">
-            Filter out Goldens (also exclude Goldens in missing list)
-          </label>
-        </div>
-      </div>
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="filterNormals" />
-          <label class="form-check-label" for="filterNormals">
-            Filter out Normals (also exclude Normals in missing list)
-          </label>
-        </div>
-      </div>
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="filterShinys" />
-          <label class="form-check-label" for="filterShinys">
-            Filter out Shinys (also exclude Shinys in missing list)
-          </label>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="filterDarks" />
-          <label class="form-check-label" for="filterDarks">
-            Filter out Darks (also exclude Darks in missing list)
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Options -->
-    <div class="row mb-3">
-      <div class="col-md-4 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="missingOnlyFamilyNeeded" />
-          <label class="form-check-label" for="missingOnlyFamilyNeeded">
-            Missing list: only entries needed to complete incomplete families
-          </label>
-        </div>
-      </div>
-
-      <div class="col-md-4 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="addMissingInline" />
-          <label class="form-check-label" for="addMissingInline">
-            Add missing items inline (in Families output)
-          </label>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="noGroupSpacing" />
-          <label class="form-check-label" for="noGroupSpacing">
-            No space between familys/individuals
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- FIXED GRID: 4 options in one row (col-md-3 each) -->
-    <div class="row mb-3">
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="showLevelLabel" />
-          <label class="form-check-label" for="showLevelLabel">
-            Output level as (Level: X) instead of just X
-          </label>
-        </div>
-      </div>
-
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="dropDuplicates" checked />
-          <label class="form-check-label" for="dropDuplicates">
-            Drop duplicates (keep the lowest-level one)
-          </label>
-        </div>
-      </div>
-
-      <div class="col-md-3 mb-2 mb-md-0">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="highlightRarity" checked />
-          <label class="form-check-label" for="highlightRarity">
-            Highlight rarity
-          </label>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="omitSummaryStats" />
-          <label class="form-check-label" for="omitSummaryStats">
-            Omit summary stats
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Colors -->
-    <div class="row mb-3">
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorGolden" class="form-label">Golden color</label>
-        <input type="text" class="form-control" id="colorGolden" value="gold" placeholder='e.g. gold or #FFD700' />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorShiny" class="form-label">Shiny color</label>
-        <input type="text" class="form-control" id="colorShiny" value="magenta" placeholder='e.g. magenta or #708090' />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorDark" class="form-label">Dark color</label>
-        <input type="text" class="form-control" id="colorDark" value="slategray" placeholder='e.g. slategray or #0000FF' />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorNormal" class="form-label">Normal color</label>
-        <input type="text" class="form-control" id="colorNormal" value="" placeholder='leave blank = no color' />
-      </div>
-    </div>
-
-    <button id="runButton" class="btn btn-primary">Generate BBCode & Stats</button>
-    <div class="mt-3 small text-muted" id="status"></div>
+  <!-- Header -->
+  <div class="mb-3">
+    <h1 class="h3 mb-1">TPPC (?) Enhanced Dex Sorter & Stats</h1>
+    <div class="small-note">by Darkness AKA Shiva</div>
+    <div class="small-note mt-1">Ungendered family grouping + rarity-aware highlighting + missing list + optional tag cloud.</div>
   </div>
 
-  <!-- Output view -->
-  <div id="output-view" class="d-none">
-    <h2 class="mb-3">Output</h2>
-    <p class="text-muted">Copy this text to your TPPC forum post / notes.</p>
+  <!-- Split panels -->
+  <div class="row g-3">
+    <!-- LEFT -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-input">
+        <label for="inputList" class="form-label fw-semibold">Input</label>
+        <textarea id="inputList" class="form-control" rows="16"
+          placeholder='Example:
+DarkBulbasaur (?) 20 $40,005
+ShinyBulbasaur (?) 20 $40,005
+Bulbasaur (?) 4 $625'></textarea>
 
-    <label for="outputText" class="form-label">Summary + Families BBCode</label>
-    <textarea id="outputText" class="form-control mb-3" rows="20"></textarea>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <button id="runButton" class="btn btn-primary" type="button">Generate BBCode & Stats</button>
+          <button id="clearButton" class="btn btn-outline-secondary" type="button">Clear</button>
+        </div>
 
-    <div id="familiesSinglesBlock" class="d-none">
-      <label for="outputSingles" class="form-label mt-3">Singles/Sets BBCode</label>
-      <textarea id="outputSingles" class="form-control mb-3" rows="20"></textarea>
+        <div class="mt-3">
+          <!-- OPTIONS FIRST -->
+          <div class="fw-semibold mb-2">Options</div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="partitionOutput" />
+            <label class="form-check-label" for="partitionOutput">
+              Partition output into Families vs Singles/Sets
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="missingOnlyFamilyNeeded" />
+            <label class="form-check-label" for="missingOnlyFamilyNeeded">
+              Missing list: only entries needed to complete incomplete families
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="addMissingInline" />
+            <label class="form-check-label" for="addMissingInline">
+              Add missing items inline (Families output)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="noGroupSpacing" />
+            <label class="form-check-label" for="noGroupSpacing">
+              No space between familys/individuals
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="showLevelLabel" />
+            <label class="form-check-label" for="showLevelLabel">
+              Output level as <code>(Level: X)</code> instead of just <code>X</code>
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="dropDuplicates" checked />
+            <label class="form-check-label" for="dropDuplicates">
+              Drop duplicates (keep the lowest-level one)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="highlightRarity" checked />
+            <label class="form-check-label" for="highlightRarity">
+              Highlight rarity
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="omitSummaryStats" />
+            <label class="form-check-label" for="omitSummaryStats">
+              Omit summary stats
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="visualizeCloud" />
+            <label class="form-check-label" for="visualizeCloud">
+              Visualize output (tag cloud sample)
+            </label>
+          </div>
+
+          <!-- Colors -->
+          <div class="mt-3 p-3 border rounded-3 bg-white bg-opacity-50">
+            <div class="fw-semibold mb-2">Optional colors (leave blank for none)</div>
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label for="colorGolden" class="form-label">Gold color</label>
+                <input id="colorGolden" class="form-control" type="text" value="gold" placeholder="#DAA520 or gold" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorShiny" class="form-label">Shiny color</label>
+                <input id="colorShiny" class="form-control" type="text" value="magenta" placeholder="#00AEEF" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorDark" class="form-label">Dark color</label>
+                <input id="colorDark" class="form-control" type="text" value="slategray" placeholder="#8A2BE2" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorNormal" class="form-label">Normal color</label>
+                <input id="colorNormal" class="form-control" type="text" value="" placeholder="#666666" />
+              </div>
+            </div>
+            <div class="small-note mt-2">
+              Colors apply to the name only via <code>[color="..."]Name[/color]</code>.
+            </div>
+          </div>
+
+          <hr class="my-3" />
+
+          <!-- FILTERS SECOND -->
+          <div class="fw-semibold mb-2">Filters</div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterGolds" />
+            <label class="form-check-label" for="filterGolds">
+              Filter out Goldens (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterNormals" />
+            <label class="form-check-label" for="filterNormals">
+              Filter out Normals (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterShinys" />
+            <label class="form-check-label" for="filterShinys">
+              Filter out Shinys (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterDarks" />
+            <label class="form-check-label" for="filterDarks">
+              Filter out Darks (also exclude in missing list)
+            </label>
+          </div>
+          <!-- Min/Max 50/50 -->
+          <div class="d-flex gap-3 flex-wrap mb-2">
+            <div class="flex-fill" style="min-width: 220px;">
+              <label for="minUngendered" class="form-label">Missing list: Min Ungendered</label>
+              <input type="number" class="form-control" id="minUngendered" value="10" min="0" />
+            </div>
+
+            <div class="flex-fill" style="min-width: 220px;">
+              <label for="maxMissing" class="form-label">Missing list: Max Missing</label>
+              <input type="number" class="form-control" id="maxMissing" value="20" min="0" />
+              <div class="form-text">0 = show all missing entries</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <label for="outputMissing" class="form-label mt-3">Missing list (per variant)</label>
-    <textarea id="outputMissing" class="form-control" rows="12"></textarea>
+    <!-- RIGHT -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-output">
+        <label for="outputText" class="form-label fw-semibold">Output (Summary + Families BBCode)</label>
+        <textarea id="outputText" class="form-control" rows="14" readonly></textarea>
 
-    <button id="backButton" class="btn btn-secondary mt-3">Back to input</button>
+        <div class="mt-2 d-flex flex-wrap gap-2">
+          <button id="copyMainBtn" class="btn btn-success" type="button">Copy Main</button>
+        </div>
+
+        <div id="familiesSinglesBlock" class="mt-3 d-none">
+          <label for="outputSingles" class="form-label fw-semibold">Singles/Sets BBCode</label>
+          <textarea id="outputSingles" class="form-control" rows="8" readonly></textarea>
+
+          <div class="mt-2 d-flex flex-wrap gap-2">
+            <button id="copySinglesBtn" class="btn btn-success" type="button">Copy Singles</button>
+          </div>
+        </div>
+
+        <label for="outputMissing" class="form-label fw-semibold mt-3">Missing list (per variant)</label>
+        <textarea id="outputMissing" class="form-control" rows="10" readonly></textarea>
+
+        <div class="mt-2 d-flex flex-wrap gap-2">
+          <button id="copyMissingBtn" class="btn btn-success" type="button">Copy Missing</button>
+        </div>
+
+        <div class="small-note mt-2" id="status"></div>
+
+        <!-- Tag cloud area (full width below both panels) -->
+        <div id="cloudRow" class="row g-3 mt-1 d-none">
+          <div class="col-12">
+            <div class="panel panel-output">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                  <div class="fw-semibold">Tag Cloud (sample of 40 from your input)</div>
+                  <div class="small-note">
+                    Font size is based on rarity (rarer = bigger). Sample is taken after filters/dedupe.
+                  </div>
+                </div>
+                <button id="rerollCloudBtn" class="btn btn-outline-success btn-sm" type="button">
+                  Resample 40
+                </button>
+              </div>
+
+              <div class="mt-2">
+                <svg id="tagCloudSvg" class="w-100" style="height: 360px;"></svg>
+              </div>
+
+              <div class="small-note mt-2" id="cloudStatus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+
+
+  <footer style="
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+  ">
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v8
+  </footer>
 </div>
+
+<!-- d3 + d3-cloud -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
 
 <script>
 // ===============================
 // Utility helpers
 // ===============================
 
-// Remove color prefixes (Shiny/Dark/Golden) whether it's "DarkFoo" or "Dark Foo"
 function stripPrefixes(name) {
   return name
     .replace(/^(shiny|dark|golden)\s*/i, "")
@@ -229,7 +306,6 @@ function extractForm(fullName) {
   const m = noPrefix.match(/\(([^)]+)\)/);
   if (!m) return "";
   const form = m[1].trim();
-  // "(?)" is the ungendered marker, not a form
   if (form === "?") return "";
   return form;
 }
@@ -246,7 +322,6 @@ function colorCategory(name) {
 }
 
 function colorRank(name) {
-  // Normal (0) < Dark (1) < Shiny (2) < Golden (3)
   const cat = colorCategory(name);
   if (cat === "golden") return 3;
   if (cat === "shiny") return 2;
@@ -273,10 +348,6 @@ function applyLevelLabelToRemainder(remainder) {
 }
 
 function boldLowLevels(remainder) {
-  // Handles:
-  //  "4"
-  //  "(Level: 4)"
-  //  "(Level: 4) extra"
   return remainder
     .replace(/\(Level:\s*(4|5)\)/g, '(Level: [B]$1[/B])')
     .replace(/^([45])\b/, '[B]$1[/B]');
@@ -290,7 +361,6 @@ function parseLeadingLevelFromRemainder(remainder) {
   return Number.isFinite(n) ? { levelNum: n, levelStr: s } : { levelNum: null, levelStr: s };
 }
 
-// Return raw text; caller decides how to wrap (color/strike nesting matters)
 function decorateMissingInline(text) {
   return text;
 }
@@ -374,7 +444,7 @@ async function runDexSorter({
   inputText,
   minUngendered,
   maxMissing,
-  flags, // {filterGolds, filterNormals, filterShinys, filterDarks}
+  flags,
   colors,
   statusEl,
   partitionOutput,
@@ -419,13 +489,11 @@ async function runDexSorter({
   }
 
   statusEl.textContent = "Parsing input list...";
-  // Capture: Name + optional (Form) + required (?) marker as part of the "full name"
   const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))/;
 
   const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
   if (!raw) throw new Error("No input provided.");
 
-  // Detect compact "(Level: N)" blob format
   const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
   const lineCount = raw.split(/\n/).length;
   const isCompact = lineCount < 2 && levelMatches.length >= 2;
@@ -438,8 +506,8 @@ async function runDexSorter({
 
     let m;
     while ((m = compactEntryRegex.exec(raw)) !== null) {
-      const name = m[1].trim();   // e.g. "DarkLugia (?)"
-      const lvlRaw = m[2];        // e.g. "3,499"
+      const name = m[1].trim();
+      const lvlRaw = m[2];
       const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
       const lvlFmt = Number.isFinite(lvlInt) ? lvlInt.toLocaleString("en-US") : lvlRaw.replace(/\s+/g, "");
       if (!name.includes("(?)")) continue;
@@ -449,7 +517,6 @@ async function runDexSorter({
     logicalLines = raw.split("\n");
   }
 
-  // Parse rows + apply filters + parse level for dedupe
   const tempRows = [];
   for (const rawLine of logicalLines) {
     const line = rawLine.trim();
@@ -485,14 +552,11 @@ async function runDexSorter({
 
   let rows;
   if (dropDuplicates) {
-    const best = new Map(); // canonical(full_name) -> row
+    const best = new Map();
     for (const r of tempRows) {
-      // Dedupe key: keep Unown letters distinct (canonicalKey() collapses Unown* -> "unown")
       let key;
       const rawKey = r.full_name.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
       if (rawKey.replace(/[^a-z0-9]/g, "").startsWith("unown")) {
-        // For Unown: do NOT collapse variants; treat UnownA, UnownB, etc as distinct
-        // Canonicalize spacing/punctuation but keep the full string identity
         key = rawKey
           .replace("♀", "f").replace("♂", "m")
           .replace(/\s+/g, " ")
@@ -532,11 +596,8 @@ async function runDexSorter({
     }
     r.dex = dex;
   }
-  if (missingSpecies.length > 0) {
-    console.warn("WARNING: Could not find dex for:", Array.from(new Set(missingSpecies)));
-  }
 
-  // Compute evolution families (components) and depths (from evolution JSON)
+  // Compute evolution families and depths
   statusEl.textContent = "Computing evo families & depths...";
   const rowSpeciesKeys = new Set();
   for (const r of rows) {
@@ -545,8 +606,8 @@ async function runDexSorter({
     if (!graph.has(k)) graph.set(k, new Set());
   }
 
-  const familyAnchor = {};           // speciesKey -> familyId
-  const familyMembers = new Map();   // familyId -> Set(speciesKey)
+  const familyAnchor = {};
+  const familyMembers = new Map();
   const visited = new Set();
 
   for (const start of rowSpeciesKeys) {
@@ -581,7 +642,6 @@ async function runDexSorter({
 
     for (const k of component) familyAnchor[k] = minDex;
 
-    // evoDepth in component
     const componentList = Array.from(component);
     const roots = [];
 
@@ -625,7 +685,7 @@ async function runDexSorter({
     return d !== undefined ? d : 9999;
   }
 
-  // Sort rows (dex+family+depth+forms+colors)
+  // Sort rows
   statusEl.textContent = "Sorting Pokémon...";
   const rowsSorted = rows.slice().sort((a, b) => {
     const familyA = getFamilyId(a.species);
@@ -643,7 +703,6 @@ async function runDexSorter({
     const crA = colorRank(a.full_name);
     const crB = colorRank(b.full_name);
 
-    // Ensure color ordering is respected before name tie-breakers
     const keyA = [familyA, depthA, a.dex, frA, crA, baseA.toLowerCase(), a.full_name];
     const keyB = [familyB, depthB, b.dex, frB, crB, baseB.toLowerCase(), b.full_name];
     return compareTuple(keyA, keyB);
@@ -671,25 +730,30 @@ async function runDexSorter({
     return wrapColor(colors.normal, name);
   }
 
-  // Fetch rarity early (for family-vs-single based on rarity existence + for inline missing strike-through + rarity highlighting)
+  // Fetch rarity early
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
-  // --- Rarity lookup + base-evolution resolver + (FORM-AWARE) rarity for highlight/strike ---
-  const rarityByKey = new Map(); // canonicalKey(pokemonName) -> ungendered count
+  const rarityByKey = new Map();
   for (const rr of rarityRowsAll) {
     rarityByKey.set(canonicalKey(rr.pokemon), rr.ungendered);
   }
 
-  // canonical species key -> a nice display name (from evo json), fallback handled later
   const speciesDisplayByKey = {};
   for (const nm of Object.values(pokemonNameMap)) {
     const k = canonicalKey(nm);
     if (!(k in speciesDisplayByKey)) speciesDisplayByKey[k] = nm;
   }
 
-  // Walk "parents" to find the base evolution species key.
-  // If multiple parents exist, pick the one with the lowest dex (stable tie-break).
+  function variantPrefixFromName(fullName) {
+    const cat = colorCategory(fullName);
+    if (cat === "golden") return "Golden";
+    if (cat === "shiny") return "Shiny";
+    if (cat === "dark") return "Dark";
+    return "";
+  }
+
+  const baseRarityMemo = new Map();
   function baseEvolutionKey(speciesKey) {
     let cur = speciesKey;
     while (true) {
@@ -708,18 +772,6 @@ async function runDexSorter({
     return cur;
   }
 
-  function variantPrefixFromName(fullName) {
-    const cat = colorCategory(fullName);
-    if (cat === "golden") return "Golden";
-    if (cat === "shiny") return "Shiny";
-    if (cat === "dark") return "Dark";
-    return ""; // normal
-  }
-
-  // Find rarity of "base form", but if base form variant doesn't exist (0),
-  // use the youngest stage (from base->children) where it DOES exist.
-  // FORM-AWARE: if form is "Alola", we look up "GoldenVulpix (Alola)" etc.
-  const baseRarityMemo = new Map(); // key: `${prefix}|${form}|${speciesKey}` -> number
   function baseVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     const memoKey = `${variantPrefix}|${(form || "").toLowerCase()}|${speciesKey}`;
     if (baseRarityMemo.has(memoKey)) return baseRarityMemo.get(memoKey);
@@ -733,7 +785,6 @@ async function runDexSorter({
       return rarityByKey.get(canonicalKey(lookup)) ?? 0;
     }
 
-    // BFS by depth from baseKey (youngest first) until we find rarity > 0
     const q = [baseKey];
     const seen = new Set();
     while (q.length) {
@@ -746,7 +797,6 @@ async function runDexSorter({
         layer.push(n);
       }
 
-      // stable tie-break inside a layer
       layer.sort((a, b) => (nameToDex[a] ?? 9999) - (nameToDex[b] ?? 9999));
 
       for (const n of layer) {
@@ -769,21 +819,26 @@ async function runDexSorter({
 
   function rarityForVariantAtSpeciesKey(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     const sName = speciesDisplayByKey[speciesKey] ?? fallbackSpeciesName;
-    let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
-    if (form) lookup += ` (${form})`;
-    return rarityByKey.get(canonicalKey(lookup)) ?? 0;
+
+    // 1) Try form-specific lookup first (if form exists)
+    if (form) {
+      let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
+      lookup += ` (${form})`;
+      const rForm = rarityByKey.get(canonicalKey(lookup)) ?? 0;
+      if (rForm > 0) return rForm;
+      // else fall through to try non-form
+    }
+
+    // 2) Fallback to non-form lookup
+    let lookup2 = variantPrefix ? `${variantPrefix}${sName}` : sName;
+    return rarityByKey.get(canonicalKey(lookup2)) ?? 0;
   }
 
-  // cumulative rarity = rarity(species) + rarity(all pre-evos in chain)
-  // If a pre-evo variant doesn't exist (rarity 0), it contributes 0.
-  // FORM-AWARE: if current is "(Alola)", we keep "(Alola)" for all lookups so we DON'T pull in non-form pre-evos.
   function cumulativeVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     let total = 0;
     let cur = speciesKey;
 
-    // protect against weird loops
     const seen = new Set();
-
     while (true) {
       if (seen.has(cur)) break;
       seen.add(cur);
@@ -793,7 +848,6 @@ async function runDexSorter({
       const pset = parents.get(cur);
       if (!pset || pset.size === 0) break;
 
-      // if multiple parents exist, pick lowest dex as you already do elsewhere
       let best = null;
       let bestDex = Infinity;
       for (const p of pset) {
@@ -817,15 +871,10 @@ async function runDexSorter({
 
   function wrapRaritySizeIfNeeded(bbcodeText, cumulativeRarity) {
     if (!highlightRarity) return bbcodeText;
-    if (cumulativeRarity >= 1 && cumulativeRarity <= 20) {
-      return `[b][size="5"]${bbcodeText}[/size][/b]`;
-    }
-    if (cumulativeRarity >= 21 && cumulativeRarity <= 100) {
-      return `[b][size="4"]${bbcodeText}[/size][/b]`;
-    }
+    if (cumulativeRarity >= 1 && cumulativeRarity <= 20) return `[b][size="5"]${bbcodeText}[/size][/b]`;
+    if (cumulativeRarity >= 21 && cumulativeRarity <= 100) return `[b][size="4"]${bbcodeText}[/size][/b]`;
     return bbcodeText;
   }
-  // --- END Rarity block ---
 
   // Species present in rarity list at all (respecting variant filters)
   const raritySpeciesKeysPresent = new Set();
@@ -836,8 +885,8 @@ async function runDexSorter({
     raritySpeciesKeysPresent.add(sk);
   }
 
-  // For each component familyId: how many species in that component have ANY ungendered entry in rarity list
-  const rarityFamilySize = new Map(); // famId -> count
+  // family size in rarity list
+  const rarityFamilySize = new Map();
   for (const [famId, members] of familyMembers.entries()) {
     let c = 0;
     for (const sk of members) if (raritySpeciesKeysPresent.has(sk)) c++;
@@ -855,7 +904,6 @@ async function runDexSorter({
     .filter((row) => row.ungendered > minUngendered)
     .sort((a, b) => b.ungendered - a.ungendered);
 
-  // Incomplete families (multi-species in rarity) = any missing entry (any allowed variant) in that family
   const incompleteFamilyIds = new Set();
   for (const row of candidates) {
     const pokeName = row.pokemon;
@@ -871,7 +919,7 @@ async function runDexSorter({
   }
 
   const missingByVariant = { golden: [], shiny: [], dark: [], normal: [] };
-  const missingByFamily = new Map(); // famId -> array of { name, u }
+  const missingByFamily = new Map();
 
   for (const row of candidates) {
     const pokeName = row.pokemon;
@@ -890,7 +938,6 @@ async function runDexSorter({
     }
 
     missingByVariant[cat].push({ name: pokeName, u: row.ungendered });
-
     if (!missingByFamily.has(famId)) missingByFamily.set(famId, []);
     missingByFamily.get(famId).push({ name: pokeName, u: row.ungendered });
   }
@@ -898,7 +945,6 @@ async function runDexSorter({
   // ===============================
   // Output formatting
   // ===============================
-
   statusEl.textContent = "Formatting sorted output...";
 
   function formatExistingRow(r) {
@@ -909,7 +955,6 @@ async function runDexSorter({
     const afterName = origLine.slice(m[0].length).trim();
     const decorated = decorateName(r.full_name);
 
-    // rarity highlight applies to NAME portion only (FORM-AWARE)
     const sk = canonicalKey(r.species);
     const prefix = variantPrefixFromName(r.full_name);
     const form = extractForm(r.full_name);
@@ -922,14 +967,11 @@ async function runDexSorter({
     }
     let remainder = restParts.join(" ");
     if (showLevelLabel && remainder) remainder = applyLevelLabelToRemainder(remainder);
-
-    // bold levels 4 / 5
     if (remainder) remainder = boldLowLevels(remainder);
 
     return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
   }
 
-  // Group existing rows by family
   const rowsByFamily = new Map();
   for (const r of rowsSorted) {
     const famId = getFamilyId(r.species);
@@ -937,7 +979,6 @@ async function runDexSorter({
     rowsByFamily.get(famId).push(r);
   }
 
-  // Sort-key used when merging existing+missing inline
   function sortKeyForItem(item) {
     const familyId = getFamilyId(item.species);
     const depth = evoDepth[canonicalKey(item.species)] ?? 0;
@@ -945,8 +986,6 @@ async function runDexSorter({
     const fr = formRank(extractForm(item.full_name));
     const cr = colorRank(item.full_name);
     const base = speciesFromFullName(item.full_name);
-
-    // Color comes before base tie-breakers to guarantee normal->dark->shiny->golden
     return [familyId, depth, dex, fr, cr, base.toLowerCase(), item.full_name];
   }
 
@@ -968,19 +1007,17 @@ async function runDexSorter({
 
     const existing = rowsByFamily.get(famId) || [];
 
-    // If not adding inline, or it's a single-set group, just output what we have
     if (!addMissingInline || isSingleSet || famSizeRarity <= 1) {
       for (const r of existing) target.push(formatExistingRow(r));
       continue;
     }
 
-    // Merge existing + missing-in-family, sort, output (missing in red)
     const items = [];
 
     for (const r of existing) {
       items.push({
         kind: "have",
-        full_name: r.full_name, // includes (?) marker already
+        full_name: r.full_name,
         species: r.species,
         dex: r.dex,
         row: r,
@@ -989,17 +1026,12 @@ async function runDexSorter({
 
     const missingListForFamily = missingByFamily.get(famId) || [];
     for (const miss of missingListForFamily) {
-      // Display: "VariantName (?)" (no level)
-      const displayName = `${miss.name} (?)`;
-      const species = speciesFromFullName(miss.name);
-      const dex = nameToDex[canonicalKey(species)] ?? 9999;
-
       items.push({
         kind: "missing",
         full_name: `${miss.name} (?)`,
-        display: displayName,
-        species,
-        dex,
+        display: `${miss.name} (?)`,
+        species: speciesFromFullName(miss.name),
+        dex: nameToDex[canonicalKey(speciesFromFullName(miss.name))] ?? 9999,
       });
     }
 
@@ -1009,11 +1041,10 @@ async function runDexSorter({
       if (it.kind === "have") {
         target.push(formatExistingRow(it.row));
       } else {
-        // IMPORTANT: do NOT apply rarity size highlights to inline missing items
-        const raw = decorateMissingInline(it.display);
+        const rawTxt = decorateMissingInline(it.display);
         const out = shouldStrikeInlineMissing(it.full_name, it.species)
-          ? `[color="red"][s]${raw}[/s][/color]`
-          : `[color="red"]${raw}[/color]`;
+          ? `[color="red"][s]${rawTxt}[/s][/color]`
+          : `[color="red"]${rawTxt}[/color]`;
         target.push(out);
       }
     }
@@ -1116,35 +1147,144 @@ async function runDexSorter({
   let singlesBlockOut = singlesBbcodeBlock;
 
   if (partitionOutput) {
-    familiesBlockOut =
-      "[B][U]Evolution Families:[/U][/B]\n" +
-      familiesBbcodeBlock;
-
-    singlesBlockOut =
-      "[B][U]Individual Pokemon / Pairs:[/U][/B]\n" +
-      singlesBbcodeBlock;
+    familiesBlockOut = "[B][U]Evolution Families:[/U][/B]\n" + familiesBbcodeBlock;
+    singlesBlockOut  = "[B][U]Individual Pokemon / Pairs:[/U][/B]\n" + singlesBbcodeBlock;
   }
 
   const summaryText = omitSummaryStats ? "" : (summaryLines.join("\n") + "\n");
   const mainText = summaryText + familiesBlockOut;
-
   const secondaryText = partitionOutput ? singlesBlockOut : "";
-
   const missingText = missingLines.join("\n");
 
-  return { mainText, missingText, secondaryText };
+  // ===============================
+  // Tag cloud source data (post filters/dedupe)
+  // ===============================
+  const cloudItems = rowsSorted.map(r => {
+    const sk = canonicalKey(r.species);
+    const prefix = variantPrefixFromName(r.full_name);
+    const form = extractForm(r.full_name);
+    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species, form);
+
+    // Display text: remove trailing "(?)"
+    const text = r.full_name.replace(/\(\?\)\s*$/g, "").trim();
+    return { text, rarity: cumR };
+  });
+
+  // sort by rarity ascending (rarest first)
+  cloudItems.sort((a, b) => (a.rarity ?? 999999) - (b.rarity ?? 999999));
+
+  return { mainText, missingText, secondaryText, cloudItems };
 }
+
+// ===============================
+// Tag cloud renderer
+// ===============================
+
+function sampleArray(arr, n) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a.slice(0, Math.min(n, a.length));
+}
+
+function renderTagCloud(items, svgEl, statusEl) {
+  if (!items || items.length === 0) {
+    statusEl.textContent = "No items to visualize.";
+    if (window.d3) d3.select(svgEl).selectAll("*").remove();
+    return;
+  }
+
+  // Sample 40 (or fewer if not enough)
+  const sample = sampleArray(items, 40);
+
+  // Rarity values (cumulative rarity) — lower = rarer
+  const rarityVals = sample.map(w => Number.isFinite(w.rarity) ? w.rarity : 0);
+  const minR = Math.min(...rarityVals);
+  const maxR = Math.max(...rarityVals);
+
+  // Min-max normalization -> [0,1]
+  // We then invert so rarer becomes larger: inv = 1 - norm
+  function invNorm(r) {
+    if (!Number.isFinite(r)) r = 0;
+    if (minR === maxR) return 0.5; // all same -> stable mid size
+    const norm = (r - minR) / (maxR - minR); // 0..1 where 0 is rarest
+    return 1 - norm; // 1..0 where 1 is rarest
+  }
+
+  // Map normalized score to font sizes
+  const MIN_FONT = 14;
+  const MAX_FONT = 58;
+
+  // Prepare SVG
+  const bbox = svgEl.getBoundingClientRect();
+  const width = Math.max(320, Math.floor(bbox.width || 720));
+  const height = 360;
+
+  const svg = d3.select(svgEl);
+  svg.selectAll("*").remove();
+  svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+  statusEl.textContent =
+    `Showing ${sample.length} sampled items. ` +
+    `Cumulative rarity min: ${minR}, max: ${maxR}. ` +
+    `Min-max normalized for sizing (rarer = bigger). Click a word to copy.`;
+
+  const cloudWords = sample.map(w => {
+    const score = invNorm(w.rarity); // 0..1 (rarer -> closer to 1)
+    const size = Math.round(MIN_FONT + score * (MAX_FONT - MIN_FONT));
+    return { text: w.text, rarity: w.rarity, size };
+  });
+
+  d3.layout.cloud()
+    .size([width, height])
+    .words(cloudWords)
+    .padding(2)
+    .spiral("rectangular")
+    .rotate(() => (Math.random() < 0.15 ? 90 : 0))
+    .font("sans-serif")
+    .fontSize(d => d.size)
+    .on("end", draw)
+    .start();
+
+  function draw(layoutWords) {
+    const g = svg.append("g")
+      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+    const texts = g.selectAll("text")
+      .data(layoutWords)
+      .enter()
+      .append("text")
+      .style("font-size", d => `${d.size}px`)
+      .style("font-family", "sans-serif")
+      .style("cursor", "pointer")
+      .attr("text-anchor", "middle")
+      .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+      .text(d => d.text);
+
+    texts.append("title").text(d => `cumulative rarity: ${d.rarity} | size: ${d.size}`);
+
+    texts.on("click", (_, d) => {
+      navigator.clipboard.writeText(d.text).catch(() => {});
+      statusEl.textContent = `Copied: ${d.text} (cumulative rarity: ${d.rarity})`;
+    });
+  }
+}
+
 
 // ===============================
 // UI wiring
 // ===============================
 
-const runButton = document.getElementById("runButton");
-const backButton = document.getElementById("backButton");
-const statusEl = document.getElementById("status");
+function copyToClipboard(text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).catch(() => {});
+}
 
-const inputView = document.getElementById("input-view");
-const outputView = document.getElementById("output-view");
+const runButton = document.getElementById("runButton");
+const clearButton = document.getElementById("clearButton");
+const statusEl = document.getElementById("status");
 
 const inputListEl = document.getElementById("inputList");
 const outputTextEl = document.getElementById("outputText");
@@ -1171,10 +1311,24 @@ const dropDuplicatesEl = document.getElementById("dropDuplicates");
 const highlightRarityEl = document.getElementById("highlightRarity");
 const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
+const visualizeCloudEl = document.getElementById("visualizeCloud");
+
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
 const colorDarkEl = document.getElementById("colorDark");
 const colorNormalEl = document.getElementById("colorNormal");
+
+const copyMainBtn = document.getElementById("copyMainBtn");
+const copyMissingBtn = document.getElementById("copyMissingBtn");
+const copySinglesBtn = document.getElementById("copySinglesBtn");
+
+// Cloud UI
+const cloudRowEl = document.getElementById("cloudRow");
+const tagCloudSvgEl = document.getElementById("tagCloudSvg");
+const cloudStatusEl = document.getElementById("cloudStatus");
+const rerollCloudBtn = document.getElementById("rerollCloudBtn");
+
+let lastCloudItems = null;
 
 runButton.addEventListener("click", async () => {
   const inputText = inputListEl.value.trim();
@@ -1213,7 +1367,7 @@ runButton.addEventListener("click", async () => {
   statusEl.textContent = "Running sorter...";
 
   try {
-    const { mainText, missingText, secondaryText } = await runDexSorter({
+    const { mainText, missingText, secondaryText, cloudItems } = await runDexSorter({
       inputText,
       minUngendered: Number.isFinite(minUngendered) ? minUngendered : 10,
       maxMissing: Number.isFinite(maxMissing) ? maxMissing : 20,
@@ -1241,8 +1395,18 @@ runButton.addEventListener("click", async () => {
       outputSinglesEl.value = "";
     }
 
-    inputView.classList.add("d-none");
-    outputView.classList.remove("d-none");
+    // Cloud
+    lastCloudItems = cloudItems || null;
+    if (visualizeCloudEl.checked && lastCloudItems && lastCloudItems.length > 0) {
+      cloudRowEl.classList.remove("d-none");
+      // Render after it becomes visible so width measures correctly
+      setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl), 0);
+    } else {
+      cloudRowEl.classList.add("d-none");
+      cloudStatusEl.textContent = "";
+      d3.select(tagCloudSvgEl).selectAll("*").remove();
+    }
+
   } catch (err) {
     console.error(err);
     statusEl.textContent = "Error: " + err.message;
@@ -1251,27 +1415,43 @@ runButton.addEventListener("click", async () => {
   }
 });
 
-backButton.addEventListener("click", () => {
-  outputView.classList.add("d-none");
-  inputView.classList.remove("d-none");
+clearButton.addEventListener("click", () => {
+  inputListEl.value = "";
+  outputTextEl.value = "";
+  outputMissingEl.value = "";
+  outputSinglesEl.value = "";
+  familiesSinglesBlock.classList.add("d-none");
   statusEl.textContent = "";
+
+  cloudRowEl.classList.add("d-none");
+  cloudStatusEl.textContent = "";
+  lastCloudItems = null;
+  if (window.d3) d3.select(tagCloudSvgEl).selectAll("*").remove();
 });
+
+copyMainBtn.addEventListener("click", () => copyToClipboard(outputTextEl.value));
+copyMissingBtn.addEventListener("click", () => copyToClipboard(outputMissingEl.value));
+copySinglesBtn.addEventListener("click", () => copyToClipboard(outputSinglesEl.value));
+
+rerollCloudBtn.addEventListener("click", () => {
+  if (!lastCloudItems || lastCloudItems.length === 0) return;
+  cloudRowEl.classList.remove("d-none");
+  renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl);
+});
+
+visualizeCloudEl.addEventListener("change", () => {
+  if (visualizeCloudEl.checked && lastCloudItems && lastCloudItems.length > 0) {
+    cloudRowEl.classList.remove("d-none");
+    setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl), 0);
+  } else {
+    cloudRowEl.classList.add("d-none");
+    cloudStatusEl.textContent = "";
+    if (window.d3) d3.select(tagCloudSvgEl).selectAll("*").remove();
+  }
+});
+
+document.getElementById("copyright-year").textContent = new Date().getFullYear();
 </script>
 
 </body>
-
-<footer style="
-  margin-top: 3rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid #ddd;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666;
-">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v7.3
-</footer>
-
-<script>
-  document.getElementById("copyright-year").textContent = new Date().getFullYear();
-</script>
 </html>
