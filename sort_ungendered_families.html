@@ -11,6 +11,12 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
+  <!-- Bootstrap Icons (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
   <style>
     body { padding-top: 1.5rem; padding-bottom: 1.5rem; }
     textarea { font-family: monospace; font-size: 0.9rem; }
@@ -28,6 +34,96 @@
     .panel {
       border-radius: 1rem;
       padding: 1rem;
+    }
+
+    .flash-note {
+      font-size: 0.9rem;
+      color: #0f5132;
+    }
+    .cloud-tooltip {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.3;
+      max-width: 360px;
+      white-space: pre-line; /* respects \n in tooltip text */
+      display: none;
+    }
+
+    /* ===============================
+       Dark mode (added)
+       =============================== */
+    body.dark-mode {
+      background: #0f1115;
+      color: #e6e6e6;
+    }
+    body.dark-mode .small-note { color: #a7a7a7; }
+    body.dark-mode textarea.form-control,
+    body.dark-mode input.form-control {
+      background: #151923;
+      color: #e6e6e6;
+      border-color: rgba(255,255,255,0.18);
+    }
+    body.dark-mode .form-text { color: #a7a7a7; }
+    body.dark-mode .panel-input {
+      background: rgba(13, 202, 240, 0.08);
+      border-color: rgba(13, 202, 240, 0.20);
+    }
+    body.dark-mode .panel-output {
+      background: rgba(25, 135, 84, 0.08);
+      border-color: rgba(25, 135, 84, 0.20);
+    }
+    body.dark-mode .bg-white.bg-opacity-50 {
+      background-color: rgba(20, 24, 33, 0.55) !important;
+    }
+    body.dark-mode footer {
+      border-top-color: rgba(255,255,255,0.16) !important;
+      color: #a7a7a7 !important;
+    }
+
+    /* Bottom-right toggle container (added) */
+    .darkmode-toggle {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+      backdrop-filter: blur(8px);
+    }
+    body.dark-mode .darkmode-toggle {
+      background: rgba(21, 25, 35, 0.92);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+    .darkmode-toggle .bi {
+      font-size: 1.05rem;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    body.dark-mode .darkmode-toggle .bi { opacity: 0.95; }
+    .darkmode-toggle .form-check {
+      margin: 0;
+    }
+    .darkmode-toggle .form-check-input {
+      cursor: pointer;
+    }
+
+    /* Tag cloud sample control wrapper (added) */
+    #cloudSampleControls {
+      margin-top: 0.25rem;
+      margin-left: 1.5rem; /* aligns under checkbox label area */
     }
   </style>
 </head>
@@ -60,7 +156,6 @@ Bulbasaur (?) 4 $625'></textarea>
         </div>
 
         <div class="mt-3">
-          <!-- OPTIONS FIRST -->
           <div class="fw-semibold mb-2">Options</div>
 
           <div class="form-check mb-2">
@@ -126,6 +221,26 @@ Bulbasaur (?) 4 $625'></textarea>
             </label>
           </div>
 
+          <!-- Tag cloud sample size option (added) -->
+          <div id="cloudSampleControls" class="d-none">
+            <label for="cloudSampleSize" class="form-label mb-1">
+              Tag cloud sample size
+              <span class="small-note">(default 100)</span>
+            </label>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <input
+                type="number"
+                class="form-control"
+                id="cloudSampleSize"
+                value="100"
+                min="1"
+                step="1"
+                style="width: 140px;"
+              />
+              <div class="form-text m-0">Max words sampled from your filtered/deduped input.</div>
+            </div>
+          </div>
+
           <!-- Colors -->
           <div class="mt-3 p-3 border rounded-3 bg-white bg-opacity-50">
             <div class="fw-semibold mb-2">Optional colors (leave blank for none)</div>
@@ -154,7 +269,6 @@ Bulbasaur (?) 4 $625'></textarea>
 
           <hr class="my-3" />
 
-          <!-- FILTERS SECOND -->
           <div class="fw-semibold mb-2">Filters</div>
 
           <div class="form-check mb-2">
@@ -184,7 +298,7 @@ Bulbasaur (?) 4 $625'></textarea>
               Filter out Darks (also exclude in missing list)
             </label>
           </div>
-          <!-- Min/Max 50/50 -->
+
           <div class="d-flex gap-3 flex-wrap mb-2">
             <div class="flex-fill" style="min-width: 220px;">
               <label for="minUngendered" class="form-label">Missing list: Min Ungendered</label>
@@ -207,8 +321,9 @@ Bulbasaur (?) 4 $625'></textarea>
         <label for="outputText" class="form-label fw-semibold">Output (Summary + Families BBCode)</label>
         <textarea id="outputText" class="form-control" rows="14" readonly></textarea>
 
-        <div class="mt-2 d-flex flex-wrap gap-2">
+        <div class="mt-2 d-flex flex-wrap gap-2 align-items-center">
           <button id="copyMainBtn" class="btn btn-success" type="button">Copy Main</button>
+          <span id="jumpStatus" class="flash-note"></span>
         </div>
 
         <div id="familiesSinglesBlock" class="mt-3 d-none">
@@ -229,35 +344,35 @@ Bulbasaur (?) 4 $625'></textarea>
 
         <div class="small-note mt-2" id="status"></div>
 
-        <!-- Tag cloud area (full width below both panels) -->
+        <!-- Tag cloud area -->
         <div id="cloudRow" class="row g-3 mt-1 d-none">
           <div class="col-12">
             <div class="panel panel-output">
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
-                  <div class="fw-semibold">Tag Cloud (sample of 40 from your input)</div>
+                  <div class="fw-semibold">Tag Cloud</div>
                   <div class="small-note">
-                    Font size is based on rarity (rarer = bigger). Sample is taken after filters/dedupe.
+                    Size uses <b>adjusted score</b> derived from cumulative rarity (rarer/valuable = bigger),
+                    min-max normalized within the sample. Click a word to jump-highlight it in output.
                   </div>
                 </div>
                 <button id="rerollCloudBtn" class="btn btn-outline-success btn-sm" type="button">
-                  Resample 40
+                  Resample
                 </button>
               </div>
 
               <div class="mt-2">
-                <svg id="tagCloudSvg" class="w-100" style="height: 360px;"></svg>
+                <svg id="tagCloudSvg" class="w-100" style="height: 650px;"></svg>
               </div>
 
               <div class="small-note mt-2" id="cloudStatus"></div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
-
-
 
   <footer style="
     margin-top: 3rem;
@@ -267,8 +382,17 @@ Bulbasaur (?) 4 $625'></textarea>
     font-size: 0.9rem;
     color: #666;
   ">
-    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v8
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v8.2
   </footer>
+</div>
+
+<!-- Bottom-right dark mode toggle (added) -->
+<div class="darkmode-toggle" aria-label="Dark mode toggle">
+  <i class="bi bi-sun-fill" aria-hidden="true"></i>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+  </div>
+  <i class="bi bi-moon-stars-fill" aria-hidden="true"></i>
 </div>
 
 <!-- d3 + d3-cloud -->
@@ -361,9 +485,7 @@ function parseLeadingLevelFromRemainder(remainder) {
   return Number.isFinite(n) ? { levelNum: n, levelStr: s } : { levelNum: null, levelStr: s };
 }
 
-function decorateMissingInline(text) {
-  return text;
-}
+function decorateMissingInline(text) { return text; }
 
 function isVariantFiltered(cat, flags) {
   if (cat === "golden" && flags.filterGolds) return true;
@@ -371,6 +493,10 @@ function isVariantFiltered(cat, flags) {
   if (cat === "shiny"  && flags.filterShinys) return true;
   if (cat === "dark"   && flags.filterDarks) return true;
   return false;
+}
+
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 // ===============================
@@ -582,22 +708,13 @@ async function runDexSorter({
     rows = tempRows;
   }
 
-  // Attach species + dex
-  const missingSpecies = [];
   for (const r of rows) {
     const species = speciesFromFullName(r.full_name);
     r.species = species;
-
     const key = canonicalKey(species);
-    let dex = nameToDex[key];
-    if (dex === undefined) {
-      missingSpecies.push(species);
-      dex = 9999;
-    }
-    r.dex = dex;
+    r.dex = nameToDex[key] ?? 9999;
   }
 
-  // Compute evolution families and depths
   statusEl.textContent = "Computing evo families & depths...";
   const rowSpeciesKeys = new Set();
   for (const r of rows) {
@@ -685,7 +802,6 @@ async function runDexSorter({
     return d !== undefined ? d : 9999;
   }
 
-  // Sort rows
   statusEl.textContent = "Sorting Pokémon...";
   const rowsSorted = rows.slice().sort((a, b) => {
     const familyA = getFamilyId(a.species);
@@ -708,7 +824,6 @@ async function runDexSorter({
     return compareTuple(keyA, keyB);
   });
 
-  // UE/UG list
   statusEl.textContent = "Fetching UE/UG list...";
   const ueugSet = await fetchUEUGSet();
 
@@ -730,7 +845,6 @@ async function runDexSorter({
     return wrapColor(colors.normal, name);
   }
 
-  // Fetch rarity early
   statusEl.textContent = "Fetching rarity...";
   const rarityRowsAll = await fetchRarityTable();
 
@@ -753,7 +867,6 @@ async function runDexSorter({
     return "";
   }
 
-  const baseRarityMemo = new Map();
   function baseEvolutionKey(speciesKey) {
     let cur = speciesKey;
     while (true) {
@@ -772,64 +885,16 @@ async function runDexSorter({
     return cur;
   }
 
-  function baseVariantRarityForSpecies(speciesKey, variantPrefix, fallbackSpeciesName, form) {
-    const memoKey = `${variantPrefix}|${(form || "").toLowerCase()}|${speciesKey}`;
-    if (baseRarityMemo.has(memoKey)) return baseRarityMemo.get(memoKey);
-
-    const baseKey = baseEvolutionKey(speciesKey);
-
-    function rarityForSpeciesKey(sk) {
-      const sName = speciesDisplayByKey[sk] ?? fallbackSpeciesName;
-      let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
-      if (form) lookup += ` (${form})`;
-      return rarityByKey.get(canonicalKey(lookup)) ?? 0;
-    }
-
-    const q = [baseKey];
-    const seen = new Set();
-    while (q.length) {
-      const layerSize = q.length;
-      const layer = [];
-      for (let i = 0; i < layerSize; i++) {
-        const n = q.shift();
-        if (seen.has(n)) continue;
-        seen.add(n);
-        layer.push(n);
-      }
-
-      layer.sort((a, b) => (nameToDex[a] ?? 9999) - (nameToDex[b] ?? 9999));
-
-      for (const n of layer) {
-        const r = rarityForSpeciesKey(n);
-        if (r > 0) {
-          baseRarityMemo.set(memoKey, r);
-          return r;
-        }
-      }
-
-      for (const n of layer) {
-        const childSet = children.get(n) || new Set();
-        for (const c of childSet) if (!seen.has(c)) q.push(c);
-      }
-    }
-
-    baseRarityMemo.set(memoKey, 0);
-    return 0;
-  }
-
   function rarityForVariantAtSpeciesKey(speciesKey, variantPrefix, fallbackSpeciesName, form) {
     const sName = speciesDisplayByKey[speciesKey] ?? fallbackSpeciesName;
 
-    // 1) Try form-specific lookup first (if form exists)
     if (form) {
       let lookup = variantPrefix ? `${variantPrefix}${sName}` : sName;
       lookup += ` (${form})`;
       const rForm = rarityByKey.get(canonicalKey(lookup)) ?? 0;
       if (rForm > 0) return rForm;
-      // else fall through to try non-form
     }
 
-    // 2) Fallback to non-form lookup
     let lookup2 = variantPrefix ? `${variantPrefix}${sName}` : sName;
     return rarityByKey.get(canonicalKey(lookup2)) ?? 0;
   }
@@ -857,16 +922,91 @@ async function runDexSorter({
       if (!best) break;
       cur = best;
     }
-
     return total;
+  }
+
+  function preEvoChainBreakdown(speciesKey, variantPrefix, fallbackSpeciesName, form) {
+    const parts = [];
+    let cur = speciesKey;
+    const seen = new Set();
+
+    while (true) {
+      if (seen.has(cur)) break;
+      seen.add(cur);
+
+      const sName = speciesDisplayByKey[cur] ?? fallbackSpeciesName;
+      const rUsed = rarityForVariantAtSpeciesKey(cur, variantPrefix, fallbackSpeciesName, form);
+
+      parts.push({ speciesKey: cur, name: sName, rarity: rUsed });
+
+      const pset = parents.get(cur);
+      if (!pset || pset.size === 0) break;
+
+      let best = null;
+      let bestDex = Infinity;
+      for (const p of pset) {
+        const d = nameToDex[p] ?? 9999;
+        if (d < bestDex) { bestDex = d; best = p; }
+      }
+      if (!best) break;
+      cur = best;
+    }
+    return parts;
   }
 
   function shouldStrikeInlineMissing(missingFullName, missingSpecies) {
     const prefix = variantPrefixFromName(missingFullName);
     const sk = canonicalKey(missingSpecies);
     const form = extractForm(missingFullName);
-    const r = baseVariantRarityForSpecies(sk, prefix, missingSpecies, form);
-    return r > 0 && r <= 10;
+
+    const memoKey = `${prefix}|${(form || "").toLowerCase()}|${sk}`;
+    if (!shouldStrikeInlineMissing.memo) shouldStrikeInlineMissing.memo = new Map();
+    const baseRarityMemo = shouldStrikeInlineMissing.memo;
+
+    function rarityLookupForSpeciesKey(sk2) {
+      const sName = speciesDisplayByKey[sk2] ?? missingSpecies;
+      let lookup = prefix ? `${prefix}${sName}` : sName;
+      if (form) lookup += ` (${form})`;
+      return rarityByKey.get(canonicalKey(lookup)) ?? 0;
+    }
+
+    if (baseRarityMemo.has(memoKey)) {
+      const r = baseRarityMemo.get(memoKey);
+      return r > 0 && r <= 10;
+    }
+
+    const baseKey = baseEvolutionKey(sk);
+
+    const q = [baseKey];
+    const seen = new Set();
+    while (q.length) {
+      const layerSize = q.length;
+      const layer = [];
+      for (let i = 0; i < layerSize; i++) {
+        const n = q.shift();
+        if (seen.has(n)) continue;
+        seen.add(n);
+        layer.push(n);
+      }
+
+      layer.sort((a, b) => (nameToDex[a] ?? 9999) - (nameToDex[b] ?? 9999));
+
+      for (const n of layer) {
+        const r = rarityLookupForSpeciesKey(n);
+        if (r > 0) {
+          baseRarityMemo.set(memoKey, r);
+          return r <= 10;
+        }
+      }
+
+      for (const n of layer) {
+        const childSet = children.get(n) || new Set();
+        for (const c of childSet) if (!seen.has(c)) q.push(c);
+      }
+    }
+
+    baseRarityMemo.set(memoKey, 0);
+    return false;
   }
 
   function wrapRaritySizeIfNeeded(bbcodeText, cumulativeRarity) {
@@ -919,7 +1059,7 @@ async function runDexSorter({
   }
 
   const missingByVariant = { golden: [], shiny: [], dark: [], normal: [] };
-  const missingByFamily = new Map();
+  const missingByFamily = new Map(); // famId -> array of { name, u, cat, cumR }
 
   for (const row of candidates) {
     const pokeName = row.pokemon;
@@ -937,9 +1077,15 @@ async function runDexSorter({
       if (!incompleteFamilyIds.has(famId)) continue;
     }
 
-    missingByVariant[cat].push({ name: pokeName, u: row.ungendered });
+    const missSpecies = speciesFromFullName(pokeName);
+    const sk = canonicalKey(missSpecies);
+    const prefix = (cat === "golden") ? "Golden" : (cat === "shiny") ? "Shiny" : (cat === "dark") ? "Dark" : "";
+    const form = extractForm(pokeName);
+    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, missSpecies, form);
+
+    missingByVariant[cat].push({ name: pokeName, u: row.ungendered, cumR, famId });
     if (!missingByFamily.has(famId)) missingByFamily.set(famId, []);
-    missingByFamily.get(famId).push({ name: pokeName, u: row.ungendered });
+    missingByFamily.get(famId).push({ name: pokeName, u: row.ungendered, cat, cumR, famId });
   }
 
   // ===============================
@@ -989,9 +1135,7 @@ async function runDexSorter({
     return [familyId, depth, dex, fr, cr, base.toLowerCase(), item.full_name];
   }
 
-  function cmpItems(a, b) {
-    return compareTuple(sortKeyForItem(a), sortKeyForItem(b));
-  }
+  function cmpItems(a, b) { return compareTuple(sortKeyForItem(a), sortKeyForItem(b)); }
 
   const familyLines = [];
   const singleLines = [];
@@ -1090,8 +1234,9 @@ async function runDexSorter({
   summaryLines.push("");
 
   // ===============================
-  // Missing list output text
+  // Missing list output text + Top 10 Targets
   // ===============================
+
   function sliceVariant(list) {
     if (maxMissing && maxMissing > 0) return list.slice(0, maxMissing);
     return list;
@@ -1138,6 +1283,63 @@ async function runDexSorter({
   if (!flags.filterDarks)  emitVariant("Dark", "dark");
   if (!flags.filterNormals) emitVariant("Normal", "normal");
 
+  function bestTargetForFamily(famId) {
+    const list = missingByFamily.get(famId) || [];
+    if (list.length === 0) return null;
+
+    let best = list[0];
+    for (const it of list) {
+      const a = (it.cumR ?? 999999999);
+      const b = (best.cumR ?? 999999999);
+      if (a < b) best = it;
+    }
+
+    const missingLeft = list.length;
+    const famSize = rarityFamilySize.get(famId) ?? 1;
+
+    return {
+      famId,
+      famSize,
+      missingLeft,
+      bestName: best.name,
+      bestCat: best.cat,
+      bestCumR: best.cumR ?? 0,
+    };
+  }
+
+  const familyTargets = [];
+  for (const famId of incompleteFamilyIds) {
+    const famSize = rarityFamilySize.get(famId) ?? 1;
+    if (famSize <= 1) continue;
+    const t = bestTargetForFamily(famId);
+    if (t) familyTargets.push(t);
+  }
+
+  familyTargets.sort((a, b) => {
+    if (a.missingLeft !== b.missingLeft) return a.missingLeft - b.missingLeft;
+    if (a.bestCumR !== b.bestCumR) return a.bestCumR - b.bestCumR;
+    if (a.famSize !== b.famSize) return b.famSize - a.famSize;
+    return a.famId - b.famId;
+  });
+
+  const top10 = familyTargets.slice(0, 10);
+
+  missingLines.push("");
+  missingLines.push("=== Best Targets to Complete Families (Top 10) ===");
+  if (top10.length === 0) {
+    missingLines.push("No incomplete multi-species families found (under current filters/min threshold).");
+  } else {
+    missingLines.push("Ranked by: fewest missing left → rarest pick → larger family.");
+    let i = 1;
+    for (const t of top10) {
+      const catLabel = (t.bestCat || "normal");
+      missingLines.push(
+        `${i}. ${t.bestName} (?) [${catLabel}] — family missing left: ${t.missingLeft}, family size: ${t.famSize}, cumulative rarity: ${t.bestCumR}`
+      );
+      i++;
+    }
+  }
+
   statusEl.textContent = "Done.";
 
   const familiesBbcodeBlock = ["[code]", familiesSortedOutput, "[/code]"].join("\n");
@@ -1161,23 +1363,73 @@ async function runDexSorter({
   // ===============================
   const cloudItems = rowsSorted.map(r => {
     const sk = canonicalKey(r.species);
-    const prefix = variantPrefixFromName(r.full_name);
+    const variantPrefix = variantPrefixFromName(r.full_name);
     const form = extractForm(r.full_name);
-    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species, form);
+    const cumR = cumulativeVariantRarityForSpecies(sk, variantPrefix, r.species, form);
 
-    // Display text: remove trailing "(?)"
+    const chain = preEvoChainBreakdown(sk, variantPrefix, r.species, form);
+    const baseR = chain.length ? (chain[0].rarity ?? 0) : 0;
+
     const text = r.full_name.replace(/\(\?\)\s*$/g, "").trim();
-    return { text, rarity: cumR };
+    const cat = colorCategory(r.full_name);
+
+    const levelNum = r.levelNum ?? null;
+    const isLv45 = (levelNum === 4 || levelNum === 5);
+
+    const depth = evoDepth[canonicalKey(r.species)] ?? 0;
+    const isEvolved = depth > 0;
+
+    const baseForUeug = stripPrefixes(r.full_name);
+    const isUeug = ueugSet.has(canonicalKey(baseForUeug));
+
+    // --- FIXED SCORING HEURISTIC (penalties make words smaller) ---
+    // Baseline score = cumulative rarity
+    // Cloud sizing uses inverted normalization (lower score => bigger),
+    // so penalties must INCREASE the score (multiply by >1).
+    let adjustedScore = cumR;
+
+    if (cat === "normal") {
+      // normals
+      if (!isUeug) {
+        adjustedScore *= (1 / 0.5); // = 2.0
+      } else {
+        if (!isLv45) {
+          adjustedScore *= (1 / 0.8); // = 1.25
+        }
+      }
+    } else {
+      if (!isLv45) adjustedScore *= (1 / 0.8); // 1.25
+      if (isEvolved) adjustedScore *= (1 / 0.7); // ~1.4286
+    }
+
+    return {
+      text,
+      cat,
+      form: form || "",
+      variantPrefix,
+      species: r.species,
+      baseRarity: baseR,
+      cumulativeRarity: cumR,
+      adjustedScore,
+      isLv45,
+      isEvolved,
+      isUeug,
+      chain
+    };
   });
 
-  // sort by rarity ascending (rarest first)
-  cloudItems.sort((a, b) => (a.rarity ?? 999999) - (b.rarity ?? 999999));
+  cloudItems.sort((a, b) => (a.adjustedScore ?? 999999) - (b.adjustedScore ?? 999999));
 
-  return { mainText, missingText, secondaryText, cloudItems };
+  return {
+    mainText,
+    missingText,
+    secondaryText,
+    cloudItems
+  };
 }
 
 // ===============================
-// Tag cloud renderer
+// Tag cloud renderer + helpers
 // ===============================
 
 function sampleArray(arr, n) {
@@ -1189,60 +1441,173 @@ function sampleArray(arr, n) {
   return a.slice(0, Math.min(n, a.length));
 }
 
-function renderTagCloud(items, svgEl, statusEl) {
+function buildVariantColorMapFromInputs() {
+  const gold = (colorGoldenEl?.value || "").trim() || "gold";
+  const shiny = (colorShinyEl?.value || "").trim() || "magenta";
+  const dark = (colorDarkEl?.value || "").trim() || "slategray";
+  const normal = (colorNormalEl?.value || "").trim() || "#2b2b2b";
+  return { golden: gold, shiny, dark, normal };
+}
+
+function chainTooltipText(item) {
+  const pieces = (item.chain || []).map(p => `${p.name}:${p.rarity ?? 0}`);
+  const base = item.cumulativeRarity ?? 0;
+  const adj = item.adjustedScore ?? base;
+
+  const cat = item.cat || "normal";
+  const form = item.form ? ` (${item.form})` : "";
+
+  const flags = [];
+  if (cat === "normal") flags.push(item.isUeug ? "UE/UG" : "non-UE/UG");
+  else flags.push(item.isEvolved ? "evolved" : "base");
+  flags.push(item.isLv45 ? "Lv4/5" : "not Lv4/5");
+
+  return [
+    `${item.text}`,
+    `variant: ${cat}${form}`,
+    `flags: ${flags.join(", ")}`,
+    `baseline cumulative rarity: ${base}`,
+    `adjusted score (cloud sizing): ${adj}`,
+    `chain: ${pieces.join(" + ")} = ${base}`
+  ].join("\n");
+}
+
+function jumpHighlightWord(wordText) {
+  const word = (wordText || "").trim();
+  if (!word) return false;
+
+  const targets = [
+    { el: outputTextEl, name: "Main output" },
+    { el: outputSinglesEl, name: "Singles output" },
+    { el: outputMissingEl, name: "Missing output" },
+  ];
+
+  const variantsToTry = (() => {
+    const out = [];
+    out.push(word);
+
+    const cleaned = word.replace(/\s+/g, " ").trim();
+    if (cleaned !== word) out.push(cleaned);
+
+    const noPrefix = stripPrefixes(cleaned);
+    if (noPrefix && noPrefix !== cleaned) out.push(noPrefix);
+
+    const noForm = cleaned.replace(/\s*\([^)]+\)\s*$/g, "").trim();
+    if (noForm && noForm !== cleaned) out.push(noForm);
+
+    const noPrefixNoForm = stripPrefixes(noForm);
+    if (noPrefixNoForm && !out.includes(noPrefixNoForm)) out.push(noPrefixNoForm);
+
+    return Array.from(new Set(out)).filter(Boolean);
+  })();
+
+  for (const t of targets) {
+    const el = t.el;
+    if (!el) continue;
+
+    const hay = el.value || "";
+    if (!hay) continue;
+
+    let bestIdx = -1;
+    let bestNeedleLen = 0;
+
+    for (const needle of variantsToTry) {
+      const re = new RegExp(`\\b${escapeRegex(needle)}\\b`, "i");
+      const m = re.exec(hay);
+      if (m && (bestIdx === -1 || m.index < bestIdx)) {
+        bestIdx = m.index;
+        bestNeedleLen = m[0].length;
+      }
+    }
+
+    if (bestIdx !== -1) {
+      el.focus();
+      el.setSelectionRange(bestIdx, bestIdx + Math.max(1, bestNeedleLen));
+      const fontSizePx = parseFloat(getComputedStyle(el).fontSize) || 14;
+      const lineHeightPx = parseFloat(getComputedStyle(el).lineHeight) || (fontSizePx * 1.2);
+      const before = hay.slice(0, bestIdx);
+      const lineIndex = before.split("\n").length - 1;
+      const approxTop = Math.max(0, lineIndex * lineHeightPx - (el.clientHeight / 3));
+      el.scrollTop = approxTop;
+
+      jumpStatusEl.textContent = `Jumped to "${word}" in ${t.name}`;
+      clearTimeout(jumpHighlightWord._timer);
+      jumpHighlightWord._timer = setTimeout(() => { jumpStatusEl.textContent = ""; }, 1600);
+      return true;
+    }
+  }
+
+  jumpStatusEl.textContent = `Couldn't find "${word}" in outputs.`;
+  clearTimeout(jumpHighlightWord._timer);
+  jumpHighlightWord._timer = setTimeout(() => { jumpStatusEl.textContent = ""; }, 1600);
+  return false;
+}
+
+function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize) {
   if (!items || items.length === 0) {
     statusEl.textContent = "No items to visualize.";
     if (window.d3) d3.select(svgEl).selectAll("*").remove();
     return;
   }
 
-  // Sample 40 (or fewer if not enough)
-  const sample = sampleArray(items, 40);
+  // Sample size is now configurable (default 100)
+  const n = Number.isFinite(sampleSize) && sampleSize > 0 ? Math.floor(sampleSize) : 100;
+  const sample = sampleArray(items, n);
 
-  // Rarity values (cumulative rarity) — lower = rarer
-  const rarityVals = sample.map(w => Number.isFinite(w.rarity) ? w.rarity : 0);
-  const minR = Math.min(...rarityVals);
-  const maxR = Math.max(...rarityVals);
-
-  // Min-max normalization -> [0,1]
-  // We then invert so rarer becomes larger: inv = 1 - norm
-  function invNorm(r) {
-    if (!Number.isFinite(r)) r = 0;
-    if (minR === maxR) return 0.5; // all same -> stable mid size
-    const norm = (r - minR) / (maxR - minR); // 0..1 where 0 is rarest
-    return 1 - norm; // 1..0 where 1 is rarest
+  // --- Nonlinear scaling (log compression) ---
+  // We want: low scores separated more; high scores compressed.
+  function tScore(v) {
+    if (!Number.isFinite(v)) v = 0;
+    v = Math.max(0, v);
+    // log10(1 + v) is stable for small values and compresses big values
+    return Math.log10(1 + v);
   }
 
-  // Map normalized score to font sizes
-  const MIN_FONT = 14;
-  const MAX_FONT = 58;
+  const tVals = sample.map(w => tScore(w.adjustedScore));
+  const minV = Math.min(...tVals);
+  const maxV = Math.max(...tVals);
 
-  // Prepare SVG
+  function invNormScoreFromTransformed(tv) {
+    if (!Number.isFinite(tv)) tv = 0;
+    if (minV === maxV) return 0.5;
+    const norm = (tv - minV) / (maxV - minV);
+    return 1 - norm; // lower (rarer) => bigger
+  }
+
+
+  const MIN_FONT = 11;
+  const MAX_FONT = 34;
+
   const bbox = svgEl.getBoundingClientRect();
   const width = Math.max(320, Math.floor(bbox.width || 720));
-  const height = 360;
+  const height = Math.max(360, Math.floor(bbox.height || 650));
 
   const svg = d3.select(svgEl);
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
 
   statusEl.textContent =
-    `Showing ${sample.length} sampled items. ` +
-    `Cumulative rarity min: ${minR}, max: ${maxR}. ` +
-    `Min-max normalized for sizing (rarer = bigger). Click a word to copy.`;
+    `Sample: ${sample.length}. (Log-scaled) adjusted score min: ${minV.toFixed(3)}, max: ${maxV.toFixed(3)}. ` +
+    `Log10(1+score) → min-max normalized and inverted (lower score => bigger).`;
 
   const cloudWords = sample.map(w => {
-    const score = invNorm(w.rarity); // 0..1 (rarer -> closer to 1)
+    const score = invNormScoreFromTransformed(tScore(w.adjustedScore));
     const size = Math.round(MIN_FONT + score * (MAX_FONT - MIN_FONT));
-    return { text: w.text, rarity: w.rarity, size };
+    const fill = colorMap?.[w.cat] || "#2b2b2b";
+    return {
+      ...w,
+      size,
+      fill,
+      tooltip: chainTooltipText(w),
+    };
   });
 
   d3.layout.cloud()
     .size([width, height])
     .words(cloudWords)
-    .padding(2)
+    .padding(1)
     .spiral("rectangular")
-    .rotate(() => (Math.random() < 0.15 ? 90 : 0))
+    .rotate(() => (Math.random() < 0.15 ? (Math.random() < 0.5 ? 90 : -90) : 0))
     .font("sans-serif")
     .fontSize(d => d.size)
     .on("end", draw)
@@ -1252,26 +1617,97 @@ function renderTagCloud(items, svgEl, statusEl) {
     const g = svg.append("g")
       .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    const texts = g.selectAll("text")
+    const tooltipEl = document.getElementById("cloudTooltip");
+
+    // One <g> per word so we can layer effects cleanly
+    const nodes = g.selectAll("g.word")
       .data(layoutWords)
       .enter()
+      .append("g")
+      .attr("class", "word")
+      .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+      .style("cursor", "pointer")
+      .style("pointer-events", "all");
+
+    /* -----------------------------
+       Base text (always drawn)
+       ----------------------------- */
+    nodes.append("text")
+      .style("font-size", d => `${d.size}px`)
+      .style("font-family", "sans-serif")
+      .style("text-anchor", "middle")
+      .style("fill", d => d.fill)
+      // subtle outline for readability
+      .style("paint-order", "stroke")
+      .style("stroke", "rgba(0,0,0,0.25)")
+      .style("stroke-width", d => Math.max(0.6, d.size * 0.04))
+      .text(d => d.text);
+
+    /* ---------------------------------------------------
+       Gloss highlight ONLY for UE/UG normals
+       --------------------------------------------------- */
+    nodes
+      .filter(d => d.cat === "normal" && d.isUeug)
       .append("text")
       .style("font-size", d => `${d.size}px`)
       .style("font-family", "sans-serif")
-      .style("cursor", "pointer")
-      .attr("text-anchor", "middle")
-      .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+      .style("text-anchor", "middle")
+      .style("fill", "rgba(255,255,255,0.38)")
+      // slight offset creates a glossy “shine”
+      .attr("transform", "translate(-1.2,-1.2)")
       .text(d => d.text);
 
-    texts.append("title").text(d => `cumulative rarity: ${d.rarity} | size: ${d.size}`);
+    /* -----------------------------
+       Tooltip helpers
+       ----------------------------- */
+    function showTip(text, x, y) {
+      if (!tooltipEl) return;
+      tooltipEl.textContent = text;
+      tooltipEl.style.display = "block";
 
-    texts.on("click", (_, d) => {
-      navigator.clipboard.writeText(d.text).catch(() => {});
-      statusEl.textContent = `Copied: ${d.text} (cumulative rarity: ${d.rarity})`;
-    });
+      const pad = 12;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      tooltipEl.style.left = "0px";
+      tooltipEl.style.top = "0px";
+
+      const rect = tooltipEl.getBoundingClientRect();
+      let left = x + pad;
+      let top  = y + pad;
+
+      if (left + rect.width > vw - 8) left = x - rect.width - pad;
+      if (top + rect.height > vh - 8) top = y - rect.height - pad;
+
+      left = Math.max(8, Math.min(left, vw - rect.width - 8));
+      top  = Math.max(8, Math.min(top,  vh - rect.height - 8));
+
+      tooltipEl.style.left = `${left}px`;
+      tooltipEl.style.top  = `${top}px`;
+    }
+
+    function hideTip() {
+      if (!tooltipEl) return;
+      tooltipEl.style.display = "none";
+    }
+
+    /* -----------------------------
+       Interactions (on the group)
+       ----------------------------- */
+    nodes
+      .on("pointerenter", (event, d) =>
+        showTip(d.tooltip, event.clientX, event.clientY)
+      )
+      .on("pointermove", (event, d) =>
+        showTip(d.tooltip, event.clientX, event.clientY)
+      )
+      .on("pointerleave", hideTip)
+      .on("click", (_, d) => {
+        navigator.clipboard.writeText(d.text).catch(() => {});
+        jumpHighlightWord(d.text);
+      });
   }
 }
-
 
 // ===============================
 // UI wiring
@@ -1285,6 +1721,7 @@ function copyToClipboard(text) {
 const runButton = document.getElementById("runButton");
 const clearButton = document.getElementById("clearButton");
 const statusEl = document.getElementById("status");
+const jumpStatusEl = document.getElementById("jumpStatus");
 
 const inputListEl = document.getElementById("inputList");
 const outputTextEl = document.getElementById("outputText");
@@ -1312,6 +1749,8 @@ const highlightRarityEl = document.getElementById("highlightRarity");
 const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
 const visualizeCloudEl = document.getElementById("visualizeCloud");
+const cloudSampleControlsEl = document.getElementById("cloudSampleControls");
+const cloudSampleSizeEl = document.getElementById("cloudSampleSize");
 
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
@@ -1322,13 +1761,39 @@ const copyMainBtn = document.getElementById("copyMainBtn");
 const copyMissingBtn = document.getElementById("copyMissingBtn");
 const copySinglesBtn = document.getElementById("copySinglesBtn");
 
-// Cloud UI
 const cloudRowEl = document.getElementById("cloudRow");
 const tagCloudSvgEl = document.getElementById("tagCloudSvg");
 const cloudStatusEl = document.getElementById("cloudStatus");
 const rerollCloudBtn = document.getElementById("rerollCloudBtn");
 
 let lastCloudItems = null;
+
+function getCloudSampleSize() {
+  const n = parseInt((cloudSampleSizeEl?.value || "100"), 10);
+  if (!Number.isFinite(n) || n <= 0) return 100;
+  return n;
+}
+
+function syncCloudSampleOptionVisibility() {
+  if (visualizeCloudEl.checked) {
+    cloudSampleControlsEl.classList.remove("d-none");
+  } else {
+    cloudSampleControlsEl.classList.add("d-none");
+  }
+}
+
+let resizeTimer = null;
+function rerenderCloudIfVisible() {
+  if (!visualizeCloudEl.checked) return;
+  if (cloudRowEl.classList.contains("d-none")) return;
+  if (!lastCloudItems || lastCloudItems.length === 0) return;
+  const colorMap = buildVariantColorMapFromInputs();
+  renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl, colorMap, getCloudSampleSize());
+}
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(rerenderCloudIfVisible, 180);
+});
 
 runButton.addEventListener("click", async () => {
   const inputText = inputListEl.value.trim();
@@ -1395,16 +1860,15 @@ runButton.addEventListener("click", async () => {
       outputSinglesEl.value = "";
     }
 
-    // Cloud
     lastCloudItems = cloudItems || null;
     if (visualizeCloudEl.checked && lastCloudItems && lastCloudItems.length > 0) {
       cloudRowEl.classList.remove("d-none");
-      // Render after it becomes visible so width measures correctly
-      setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl), 0);
+      const colorMap = buildVariantColorMapFromInputs();
+      setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl, colorMap, getCloudSampleSize()), 0);
     } else {
       cloudRowEl.classList.add("d-none");
       cloudStatusEl.textContent = "";
-      d3.select(tagCloudSvgEl).selectAll("*").remove();
+      if (window.d3) d3.select(tagCloudSvgEl).selectAll("*").remove();
     }
 
   } catch (err) {
@@ -1422,6 +1886,7 @@ clearButton.addEventListener("click", () => {
   outputSinglesEl.value = "";
   familiesSinglesBlock.classList.add("d-none");
   statusEl.textContent = "";
+  jumpStatusEl.textContent = "";
 
   cloudRowEl.classList.add("d-none");
   cloudStatusEl.textContent = "";
@@ -1436,13 +1901,17 @@ copySinglesBtn.addEventListener("click", () => copyToClipboard(outputSinglesEl.v
 rerollCloudBtn.addEventListener("click", () => {
   if (!lastCloudItems || lastCloudItems.length === 0) return;
   cloudRowEl.classList.remove("d-none");
-  renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl);
+  const colorMap = buildVariantColorMapFromInputs();
+  renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl, colorMap, getCloudSampleSize());
 });
 
 visualizeCloudEl.addEventListener("change", () => {
+  syncCloudSampleOptionVisibility();
+
   if (visualizeCloudEl.checked && lastCloudItems && lastCloudItems.length > 0) {
     cloudRowEl.classList.remove("d-none");
-    setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl), 0);
+    const colorMap = buildVariantColorMapFromInputs();
+    setTimeout(() => renderTagCloud(lastCloudItems, tagCloudSvgEl, cloudStatusEl, colorMap, getCloudSampleSize()), 0);
   } else {
     cloudRowEl.classList.add("d-none");
     cloudStatusEl.textContent = "";
@@ -1450,8 +1919,46 @@ visualizeCloudEl.addEventListener("change", () => {
   }
 });
 
+// Re-render cloud when sample size changes (added)
+cloudSampleSizeEl.addEventListener("change", () => {
+  if (!visualizeCloudEl.checked) return;
+  rerenderCloudIfVisible();
+});
+
+// Initialize visibility (added)
+syncCloudSampleOptionVisibility();
+
 document.getElementById("copyright-year").textContent = new Date().getFullYear();
+
+// ===============================
+// Dark mode toggle wiring (added)
+// ===============================
+const darkModeToggleEl = document.getElementById("darkModeToggle");
+
+function applyDarkMode(isDark) {
+  document.body.classList.toggle("dark-mode", !!isDark);
+}
+
+(function initDarkMode() {
+  try {
+    const saved = localStorage.getItem("tppc_dexsorter_darkmode");
+    if (saved === "1") {
+      darkModeToggleEl.checked = true;
+      applyDarkMode(true);
+    }
+  } catch (_) {}
+})();
+
+darkModeToggleEl.addEventListener("change", () => {
+  const isDark = !!darkModeToggleEl.checked;
+  applyDarkMode(isDark);
+  try {
+    localStorage.setItem("tppc_dexsorter_darkmode", isDark ? "1" : "0");
+  } catch (_) {}
+});
 </script>
+
+<div id="cloudTooltip" class="cloud-tooltip"></div>
 
 </body>
 </html>
