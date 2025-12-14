@@ -165,7 +165,8 @@ function canonicalKeyExact(name) {
     .toLowerCase();
 
   // Keep Darkrai stable
-  if (norm.startsWith("darkrai")) return "darkrai";
+  const stripped = norm.replace(/[^a-z0-9]/g, "");
+  if (stripped === "darkrai") return "darkrai";
 
   // Keep Unown variants distinct; allow ! and ?
   return norm.replace(/[^a-z0-9!?]/g, "");
@@ -605,7 +606,7 @@ backButton.addEventListener("click", () => {
   font-size: 0.9rem;
   color: #666;
 ">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v1.3
+  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v1.3.1
 </footer>
 
 <script>
