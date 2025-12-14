@@ -88,6 +88,13 @@
         </div>
 
         <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="keepGoldsInGolden" />
+          <label class="form-check-label" for="keepGoldsInGolden">
+            Keep all golds in Golden category (ignore dedicated sections for golds)
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
           <input class="form-check-input" type="checkbox" id="highlightUEUG" />
           <label class="form-check-label" for="highlightUEUG">
             Highlight UE/UG <code>(?)</code> normals using <code>ueug_list.txt</code> (same directory)
@@ -155,7 +162,7 @@
     font-size: 0.9rem;
     color: #666;
   ">
-    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2.1
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v3
   </footer>
 </div>
 
@@ -464,29 +471,22 @@
   }
 
   function isTypicalGenderForFiltering(entry, genderlessSetLoaded) {
-    // Typical gender:
-    // - For gendered species: must have ♂ or ♀
-    // - For genderless species (listed in genderless.txt): must have NO ♂/♀
-    // - (?) is NOT typical
     if (isUnknown(entry.name)) return false;
 
     const core = canonicalNoGender(entry.name);
     const isGenderlessSpecies = genderlessSetLoaded.has(core);
 
-    if (isGenderlessSpecies) {
-      return !hasGenderSymbol(entry.name);
-    } else {
-      return hasGenderSymbol(entry.name);
-    }
+    if (isGenderlessSpecies) return !hasGenderSymbol(entry.name);
+    return hasGenderSymbol(entry.name);
   }
 
   function shouldFilterAsJunk(entry, opts, lists) {
     if (!opts.filterJunk) return false;
 
-    // NEW: Always keep level 4s, even if they match junk
+    // Always keep level 4s
     if (entry.levelNum === 4) return false;
 
-    // Your change: filter if < 1000 (keep >= 1000)
+    // filter if < 1000 (keep >= 1000)
     if (entry.levelNum >= 1000) return false;
 
     // Only filter if typical gender
@@ -544,9 +544,13 @@
       normal: catsAll.normal.slice()
     };
 
+    // ---- Dedicated routing (with "keepGoldsInGolden" guard) ----
+    const applyDedicatedUnknownFor = (cat) => (cat !== "gold" || !opts.keepGoldsInGolden) && opts.dedicatedUnknown;
+    const applyDedicatedLegendsFor = (cat) => (cat !== "gold" || !opts.keepGoldsInGolden) && opts.dedicatedLegends;
+
     let dedU = { gold: [], shiny: [], dark: [], normal: [] };
-    if (opts.dedicatedUnknown) {
-      for (const cat of ["gold","shiny","dark","normal"]) {
+    for (const cat of ["gold","shiny","dark","normal"]) {
+      if (applyDedicatedUnknownFor(cat)) {
         const split = splitUnknown(cats[cat]);
         dedU[cat] = split.unknown;
         cats[cat] = split.rest;
@@ -554,17 +558,18 @@
     }
 
     let dedL = { gold: [], shiny: [], dark: [], normal: [] };
-    if (opts.dedicatedLegends) {
-      for (const cat of ["gold","shiny","dark","normal"]) {
+    for (const cat of ["gold","shiny","dark","normal"]) {
+      if (applyDedicatedLegendsFor(cat)) {
         const split = splitLegends(cats[cat], legendSet);
         dedL[cat] = split.legends;
         cats[cat] = split.rest;
       }
     }
 
+    // Local subsections (if not dedicated for that category)
     let localU = { gold: [], shiny: [], dark: [], normal: [] };
-    if (!opts.dedicatedUnknown) {
-      for (const cat of ["gold","shiny","dark","normal"]) {
+    for (const cat of ["gold","shiny","dark","normal"]) {
+      if (!applyDedicatedUnknownFor(cat)) {
         const split = splitUnknown(cats[cat]);
         localU[cat] = split.unknown;
         cats[cat] = split.rest;
@@ -572,14 +577,15 @@
     }
 
     let localL = { gold: [], shiny: [], dark: [], normal: [] };
-    if (!opts.dedicatedLegends) {
-      for (const cat of ["gold","shiny","dark","normal"]) {
+    for (const cat of ["gold","shiny","dark","normal"]) {
+      if (!applyDedicatedLegendsFor(cat)) {
         const split = splitLegends(cats[cat], legendSet);
         localL[cat] = split.legends;
         cats[cat] = split.rest;
       }
     }
 
+    // Combine duplicates AFTER routing
     const maybeCombine = (list) => opts.combine ? combineEntries(list) : list;
     for (const cat of ["gold","shiny","dark","normal"]) {
       cats[cat] = maybeCombine(cats[cat]);
@@ -596,13 +602,23 @@
       const mainLines = sortAndLines(cats[cat], opts, colorPicker);
       if (mainLines) body += mainLines;
 
-      if (!opts.dedicatedUnknown && localU[cat].length) {
+      // IMPORTANT: for golds, even if dedicated toggles are ON, we still show localU/localL when keepGoldsInGolden is ON
+      const shouldShowLocalU = (!applyDedicatedUnknownFor(cat)) || (cat === "gold" && opts.keepGoldsInGolden);
+      const shouldShowLocalL = (!applyDedicatedLegendsFor(cat)) || (cat === "gold" && opts.keepGoldsInGolden);
+
+      if (shouldShowLocalU && localU[cat].length) {
         if (body) body += "\n\n";
         body += makeSubheader("Ungendered");
-        body += sortAndLines(localU[cat], opts, colorPicker, (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded));
+        body += sortAndLines(
+          localU[cat],
+          opts,
+          colorPicker,
+          (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded),
+          false
+        );
       }
 
-      if (!opts.dedicatedLegends && localL[cat].length) {
+      if (shouldShowLocalL && localL[cat].length) {
         if (body) body += "\n\n";
         body += makeSubheader("Legends / Mythicals");
         body += sortAndLines(localL[cat], opts, colorPicker);
@@ -613,6 +629,9 @@
 
     const buildDedicatedUnknownSection = () => {
       if (!opts.dedicatedUnknown) return "";
+
+      // If "keepGoldsInGolden", gold unknowns should NOT appear here
+      // (because they remain as a subsection in Golden)
       let body = "";
 
       const addSub = (label, list, boldNormal=false, useCombinedSD=false) => {
@@ -627,7 +646,7 @@
         ) + "\n\n";
       };
 
-      addSub("Golden", dedU.gold);
+      if (!opts.keepGoldsInGolden) addSub("Golden", dedU.gold);
 
       if (opts.combineSD) {
         const merged = dedU.shiny.concat(dedU.dark);
@@ -644,6 +663,9 @@
 
     const buildDedicatedLegendsSection = () => {
       if (!opts.dedicatedLegends) return "";
+
+      // If "keepGoldsInGolden", gold legends should NOT appear here
+      // (because they remain as a subsection in Golden)
       let body = "";
 
       const addSub = (label, list, useCombinedSD=false) => {
@@ -652,7 +674,7 @@
         body += sortAndLines(list, opts, colorPicker, null, useCombinedSD) + "\n\n";
       };
 
-      addSub("Golden", dedL.gold);
+      if (!opts.keepGoldsInGolden) addSub("Golden", dedL.gold);
 
       if (opts.combineSD) {
         const merged = dedL.shiny.concat(dedL.dark);
@@ -667,8 +689,18 @@
       return makeSection("Legends / Mythicals", body.trimEnd());
     };
 
+    // Output ordering:
+    // Golden always first
+    // then Dedicated (?) if present
+    // then Dedicated Legends/Mythicals if present
+    // then Shiny/Dark (or combined)
+    // then Normal
     let out = "";
+
+    // Golden section always built from its own locals when keepGoldsInGolden is enabled
     out += buildCategorySection("gold");
+
+    // Dedicated sections (will omit gold subsections if keepGoldsInGolden is ON)
     out += buildDedicatedUnknownSection();
     out += buildDedicatedLegendsSection();
 
@@ -719,6 +751,7 @@
       combineSD: $("combineSD").checked,
       dedicatedUnknown: $("dedicatedUnknown").checked,
       dedicatedLegends: $("dedicatedLegends").checked,
+      keepGoldsInGolden: $("keepGoldsInGolden").checked,
       highlightUEUG: $("highlightUEUG").checked,
       filterJunk: $("filterJunk").checked
     };
@@ -739,6 +772,9 @@
     } else {
       if (!opts.highlightUEUG) setStatus("");
     }
+
+    // If keepGoldsInGolden is enabled, make sure gold local subsections were NOT stripped earlier:
+    // We handle that in routing logic by applying "dedicated" toggles only to non-gold categories.
 
     $("output").value = entries.length ? organize(entries, legendSet, opts, colors, ueugLoaded) : "";
   });
