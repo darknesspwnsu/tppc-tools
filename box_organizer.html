@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TPPC Generic Box Organizer</title>
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    textarea, input[type="text"] {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95rem;
+    }
+    .small-note { font-size: 0.9rem; color: #666; }
+    .tight label { margin-bottom: 0.25rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="mb-3">
+    <h1 class="h3 mb-1">Generic Box Organizer</h1>
+    <div class="small-note">Supports blurb format and tabbed formats. Empty sections/subsections are omitted.</div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-6">
+      <label class="form-label fw-semibold">Input</label>
+      <textarea id="input" class="form-control" rows="16" placeholder="Paste your box text here..."></textarea>
+
+      <!-- Buttons immediately below input -->
+      <div class="mt-3 d-flex flex-wrap gap-2">
+        <button id="sortBtn" class="btn btn-primary" type="button">Sort</button>
+        <button id="clearBtn" class="btn btn-outline-secondary" type="button">Clear</button>
+      </div>
+
+      <!-- Options row by row -->
+      <div class="mt-3">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="combine" />
+          <label class="form-check-label" for="combine">
+            Combine Pokémon with the same gender and level into one entry
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="dupeDesc" />
+          <label class="form-check-label" for="dupeDesc">
+            Sort dupes by level descending
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="plainLevel" />
+          <label class="form-check-label" for="plainLevel">
+            Display levels as <code>X</code> instead of <code>(Level: X)</code>
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="combineSD" />
+          <label class="form-check-label" for="combineSD">
+            Combine Shiny / Dark into one section (interleaved by Pokémon name)
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="dedicatedUnknown" />
+          <label class="form-check-label" for="dedicatedUnknown">
+            Dedicated <code>(?)</code> section (removes Ungendered subsections everywhere)
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="dedicatedLegends" />
+          <label class="form-check-label" for="dedicatedLegends">
+            Dedicated Legends / Mythicals section (removes Legends / Mythicals subsections everywhere)
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="highlightUEUG" />
+          <label class="form-check-label" for="highlightUEUG">
+            Highlight UE/UG <code>(?)</code> normals using <code>ueug_list.txt</code> (same directory)
+          </label>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="filterJunk" />
+          <label class="form-check-label" for="filterJunk">
+            Filter out Maps/Swaps and junk unless level is <b>&ge; 1000</b>
+            (uses <code>maps.txt</code>, <code>secret_swaps.txt</code>, <code>genderless.txt</code>)
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-3 p-3 border rounded-3 tight">
+        <div class="fw-semibold mb-2">Optional colors (leave blank for none)</div>
+        <div class="row g-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Gold color</label>
+            <input id="cGold" class="form-control" type="text" placeholder="#DAA520 or gold" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Shiny color</label>
+            <input id="cShiny" class="form-control" type="text" placeholder="#00AEEF" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Dark color</label>
+            <input id="cDark" class="form-control" type="text" placeholder="#8A2BE2" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Normal color</label>
+            <input id="cNormal" class="form-control" type="text" placeholder="#666666" />
+          </div>
+        </div>
+        <div class="small-note mt-2">Colors apply to the name only via <code>[color=...]Name[/color]</code>.</div>
+      </div>
+
+      <details class="mt-3">
+        <summary class="fw-semibold">Legend/Mythical list (optional)</summary>
+        <div class="small-note mt-2">
+          One name per line. Used to classify Legends / Mythicals in all sections (unless dedicated legends is enabled).
+          Forms like <code>Arceus (Ground)</code> still match.
+        </div>
+        <textarea id="legends" class="form-control mt-2" rows="8"></textarea>
+      </details>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <label class="form-label fw-semibold">Output (BBCode)</label>
+      <textarea id="output" class="form-control" rows="22" readonly></textarea>
+
+      <div class="mt-3 d-flex flex-wrap gap-2">
+        <button id="copyBtn" class="btn btn-success" type="button">Copy Output</button>
+      </div>
+      <div class="small-note mt-2" id="status"></div>
+    </div>
+  </div>
+
+  <footer style="
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+  ">
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2
+  </footer>
+</div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+
+  // Gen 7 Legends & Mythicals + Zeraora
+  const DEFAULT_LEGENDS_MYTHICALS_GEN7 = [
+    "Articuno","Zapdos","Moltres","Mewtwo","Mew",
+    "Raikou","Entei","Suicune","Lugia","Ho-oh","Celebi",
+    "Regirock","Regice","Registeel","Latias","Latios","Kyogre","Groudon","Rayquaza","Jirachi","Deoxys",
+    "Mesprit","Uxie","Azelf","Dialga","Palkia","Heatran","Regigigas","Giratina","Cresselia",
+    "Phione","Manaphy","Darkrai","Shaymin","Arceus",
+    "Victini","Cobalion","Terrakion","Virizion","Tornadus","Thundurus","Reshiram","Zekrom","Landorus","Kyurem",
+    "Keldeo","Meloetta","Genesect",
+    "Xerneas","Yveltal","Zygarde","Diancie","Hoopa","Volcanion",
+    "Tapu Koko","Tapu Lele","Tapu Bulu","Tapu Fini",
+    "Cosmog","Cosmoem","Solgaleo","Lunala","Necrozma",
+    "Magearna","Marshadow",
+    "Zeraora"
+  ];
+
+  // "Real prefix" = followed by uppercase (prevents Darkrai being treated as Dark prefix)
+  const RE_GOLD_PREFIX  = /^Golden(?=[A-Z])/;
+  const RE_SHINY_PREFIX = /^Shiny(?=[A-Z])/;
+  const RE_DARK_PREFIX  = /^Dark(?=[A-Z])/;
+
+  // Loaded sets (lazy)
+  let ueugSet = null, ueugLoadPromise = null;
+
+  let mapsSet = null, mapsLoadPromise = null;
+  let swapsSet = null, swapsLoadPromise = null;
+  let genderlessSet = null, genderlessLoadPromise = null;
+
+  function setStatus(msg) { $("status").textContent = msg || ""; }
+  function normalize(s) { return s.trim().toLowerCase(); }
+
+  function buildLegendSet() {
+    const raw = $("legends").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    return new Set(raw.map(normalize));
+  }
+
+  function parseIntLoose(n) {
+    const cleaned = String(n).replace(/[^\d]/g, "");
+    return cleaned ? parseInt(cleaned, 10) : null;
+  }
+  function fmtLevel(n) { return Number(n).toLocaleString("en-US"); }
+
+  function hasGenderSymbol(name) { return name.includes("♂") || name.includes("♀"); }
+  function extractGender(name) {
+    if (name.includes("♀")) return "♀";
+    if (name.includes("♂")) return "♂";
+    return "";
+  }
+  function isUnknown(name) { return /\(\s*\?\s*\)/.test(name); } // ONLY "(?)"
+
+  function stripGender(name) {
+    return name.replace(/\s*[♂♀]\s*/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function stripPrefix(name) {
+    // remove ONLY real prefixes (followed by uppercase)
+    return name
+      .replace(/^Shiny(?=[A-Z])/, "")
+      .replace(/^Dark(?=[A-Z])/, "")
+      .replace(/^Golden(?=[A-Z])/, "")
+      .trim();
+  }
+
+  function baseSpeciesName(name) {
+    // For legend detection: remove prefix + gender, take before first " ("
+    const withoutPrefix = stripPrefix(name);
+    const withoutGender = stripGender(withoutPrefix);
+    return withoutGender.split(" (")[0].trim();
+  }
+
+  function normalizeUEUGCandidateName(name) {
+    return name.replace(/\(\s*\?\s*\)/g, "").trim().toLowerCase();
+  }
+
+  function canonicalNoGender(name) {
+    // Used for list membership checks (maps/swaps/genderless)
+    // Keep forms as-is; remove gender symbol; keep prefixes if present.
+    return stripGender(name).trim().toLowerCase();
+  }
+
+  function dupeGroupKey(name) {
+    // Keep duplicates together ignoring gender, but preserving everything else
+    return stripGender(name).toLowerCase();
+  }
+
+  // For combined Shiny/Dark interleaving: ignore ONE leading Shiny/Dark prefix, then ignore gender
+  function stripLeadingShinyDarkPrefixOnce(name) {
+    if (/^Shiny(?=[A-Z])/.test(name)) return name.replace(/^Shiny(?=[A-Z])/, "");
+    if (/^Dark(?=[A-Z])/.test(name))  return name.replace(/^Dark(?=[A-Z])/, "");
+    return name;
+  }
+  function combinedSDKey(name) {
+    return stripGender(stripLeadingShinyDarkPrefixOnce(name)).toLowerCase();
+  }
+  function shinyDarkRank(entry) {
+    // Prefer Shiny before Dark when same base key/level/gender
+    if (entry.category === "shiny") return 0;
+    if (entry.category === "dark") return 1;
+    return 2;
+  }
+
+  function compareEntries(a, b, dupeDesc, useCombinedSD=false) {
+    const ak = useCombinedSD ? combinedSDKey(a.name) : dupeGroupKey(a.name);
+    const bk = useCombinedSD ? combinedSDKey(b.name) : dupeGroupKey(b.name);
+
+    if (ak < bk) return -1;
+    if (ak > bk) return 1;
+
+    const al = a.levelNum ?? 0;
+    const bl = b.levelNum ?? 0;
+    if (al !== bl) return dupeDesc ? (bl - al) : (al - bl);
+
+    const rankGender = (g) => g === "♀" ? 0 : (g === "♂" ? 1 : 2);
+    const arG = rankGender(extractGender(a.name));
+    const brG = rankGender(extractGender(b.name));
+    if (arG !== brG) return arG - brG;
+
+    if (useCombinedSD) {
+      const ar = shinyDarkRank(a);
+      const br = shinyDarkRank(b);
+      if (ar !== br) return ar - br;
+    }
+
+    const an = a.name.toLowerCase();
+    const bn = b.name.toLowerCase();
+    if (an < bn) return -1;
+    if (an > bn) return 1;
+    return 0;
+  }
+
+  function parseInput(raw) {
+    raw = (raw || "").trim();
+    if (!raw) return [];
+    const entries = [];
+
+    // blurb format
+    if (/\(Level:\s*[\d,]+\)/i.test(raw)) {
+      const text = raw.replace(/\r?\n/g, " ");
+      const re = /(.+?)\s*\(Level:\s*([\d,]+)\)/gi;
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        const name = (m[1] || "").trim();
+        const levelNum = parseIntLoose((m[2] || "").trim());
+        if (!name || levelNum === null) continue;
+        entries.push({ name, levelNum });
+      }
+      if (entries.length) return entries;
+    }
+
+    // tab/line formats
+    const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    for (const line of lines) {
+      const parts = line.split("\t").map(p => p.trim());
+
+      if (parts.length >= 2 && parts[1]) {
+        const name = parts[0];
+        const levelNum = parseIntLoose(parts[1]);
+        if (name && levelNum !== null) { entries.push({ name, levelNum }); continue; }
+      }
+
+      const m = line.match(/^(.*?)(\d[\d,]*)\s*$/);
+      if (m) {
+        const name = (m[1] || "").trim();
+        const levelNum = parseIntLoose(m[2]);
+        if (name && levelNum !== null) entries.push({ name, levelNum });
+      }
+    }
+    return entries;
+  }
+
+  function combineEntries(entries) {
+    const map = new Map();
+    for (const e of entries) {
+      const key = `${e.name}|||${e.levelNum}`;
+      const prev = map.get(key);
+      if (!prev) map.set(key, { ...e, count: 1 });
+      else prev.count += 1;
+    }
+    return Array.from(map.values());
+  }
+
+  function colorizeName(name, color) {
+    const c = (color || "").trim();
+    if (!c) return name;
+    return `[color=${c}]${name}[/color]`;
+  }
+  function boldWrap(s) { return `[B]${s}[/B]`; }
+
+  function formatLine(e, opts, color, doBold=false) {
+    let nm = e.name;
+    if (doBold) nm = boldWrap(nm);
+    nm = colorizeName(nm, color);
+    const lvl = fmtLevel(e.levelNum);
+    return opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
+  }
+
+  function formatCombinedLine(e, opts, color, doBold=false) {
+    const base = formatLine(e, opts, color, doBold);
+    return (e.count && e.count > 1) ? `${base} x${e.count}` : base;
+  }
+
+  function makeSubheader(label) { return `[b]${label}[/b]\n`; }
+
+  function makeSection(title, body) {
+    const b = (body || "").trimEnd();
+    if (!b) return "";
+    return `[b]${title}[/b]\n[code]\n${b}\n[/code]\n`;
+  }
+
+  function splitUnknown(list) {
+    const unknown = [];
+    const rest = [];
+    for (const e of list) (isUnknown(e.name) ? unknown : rest).push(e);
+    return { unknown, rest };
+  }
+
+  function splitLegends(list, legendSet) {
+    const legends = [];
+    const rest = [];
+    for (const e of list) {
+      const base = baseSpeciesName(e.name);
+      if (legendSet.has(normalize(base))) legends.push(e);
+      else rest.push(e);
+    }
+    return { legends, rest };
+  }
+
+  async function loadTextSetOnce(filename, cacheObjName) {
+    // cacheObjName is the variable we want to set; we handle externally for clarity
+    try {
+      const res = await fetch(`./${filename}`, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      return new Set(
+        text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => l.toLowerCase())
+      );
+    } catch {
+      return new Set();
+    }
+  }
+
+  async function loadUEUGListIfNeeded() {
+    if (ueugSet) return ueugSet;
+    if (ueugLoadPromise) return ueugLoadPromise;
+
+    ueugLoadPromise = (async () => {
+      const set = await loadTextSetOnce("ueug_list.txt");
+      ueugSet = set;
+      if (set.size) setStatus(`UE/UG list loaded: ${set.size.toLocaleString("en-US")} entries.`);
+      else setStatus("Could not load ueug_list.txt (file missing or file:// blocked). UE/UG highlighting disabled.");
+      ueugLoadPromise = null;
+      return ueugSet;
+    })();
+
+    return ueugLoadPromise;
+  }
+
+  async function loadJunkListsIfNeeded() {
+    // maps.txt, secret_swaps.txt, genderless.txt
+    const promises = [];
+
+    if (!mapsSet && !mapsLoadPromise) {
+      mapsLoadPromise = (async () => {
+        mapsSet = await loadTextSetOnce("maps.txt");
+        mapsLoadPromise = null;
+        return mapsSet;
+      })();
+    }
+    if (!swapsSet && !swapsLoadPromise) {
+      swapsLoadPromise = (async () => {
+        swapsSet = await loadTextSetOnce("secret_swaps.txt");
+        swapsLoadPromise = null;
+        return swapsSet;
+      })();
+    }
+    if (!genderlessSet && !genderlessLoadPromise) {
+      genderlessLoadPromise = (async () => {
+        genderlessSet = await loadTextSetOnce("genderless.txt");
+        genderlessLoadPromise = null;
+        return genderlessSet;
+      })();
+    }
+
+    promises.push(mapsLoadPromise || Promise.resolve(mapsSet || new Set()));
+    promises.push(swapsLoadPromise || Promise.resolve(swapsSet || new Set()));
+    promises.push(genderlessLoadPromise || Promise.resolve(genderlessSet || new Set()));
+
+    const [m, s, g] = await Promise.all(promises);
+    mapsSet = m || new Set();
+    swapsSet = s || new Set();
+    genderlessSet = g || new Set();
+
+    // only show status if files actually loaded
+    const msg = `Junk lists loaded: maps=${mapsSet.size.toLocaleString("en-US")}, swaps=${swapsSet.size.toLocaleString("en-US")}, genderless=${genderlessSet.size.toLocaleString("en-US")}`;
+    setStatus(msg);
+
+    return { mapsSet, swapsSet, genderlessSet };
+  }
+
+  function shouldBoldNormalUnknown(e, opts, ueugLoaded) {
+    if (!opts.highlightUEUG) return false;
+    if (!isUnknown(e.name)) return false;
+    if (e.category !== "normal") return false;
+    return ueugLoaded.has(normalizeUEUGCandidateName(e.name));
+  }
+
+  function isTypicalGenderForFiltering(entry, genderlessSetLoaded) {
+    // Typical gender:
+    // - For gendered species: must have ♂ or ♀
+    // - For genderless species (listed in genderless.txt): must have NO ♂/♀
+    // - (?) is NOT typical
+    if (isUnknown(entry.name)) return false;
+
+    const core = canonicalNoGender(entry.name); // no gender symbols, lower
+    const isGenderlessSpecies = genderlessSetLoaded.has(core);
+
+    if (isGenderlessSpecies) {
+      // typical genderless display: no gender symbol
+      return !hasGenderSymbol(entry.name);
+    } else {
+      // typical gendered display: has male or female symbol
+      return hasGenderSymbol(entry.name);
+    }
+  }
+
+  function shouldFilterAsJunk(entry, opts, lists) {
+    if (!opts.filterJunk) return false;
+    if (entry.levelNum >= 1000) return false; // keep if >1000 (strict per your wording)
+    // Only filter if typical gender
+    if (!isTypicalGenderForFiltering(entry, lists.genderlessSet)) return false;
+
+    const core = canonicalNoGender(entry.name);
+    const isMap = lists.mapsSet.has(core);
+    const isSwap = lists.swapsSet.has(core);
+    return isMap || isSwap;
+  }
+
+  function sortAndLines(list, opts, colorPicker, boldPredicate=null, useCombinedSD=false) {
+    const arr = list.slice().sort((a,b)=>compareEntries(a,b,opts.dupeDesc, useCombinedSD));
+    return arr.map(e => {
+      const color = colorPicker(e);
+      const doBold = boldPredicate ? !!boldPredicate(e) : false;
+      return opts.combine
+        ? formatCombinedLine(e, opts, color, doBold)
+        : formatLine(e, opts, color, doBold);
+    }).join("\n");
+  }
+
+  function sectionForCategory(cat) {
+    if (cat === "gold") return "Golden";
+    if (cat === "shiny") return "Shiny";
+    if (cat === "dark") return "Dark";
+    return "Normal";
+  }
+
+  function organize(entries, legendSet, opts, colors, ueugLoaded) {
+    // Assign categories (real prefix only)
+    const catsAll = { gold: [], shiny: [], dark: [], normal: [] };
+
+    for (const e0 of entries) {
+      const e = { ...e0, category: "normal" };
+
+      if (RE_GOLD_PREFIX.test(e.name)) e.category = "gold";
+      else if (RE_SHINY_PREFIX.test(e.name)) e.category = "shiny";
+      else if (RE_DARK_PREFIX.test(e.name)) e.category = "dark";
+      else e.category = "normal";
+
+      catsAll[e.category].push(e);
+    }
+
+    // per-entry color
+    const colorPicker = (e) => {
+      if (e.category === "gold") return colors.gold;
+      if (e.category === "shiny") return colors.shiny;
+      if (e.category === "dark") return colors.dark;
+      return colors.normal;
+    };
+
+    // Working sets
+    let cats = {
+      gold: catsAll.gold.slice(),
+      shiny: catsAll.shiny.slice(),
+      dark: catsAll.dark.slice(),
+      normal: catsAll.normal.slice()
+    };
+
+    // Dedicated (?) routing
+    let dedU = { gold: [], shiny: [], dark: [], normal: [] };
+    if (opts.dedicatedUnknown) {
+      for (const cat of ["gold","shiny","dark","normal"]) {
+        const split = splitUnknown(cats[cat]);
+        dedU[cat] = split.unknown;
+        cats[cat] = split.rest;
+      }
+    }
+
+    // Dedicated Legends routing
+    let dedL = { gold: [], shiny: [], dark: [], normal: [] };
+    if (opts.dedicatedLegends) {
+      for (const cat of ["gold","shiny","dark","normal"]) {
+        const split = splitLegends(cats[cat], legendSet);
+        dedL[cat] = split.legends;
+        cats[cat] = split.rest;
+      }
+    }
+
+    // Local (non-dedicated) subsections
+    let localU = { gold: [], shiny: [], dark: [], normal: [] };
+    if (!opts.dedicatedUnknown) {
+      for (const cat of ["gold","shiny","dark","normal"]) {
+        const split = splitUnknown(cats[cat]);
+        localU[cat] = split.unknown;
+        cats[cat] = split.rest;
+      }
+    }
+
+    let localL = { gold: [], shiny: [], dark: [], normal: [] };
+    if (!opts.dedicatedLegends) {
+      for (const cat of ["gold","shiny","dark","normal"]) {
+        const split = splitLegends(cats[cat], legendSet);
+        localL[cat] = split.legends;
+        cats[cat] = split.rest;
+      }
+    }
+
+    // Combine duplicates AFTER routing
+    const maybeCombine = (list) => opts.combine ? combineEntries(list) : list;
+    for (const cat of ["gold","shiny","dark","normal"]) {
+      cats[cat] = maybeCombine(cats[cat]);
+      localU[cat] = maybeCombine(localU[cat]);
+      localL[cat] = maybeCombine(localL[cat]);
+      dedU[cat] = maybeCombine(dedU[cat]);
+      dedL[cat] = maybeCombine(dedL[cat]);
+    }
+
+    const buildCategorySection = (cat) => {
+      const title = sectionForCategory(cat);
+      let body = "";
+
+      const mainLines = sortAndLines(cats[cat], opts, colorPicker);
+      if (mainLines) body += mainLines;
+
+      if (!opts.dedicatedUnknown && localU[cat].length) {
+        if (body) body += "\n\n";
+        body += makeSubheader("Ungendered");
+        body += sortAndLines(
+          localU[cat],
+          opts,
+          colorPicker,
+          (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded)
+        );
+      }
+
+      if (!opts.dedicatedLegends && localL[cat].length) {
+        if (body) body += "\n\n";
+        body += makeSubheader("Legends / Mythicals");
+        body += sortAndLines(localL[cat], opts, colorPicker);
+      }
+
+      return makeSection(title, body);
+    };
+
+    const buildDedicatedUnknownSection = () => {
+      if (!opts.dedicatedUnknown) return "";
+      let body = "";
+
+      const addSub = (label, list, boldNormal=false, useCombinedSD=false) => {
+        if (!list.length) return;
+        body += makeSubheader(label);
+        body += sortAndLines(
+          list,
+          opts,
+          colorPicker,
+          boldNormal ? (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded) : null,
+          useCombinedSD
+        ) + "\n\n";
+      };
+
+      addSub("Golden", dedU.gold);
+
+      if (opts.combineSD) {
+        const merged = dedU.shiny.concat(dedU.dark);
+        addSub("Shiny / Dark", merged, false, true);
+      } else {
+        addSub("Shiny", dedU.shiny);
+        addSub("Dark", dedU.dark);
+      }
+
+      addSub("Normal", dedU.normal, true);
+
+      return makeSection("Ungendered", body.trimEnd());
+    };
+
+    const buildDedicatedLegendsSection = () => {
+      if (!opts.dedicatedLegends) return "";
+      let body = "";
+
+      const addSub = (label, list, useCombinedSD=false) => {
+        if (!list.length) return;
+        body += makeSubheader(label);
+        body += sortAndLines(list, opts, colorPicker, null, useCombinedSD) + "\n\n";
+      };
+
+      addSub("Golden", dedL.gold);
+
+      if (opts.combineSD) {
+        const merged = dedL.shiny.concat(dedL.dark);
+        addSub("Shiny / Dark", merged, true);
+      } else {
+        addSub("Shiny", dedL.shiny);
+        addSub("Dark", dedL.dark);
+      }
+
+      addSub("Normal", dedL.normal);
+
+      return makeSection("Legends / Mythicals", body.trimEnd());
+    };
+
+    // Output ordering:
+    // Golden always first
+    // then Dedicated (?) if present
+    // then Dedicated Legends/Mythicals if present
+    // then Shiny/Dark (or combined)
+    // then Normal
+    let out = "";
+
+    out += buildCategorySection("gold");
+    out += buildDedicatedUnknownSection();
+    out += buildDedicatedLegendsSection();
+
+    if (opts.combineSD) {
+      const mergedMain = cats.shiny.concat(cats.dark);
+      const mergedU = localU.shiny.concat(localU.dark);
+      const mergedL = localL.shiny.concat(localL.dark);
+
+      let body = "";
+
+      const mainLines = sortAndLines(mergedMain, opts, colorPicker, null, true);
+      if (mainLines) body += mainLines;
+
+      if (!opts.dedicatedUnknown && mergedU.length) {
+        if (body) body += "\n\n";
+        body += makeSubheader("Ungendered");
+        body += sortAndLines(mergedU, opts, colorPicker, null, true);
+      }
+
+      if (!opts.dedicatedLegends && mergedL.length) {
+        if (body) body += "\n\n";
+        body += makeSubheader("Legends / Mythicals");
+        body += sortAndLines(mergedL, opts, colorPicker, null, true);
+      }
+
+      out += makeSection("Shiny / Dark", body);
+    } else {
+      out += buildCategorySection("shiny");
+      out += buildCategorySection("dark");
+    }
+
+    out += buildCategorySection("normal");
+
+    return out.trimEnd();
+  }
+
+  function initLegendBox() {
+    const sorted = DEFAULT_LEGENDS_MYTHICALS_GEN7.slice().sort((a,b)=>a.localeCompare(b));
+    $("legends").value = sorted.join("\n");
+  }
+
+  $("sortBtn").addEventListener("click", async () => {
+    let entries = parseInput($("input").value);
+
+    const opts = {
+      combine: $("combine").checked,
+      dupeDesc: $("dupeDesc").checked,
+      plainLevel: $("plainLevel").checked,
+      combineSD: $("combineSD").checked,
+      dedicatedUnknown: $("dedicatedUnknown").checked,
+      dedicatedLegends: $("dedicatedLegends").checked,
+      highlightUEUG: $("highlightUEUG").checked,
+      filterJunk: $("filterJunk").checked
+    };
+
+    const colors = {
+      gold: $("cGold").value,
+      shiny: $("cShiny").value,
+      dark: $("cDark").value,
+      normal: $("cNormal").value
+    };
+
+    const legendSet = buildLegendSet();
+
+    // Load optional lists if needed
+    const ueugLoaded = opts.highlightUEUG ? await loadUEUGListIfNeeded() : new Set();
+
+    if (opts.filterJunk) {
+      const lists = await loadJunkListsIfNeeded();
+
+      // Filter BEFORE categorization/organization.
+      // Filter condition:
+      // - Entry is in maps.txt OR secret_swaps.txt (exact match on name-without-gender; forms are respected automatically)
+      // - Level <= 1000
+      // - Typical gender only:
+      //   - Gendered species: must have ♂ or ♀
+      //   - Genderless species (listed in genderless.txt): must have NO ♂/♀
+      //   - (?) is never "typical" and will not be filtered by this rule
+      entries = entries.filter(e => !shouldFilterAsJunk(e, opts, lists));
+    } else {
+      // keep status clean if junk filtering not used
+      // (but don't wipe ueug status if it was just loaded)
+      if (!opts.highlightUEUG) setStatus("");
+    }
+
+    $("output").value = entries.length ? organize(entries, legendSet, opts, colors, ueugLoaded) : "";
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    $("input").value = "";
+    $("output").value = "";
+    setStatus("");
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = $("output").value || "";
+    if (!text) return;
+    try { await navigator.clipboard.writeText(text); }
+    catch {
+      $("output").focus();
+      $("output").select();
+      document.execCommand("copy");
+    }
+  });
+
+  // Footer year
+  $("copyright-year").textContent = String(new Date().getFullYear());
+
+  initLegendBox();
+})();
+</script>
+</body>
+</html>
