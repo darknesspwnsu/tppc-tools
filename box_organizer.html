@@ -155,7 +155,7 @@
     font-size: 0.9rem;
     color: #666;
   ">
-    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4.1
   </footer>
 </div>
 
@@ -590,26 +590,21 @@
 
     // Helper: render Normal ungendereds as UE/UG vs non-UE/UG
     function renderNormalUngenderedBlock(listUnknownNormal) {
-      if (!listUnknownNormal.length) return "";
+      if (!listUnknownNormal.length) return { ueug: "", non: "" };
 
       const { ueug, non } = splitUEUG(listUnknownNormal, ueugLoaded);
-      let block = "";
 
       const ueugLines = sortAndLines(ueug, opts, colorPicker);
-      if (ueugLines) {
-        block += makeSubheader("Unevolved / Ungoldenized");
-        block += ueugLines;
-        block += "\n\n";
-      }
+      const nonLines  = sortAndLines(non, opts, colorPicker);
 
-      const nonLines = sortAndLines(non, opts, colorPicker);
-      if (nonLines) {
-        block += makeSubheader("Evolved / Goldenized");
-        block += nonLines;
-        block += "\n\n";
-      }
-
-      return block.trimEnd();
+      return {
+        ueug: ueugLines
+          ? makeSubheader("Unevolved / Ungoldenized") + ueugLines
+          : "",
+        non: nonLines
+          ? makeSubheader("Evolved / Goldenized") + nonLines
+          : ""
+      };
     }
 
     const buildCategorySection = (cat) => {
@@ -655,8 +650,20 @@
         body += sortAndLines(list, opts, colorPicker, useCombinedSD) + "\n\n";
       };
 
-      if (!opts.keepGoldsInGolden) addSub("Golden", dedU.gold);
+      // GOLDEN FIRST
+      if (!opts.keepGoldsInGolden) {
+        addSub("Golden", dedU.gold);
+      }
 
+      // NORMAL UE/UG — UNEVOLVED FIRST
+      let egBlock = "";
+      if (dedU.normal.length) {
+        const blocks = renderNormalUngenderedBlock(dedU.normal);
+        if (blocks.ueug) body += blocks.ueug + "\n\n";
+        egBlock = blocks.non; // defer E/G to the end
+      }
+
+      // SHINY / DARK
       if (opts.combineSD) {
         const merged = dedU.shiny.concat(dedU.dark);
         addSub("Shiny / Dark", merged, true);
@@ -665,11 +672,8 @@
         addSub("Dark", dedU.dark);
       }
 
-      // CHANGE: Dedicated (?) section "Normal" becomes UE/UG split
-      if (dedU.normal.length) {
-        const block = renderNormalUngenderedBlock(dedU.normal);
-        if (block) body += block + "\n\n";
-      }
+      // EVOLVED / GOLDENIZED LAST
+      if (egBlock) body += egBlock + "\n\n";
 
       return makeSection("Ungendered", body.trimEnd());
     };
