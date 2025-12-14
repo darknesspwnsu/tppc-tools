@@ -275,7 +275,7 @@ async function fetchUEUGSet() {
 // 4) TPPC rarity table (from your proxy / static mirror)
 // If you're using a Cloudflare Worker / proxy, replace this URL accordingly.
 async function fetchRarityTable() {
-  const res = await fetch("rarity.html"); // or your proxied URL
+  const res = await fetch("https://darknesspwnsu.github.io/tppc-data/data/rarity.html"); // or your proxied URL
   if (!res.ok) {
     throw new Error("Failed to fetch TPPC rarity list.");
   }
