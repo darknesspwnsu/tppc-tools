@@ -270,3 +270,4 @@ Yanma
 Zangoose
 Zigzagoon
 Zubat
+Spiritomb
