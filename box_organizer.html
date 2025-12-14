@@ -95,13 +95,6 @@
         </div>
 
         <div class="form-check mb-2">
-          <input class="form-check-input" type="checkbox" id="highlightUEUG" />
-          <label class="form-check-label" for="highlightUEUG">
-            Highlight UE/UG <code>(?)</code> normals using <code>ueug_list.txt</code> (same directory)
-          </label>
-        </div>
-
-        <div class="form-check mb-2">
           <input class="form-check-input" type="checkbox" id="filterJunk" />
           <label class="form-check-label" for="filterJunk">
             Filter out Maps/Swaps and junk unless level is <b>&ge; 1000</b>
@@ -162,7 +155,7 @@
     font-size: 0.9rem;
     color: #666;
   ">
-    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v3
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v4
   </footer>
 </div>
 
@@ -356,18 +349,15 @@
     if (!c) return name;
     return `[color=${c}]${name}[/color]`;
   }
-  function boldWrap(s) { return `[B]${s}[/B]`; }
 
-  function formatLine(e, opts, color, doBold=false) {
-    let nm = e.name;
-    if (doBold) nm = boldWrap(nm);
-    nm = colorizeName(nm, color);
+  function formatLine(e, opts, color) {
+    let nm = colorizeName(e.name, color);
     const lvl = fmtLevel(e.levelNum);
     return opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
   }
 
-  function formatCombinedLine(e, opts, color, doBold=false) {
-    const base = formatLine(e, opts, color, doBold);
+  function formatCombinedLine(e, opts, color) {
+    const base = formatLine(e, opts, color);
     return (e.count && e.count > 1) ? `${base} x${e.count}` : base;
   }
 
@@ -397,6 +387,17 @@
     return { legends, rest };
   }
 
+  function splitUEUG(list, ueugLoaded) {
+    const ueug = [];
+    const non = [];
+    for (const e of list) {
+      const key = normalizeUEUGCandidateName(e.name);
+      if (ueugLoaded.has(key)) ueug.push(e);
+      else non.push(e);
+    }
+    return { ueug, non };
+  }
+
   async function loadTextSetOnce(filename) {
     try {
       const res = await fetch(`./${filename}`, { cache: "no-store" });
@@ -417,8 +418,8 @@
     ueugLoadPromise = (async () => {
       const set = await loadTextSetOnce("ueug_list.txt");
       ueugSet = set;
+      // Only show a status line if it actually loaded something (keeps UI quieter)
       if (set.size) setStatus(`UE/UG list loaded: ${set.size.toLocaleString("en-US")} entries.`);
-      else setStatus("Could not load ueug_list.txt (file missing or file:// blocked). UE/UG highlighting disabled.");
       ueugLoadPromise = null;
       return ueugSet;
     })();
@@ -463,13 +464,6 @@
     return { mapsSet, swapsSet, genderlessSet };
   }
 
-  function shouldBoldNormalUnknown(e, opts, ueugLoaded) {
-    if (!opts.highlightUEUG) return false;
-    if (!isUnknown(e.name)) return false;
-    if (e.category !== "normal") return false;
-    return ueugLoaded.has(normalizeUEUGCandidateName(e.name));
-  }
-
   function isTypicalGenderForFiltering(entry, genderlessSetLoaded) {
     if (isUnknown(entry.name)) return false;
 
@@ -498,14 +492,13 @@
     return isMap || isSwap;
   }
 
-  function sortAndLines(list, opts, colorPicker, boldPredicate=null, useCombinedSD=false) {
+  function sortAndLines(list, opts, colorPicker, useCombinedSD=false) {
     const arr = list.slice().sort((a,b)=>compareEntries(a,b,opts.dupeDesc, useCombinedSD));
     return arr.map(e => {
       const color = colorPicker(e);
-      const doBold = boldPredicate ? !!boldPredicate(e) : false;
       return opts.combine
-        ? formatCombinedLine(e, opts, color, doBold)
-        : formatLine(e, opts, color, doBold);
+        ? formatCombinedLine(e, opts, color)
+        : formatLine(e, opts, color);
     }).join("\n");
   }
 
@@ -595,6 +588,30 @@
       dedL[cat] = maybeCombine(dedL[cat]);
     }
 
+    // Helper: render Normal ungendereds as UE/UG vs non-UE/UG
+    function renderNormalUngenderedBlock(listUnknownNormal) {
+      if (!listUnknownNormal.length) return "";
+
+      const { ueug, non } = splitUEUG(listUnknownNormal, ueugLoaded);
+      let block = "";
+
+      const ueugLines = sortAndLines(ueug, opts, colorPicker);
+      if (ueugLines) {
+        block += makeSubheader("Unevolved / Ungoldenized");
+        block += ueugLines;
+        block += "\n\n";
+      }
+
+      const nonLines = sortAndLines(non, opts, colorPicker);
+      if (nonLines) {
+        block += makeSubheader("Evolved / Goldenized");
+        block += nonLines;
+        block += "\n\n";
+      }
+
+      return block.trimEnd();
+    }
+
     const buildCategorySection = (cat) => {
       const title = sectionForCategory(cat);
       let body = "";
@@ -602,20 +619,21 @@
       const mainLines = sortAndLines(cats[cat], opts, colorPicker);
       if (mainLines) body += mainLines;
 
-      // IMPORTANT: for golds, even if dedicated toggles are ON, we still show localU/localL when keepGoldsInGolden is ON
+      // for golds, even if dedicated toggles are ON, we still show localU/localL when keepGoldsInGolden is ON
       const shouldShowLocalU = (!applyDedicatedUnknownFor(cat)) || (cat === "gold" && opts.keepGoldsInGolden);
       const shouldShowLocalL = (!applyDedicatedLegendsFor(cat)) || (cat === "gold" && opts.keepGoldsInGolden);
 
       if (shouldShowLocalU && localU[cat].length) {
         if (body) body += "\n\n";
-        body += makeSubheader("Ungendered");
-        body += sortAndLines(
-          localU[cat],
-          opts,
-          colorPicker,
-          (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded),
-          false
-        );
+
+        // CHANGE: Normal ungendereds get split into UE/UG vs non-UE/UG
+        if (cat === "normal") {
+          const block = renderNormalUngenderedBlock(localU[cat]);
+          if (block) body += block;
+        } else {
+          body += makeSubheader("Ungendered");
+          body += sortAndLines(localU[cat], opts, colorPicker);
+        }
       }
 
       if (shouldShowLocalL && localL[cat].length) {
@@ -629,49 +647,41 @@
 
     const buildDedicatedUnknownSection = () => {
       if (!opts.dedicatedUnknown) return "";
-
-      // If "keepGoldsInGolden", gold unknowns should NOT appear here
-      // (because they remain as a subsection in Golden)
       let body = "";
 
-      const addSub = (label, list, boldNormal=false, useCombinedSD=false) => {
+      const addSub = (label, list, useCombinedSD=false) => {
         if (!list.length) return;
         body += makeSubheader(label);
-        body += sortAndLines(
-          list,
-          opts,
-          colorPicker,
-          boldNormal ? (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded) : null,
-          useCombinedSD
-        ) + "\n\n";
+        body += sortAndLines(list, opts, colorPicker, useCombinedSD) + "\n\n";
       };
 
       if (!opts.keepGoldsInGolden) addSub("Golden", dedU.gold);
 
       if (opts.combineSD) {
         const merged = dedU.shiny.concat(dedU.dark);
-        addSub("Shiny / Dark", merged, false, true);
+        addSub("Shiny / Dark", merged, true);
       } else {
         addSub("Shiny", dedU.shiny);
         addSub("Dark", dedU.dark);
       }
 
-      addSub("Normal", dedU.normal, true);
+      // CHANGE: Dedicated (?) section "Normal" becomes UE/UG split
+      if (dedU.normal.length) {
+        const block = renderNormalUngenderedBlock(dedU.normal);
+        if (block) body += block + "\n\n";
+      }
 
       return makeSection("Ungendered", body.trimEnd());
     };
 
     const buildDedicatedLegendsSection = () => {
       if (!opts.dedicatedLegends) return "";
-
-      // If "keepGoldsInGolden", gold legends should NOT appear here
-      // (because they remain as a subsection in Golden)
       let body = "";
 
       const addSub = (label, list, useCombinedSD=false) => {
         if (!list.length) return;
         body += makeSubheader(label);
-        body += sortAndLines(list, opts, colorPicker, null, useCombinedSD) + "\n\n";
+        body += sortAndLines(list, opts, colorPicker, useCombinedSD) + "\n\n";
       };
 
       if (!opts.keepGoldsInGolden) addSub("Golden", dedL.gold);
@@ -697,10 +707,7 @@
     // then Normal
     let out = "";
 
-    // Golden section always built from its own locals when keepGoldsInGolden is enabled
     out += buildCategorySection("gold");
-
-    // Dedicated sections (will omit gold subsections if keepGoldsInGolden is ON)
     out += buildDedicatedUnknownSection();
     out += buildDedicatedLegendsSection();
 
@@ -711,19 +718,19 @@
 
       let body = "";
 
-      const mainLines = sortAndLines(mergedMain, opts, colorPicker, null, true);
+      const mainLines = sortAndLines(mergedMain, opts, colorPicker, true);
       if (mainLines) body += mainLines;
 
       if (!opts.dedicatedUnknown && mergedU.length) {
         if (body) body += "\n\n";
         body += makeSubheader("Ungendered");
-        body += sortAndLines(mergedU, opts, colorPicker, null, true);
+        body += sortAndLines(mergedU, opts, colorPicker, true);
       }
 
       if (!opts.dedicatedLegends && mergedL.length) {
         if (body) body += "\n\n";
         body += makeSubheader("Legends / Mythicals");
-        body += sortAndLines(mergedL, opts, colorPicker, null, true);
+        body += sortAndLines(mergedL, opts, colorPicker, true);
       }
 
       out += makeSection("Shiny / Dark", body);
@@ -752,7 +759,6 @@
       dedicatedUnknown: $("dedicatedUnknown").checked,
       dedicatedLegends: $("dedicatedLegends").checked,
       keepGoldsInGolden: $("keepGoldsInGolden").checked,
-      highlightUEUG: $("highlightUEUG").checked,
       filterJunk: $("filterJunk").checked
     };
 
@@ -764,17 +770,14 @@
     };
 
     const legendSet = buildLegendSet();
-    const ueugLoaded = opts.highlightUEUG ? await loadUEUGListIfNeeded() : new Set();
+
+    // NEW: UE/UG list is always used now (for Normal ungendereds). If it fails to load, it behaves like "none are UE/UG".
+    const ueugLoaded = await loadUEUGListIfNeeded();
 
     if (opts.filterJunk) {
       const lists = await loadJunkListsIfNeeded();
       entries = entries.filter(e => !shouldFilterAsJunk(e, opts, lists));
-    } else {
-      if (!opts.highlightUEUG) setStatus("");
     }
-
-    // If keepGoldsInGolden is enabled, make sure gold local subsections were NOT stripped earlier:
-    // We handle that in routing logic by applying "dedicated" toggles only to non-gold categories.
 
     $("output").value = entries.length ? organize(entries, legendSet, opts, colors, ueugLoaded) : "";
   });
