@@ -24,6 +24,11 @@
     <h1 class="h3 mb-1">Yet Another Box Organizer</h1>
     <subtitle>by Darkness AKA Shiva</subtitle>
     <br/>
+    <div class="mb-1">
+      <a href="https://forums.tppc.info/showthread.php?p=11515904#post11515904" target="_blank" rel="noopener noreferrer">
+        More information
+      </a>
+    </div>
     <div class="small-note">Supports blurb format and tabbed formats. Empty sections/subsections are omitted.</div>
   </div>
 
@@ -150,7 +155,7 @@
     font-size: 0.9rem;
     color: #666;
   ">
-    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v2.1
   </footer>
 </div>
 
@@ -385,8 +390,7 @@
     return { legends, rest };
   }
 
-  async function loadTextSetOnce(filename, cacheObjName) {
-    // cacheObjName is the variable we want to set; we handle externally for clarity
+  async function loadTextSetOnce(filename) {
     try {
       const res = await fetch(`./${filename}`, { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -416,9 +420,6 @@
   }
 
   async function loadJunkListsIfNeeded() {
-    // maps.txt, secret_swaps.txt, genderless.txt
-    const promises = [];
-
     if (!mapsSet && !mapsLoadPromise) {
       mapsLoadPromise = (async () => {
         mapsSet = await loadTextSetOnce("maps.txt");
@@ -441,19 +442,17 @@
       })();
     }
 
-    promises.push(mapsLoadPromise || Promise.resolve(mapsSet || new Set()));
-    promises.push(swapsLoadPromise || Promise.resolve(swapsSet || new Set()));
-    promises.push(genderlessLoadPromise || Promise.resolve(genderlessSet || new Set()));
+    const [m, s, g] = await Promise.all([
+      mapsLoadPromise || Promise.resolve(mapsSet || new Set()),
+      swapsLoadPromise || Promise.resolve(swapsSet || new Set()),
+      genderlessLoadPromise || Promise.resolve(genderlessSet || new Set())
+    ]);
 
-    const [m, s, g] = await Promise.all(promises);
     mapsSet = m || new Set();
     swapsSet = s || new Set();
     genderlessSet = g || new Set();
 
-    // only show status if files actually loaded
-    const msg = `Junk lists loaded: maps=${mapsSet.size.toLocaleString("en-US")}, swaps=${swapsSet.size.toLocaleString("en-US")}, genderless=${genderlessSet.size.toLocaleString("en-US")}`;
-    setStatus(msg);
-
+    setStatus(`Junk lists loaded: maps=${mapsSet.size.toLocaleString("en-US")}, swaps=${swapsSet.size.toLocaleString("en-US")}, genderless=${genderlessSet.size.toLocaleString("en-US")}`);
     return { mapsSet, swapsSet, genderlessSet };
   }
 
@@ -471,21 +470,25 @@
     // - (?) is NOT typical
     if (isUnknown(entry.name)) return false;
 
-    const core = canonicalNoGender(entry.name); // no gender symbols, lower
+    const core = canonicalNoGender(entry.name);
     const isGenderlessSpecies = genderlessSetLoaded.has(core);
 
     if (isGenderlessSpecies) {
-      // typical genderless display: no gender symbol
       return !hasGenderSymbol(entry.name);
     } else {
-      // typical gendered display: has male or female symbol
       return hasGenderSymbol(entry.name);
     }
   }
 
   function shouldFilterAsJunk(entry, opts, lists) {
     if (!opts.filterJunk) return false;
-    if (entry.levelNum >= 1000) return false; // keep if >1000 (strict per your wording)
+
+    // NEW: Always keep level 4s, even if they match junk
+    if (entry.levelNum === 4) return false;
+
+    // Your change: filter if < 1000 (keep >= 1000)
+    if (entry.levelNum >= 1000) return false;
+
     // Only filter if typical gender
     if (!isTypicalGenderForFiltering(entry, lists.genderlessSet)) return false;
 
@@ -514,7 +517,6 @@
   }
 
   function organize(entries, legendSet, opts, colors, ueugLoaded) {
-    // Assign categories (real prefix only)
     const catsAll = { gold: [], shiny: [], dark: [], normal: [] };
 
     for (const e0 of entries) {
@@ -528,7 +530,6 @@
       catsAll[e.category].push(e);
     }
 
-    // per-entry color
     const colorPicker = (e) => {
       if (e.category === "gold") return colors.gold;
       if (e.category === "shiny") return colors.shiny;
@@ -536,7 +537,6 @@
       return colors.normal;
     };
 
-    // Working sets
     let cats = {
       gold: catsAll.gold.slice(),
       shiny: catsAll.shiny.slice(),
@@ -544,7 +544,6 @@
       normal: catsAll.normal.slice()
     };
 
-    // Dedicated (?) routing
     let dedU = { gold: [], shiny: [], dark: [], normal: [] };
     if (opts.dedicatedUnknown) {
       for (const cat of ["gold","shiny","dark","normal"]) {
@@ -554,7 +553,6 @@
       }
     }
 
-    // Dedicated Legends routing
     let dedL = { gold: [], shiny: [], dark: [], normal: [] };
     if (opts.dedicatedLegends) {
       for (const cat of ["gold","shiny","dark","normal"]) {
@@ -564,7 +562,6 @@
       }
     }
 
-    // Local (non-dedicated) subsections
     let localU = { gold: [], shiny: [], dark: [], normal: [] };
     if (!opts.dedicatedUnknown) {
       for (const cat of ["gold","shiny","dark","normal"]) {
@@ -583,7 +580,6 @@
       }
     }
 
-    // Combine duplicates AFTER routing
     const maybeCombine = (list) => opts.combine ? combineEntries(list) : list;
     for (const cat of ["gold","shiny","dark","normal"]) {
       cats[cat] = maybeCombine(cats[cat]);
@@ -603,12 +599,7 @@
       if (!opts.dedicatedUnknown && localU[cat].length) {
         if (body) body += "\n\n";
         body += makeSubheader("Ungendered");
-        body += sortAndLines(
-          localU[cat],
-          opts,
-          colorPicker,
-          (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded)
-        );
+        body += sortAndLines(localU[cat], opts, colorPicker, (e) => shouldBoldNormalUnknown(e, opts, ueugLoaded));
       }
 
       if (!opts.dedicatedLegends && localL[cat].length) {
@@ -676,14 +667,7 @@
       return makeSection("Legends / Mythicals", body.trimEnd());
     };
 
-    // Output ordering:
-    // Golden always first
-    // then Dedicated (?) if present
-    // then Dedicated Legends/Mythicals if present
-    // then Shiny/Dark (or combined)
-    // then Normal
     let out = "";
-
     out += buildCategorySection("gold");
     out += buildDedicatedUnknownSection();
     out += buildDedicatedLegendsSection();
@@ -717,7 +701,6 @@
     }
 
     out += buildCategorySection("normal");
-
     return out.trimEnd();
   }
 
@@ -748,25 +731,12 @@
     };
 
     const legendSet = buildLegendSet();
-
-    // Load optional lists if needed
     const ueugLoaded = opts.highlightUEUG ? await loadUEUGListIfNeeded() : new Set();
 
     if (opts.filterJunk) {
       const lists = await loadJunkListsIfNeeded();
-
-      // Filter BEFORE categorization/organization.
-      // Filter condition:
-      // - Entry is in maps.txt OR secret_swaps.txt (exact match on name-without-gender; forms are respected automatically)
-      // - Level <= 1000
-      // - Typical gender only:
-      //   - Gendered species: must have ♂ or ♀
-      //   - Genderless species (listed in genderless.txt): must have NO ♂/♀
-      //   - (?) is never "typical" and will not be filtered by this rule
       entries = entries.filter(e => !shouldFilterAsJunk(e, opts, lists));
     } else {
-      // keep status clean if junk filtering not used
-      // (but don't wipe ueug status if it was just loaded)
       if (!opts.highlightUEUG) setStatus("");
     }
 
@@ -790,9 +760,7 @@
     }
   });
 
-  // Footer year
   $("copyright-year").textContent = String(new Date().getFullYear());
-
   initLegendBox();
 })();
 </script>
