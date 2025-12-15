@@ -774,8 +774,9 @@
         if (body) body += "\n\n";
 
         if (cat === "normal") {
-          const block = renderNormalUngenderedBlock(localU[cat]);
-          if (block) body += block;
+          const blocks = renderNormalUngenderedBlock(localU[cat]);
+          if (blocks.ueug) body += blocks.ueug + "\n\n";
+          if (blocks.non)  body += blocks.non;
         } else {
           body += makeSubheader("Ungendered");
           body += sortAndLines(localU[cat], opts, colorPicker);
