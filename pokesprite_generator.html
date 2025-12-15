@@ -23,6 +23,7 @@
     }
     .preview-box img{ width:100%; height:100%; object-fit:contain; image-rendering:pixelated; display:none; }
     .preview-hint{ font-size:.9rem; color:#9ca3af; padding:.5rem; text-align:center; line-height:1.2; }
+
     #bbcodeOut{
       width:100%; min-height:55vh; resize:vertical;
       border-radius:1rem; border:1px solid var(--border);
@@ -113,10 +114,13 @@
             <div class="no-overflow flex-grow-1">
               <div class="left-meta"><strong>Resolved:</strong> <span id="resolved" class="muted">—</span></div>
               <div class="left-meta mono muted mt-1" id="spriteUrl">—</div>
+
               <div class="mt-3 d-flex gap-2 flex-wrap">
                 <button id="copyBtn" class="btn btn-outline-secondary btn-sm">Copy BBCode</button>
+                <button id="exportBtn" class="btn btn-outline-success btn-sm">Export PNG</button>
                 <button id="clearBtn" class="btn btn-outline-danger btn-sm">Clear</button>
               </div>
+
               <div class="muted mt-3" style="font-size:.92rem">
                 Output is wrapped in <span class="mono">[code]</span> so spacing lines up on BBCode forums.
               </div>
@@ -139,12 +143,15 @@
       </div>
 
       <footer class="app-footer">
-        © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v1
+        © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v1.1
       </footer>
 
     </div>
   </div>
 </div>
+
+<!-- Hidden canvas used for exporting PNG -->
+<canvas id="exportCanvas" style="display:none;"></canvas>
 
 <script>
 const POKEMON_JSON_URL = "https://raw.githubusercontent.com/msikma/pokesprite/master/data/pokemon.json";
@@ -174,12 +181,18 @@ const els = {
   resolved: document.getElementById("resolved"),
   spriteUrl: document.getElementById("spriteUrl"),
   copyBtn: document.getElementById("copyBtn"),
+  exportBtn: document.getElementById("exportBtn"),
   clearBtn: document.getElementById("clearBtn"),
+  exportCanvas: document.getElementById("exportCanvas"),
   copyrightYear: document.getElementById("copyright-year"),
 };
 
 let nameIndex = new Map();
 let nameIndexLower = new Map();
+
+// Holds the last sampled pixel canvas used to generate BBCode
+let lastSampleCanvas = null;
+let lastExportName = "pokesprite";
 
 function setStatus(msg){ els.status.textContent = msg; }
 
@@ -247,6 +260,14 @@ function rgbToHex(r,g,b){
   return "#" + toHex2(r) + toHex2(g) + toHex2(b);
 }
 
+function safeFilename(s){
+  return String(s || "pokesprite")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_\-]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "pokesprite";
+}
+
 /**
  * Find bounding box of non-transparent pixels (alpha >= threshold).
  */
@@ -308,25 +329,18 @@ function cropToOpaqueCanvas(img, alphaThreshold, pad=1){
 }
 
 /**
- * Cropped canvas -> BBCode with per-line run-length encoding by color.
- * Aspect is LOCKED via xScale:
- *   charAspect = xScale / 2
- *
- * rows = round(sampleCols * (h/w) * charAspect)
+ * Render the cropped canvas into a sampled "pixel canvas" that preserves sprite colors.
+ * This canvas is also what we export as PNG (after scaling).
  */
-function canvasToBbcode(cropCanvas, {
+function makeSampleCanvas(cropCanvas, {
   resMode = "auto",
   cols = 120,
-  alphaThreshold = 30,
-  xScale = 2,
-  char = "█",
-  wrapInCode = true,
+  xScale = 2,          // used only to determine aspect via locked rule
   maxAutoCols = 180,
-  emptyChar = " ",
 } = {}){
   const srcW = cropCanvas.width;
   const srcH = cropCanvas.height;
-  if (srcW <= 0 || srcH <= 0) return wrapInCode ? "[code]\n\n[/code]" : "";
+  if (srcW <= 0 || srcH <= 0) return null;
 
   let sampleCols;
   if (resMode === "auto"){
@@ -335,6 +349,7 @@ function canvasToBbcode(cropCanvas, {
     sampleCols = clampNum(cols, 16, 220, 120);
   }
 
+  // aspect locked: charAspect = xScale / 2
   const charAspect = aspectFromXScale(xScale);
   const aspect = srcH / srcW;
   const sampleRows = Math.max(1, Math.round(sampleCols * aspect * charAspect));
@@ -348,10 +363,26 @@ function canvasToBbcode(cropCanvas, {
   ctx.clearRect(0,0,c.width,c.height);
   ctx.drawImage(cropCanvas, 0,0, srcW,srcH, 0,0, sampleCols, sampleRows);
 
-  const { data } = ctx.getImageData(0,0,sampleCols,sampleRows);
+  return c;
+}
+
+/**
+ * Sample canvas -> BBCode with per-line run-length encoding by color.
+ */
+function sampleCanvasToBbcode(sampleCanvas, {
+  alphaThreshold = 30,
+  xScale = 2,
+  char = "█",
+  wrapInCode = true,
+  emptyChar = " ",
+} = {}){
+  const w = sampleCanvas.width;
+  const h = sampleCanvas.height;
+  const ctx = sampleCanvas.getContext("2d", { willReadFrequently:true });
+  const { data } = ctx.getImageData(0,0,w,h);
 
   const lines = [];
-  for (let y=0; y<sampleRows; y++){
+  for (let y=0; y<h; y++){
     let line = "";
     let runHex = null;
     let runCount = 0;
@@ -368,8 +399,8 @@ function canvasToBbcode(cropCanvas, {
       runHex = null;
     };
 
-    for (let x=0; x<sampleCols; x++){
-      const i = (y*sampleCols + x) * 4;
+    for (let x=0; x<w; x++){
+      const i = (y*w + x) * 4;
       const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
       const hex = (a >= alphaThreshold) ? rgbToHex(r,g,b) : null;
 
@@ -392,9 +423,43 @@ function canvasToBbcode(cropCanvas, {
 }
 
 function appendFootnote(bbcode){
-  // Ensure one blank line before footnote, and keep it OUTSIDE [code] so the link is clickable.
-  // If user wants it inside, we can change later.
+  // Keep footnote OUTSIDE [code] so the link stays clickable.
   return `${bbcode}\n\n${BB_FOOTNOTE}\n`;
+}
+
+/**
+ * Export: scale up the sampled pixel canvas to a crisp PNG and download.
+ */
+function exportSampleCanvasPng(sampleCanvas, {
+  scale = 8,
+  filename = "pokesprite.png",
+  background = "transparent", // "transparent" or "#ffffff" etc.
+} = {}){
+  const out = els.exportCanvas;
+  const w = sampleCanvas.width * scale;
+  const h = sampleCanvas.height * scale;
+
+  out.width = w;
+  out.height = h;
+
+  const ctx = out.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,w,h);
+
+  if (background && background !== "transparent"){
+    ctx.fillStyle = background;
+    ctx.fillRect(0,0,w,h);
+  }
+
+  ctx.drawImage(sampleCanvas, 0, 0, w, h);
+
+  const url = out.toDataURL("image/png");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 async function render(){
@@ -403,6 +468,7 @@ async function render(){
     els.resolved.textContent = "—";
     els.spriteUrl.textContent = "—";
     setPreviewEmpty();
+    lastSampleCanvas = null;
 
     const xScale = clampNum(els.sizePreset.value, 1, 3, 2);
 
@@ -423,6 +489,7 @@ async function render(){
     setStatus(`Loading sprite for ${info.name}…`);
     els.resolved.textContent = `${info.name} (#${info.idx}) → slug: ${slug}`;
     els.spriteUrl.textContent = url;
+    lastExportName = safeFilename(info.name);
 
     const img = await loadImage(url);
     setPreviewSprite(url);
@@ -434,15 +501,25 @@ async function render(){
       return;
     }
 
-    setStatus("Rendering BBCode…");
-    const art = canvasToBbcode(cropCanvas, {
+    setStatus("Sampling…");
+    const sampleCanvas = makeSampleCanvas(cropCanvas, {
       resMode,
       cols,
+      xScale,
+      maxAutoCols: 180,
+    });
+    if (!sampleCanvas){
+      setStatus("Failed to sample sprite.");
+      return;
+    }
+    lastSampleCanvas = sampleCanvas;
+
+    setStatus("Rendering BBCode…");
+    const art = sampleCanvasToBbcode(sampleCanvas, {
       alphaThreshold,
       xScale,
       char: "█",
       wrapInCode: true,
-      maxAutoCols: 180,
       emptyChar: " ",
     });
 
@@ -468,11 +545,28 @@ els.copyBtn.addEventListener("click", async () => {
   }
 });
 
+els.exportBtn.addEventListener("click", () => {
+  if (!lastSampleCanvas){
+    setStatus("Render a Pokémon first, then Export PNG.");
+    return;
+  }
+  // You can tweak scale; 8 is a good default for crisp pixel art.
+  const scale = 8;
+  exportSampleCanvasPng(lastSampleCanvas, {
+    scale,
+    filename: `${lastExportName}.png`,
+    background: "transparent",
+  });
+  setStatus("Exported PNG.");
+});
+
 els.clearBtn.addEventListener("click", () => {
   els.input.value = "";
   els.bbcodeOut.value = "";
   els.resolved.textContent = "—";
   els.spriteUrl.textContent = "—";
+  lastSampleCanvas = null;
+  lastExportName = "pokesprite";
   setPreviewEmpty();
   setStatus("Cleared.");
 });
