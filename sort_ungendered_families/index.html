@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TPPC (?) Enhanced Dex Sorter & Stats</title>
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <!-- Bootstrap Icons (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <style>
+    body { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    textarea { font-family: monospace; font-size: 0.9rem; }
+    .small-note { font-size: 0.9rem; color: #666; }
+
+    /* Soft tinted panels */
+    .panel-input {
+      background: rgba(13, 202, 240, 0.12);
+      border: 1px solid rgba(13, 202, 240, 0.25);
+    }
+    .panel-output {
+      background: rgba(25, 135, 84, 0.12);
+      border: 1px solid rgba(25, 135, 84, 0.25);
+    }
+    .panel {
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+
+    .flash-note {
+      font-size: 0.9rem;
+      color: #0f5132;
+    }
+    .cloud-tooltip {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.3;
+      max-width: 360px;
+      white-space: pre-line; /* respects \n in tooltip text */
+      display: none;
+    }
+
+    /* ===============================
+       Dark mode (added)
+       =============================== */
+    body.dark-mode {
+      background: #0f1115;
+      color: #e6e6e6;
+    }
+    body.dark-mode .small-note { color: #a7a7a7; }
+    body.dark-mode textarea.form-control,
+    body.dark-mode input.form-control {
+      background: #151923;
+      color: #e6e6e6;
+      border-color: rgba(255,255,255,0.18);
+    }
+    body.dark-mode .form-text { color: #a7a7a7; }
+    body.dark-mode .panel-input {
+      background: rgba(13, 202, 240, 0.08);
+      border-color: rgba(13, 202, 240, 0.20);
+    }
+    body.dark-mode .panel-output {
+      background: rgba(25, 135, 84, 0.08);
+      border-color: rgba(25, 135, 84, 0.20);
+    }
+    body.dark-mode .bg-white.bg-opacity-50 {
+      background-color: rgba(20, 24, 33, 0.55) !important;
+    }
+    body.dark-mode footer {
+      border-top-color: rgba(255,255,255,0.16) !important;
+      color: #a7a7a7 !important;
+    }
+
+    /* Bottom-right toggle container (added) */
+    .darkmode-toggle {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+      backdrop-filter: blur(8px);
+    }
+    body.dark-mode .darkmode-toggle {
+      background: rgba(21, 25, 35, 0.92);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+    .darkmode-toggle .bi {
+      font-size: 1.05rem;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    body.dark-mode .darkmode-toggle .bi { opacity: 0.95; }
+    .darkmode-toggle .form-check {
+      margin: 0;
+    }
+    .darkmode-toggle .form-check-input {
+      cursor: pointer;
+    }
+
+    /* Tag cloud sample control wrapper (added) */
+    #cloudSampleControls {
+      margin-top: 0.25rem;
+      margin-left: 1.5rem; /* aligns under checkbox label area */
+    }
+  </style>
+</head>
+
+<body>
+<div class="container" id="app">
+
+  <!-- Header -->
+  <div class="mb-3">
+    <h1 class="h3 mb-1">TPPC (?) Enhanced Dex Sorter & Stats</h1>
+    <div class="small-note">by Darkness AKA Shiva</div>
+    <div class="small-note mt-1">Ungendered family grouping + rarity-aware highlighting + missing list + optional tag cloud.</div>
+  </div>
+
+  <!-- Split panels -->
+  <div class="row g-3">
+    <!-- LEFT -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-input">
+        <label for="inputList" class="form-label fw-semibold">Input</label>
+        <textarea id="inputList" class="form-control" rows="16"
+          placeholder='Example:
+DarkBulbasaur (?) 20 $40,005
+ShinyBulbasaur (?) 20 $40,005
+Bulbasaur (?) 4 $625'></textarea>
+
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <button id="runButton" class="btn btn-primary" type="button">Generate BBCode & Stats</button>
+          <button id="clearButton" class="btn btn-outline-secondary" type="button">Clear</button>
+        </div>
+
+        <div class="mt-3">
+          <div class="fw-semibold mb-2">Options</div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="partitionOutput" />
+            <label class="form-check-label" for="partitionOutput">
+              Partition output into Families vs Singles/Sets
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="missingOnlyFamilyNeeded" />
+            <label class="form-check-label" for="missingOnlyFamilyNeeded">
+              Missing list: only entries needed to complete incomplete families
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="addMissingInline" />
+            <label class="form-check-label" for="addMissingInline">
+              Add missing items inline (Families output)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="noGroupSpacing" />
+            <label class="form-check-label" for="noGroupSpacing">
+              No space between familys/individuals
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="showLevelLabel" />
+            <label class="form-check-label" for="showLevelLabel">
+              Output level as <code>(Level: X)</code> instead of just <code>X</code>
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="dropDuplicates" checked />
+            <label class="form-check-label" for="dropDuplicates">
+              Drop duplicates (keep the lowest-level one)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="highlightRarity" checked />
+            <label class="form-check-label" for="highlightRarity">
+              Highlight rarity
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="omitSummaryStats" />
+            <label class="form-check-label" for="omitSummaryStats">
+              Omit summary stats
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="visualizeCloud" />
+            <label class="form-check-label" for="visualizeCloud">
+              Visualize output (tag cloud sample)
+            </label>
+          </div>
+
+          <!-- Tag cloud sample size option (added) -->
+          <div id="cloudSampleControls" class="d-none">
+            <label for="cloudSampleSize" class="form-label mb-1">
+              Tag cloud sample size
+              <span class="small-note">(default 100)</span>
+            </label>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <input
+                type="number"
+                class="form-control"
+                id="cloudSampleSize"
+                value="100"
+                min="1"
+                step="1"
+                style="width: 140px;"
+              />
+              <div class="form-text m-0">Max words sampled from your filtered/deduped input.</div>
+            </div>
+          </div>
+
+          <!-- Colors -->
+          <div class="mt-3 p-3 border rounded-3 bg-white bg-opacity-50">
+            <div class="fw-semibold mb-2">Optional colors (leave blank for none)</div>
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label for="colorGolden" class="form-label">Gold color</label>
+                <input id="colorGolden" class="form-control" type="text" value="gold" placeholder="#DAA520 or gold" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorShiny" class="form-label">Shiny color</label>
+                <input id="colorShiny" class="form-control" type="text" value="magenta" placeholder="#00AEEF" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorDark" class="form-label">Dark color</label>
+                <input id="colorDark" class="form-control" type="text" value="slategray" placeholder="#8A2BE2" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="colorNormal" class="form-label">Normal color</label>
+                <input id="colorNormal" class="form-control" type="text" value="" placeholder="#666666" />
+              </div>
+            </div>
+            <div class="small-note mt-2">
+              Colors apply to the name only via <code>[color="..."]Name[/color]</code>.
+            </div>
+          </div>
+
+          <hr class="my-3" />
+
+          <div class="fw-semibold mb-2">Filters</div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterGolds" />
+            <label class="form-check-label" for="filterGolds">
+              Filter out Goldens (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterNormals" />
+            <label class="form-check-label" for="filterNormals">
+              Filter out Normals (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterShinys" />
+            <label class="form-check-label" for="filterShinys">
+              Filter out Shinys (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterDarks" />
+            <label class="form-check-label" for="filterDarks">
+              Filter out Darks (also exclude in missing list)
+            </label>
+          </div>
+
+          <div class="d-flex gap-3 flex-wrap mb-2">
+            <div class="flex-fill" style="min-width: 220px;">
+              <label for="minUngendered" class="form-label">Missing list: Min Ungendered</label>
+              <input type="number" class="form-control" id="minUngendered" value="10" min="0" />
+            </div>
+
+            <div class="flex-fill" style="min-width: 220px;">
+              <label for="maxMissing" class="form-label">Missing list: Max Missing</label>
+              <input type="number" class="form-control" id="maxMissing" value="20" min="0" />
+              <div class="form-text">0 = show all missing entries</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-output">
+        <label for="outputText" class="form-label fw-semibold">Output (Summary + Families BBCode)</label>
+        <textarea id="outputText" class="form-control" rows="14" readonly></textarea>
+
+        <div class="mt-2 d-flex flex-wrap gap-2 align-items-center">
+          <button id="copyMainBtn" class="btn btn-success" type="button">Copy Main</button>
+          <span id="jumpStatus" class="flash-note"></span>
+        </div>
+
+        <div id="familiesSinglesBlock" class="mt-3 d-none">
+          <label for="outputSingles" class="form-label fw-semibold">Singles/Sets BBCode</label>
+          <textarea id="outputSingles" class="form-control" rows="8" readonly></textarea>
+
+          <div class="mt-2 d-flex flex-wrap gap-2">
+            <button id="copySinglesBtn" class="btn btn-success" type="button">Copy Singles</button>
+          </div>
+        </div>
+
+        <label for="outputMissing" class="form-label fw-semibold mt-3">Missing list (per variant)</label>
+        <textarea id="outputMissing" class="form-control" rows="10" readonly></textarea>
+
+        <div class="mt-2 d-flex flex-wrap gap-2">
+          <button id="copyMissingBtn" class="btn btn-success" type="button">Copy Missing</button>
+        </div>
+
+        <div class="small-note mt-2" id="status"></div>
+
+        <!-- Tag cloud area -->
+        <div id="cloudRow" class="row g-3 mt-1 d-none">
+          <div class="col-12">
+            <div class="panel panel-output">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                  <div class="fw-semibold">Tag Cloud</div>
+                  <div class="small-note">
+                    Size uses <b>adjusted score</b> derived from cumulative rarity (rarer/valuable = bigger),
+                    min-max normalized within the sample. Click a word to jump-highlight it in output.
+                  </div>
+                </div>
+                <button id="rerollCloudBtn" class="btn btn-outline-success btn-sm" type="button">
+                  Resample
+                </button>
+              </div>
+
+              <div class="mt-2">
+                <svg id="tagCloudSvg" class="w-100" style="height: 650px;"></svg>
+              </div>
+
+              <div class="small-note mt-2" id="cloudStatus"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer style="
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+  ">
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v9
+  </footer>
+</div>
+
+<!-- Bottom-right dark mode toggle (added) -->
+<div class="darkmode-toggle" aria-label="Dark mode toggle">
+  <i class="bi bi-sun-fill" aria-hidden="true"></i>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+  </div>
+  <i class="bi bi-moon-stars-fill" aria-hidden="true"></i>
+</div>
+
+<div id="cloudTooltip" class="cloud-tooltip"></div>
+
+<!-- d3 + d3-cloud -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
+<script type="module" src="./js/main.js"></script>
+
+</body>
+</html>
