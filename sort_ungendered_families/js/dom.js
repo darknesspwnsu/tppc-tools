@@ -27,6 +27,8 @@ export function getDomRefs() {
   const showLevelLabelEl = document.getElementById("showLevelLabel");
   const dropDuplicatesEl = document.getElementById("dropDuplicates");
   const highlightRarityEl = document.getElementById("highlightRarity");
+  const annotateRarityWrapEl = document.getElementById("annotateRarityWrap");
+  const annotateRarityEl = document.getElementById("annotateRarity");
   const omitSummaryStatsEl = document.getElementById("omitSummaryStats");
 
   const visualizeCloudEl = document.getElementById("visualizeCloud");
@@ -56,7 +58,7 @@ export function getDomRefs() {
     partitionOutputEl,
     filterGoldsEl, filterNormalsEl, filterShinysEl, filterDarksEl,
     missingOnlyFamilyNeededEl, addMissingInlineEl, noGroupSpacingEl,
-    showLevelLabelEl, dropDuplicatesEl, highlightRarityEl, omitSummaryStatsEl,
+    showLevelLabelEl, dropDuplicatesEl, highlightRarityEl, annotateRarityWrapEl, annotateRarityEl, omitSummaryStatsEl,
     visualizeCloudEl, cloudSampleControlsEl, cloudSampleSizeEl,
     colorGoldenEl, colorShinyEl, colorDarkEl, colorNormalEl,
     copyMainBtn, copyMissingBtn, copySinglesBtn,

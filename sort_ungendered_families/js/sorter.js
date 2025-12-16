@@ -41,6 +41,7 @@ export async function runDexSorter({
   addMissingInline,
   noGroupSpacing,
   highlightRarity,
+  annotateRarity,
   omitSummaryStats
 }) {
   statusEl.textContent = "Fetching Dex mapping...";
@@ -353,6 +354,43 @@ export async function runDexSorter({
   // Rarity functions (with LV4 override)
   // ===============================
 
+  function hasPreEvoWithNonZeroRarity(speciesKey, variantPrefix, fallbackSpeciesName, form, lv4Eligible) {
+    let cur = speciesKey;
+    const seen = new Set([cur]);
+
+    while (true) {
+      const pset = parents.get(cur);
+      if (!pset || pset.size === 0) break;
+
+      // pick "best" parent the same way you do elsewhere (lowest dex)
+      let best = null;
+      let bestDex = Infinity;
+      for (const p of pset) {
+        const d = nameToDex[p] ?? 9999;
+        if (d < bestDex) { bestDex = d; best = p; }
+      }
+      if (!best) break;
+
+      cur = best;
+      if (seen.has(cur)) break;
+      seen.add(cur);
+
+      // Missing list never qualifies for LV4 override, so isInputLevel4 = false
+      const r = rarityForVariantAtSpeciesKey(
+        cur,
+        variantPrefix,
+        fallbackSpeciesName,
+        form,
+        lv4Eligible,
+        false
+      );
+
+      if ((r ?? 0) > 0) return true;
+    }
+
+    return false;
+  }
+
   function rarityForVariantAtSpeciesKey(
     speciesKey,
     variantPrefix,
@@ -614,19 +652,53 @@ export async function runDexSorter({
     if (!m) return origLine;
 
     const afterName = origLine.slice(m[0].length).trim();
-    const decorated = decorateName(r.full_name);
+
+    const fullName = r.full_name;
+    const decorated = decorateName(fullName);
+
+    // Unown special-case: skip rarity highlight resizing + skip rarity annotations entirely.
+    const rawKeyForUnown = fullName
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+    const isUnown = rawKeyForUnown.startsWith("unown");
 
     const sk = canonicalKey(r.species);
-    const prefix = variantPrefixFromName(r.full_name);
-    const form = extractForm(r.full_name);
+    const prefix = variantPrefixFromName(fullName);
+    const form = extractForm(fullName);
 
-    const cat = colorCategory(r.full_name);
-    const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(r.full_name)));
+    const cat = colorCategory(fullName);
+    const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(fullName)));
     const lv4Eligible = (cat === "shiny" || cat === "dark" || isUeugNormal);
 
     const isInputLevel4 = (r.levelNum === 4);
-    const cumR = cumulativeVariantRarityForSpecies(sk, prefix, r.species, form, lv4Eligible, isInputLevel4);
-    const decoratedSized = wrapRaritySizeIfNeeded(decorated, cumR);
+
+    const cumR = cumulativeVariantRarityForSpecies(
+      sk,
+      prefix,
+      r.species,
+      form,
+      lv4Eligible,
+      isInputLevel4
+    );
+
+    // If we used the LV4 rarity override for THIS row's base lookup, we annotate "(at this level)".
+    // (Only possible for unevolved + eligible + exact LV4 list hit, and only when the input row is level 4.)
+    const depthHere = (evoDepth[sk] ?? 0);
+    const lookupNameBase = (() => {
+      const sName = speciesDisplayByKey[sk] ?? r.species;
+      let lookup = prefix ? `${prefix}${sName}` : sName;
+      if (form) lookup += ` (${form})`;
+      return lookup;
+    })();
+    const usedLv4ForThisRow =
+      isInputLevel4 &&
+      depthHere === 0 &&
+      !!lv4Eligible &&
+      level4RarityByKey.has(canonicalKey(lookupNameBase));
+
+    const decoratedSized = isUnown ? decorated : wrapRaritySizeIfNeeded(decorated, cumR);
 
     let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
     if (restParts.length > 0 && restParts[restParts.length - 1].startsWith("$")) {
@@ -636,7 +708,27 @@ export async function runDexSorter({
     if (showLevelLabel && remainder) remainder = applyLevelLabelToRemainder(remainder);
     if (remainder) remainder = boldLowLevels(remainder);
 
-    return remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
+    let lineOut = remainder ? `${decoratedSized} ${remainder}` : decoratedSized;
+
+    // Rarity annotation only when enabled, highlighted, and not Unown.
+    const isHighlighted = !!highlightRarity && cumR >= 1 && cumR <= 130;
+    if (annotateRarity && isHighlighted && !isUnown) {
+      const ig = Number.isFinite(cumR)
+        ? Math.round(cumR).toLocaleString("en-US")
+        : String(cumR);
+
+      // Only append "(including pre-evos)" if there is actually a pre-evo contribution
+      // (i.e., at least one pre-evo in the chain has a non-zero rarity for this variant).
+      const chain = preEvoChainBreakdown(sk, prefix, r.species, form, lv4Eligible, isInputLevel4);
+      const hasPreEvoContribution = chain.slice(1).some((p) => (p.rarity ?? 0) > 0);
+
+      const suffixAtLevel = usedLv4ForThisRow ? " (at this level)" : "";
+      const suffixPreEvo = hasPreEvoContribution ? " (including pre-evos)" : "";
+
+      lineOut += ` [size="1"]- ${ig} ig${suffixAtLevel}${suffixPreEvo}[/size]`;
+    }
+
+    return lineOut;
   }
 
   const rowsByFamily = new Map();
@@ -793,8 +885,26 @@ export async function runDexSorter({
     if (shown.length === 0) {
       missingLines.push("You have all of them.");
     } else {
-      for (const { name, u } of shown) {
-        missingLines.push(`${name} (?) (${u}ig)`);
+      for (const { name, cumR } of shown) {
+        const missSpecies = speciesFromFullName(name);
+        const sk = canonicalKey(missSpecies);
+
+        const cat = colorCategory(name);
+        const prefix = (cat === "golden") ? "Golden" : (cat === "shiny") ? "Shiny" : (cat === "dark") ? "Dark" : "";
+        const form = extractForm(name);
+
+        const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(name)));
+        const lv4Eligible = (cat === "shiny" || cat === "dark" || isUeugNormal);
+
+        const hasPreEvo = hasPreEvoWithNonZeroRarity(sk, prefix, missSpecies, form, lv4Eligible);
+
+        const ig = Number.isFinite(cumR)
+          ? Math.round(cumR).toLocaleString("en-US")
+          : String(cumR ?? 0);
+
+        missingLines.push(
+          `${name} (?) (${ig} ig${hasPreEvo ? " including pre-evos" : ""})`
+        );
       }
     }
   }

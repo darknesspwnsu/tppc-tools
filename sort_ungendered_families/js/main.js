@@ -14,12 +14,24 @@ function getCloudSampleSize(cloudSampleSizeEl) {
   return n;
 }
 
+
+function syncAnnotateRarityVisibility(dom) {
+  const wrap = dom.annotateRarityWrapEl;
+  const cb = dom.annotateRarityEl;
+  if (!wrap || !cb) return;
+
+  const show = !!dom.highlightRarityEl?.checked;
+  wrap.classList.toggle("d-none", !show);
+  if (!show) cb.checked = false;
+}
+
 function syncCloudSampleOptionVisibility(visualizeCloudEl, cloudSampleControlsEl) {
   if (visualizeCloudEl.checked) cloudSampleControlsEl.classList.remove("d-none");
   else cloudSampleControlsEl.classList.add("d-none");
 }
 
 const dom = getDomRefs();
+syncAnnotateRarityVisibility(dom);
 let lastCloudItems = null;
 
 function rerenderCloudIfVisible() {
@@ -68,6 +80,7 @@ dom.runButton.addEventListener("click", async () => {
   const addMissingInline = dom.addMissingInlineEl.checked;
   const noGroupSpacing = dom.noGroupSpacingEl.checked;
   const highlightRarity = dom.highlightRarityEl.checked;
+  const annotateRarity = highlightRarity && !!dom.annotateRarityEl?.checked;
   const omitSummaryStats = dom.omitSummaryStatsEl.checked;
 
   const colors = {
@@ -95,6 +108,7 @@ dom.runButton.addEventListener("click", async () => {
       addMissingInline,
       noGroupSpacing,
       highlightRarity,
+      annotateRarity,
       omitSummaryStats
     });
 
@@ -188,6 +202,10 @@ dom.visualizeCloudEl.addEventListener("change", () => {
     dom.cloudStatusEl.textContent = "";
     if (window.d3) d3.select(dom.tagCloudSvgEl).selectAll("*").remove();
   }
+});
+
+dom.highlightRarityEl.addEventListener("change", () => {
+  syncAnnotateRarityVisibility(dom);
 });
 
 dom.cloudSampleSizeEl.addEventListener("change", () => {
