@@ -29,7 +29,6 @@
     h1,h2,h3,.card-header{ font-weight:600; }
     .mono{ font-family:var(--mono); }
 
-    /* Card polish */
     .card{
       border-radius:1rem;
       border:1px solid rgba(0,0,0,.06);
@@ -48,7 +47,6 @@
     }
     [data-bs-theme="dark"] .helper{ color: rgba(255,255,255,.60); }
 
-    /* Footer */
     .app-footer{
       margin-top:auto;
       padding:18px 0 26px;
@@ -60,7 +58,6 @@
 
     .copy-btn{ display:inline-flex; align-items:center; justify-content:center; }
 
-    /* Scroll-to-top */
     .scroll-top{
       position:fixed;
       bottom:20px;
@@ -72,16 +69,13 @@
     }
     .scroll-top.show{ opacity:1; pointer-events:auto; }
 
-    /* Masonry (staggered) layout
-       - avoids "neighbor grows" behavior because columns flow independently */
+    /* Masonry (staggered) */
     .masonry{
       column-gap:1.5rem;
       column-count:1;
     }
     @media (min-width: 768px){ .masonry{ column-count:2; } }
     @media (min-width: 1200px){ .masonry{ column-count:3; } }
-
-    /* Ensure each card stays intact and doesn't split between columns */
     .masonry > .card{
       break-inside: avoid;
       margin:0 0 1.5rem;
@@ -372,209 +366,6 @@
   </button>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Math/logic -->
   <script src="exp_utils.js"></script>
-
-  <script>
-    // Footer year
-    document.getElementById("copyright-year").textContent = new Date().getFullYear();
-
-    // Copy helpers
-    async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        return true;
-      }catch(_){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        ta.setAttribute("readonly", "");
-        document.body.appendChild(ta);
-        ta.select();
-        let ok = false;
-        try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
-        document.body.removeChild(ta);
-        return ok;
-      }
-    }
-
-    function setCopiedUI(btn, ok){
-      const i = btn.querySelector("i");
-      const prev = i ? i.className : "";
-      if(i) i.className = ok ? "bi bi-clipboard-check" : "bi bi-clipboard-x";
-      btn.classList.toggle("btn-outline-secondary", !ok);
-      btn.classList.toggle("btn-outline-success", ok);
-      setTimeout(() => {
-        if(i) i.className = prev || "bi bi-clipboard";
-        btn.classList.remove("btn-outline-success");
-        btn.classList.add("btn-outline-secondary");
-      }, 1100);
-    }
-
-    document.querySelectorAll("[data-copy-target]").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const id = btn.getAttribute("data-copy-target");
-        const el = document.getElementById(id);
-        const text = (el && "value" in el) ? (el.value ?? "") : "";
-        const ok = await copyText(String(text));
-        setCopiedUI(btn, ok);
-      });
-    });
-
-    // Scroll-to-top
-    const scrollToTopBtn = document.getElementById("scroll-to-top");
-    scrollToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    window.addEventListener("scroll", () => {
-      if (window.pageYOffset > 100) scrollToTopBtn.classList.add("show");
-      else scrollToTopBtn.classList.remove("show");
-    });
-
-    // Make Enter trigger "=" within the same card
-    document.querySelectorAll(".card").forEach(card => {
-      card.addEventListener("keydown", (e) => {
-        if(e.key !== "Enter") return;
-        const t = e.target;
-        if(!(t instanceof HTMLElement)) return;
-        if(t.tagName !== "INPUT") return;
-        const eqBtn = card.querySelector(".btn.btn-primary.btn-calc");
-        if(eqBtn && eqBtn instanceof HTMLButtonElement){
-          e.preventDefault();
-          eqBtn.click();
-        }
-      });
-    });
-
-    // --- Multi-add repeaters ---
-    function _num(v){
-      const n = Number(v);
-      return Number.isFinite(n) ? n : 0;
-    }
-    function _sumFrom(selector){
-      return Array.from(document.querySelectorAll(selector))
-        .map(el => _num(el.value))
-        .reduce((a,b)=>a+b, 0);
-    }
-
-    function wireRepeater(containerId, inputClass, minRows, label){
-      const box = document.getElementById(containerId);
-
-      function sync(){
-        const rows = box.querySelectorAll(".input-group");
-        rows.forEach(row => {
-          const rm = row.querySelector("button[data-remove]");
-          if(!rm) return;
-          const disable = rows.length <= minRows;
-          rm.disabled = disable;
-          rm.title = disable ? `At least ${minRows} row(s) are required` : "Remove row";
-        });
-      }
-
-      function addRow(){
-        const row = document.createElement("div");
-        row.className = "input-group";
-        row.innerHTML = `
-          <span class="input-group-text">${label}</span>
-          <input type="number" class="form-control ${inputClass}" placeholder="${label === "Lv" ? "Enter Level" : (label === "B" ? "Enter Exp (B)" : "Enter Exp")}">
-          <button class="btn btn-outline-secondary" type="button" data-remove><i class="bi bi-x-lg"></i></button>
-        `;
-        box.appendChild(row);
-        sync();
-        row.querySelector("input")?.focus();
-      }
-
-      box.addEventListener("click", (e) => {
-        const btn = e.target.closest("button[data-remove]");
-        if(!btn || btn.disabled) return;
-        btn.closest(".input-group")?.remove();
-        sync();
-      });
-
-      sync();
-      return { addRow, sync };
-    }
-
-    const expAddRep = wireRepeater("expAddList", "exp-add-item", 1, "EXP");
-    const expBillAddRep = wireRepeater("expBillAddList", "exp-bill-add-item", 1, "B");
-    const addLevelsRep = wireRepeater("addLevelsList", "add-level-item", 2, "Lv");
-
-    document.getElementById("expAddMoreBtn")?.addEventListener("click", () => expAddRep.addRow());
-    document.getElementById("expBillAddMoreBtn")?.addEventListener("click", () => expBillAddRep.addRow());
-    document.getElementById("addLevelsMoreBtn")?.addEventListener("click", () => addLevelsRep.addRow());
-
-    // Override calc + clear to support multi rows (keeps existing IDs)
-    function calculateExpAdd(){
-      const level = _num(document.getElementById("levelInput3")?.value);
-      const totalExp = _sumFrom(".exp-add-item");
-      const newLevel = expAdd(totalExp, level);
-      document.getElementById("expLevelOutput2").value = newLevel;
-      const hint = document.getElementById("expAddSumHint");
-      if(hint) hint.textContent = `Total EXP added: ${totalExp.toLocaleString()}`;
-    }
-
-    function clearExpAdd(){
-      document.getElementById("levelInput3").value = "";
-      const first = document.getElementById("expInput2");
-      if(first) first.value = "";
-      const box = document.getElementById("expAddList");
-      Array.from(box.querySelectorAll(".input-group")).slice(1).forEach(n => n.remove());
-      expAddRep.sync();
-      document.getElementById("expLevelOutput2").value = "";
-      const hint = document.getElementById("expAddSumHint");
-      if(hint) hint.textContent = "";
-    }
-
-    function calculateExpInBillAdd(){
-      const level = _num(document.getElementById("levelInput4")?.value);
-      const totalB = _sumFrom(".exp-bill-add-item");
-      const newLevel = expInBillAdd(totalB, level);
-      document.getElementById("expLevelOutput3").value = newLevel;
-      const hint = document.getElementById("expBillAddSumHint");
-      if(hint) hint.textContent = `Total EXP (B) added: ${totalB}`;
-    }
-
-    function clearExpInBillAdd(){
-      document.getElementById("levelInput4").value = "";
-      const first = document.getElementById("expInput3");
-      if(first) first.value = "";
-      const box = document.getElementById("expBillAddList");
-      Array.from(box.querySelectorAll(".input-group")).slice(1).forEach(n => n.remove());
-      expBillAddRep.sync();
-      document.getElementById("expLevelOutput3").value = "";
-      const hint = document.getElementById("expBillAddSumHint");
-      if(hint) hint.textContent = "";
-    }
-
-    function calculateAddLevels(){
-      const levels = Array.from(document.querySelectorAll(".add-level-item")).map(el => _num(el.value));
-      const totalExp = levels.reduce((acc, lv) => acc + level2Exp(lv), 0);
-      const out = exp2Level(totalExp);
-      document.getElementById("addLevelsOutput").value = out;
-      const hint = document.getElementById("addLevelsSumHint");
-      if(hint) hint.textContent = `Total EXP summed: ${totalExp.toLocaleString()}`;
-    }
-
-    function clearAddLevels(){
-      const box = document.getElementById("addLevelsList");
-      const rows = Array.from(box.querySelectorAll(".input-group"));
-      rows.forEach(r => { const inp=r.querySelector("input"); if(inp) inp.value=""; });
-      rows.slice(2).forEach(r => r.remove());
-      addLevelsRep.sync();
-      document.getElementById("addLevelsOutput").value = "";
-      const hint = document.getElementById("addLevelsSumHint");
-      if(hint) hint.textContent = "";
-    }
-
-    // Extend Clear All
-    const _oldClearAll = window.clearAll;
-    window.clearAll = function(){
-      // Clear multi tools first (so their dynamic rows reset cleanly)
-      try{ clearExpAdd(); }catch(e){}
-      try{ clearExpInBillAdd(); }catch(e){}
-      try{ clearAddLevels(); }catch(e){}
-      if(typeof _oldClearAll === "function") _oldClearAll();
-    };
-  </script>
 </body>
 </html>
