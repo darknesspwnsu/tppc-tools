@@ -147,12 +147,22 @@ window.addEventListener("scroll", () => {
   }
 });
 
-module.exports = {
-  level2exp,
-  level2ExpInBillion,
-  exp2Level,
-  expInBillion2Level,
-  levelDifference,
-  expAdd,
-  expInBillAdd
-};
+// Optional Node/CommonJS exports (safe in browser)
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    level2Exp,
+    level2ExpInBillion,
+    exp2Level,
+    expInBillion2Level,
+    levelDifference,
+    expAdd,
+    expInBillAdd,
+    calculateLevel2Exp,
+    calculateLevel2ExpInBillion,
+    calculateExp2Level,
+    calculateExpInBillion2Level,
+    calculateLevelDifference,
+    calculateLevelTo4499,
+    clearAll
+  };
+}
