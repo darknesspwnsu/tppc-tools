@@ -1,1 +1,707 @@
-hello world!
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>TPPC Tools by Darkness</title>
+  <meta name="description" content="A curated set of TPPC web utilities by Darkness: box organizer, EXP tools, and more." />
+
+  <!-- Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#070a12;
+      --bg1:#0b1020;
+      --card:#0e1730cc;
+      --card2:#0e1730a6;
+      --text:#e7ecff;
+      --muted:#aab2d6;
+      --muted2:#7f89b6;
+      --line:#1c2a55;
+      --glow:#7c5cff;
+      --glow2:#39d3ff;
+      --accent:#7c5cff;
+      --accent2:#39d3ff;
+      --good:#2ee59d;
+      --warn:#ffd166;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    /* Light theme (still “techy”, not plain white) */
+    [data-theme="light"]{
+      --bg0:#f6f7ff;
+      --bg1:#eef2ff;
+      --card:#ffffffcc;
+      --card2:#ffffffa6;
+      --text:#0b1020;
+      --muted:#3b456b;
+      --muted2:#59638c;
+      --line:#d8def5;
+      --glow:#5b46ff;
+      --glow2:#00b7ff;
+      --accent:#5b46ff;
+      --accent2:#00b7ff;
+      --shadow: 0 14px 34px rgba(20,30,70,.14);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(124,92,255,.26), transparent 60%),
+        radial-gradient(900px 500px at 85% 10%, rgba(57,211,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 55% 100%, rgba(46,229,157,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* subtle noise */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.06;
+      mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      background-size:180px 180px;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{
+      width:min(1120px, 92vw);
+      margin:0 auto;
+      padding:28px 0 46px;
+      position:relative;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:10px 2px 18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 240px;
+    }
+    .logo{
+      width:40px;height:40px;
+      border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.35), transparent 60%),
+        linear-gradient(135deg, rgba(124,92,255,.95), rgba(57,211,255,.85));
+      box-shadow: 0 10px 20px rgba(124,92,255,.20), 0 10px 30px rgba(57,211,255,.14);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 180deg, transparent, rgba(255,255,255,.35), transparent);
+      animation: spin 8s linear infinite;
+      opacity:.55;
+    }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    .brand h1{
+      font-size:16px;
+      letter-spacing:.2px;
+      margin:0;
+      font-weight:700;
+    }
+    .brand .sub{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:12px;
+      margin-top:2px;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .pill:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--line), var(--accent) 22%); }
+
+    .btn{
+      cursor:pointer;
+      user-select:none;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.2px;
+      color:var(--text);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--line), var(--accent2) 26%); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn:focus-visible,
+    .search:focus-visible,
+    .card:focus-visible{
+      outline: 2px solid color-mix(in oklab, var(--accent2), white 18%);
+      outline-offset: 2px;
+    }
+
+    /* Hero */
+    .hero{
+      margin-top:4px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
+    .heroCard{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position:relative;
+      overflow:hidden;
+      padding:22px 22px 20px;
+    }
+    .heroCard:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(500px 240px at 20% 0%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(420px 220px at 90% 10%, rgba(57,211,255,.16), transparent 60%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .heroCard > *{ position:relative; z-index:1; }
+
+    .kicker{
+      font-family:var(--mono);
+      color: color-mix(in oklab, var(--muted), var(--accent2) 18%);
+      font-size:12px;
+      letter-spacing:.25em;
+      text-transform:uppercase;
+    }
+    .title{
+      margin:10px 0 10px;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:-0.02em;
+    }
+    @media (max-width: 520px){
+      .title{ font-size:28px; }
+    }
+    .lead{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      max-width: 62ch;
+    }
+
+    .metaRow{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tag{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--text);
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      padding:8px 10px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    [data-theme="light"] .tag{ background: rgba(10,20,60,.05); }
+
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 3px rgba(124,92,255,.15);
+    }
+
+    /* Side panel */
+    .sideCard{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .searchWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:10px 12px;
+      background: rgba(0,0,0,.12);
+    }
+    [data-theme="light"] .searchWrap{ background: rgba(10,20,60,.05); }
+    .searchIcon{
+      font-family:var(--mono);
+      color:var(--muted2);
+      font-size:12px;
+      opacity:.9;
+    }
+    .search{
+      width:100%;
+      border:none;
+      background:transparent;
+      outline:none;
+      color:var(--text);
+      font-family:var(--mono);
+      font-size:12.5px;
+      letter-spacing:.1px;
+    }
+    .search::placeholder{ color: color-mix(in oklab, var(--muted2), var(--text) 8%); }
+
+    .miniHint{
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.45;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      color:var(--text);
+    }
+    [data-theme="light"] .kbd{ background: rgba(10,20,60,.05); }
+
+    /* Tools grid */
+    .gridHead{
+      margin-top:18px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .gridHead h2{
+      margin:0;
+      font-size:14px;
+      font-family:var(--mono);
+      color: color-mix(in oklab, var(--muted), var(--text) 18%);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .count{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted2);
+    }
+
+    .grid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 1020px){
+      .grid{ gap:10px; }
+    }
+    .card{
+      grid-column: span 6;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding:16px 16px 14px;
+      position:relative;
+      overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 148px;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--line), var(--accent) 24%);
+      box-shadow: 0 16px 40px rgba(0,0,0,.50);
+    }
+    [data-theme="light"] .card:hover{ box-shadow: 0 18px 44px rgba(20,30,70,.18); }
+    .card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 240px at 0% 0%, rgba(124,92,255,.12), transparent 60%),
+        radial-gradient(420px 220px at 100% 10%, rgba(57,211,255,.10), transparent 60%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .card > *{ position:relative; z-index:1; }
+
+    @media (max-width: 860px){
+      .card{ grid-column: span 12; }
+    }
+
+    .row1{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .name{
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:-.01em;
+      margin:0;
+    }
+    .badge{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color: color-mix(in oklab, var(--muted), var(--text) 10%);
+      background: rgba(0,0,0,.12);
+      white-space:nowrap;
+    }
+    [data-theme="light"] .badge{ background: rgba(10,20,60,.05); }
+
+    .desc{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .linkRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:auto;
+    }
+    .url{
+      font-family:var(--mono);
+      font-size:11.5px;
+      color: color-mix(in oklab, var(--muted2), var(--accent2) 18%);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 72%;
+    }
+    .go{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid color-mix(in oklab, var(--line), var(--accent2) 18%);
+      background: linear-gradient(135deg, rgba(124,92,255,.18), rgba(57,211,255,.14));
+      color:var(--text);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: transform .15s ease, border-color .15s ease;
+      flex-shrink:0;
+    }
+    .go:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in oklab, var(--line), var(--accent2) 32%);
+    }
+
+    /* Footer */
+    footer{
+      margin-top:18px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:6px 2px 0;
+    }
+    .footerMono{ font-family:var(--mono); }
+
+    /* Tiny motion preferences */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Site title">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>TPPC Tools by Darkness</h1>
+          <div class="sub">tppc • utilities • organizers</div>
+        </div>
+      </div>
+
+      <div class="actions" aria-label="Actions">
+        <a class="btn" href="https://github.com/coldsp33d" target="_blank" rel="noreferrer">
+          <span aria-hidden="true">↗</span>
+          <span>GitHub</span>
+        </a>
+        <button id="themeBtn" class="btn" type="button" aria-label="Toggle theme">
+          <span id="themeIcon" aria-hidden="true">☾</span>
+          <span id="themeText">Dark</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="hero" aria-label="Header">
+      <div class="heroCard">
+        <div class="kicker">Tool Hub</div>
+        <h2 class="title">A clean index of battle-tested TPPC utilities.</h2>
+        <p class="lead">
+          Quick text organizers, calculators, and “power tools” built for TPPC players.
+          Everything here is a small, focused web app — no fluff, just results.
+        </p>
+
+        <div class="metaRow" aria-label="Highlights">
+          <span class="tag"><span class="dot" aria-hidden="true"></span> Fast, keyboard-friendly</span>
+          <span class="tag"><span class="dot" aria-hidden="true"></span> Modern UI, readable output</span>
+          <span class="tag"><span class="dot" aria-hidden="true"></span> Extensible list</span>
+        </div>
+      </div>
+
+      <aside class="sideCard" aria-label="Search and tips">
+        <div class="searchWrap">
+          <div class="searchIcon" aria-hidden="true">⌕</div>
+          <input id="search" class="search" type="search" placeholder="Search tools… (name / description)" autocomplete="off" />
+        </div>
+        <div class="miniHint">
+          Tip: press <span class="kbd">/</span> to focus search, <span class="kbd">Esc</span> to clear.
+        </div>
+        <div class="pill" style="justify-content:space-between;">
+          <span class="footerMono">status</span>
+          <span class="footerMono" id="statusText">ready</span>
+        </div>
+      </aside>
+    </section>
+
+    <div class="gridHead">
+      <h2>Tools</h2>
+      <div class="count" id="countText"></div>
+    </div>
+
+    <main class="grid" id="grid" aria-label="Tool list"></main>
+
+    <footer aria-label="Footer">
+      <div>© <span id="year"></span> <span class="footerMono">Darkness</span></div>
+      <div class="footerMono">Built for GitHub Pages • <span id="buildStamp"></span></div>
+    </footer>
+  </div>
+
+  <script>
+    // --- Editable tool catalog (just add more objects here) ---
+    const TOOLS = [
+      {
+        name: "Box Organizer",
+        url: "https://coldsp33d.github.io/box_organizer",
+        desc: "Organize Pokémon quickly and effectively into logically sensible groups with several options for customization.",
+        tag: "organizer"
+      },
+      {
+        name: "Perfect Exp Calculator",
+        url: "https://coldsp33d.github.io/perfect_exp",
+        desc: "Calculate the number of battles needed to perfect EXP a Pokémon at any level.",
+        tag: "calculator"
+      },
+      {
+        name: "Exp Utilities",
+        url: "https://coldsp33d.github.io/exp_utils",
+        desc: "Useful powertools for trainers.",
+        tag: "powertools"
+      },
+      {
+        name: "Ungendered Collection Sorter",
+        url: "https://coldsp33d.github.io/sort_ungendered",
+        desc: "Sorts ungendered Pokémon collections by families and lists missing Pokémon.",
+        tag: "(?) sorter"
+      }
+    ];
+
+    // --- Theme ---
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeBtn");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeText = document.getElementById("themeText");
+
+    function setTheme(mode){
+      root.setAttribute("data-theme", mode);
+      localStorage.setItem("tppc_tools_theme", mode);
+      const isLight = mode === "light";
+      themeIcon.textContent = isLight ? "☀" : "☾";
+      themeText.textContent = isLight ? "Light" : "Dark";
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", isLight ? "#eef2ff" : "#0b0f1a");
+    }
+
+    const savedTheme = localStorage.getItem("tppc_tools_theme");
+    const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+    setTheme(savedTheme || (prefersLight ? "light" : "dark"));
+
+    themeBtn.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "dark";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+
+    // --- Rendering ---
+    const grid = document.getElementById("grid");
+    const search = document.getElementById("search");
+    const countText = document.getElementById("countText");
+    const statusText = document.getElementById("statusText");
+
+    const safeHost = (u) => {
+      try { return new URL(u).host; } catch { return u; }
+    };
+
+    function render(list){
+      grid.innerHTML = "";
+      const frag = document.createDocumentFragment();
+
+      list.forEach((t, idx) => {
+        const card = document.createElement("a");
+        card.className = "card";
+        card.href = t.url;
+        card.target = "_blank";
+        card.rel = "noreferrer";
+        card.tabIndex = 0;
+        card.setAttribute("aria-label", `Open ${t.name}`);
+
+        card.innerHTML = `
+          <div class="row1">
+            <h3 class="name">${t.name}</h3>
+            <span class="badge">${t.tag || "tool"}</span>
+          </div>
+          <p class="desc">${t.desc}</p>
+          <div class="linkRow">
+            <div class="url">${safeHost(t.url)}</div>
+            <div class="go">Open <span aria-hidden="true">→</span></div>
+          </div>
+        `;
+
+        // subtle staggered entrance
+        card.style.transform = "translateY(6px)";
+        card.style.opacity = "0";
+        requestAnimationFrame(() => {
+          card.style.transition = "transform .35s ease, opacity .35s ease, border-color .18s ease, box-shadow .18s ease";
+          card.style.transitionDelay = (idx * 35) + "ms";
+          card.style.transform = "translateY(0px)";
+          card.style.opacity = "1";
+        });
+
+        frag.appendChild(card);
+      });
+
+      grid.appendChild(frag);
+
+      countText.textContent = `${list.length} / ${TOOLS.length} shown`;
+      statusText.textContent = list.length ? "ready" : "no matches";
+    }
+
+    function normalize(s){
+      return (s || "").toLowerCase().trim();
+    }
+
+    function applyFilter(){
+      const q = normalize(search.value);
+      if(!q){
+        render(TOOLS);
+        return;
+      }
+      const filtered = TOOLS.filter(t => {
+        const hay = normalize(`${t.name} ${t.desc} ${t.tag} ${t.url}`);
+        return hay.includes(q);
+      });
+      render(filtered);
+    }
+
+    // initial
+    render(TOOLS);
+
+    // search events
+    let tmr = null;
+    search.addEventListener("input", () => {
+      clearTimeout(tmr);
+      tmr = setTimeout(applyFilter, 60);
+    });
+
+    // keyboard shortcuts: "/" to focus, Esc to clear
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "/" && document.activeElement !== search && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        search.focus();
+      }
+      if (e.key === "Escape") {
+        if (document.activeElement === search || search.value) {
+          search.value = "";
+          search.blur();
+          render(TOOLS);
+        }
+      }
+    });
+
+    // Footer stamps
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const stamp = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    document.getElementById("buildStamp").textContent =
+      `${stamp.getFullYear()}-${pad(stamp.getMonth()+1)}-${pad(stamp.getDate())} ${pad(stamp.getHours())}:${pad(stamp.getMinutes())}`;
+
+  </script>
+</body>
+</html>
