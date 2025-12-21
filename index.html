@@ -31,6 +31,21 @@
       --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial;
     }
 
+    [data-theme="dark"]{
+      --bg0:#070a12;
+      --bg1:#0b1020;
+      --card:#0e1730cc;
+      --card2:#0e1730a6;
+      --panel:#0e1730;
+      --text:#e7ecff;
+      --muted:#aab2d6;
+      --muted2:#7f89b6;
+      --line:#1c2a55;
+      --accent:#7c5cff;
+      --accent2:#39d3ff;
+      --shadow: 0 16px 40px rgba(0,0,0,.45);
+    }
+
     *{ box-sizing:border-box; }
     html, body{ min-height: 100%; }
     body{
@@ -114,7 +129,8 @@
       padding:10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
-      background:#fff;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--card), var(--card2));
       cursor:pointer;
       box-shadow: 0 10px 22px rgba(20,30,70,.08);
       transition: transform .15s ease, border-color .15s ease;
@@ -199,8 +215,8 @@
       border:1px solid var(--line);
       border-radius: 14px;
       padding:10px 12px;
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 10px 22px rgba(20,30,70,.08);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
       min-width: min(420px, 78vw);
     }
 
@@ -338,6 +354,10 @@
         <a class="btn" href="https://github.com/coldsp33d" target="_blank" rel="noreferrer">
           <span aria-hidden="true">↗</span> GitHub
         </a>
+        <button id="themeBtn" class="btn" type="button" aria-label="Toggle theme">
+          <span id="themeIcon">☾</span>
+          <span id="themeText">Dark</span>
+        </button>
       </div>
     </div>
 
@@ -487,6 +507,35 @@
       clearTimeout(tmr);
       tmr = setTimeout(applyFilter, 60);
     });
+
+    // --- Theme toggle (default = light) ---
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeBtn");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeText = document.getElementById("themeText");
+
+    // Always default to light unless user previously chose dark
+    const savedTheme = localStorage.getItem("tppc_tools_theme") || "light";
+    setTheme(savedTheme);
+
+    function setTheme(mode){
+      root.setAttribute("data-theme", mode);
+      localStorage.setItem("tppc_tools_theme", mode);
+
+      const isDark = mode === "dark";
+      themeIcon.textContent = isDark ? "☀" : "☾";
+      themeText.textContent = isDark ? "Light" : "Dark";
+
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute("content", isDark ? "#0b1020" : "#eef2ff");
+    }
+
+    themeBtn.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme");
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+
   </script>
 </body>
 </html>
