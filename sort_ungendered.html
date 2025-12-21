@@ -11,131 +11,131 @@
     crossorigin="anonymous"
   />
   <style>
-    body {
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
+    body { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    textarea, input[type="text"], input[type="number"]{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95rem;
     }
-    textarea {
-      font-family: monospace;
+    .small-note { font-size: 0.9rem; color: #666; }
+    .tight label { margin-bottom: 0.25rem; }
+
+    /* === Split panels === */
+    .panel { border-radius: 1rem; padding: 1rem; }
+    /* Left = Bootstrap warning-ish */
+    .panel-input{
+      background: rgba(255, 193, 7, 0.14);
+      border: 1px solid rgba(255, 193, 7, 0.28);
+    }
+    /* Right = Bootstrap success (same as box organizer) */
+    .panel-output{
+      background: rgba(25, 135, 84, 0.12);
+      border: 1px solid rgba(25, 135, 84, 0.25);
+    }
+
+    footer.app-footer{
+      margin-top: 3rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid #ddd;
+      text-align: center;
       font-size: 0.9rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
 <div class="container" id="app">
-  <!-- Input view -->
-  <div id="input-view">
-    <h1 class="mb-3">TPPC (?) Dex Sorter & Stats (Web)</h1>
-
-    <div class="mb-3">
-      <label for="inputList" class="form-label">
-        Paste your TPPC Pokémon list here
-      </label>
-      <textarea id="inputList" class="form-control" rows="15"
-        placeholder='Example:&#10;DarkBulbasaur (?) 20 $40,005&#10;ShinyBulbasaur (?) 20 $40,005&#10;Bulbasaur (?) 4 $625'></textarea>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="minUngendered" class="form-label">Min Ungendered</label>
-        <input
-          type="number"
-          class="form-control"
-          id="minUngendered"
-          value="10"
-          min="0"
-        />
-      </div>
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="maxMissing" class="form-label">Max Missing</label>
-        <input
-          type="number"
-          class="form-control"
-          id="maxMissing"
-          value="20"
-          min="0"
-        />
-        <div class="form-text">
-          0 = show all missing entries
-        </div>
-      </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="includeGolds" />
-          <label class="form-check-label" for="includeGolds">
-            Don&apos;t filter Goldens (include Goldens in missing list)
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="row mb-3">
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorGolden" class="form-label">Golden color</label>
-        <input
-          type="text"
-          class="form-control"
-          id="colorGolden"
-          value="gold"
-          placeholder='e.g. gold or #FFD700'
-        />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorShiny" class="form-label">Shiny color</label>
-        <input
-          type="text"
-          class="form-control"
-          id="colorShiny"
-          value="magenta"
-          placeholder='e.g. magenta or #FF00FF'
-        />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorDark" class="form-label">Dark color</label>
-        <input
-          type="text"
-          class="form-control"
-          id="colorDark"
-          value="blue"
-          placeholder='e.g. blue or #0000FF'
-        />
-      </div>
-      <div class="col-md-3 mb-3 mb-md-0">
-        <label for="colorNormal" class="form-label">Normal color</label>
-        <input
-          type="text"
-          class="form-control"
-          id="colorNormal"
-          value=""
-          placeholder='leave blank = no color'
-        />
-      </div>
-    </div>
-
-    <button id="runButton" class="btn btn-primary">
-      Generate BBCode & Stats
-    </button>
-
-    <div class="mt-3 small text-muted" id="status"></div>
+  <div class="mb-3">
+    <h1 class="h3 mb-1">TPPC (?) Dex Sorter & Stats</h1>
+    <div class="small-note">Paste your ungendered list on the left. Output appears on the right.</div>
   </div>
 
-  <!-- Output view -->
-  <div id="output-view" class="d-none">
-    <h2 class="mb-3">Output</h2>
-    <p class="text-muted">
-      Copy this text to your TPPC forum post / notes.
-    </p>
+  <div class="row g-3">
+    <!-- INPUT PANEL -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-input">
+        <label for="inputList" class="form-label fw-semibold">Input</label>
+        <textarea id="inputList" class="form-control" rows="16"
+          placeholder='Example:
+DarkBulbasaur (?) 20 $40,005
+ShinyBulbasaur (?) 20 $40,005
+Bulbasaur (?) 4 $625'></textarea>
 
-    <label for="outputText" class="form-label">Summary + Sorted BBCode</label>
-    <textarea id="outputText" class="form-control mb-3" rows="20"></textarea>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <button id="runButton" class="btn btn-primary" type="button">Generate</button>
+          <button id="clearButton" class="btn btn-outline-secondary" type="button">Clear</button>
+        </div>
 
-    <label for="outputMissing" class="form-label mt-3">Missing list (per variant)</label>
-    <textarea id="outputMissing" class="form-control" rows="12"></textarea>
+        <!-- Options: one per row -->
+        <div class="mt-3">
+          <div class="mb-3">
+            <label for="minUngendered" class="form-label fw-semibold">Min Ungendered</label>
+            <input type="number" class="form-control" id="minUngendered" value="10" min="0" />
+          </div>
 
-    <button id="backButton" class="btn btn-secondary mt-3">
-      Back to input
-    </button>
+          <div class="mb-3">
+            <label for="maxMissing" class="form-label fw-semibold">Max Missing</label>
+            <input type="number" class="form-control" id="maxMissing" value="20" min="0" />
+            <div class="form-text">0 = show all missing entries</div>
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="includeGolds" />
+            <label class="form-check-label" for="includeGolds">
+              Don&apos;t filter Goldens (include Goldens in missing list)
+            </label>
+          </div>
+
+          <div id="colorBox" class="p-3 border rounded-3 tight bg-white bg-opacity-50">
+            <div class="fw-semibold mb-2">Optional colors (leave blank for none)</div>
+
+            <div class="mb-2">
+              <label for="colorGolden" class="form-label">Golden color</label>
+              <input type="text" class="form-control" id="colorGolden" value="gold" placeholder='e.g. gold or #FFD700' />
+            </div>
+
+            <div class="mb-2">
+              <label for="colorShiny" class="form-label">Shiny color</label>
+              <input type="text" class="form-control" id="colorShiny" value="magenta" placeholder='e.g. magenta or #FF00FF' />
+            </div>
+
+            <div class="mb-2">
+              <label for="colorDark" class="form-label">Dark color</label>
+              <input type="text" class="form-control" id="colorDark" value="blue" placeholder='e.g. blue or #0000FF' />
+            </div>
+
+            <div class="mb-0">
+              <label for="colorNormal" class="form-label">Normal color</label>
+              <input type="text" class="form-control" id="colorNormal" value="" placeholder='leave blank = no color' />
+            </div>
+
+            <div class="small-note mt-2">Colors apply to the name only via <code>[color=...]Name[/color]</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="col-12 col-lg-6">
+      <div class="panel panel-output">
+        <label for="outputText" class="form-label fw-semibold">Output (Summary + Sorted BBCode)</label>
+        <textarea id="outputText" class="form-control" rows="14" readonly></textarea>
+
+        <label for="outputMissing" class="form-label fw-semibold mt-3">Missing list (per variant)</label>
+        <textarea id="outputMissing" class="form-control" rows="10" readonly></textarea>
+
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <button id="copyOutputBtn" class="btn btn-success" type="button">Copy Output</button>
+          <button id="copyMissingBtn" class="btn btn-outline-success" type="button">Copy Missing</button>
+        </div>
+
+        <div class="small-note mt-2" id="status"></div>
+      </div>
+    </div>
   </div>
 
+  <footer class="app-footer">
+    © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
+  </footer>
 </div>
 
 <script>
@@ -255,20 +255,31 @@ async function fetchEvolutionData() {
 
 // 3) UE/UG list from local text file (one name per line)
 async function fetchUEUGSet() {
-  // ueug_list.txt should be UTF-8 text, one Pokémon name (with form) per line.
-  const res = await fetch("ueug_list.txt");
+  // UE/UG list (Coldsp33d) may be newline-separated OR a single space-separated line.
+  const res = await fetch("https://Coldsp33d.github.io/ueug_list.txt");
   if (!res.ok) {
     throw new Error("Failed to fetch ueug_list.txt");
   }
-  const text = await res.text();
-  const lines = text.split(/\r?\n/);
-  const ueugNames = [];
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    ueugNames.push(trimmed);
+  let text = await res.text();
+  text = text.replace(/\r\n/g, "\n").trim();
+  if (!text) return new Set();
+
+  // Special-case a known multi-word species
+  text = text.replace(/Type:\s*Null/g, "Type:Null");
+
+  let entries = [];
+
+  const lines = text.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  if (lines.length > 1) {
+    // Classic one-per-line file
+    entries = lines;
+  } else {
+    // Single-line file: extract "Name" or "Name (Form)" chunks
+    const re = /[A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:[:!?\.][A-Za-z0-9'’À-ÖØ-öø-ÿ-]+)?[!?]?(?:\s*\([^)]+\))?/g;
+    entries = text.match(re) || [];
   }
-  const ueugSet = new Set(ueugNames.map((n) => canonicalKey(n)));
+
+  const ueugSet = new Set(entries.map((n) => canonicalKey(n)));
   return ueugSet;
 }
 
@@ -728,9 +739,11 @@ async function runDexSorter({
   summaryLines.push('* Note: Unowns are only counted once.');
   summaryLines.push("");
 
-  const bbcodeBlock = ["[code]", finalSortedOutput, "[/code]"].join("\n");
-
-  // Missing Ungendered (per variant)
+  const bbcodeBlock = [
+    "[code]",
+    finalSortedOutput,
+    "[/code]"
+  ]; // Missing Ungendered (per variant)
   statusEl.textContent = "Fetching rarity & computing missing list...";
   const rarityRows = await fetchRarityTable();
 
@@ -746,8 +759,13 @@ async function runDexSorter({
     golden: [],
     shiny: [],
     dark: [],
-    normal: [],
   };
+
+  // Normal is split into:
+  //  - UE/UG (unevolved/ungoldenized) normals: only those present in Coldsp33d's UE/UG list
+  //  - Other normals (evolved/goldenized / everything else)
+  const missingNormalUeug = [];
+  const missingNormalOther = [];
 
   for (const row of candidates) {
     const pokeName = row.pokemon;
@@ -758,12 +776,21 @@ async function runDexSorter({
     }
 
     const key = canonicalKey(pokeName);
-    if (!haveKeys.has(key)) {
+    if (haveKeys.has(key)) continue;
+
+    if (cat === "normal") {
+      // Only match normals against UE/UG list
+      if (ueugSet.has(key)) {
+        missingNormalUeug.push({ name: pokeName, u: row.ungendered });
+      } else {
+        missingNormalOther.push({ name: pokeName, u: row.ungendered });
+      }
+    } else {
       missingByVariant[cat].push({ name: pokeName, u: row.ungendered });
     }
   }
 
-  // Apply maxMissing per variant
+  // Apply maxMissing per section
   function sliceVariant(list) {
     if (maxMissing && maxMissing > 0) {
       return list.slice(0, maxMissing);
@@ -771,10 +798,15 @@ async function runDexSorter({
     return list;
   }
 
+  function formatMissingLine(name, u) {
+    const withMarker = name.includes("(?)") ? name : `${name} (?)`;
+    return `${withMarker} (${u} in game)`;
+  }
+
   const missingLines = [];
   missingLines.push(
     `=== Missing Ungendered > ${minUngendered} (per variant; ${
-      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per variant" : "all shown"
+      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per section" : "all shown"
     }) ===`
   );
   if (includeGolds) {
@@ -783,10 +815,12 @@ async function runDexSorter({
     missingLines.push("Goldens are excluded from this missing list.");
   }
 
-  function emitVariant(label, variantKey, showOnlyIfGoldFlag = false) {
-    const all = missingByVariant[variantKey];
+  function emitVariant(label, list, showOnlyIfGoldFlag = false) {
     if (showOnlyIfGoldFlag && !includeGolds) return;
-    if (!all || all.length === 0) return;
+    if (!list) return;
+
+    const all = list;
+    if (all.length === 0) return;
 
     const shown = sliceVariant(all);
 
@@ -798,21 +832,26 @@ async function runDexSorter({
       missingLines.push("You have all of them.");
     } else {
       for (const { name, u } of shown) {
-        missingLines.push(`${name}: Ungendered = ${u}`);
+        missingLines.push(formatMissingLine(name, u));
       }
     }
   }
 
-  // Print in order: Golden, Shiny, Dark, Normal
-  emitVariant("Golden", "golden", true);
-  emitVariant("Shiny", "shiny");
-  emitVariant("Dark", "dark");
-  emitVariant("Normal", "normal");
+  // Print in order: Golden, Shiny, Dark, then Normal split
+  emitVariant("Golden", missingByVariant.golden, true);
+  emitVariant("Shiny", missingByVariant.shiny);
+  emitVariant("Dark", missingByVariant.dark);
+
+  // Normal split sections
+  if (missingNormalUeug.length > 0 || missingNormalOther.length > 0) {
+    emitVariant("Normal (UE/UG: Unevolved/Ungoldenized)", missingNormalUeug);
+    emitVariant("Normal (Other: Evolved/Goldenized)", missingNormalOther);
+  }
 
   statusEl.textContent = "Done.";
 
   const mainText =
-    summaryLines.join("\n") + "\n" + bbcodeBlock;
+    summaryLines.join("\n") + "\n" + bbcodeBlock.join("\n");
   const missingText = missingLines.join("\n");
 
   return { mainText, missingText };
@@ -823,27 +862,47 @@ async function runDexSorter({
 // ===============================
 
 const runButton = document.getElementById("runButton");
-const backButton = document.getElementById("backButton");
+const clearButton = document.getElementById("clearButton");
+const copyOutputBtn = document.getElementById("copyOutputBtn");
+const copyMissingBtn = document.getElementById("copyMissingBtn");
+
 const statusEl = document.getElementById("status");
-const inputView = document.getElementById("input-view");
-const outputView = document.getElementById("output-view");
 const inputListEl = document.getElementById("inputList");
 const outputTextEl = document.getElementById("outputText");
 const outputMissingEl = document.getElementById("outputMissing");
+
 const minUngEl = document.getElementById("minUngendered");
 const maxMissEl = document.getElementById("maxMissing");
 const includeGoldsEl = document.getElementById("includeGolds");
 
-// New color inputs
 const colorGoldenEl = document.getElementById("colorGolden");
 const colorShinyEl = document.getElementById("colorShiny");
 const colorDarkEl = document.getElementById("colorDark");
 const colorNormalEl = document.getElementById("colorNormal");
 
+function setStatus(msg) {
+  statusEl.textContent = msg || "";
+}
+
+async function copyText(text) {
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // Fallback for older browsers
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+}
+
 runButton.addEventListener("click", async () => {
-  const inputText = inputListEl.value.trim();
+  const inputText = (inputListEl.value || "").trim();
   if (!inputText) {
-    statusEl.textContent = "Please paste your list first.";
+    setStatus("Please paste your list first.");
     return;
   }
 
@@ -859,7 +918,9 @@ runButton.addEventListener("click", async () => {
   };
 
   runButton.disabled = true;
-  statusEl.textContent = "Running sorter...";
+  clearButton.disabled = true;
+  setStatus("Running sorter...");
+
   try {
     const { mainText, missingText } = await runDexSorter({
       inputText,
@@ -871,41 +932,39 @@ runButton.addEventListener("click", async () => {
     });
     outputTextEl.value = mainText;
     outputMissingEl.value = missingText;
-    inputView.classList.add("d-none");
-    outputView.classList.remove("d-none");
+    setStatus("Done.");
   } catch (err) {
     console.error(err);
-    statusEl.textContent = "Error: " + err.message;
+    setStatus("Error: " + (err && err.message ? err.message : String(err)));
   } finally {
     runButton.disabled = false;
+    clearButton.disabled = false;
   }
 });
 
-backButton.addEventListener("click", () => {
-  outputView.classList.add("d-none");
-  inputView.classList.remove("d-none");
-  statusEl.textContent = "";
+clearButton.addEventListener("click", () => {
+  inputListEl.value = "";
+  outputTextEl.value = "";
+  outputMissingEl.value = "";
+  setStatus("");
+});
+
+copyOutputBtn.addEventListener("click", async () => {
+  await copyText(outputTextEl.value || "");
+  setStatus("Copied output.");
+});
+
+copyMissingBtn.addEventListener("click", async () => {
+  await copyText(outputMissingEl.value || "");
+  setStatus("Copied missing list.");
 });
 </script>
 
 
 </body>
 
-<footer style="
-  margin-top: 3rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid #ddd;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666;
-">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
-</footer>
-
 <script>
-  // Auto-updates the year
-  document.getElementById("copyright-year").textContent =
-    new Date().getFullYear();
+  document.getElementById("copyright-year").textContent = String(new Date().getFullYear());
 </script>
 
 </html>
