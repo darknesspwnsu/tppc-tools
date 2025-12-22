@@ -38,6 +38,14 @@
       background: rgba(0,0,0,.06);
       display: inline-block;
     }
+    .app-footer{
+      margin-top: 1.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,.1);
+      text-align: center;
+      opacity: .8;
+      font-size: .95rem;
+    }
   </style>
 </head>
 
@@ -102,12 +110,14 @@
         </div>
       </div>
     </div>
-    <!-- STATUS -->
-    <div class="row g-3 mt-1">
+
+    <!-- STATUS (moved above formula panel) -->
+    <div class="row g-3 mt-3">
       <div class="col-12">
         <div id="status" class="alert alert-light border mb-0 mono small-metric">Ready.</div>
       </div>
     </div>
+
     <!-- FORMULA PANEL -->
     <div class="row g-3 mt-3">
       <div class="col-12">
@@ -117,9 +127,7 @@
             <span id="modeBadge" class="badge text-bg-secondary">—</span>
           </div>
 
-          <div id="formulaLatex">
-            <!-- filled by JS -->
-          </div>
+          <div id="formulaLatex"></div>
 
           <div class="hint mt-2 mb-0">
             Note: PP control affects the <b>buyer price only</b>. Seller still receives half of the original (non-discounted) market price.
@@ -127,6 +135,10 @@
         </div>
       </div>
     </div>
+
+    <footer class="app-footer">
+      © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved.
+    </footer>
   </div>
 
 <script>
@@ -151,10 +163,12 @@
   const moneyHint = $("moneyHint");
   const btnClear = $("btnClear");
 
+  // Footer year
+  $("copyright-year").textContent = new Date().getFullYear();
+
   let updating = false;
 
   // -------- BigInt-safe TPPC math --------
-  function bi(n) { return BigInt(n); }
   function cube(L) { return L * L * L; }
 
   // TotalEXP = L^3 + 1
@@ -188,80 +202,69 @@
   }
 
   // -------- Money parsing (Millions mode vs exact) --------
-  // If exactAmount unchecked: interpret as "millions"
-  //  - accepts "250", "250.5", "1,200" => multiply by 1,000,000 (rounded to nearest cent not needed; dollars only)
-  // If exactAmount checked: interpret as exact dollars/cents ("250000000.00", "$250,000,000", etc.)
-  // Returns BigInt dollars (integer dollars).
+  // Returns:
+  // - null for empty
+  // - "INVALID" for invalid
+  // - BigInt dollars for valid
   function parseMoneyToDollarsBigInt(s) {
     if (!s) return null;
     let str = String(s).trim();
     if (!str) return null;
 
+    // Allow optional leading $
+    if (str.startsWith("$")) str = str.slice(1).trim();
+    if (!str) return null;
+
     if (!exactAmount.checked) {
-      // Millions mode: allow commas and decimals
-      str = str.replace(/[^0-9.]/g, "");
-      if (!str || str === ".") return null;
+      // MILLIONS MODE
+      // Valid forms: 250 / 250.5 / 1,200 / $250.75
+      if (!/^[\d,]+(\.\d+)?$/.test(str)) return "INVALID";
 
-      // We treat input as millions. We'll support up to 6 decimal places (micro-millions) => dollars.
-      // dollars = round(millions * 1,000,000)
+      str = str.replace(/,/g, "");
+      if (!str || str === ".") return "INVALID";
+
       const parts = str.split(".");
-      const whole = parts[0] ? parts[0].replace(/^0+(?=\d)/, "") : "0";
-      const frac = (parts[1] || "").slice(0, 6).padEnd(6, "0"); // up to 6 decimals of millions
-      if (!/^\d+$/.test(whole) || !/^\d{6}$/.test(frac)) return null;
+      const whole = parts[0];
+      const frac = (parts[1] || "").slice(0, 6).padEnd(6, "0"); // millionths of a million
 
-      const wholeBI = BigInt(whole || "0");
-      const fracBI = BigInt(frac); // in millionths of a million => dollars
-      // whole millions -> dollars:
-      // wholeBI * 1,000,000 + fracBI
-      return wholeBI * 1_000_000n + fracBI;
+      if (!/^\d+$/.test(whole) || !/^\d{6}$/.test(frac)) return "INVALID";
+
+      return BigInt(whole) * 1_000_000n + BigInt(frac);
     }
 
-    // Exact mode: parse dollars with optional cents, then drop cents (or round)
-    // We'll parse up to 2 decimals and ROUND to nearest dollar.
-    str = str.replace(/[^0-9.]/g, "");
-    if (!str || str === ".") return null;
+    // EXACT MODE
+    // Valid forms: 250000000 / 250,000,000.25 / $250,000,000.00
+    if (!/^[\d,]+(\.\d{1,2})?$/.test(str)) return "INVALID";
 
+    str = str.replace(/,/g, "");
     const parts = str.split(".");
-    const whole = (parts[0] || "0").replace(/^0+(?=\d)/, "") || "0";
-    let cents = (parts[1] || "").slice(0, 2).padEnd(2, "0");
-    let third = (parts[1] || "").slice(2, 3); // for rounding
-    if (!/^\d+$/.test(whole) || !/^\d{2}$/.test(cents)) return null;
+    if (!parts[0] || !/^\d+$/.test(parts[0])) return "INVALID";
 
-    let dollars = BigInt(whole);
-    let c = Number(cents);
-    if (third && third >= "5") c += 1; // round cents
-    if (c >= 100) { dollars += 1n; c -= 100; } // carry
+    let dollars = BigInt(parts[0]);
+    let cents = parts[1] ? parts[1].padEnd(2, "0") : "00";
+    if (!/^\d{2}$/.test(cents)) return "INVALID";
+
     // Round to nearest dollar
-    if (c >= 50) dollars += 1n;
+    if (Number(cents) >= 50) dollars += 1n;
     return dollars;
   }
 
   function moneyDisplayFromDollars(dollarsBI) {
-    // Display depends on mode:
-    // - Millions mode: show in millions with up to 6 decimals trimmed
-    // - Exact mode: show full dollars with commas
     if (dollarsBI === null) return "";
     if (exactAmount.checked) {
       return dollarsBI.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    // Convert dollars to millions string
     const d = dollarsBI;
     const whole = d / 1_000_000n;
-    const frac = d % 1_000_000n; // millionths of a million
+    const frac = d % 1_000_000n;
     if (frac === 0n) return whole.toString();
     let fracStr = frac.toString().padStart(6, "0").replace(/0+$/,"");
     return whole.toString() + "." + fracStr;
   }
 
   // -------- Level solving --------
-  // We solve for minimum level whose computed amount >= target.
   function levelForTarget(targetDollars, meaning, isPP) {
-    // meaning: "buyer" or "seller"
-    const f = (L) => {
-      if (meaning === "seller") return sellerReceives(L);
-      return buyerPays(L, isPP);
-    };
-
+    const f = (L) => (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
     if (targetDollars <= 0n) return 1n;
 
     let lo = 1n, hi = 1n;
@@ -300,6 +303,7 @@
     modeBadge.textContent = label;
     modeBadge.className = "badge " + (meaning === "seller" ? "text-bg-primary" : (isPP ? "text-bg-success" : "text-bg-secondary"));
 
+    // Display math (clean: 2/3 MarketPrice)
     const buyerEq = isPP
       ? String.raw`\text{BuyerPays}(L) = \frac{2}{3}\,\text{MarketPrice}(L)`
       : String.raw`\text{BuyerPays}(L) = \text{MarketPrice}(L)`;
@@ -350,6 +354,17 @@
   // -------- Main sync: from money -> level or from level -> money --------
   function updateFromMoney() {
     const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
+
+    if (dollars === "INVALID") {
+      levelInput.value = "";             // clear level on invalid
+      updateOutputsForLevel(null);
+      moneyInput.classList.add("is-invalid");
+      setStatus("Invalid input", "danger");
+      return;
+    }
+
+    moneyInput.classList.remove("is-invalid");
+
     if (dollars === null) {
       levelInput.value = "";
       updateOutputsForLevel(null);
@@ -365,7 +380,6 @@
 
     updateOutputsForLevel(L);
 
-    // Show what the computed amount is at that level for the chosen meaning
     const actual = (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
 
     setStatus(
@@ -378,6 +392,7 @@
     const L = parseLevel(levelInput.value);
     if (L === null) {
       moneyInput.value = "";
+      moneyInput.classList.remove("is-invalid");
       updateOutputsForLevel(null);
       setStatus("Ready.", "light");
       return;
@@ -390,6 +405,7 @@
     const dollars = (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
 
     moneyInput.value = moneyDisplayFromDollars(dollars);
+    moneyInput.classList.remove("is-invalid");
 
     setStatus(
       `Level ${L.toString()} → ${meaning === "seller" ? "Seller receives" : "Buyer pays"} ${formatDollarsBI(dollars)}.`,
@@ -406,17 +422,25 @@
   function updateMoneyModeUI() {
     const exact = exactAmount.checked;
     unitPill.textContent = exact ? "Exact $" : "Millions";
-    moneyInput.placeholder = exact ? "e.g. 250,000,000.00" : "e.g. 250 (meaning $250,000,000)";
+    moneyInput.placeholder = exact ? "e.g. $250,000,000.00" : "e.g. 250 (meaning $250,000,000)";
     moneyHint.innerHTML = exact
-      ? `Enter the exact dollar amount (commas and decimals allowed).`
-      : `Type a number (like <span class="mono">250</span>) → assumes <b>millions</b> (=$250,000,000). Decimals allowed (e.g. <span class="mono">250.5</span>).`;
+      ? `Enter the exact dollar amount (optional <span class="mono">$</span>, commas and up to 2 decimals).`
+      : `Type a number (like <span class="mono">250</span>) → assumes <b>millions</b> (=$250,000,000). Optional <span class="mono">$</span>. Decimals allowed (e.g. <span class="mono">250.5</span>).`;
   }
 
   function onModeChangeRecompute() {
     updateFormulaPanel();
-    // Requirement: toggles should "recalculate and update the level field"
-    // Our primary direction is Money -> Level (money is on the left), so do that if money exists.
-    if (parseMoneyToDollarsBigInt(moneyInput.value) !== null) updateFromMoney();
+
+    const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
+    if (dollars === "INVALID") {
+      levelInput.value = "";
+      updateOutputsForLevel(null);
+      moneyInput.classList.add("is-invalid");
+      setStatus("Invalid input", "danger");
+      return;
+    }
+
+    if (dollars !== null) updateFromMoney();
     else if (parseLevel(levelInput.value) !== null) updateFromLevel();
     else setStatus("Ready.", "light");
   }
@@ -427,10 +451,10 @@
 
   ppControlled.addEventListener("change", () => withGuard(onModeChangeRecompute));
   exactAmount.addEventListener("change", () => withGuard(() => {
-    // Convert displayed money to new mode without changing its meaning in dollars.
+    // Convert displayed money to new mode without changing its meaning in dollars (when valid).
     const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
     updateMoneyModeUI();
-    if (dollars !== null) moneyInput.value = moneyDisplayFromDollars(dollars);
+    if (dollars !== null && dollars !== "INVALID") moneyInput.value = moneyDisplayFromDollars(dollars);
     onModeChangeRecompute();
   }));
 
@@ -443,6 +467,9 @@
     ppControlled.checked = false;
     exactAmount.checked = false;
     meaningBuyerPays.checked = true;
+
+    moneyInput.classList.remove("is-invalid");
+
     updateMoneyModeUI();
     updateFormulaPanel();
     updateOutputsForLevel(null);
