@@ -178,7 +178,7 @@
             <input class="form-check-input" type="checkbox" id="filterJunk" />
             <label class="form-check-label" for="filterJunk">
               Filter out Maps/Swaps and junk unless level is <b>&ge; 1000</b>
-              (uses <code>maps.txt</code>, <code>secret_swaps.txt</code>, <code>data/genderless.txt</code>)
+              (uses <code>data/maps.txt</code>, <code>secret_swaps.txt</code>, <code>data/genderless.txt</code>)
             </label>
           </div>
         </div>
@@ -508,7 +508,7 @@
   async function loadJunkListsIfNeeded() {
     if (!mapsSet && !mapsLoadPromise) {
       mapsLoadPromise = (async () => {
-        mapsSet = await loadTextSetOnce("maps.txt");
+        mapsSet = await loadTextSetOnce("data/maps.txt");
         mapsLoadPromise = null;
         return mapsSet;
       })();
