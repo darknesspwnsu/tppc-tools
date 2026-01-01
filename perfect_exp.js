@@ -123,7 +123,7 @@ async function prefetchTable() {
 }
 
 function loadTableFromJson() {
-  return fetch("https://coldsp33d.github.io/trainers.json")
+  return fetch("https://coldsp33d.github.io/data/trainers.json")
     .then((response) => response.json())
     .catch((error) => console.error(error));
 }
