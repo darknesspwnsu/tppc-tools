@@ -61,8 +61,8 @@ export async function fetchRarityTable() {
 
 // Level 4 rarity list (Name - count)
 export async function fetchLevel4RarityMap() {
-  const res = await fetch("https://coldsp33d.github.io/level4_rarity.txt");
-  if (!res.ok) throw new Error("Failed to fetch level4_rarity.txt");
+  const res = await fetch("https://coldsp33d.github.io/data/level4_rarity.txt");
+  if (!res.ok) throw new Error("Failed to fetch data/level4_rarity.txt");
   const text = await res.text();
 
   // The file is basically a stream like: "Bulbasaur - 518 UnownW - 785 ..."
