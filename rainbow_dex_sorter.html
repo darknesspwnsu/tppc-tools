@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>TPPC Rainbow Dex Checklist (Web)</title>
+  <meta name="description" content="Build a TPPC Rainbow Dex checklist with missing and duplicates." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="TPPC Rainbow Dex Checklist" />
+  <meta property="og:description" content="Build a TPPC Rainbow Dex checklist with missing and duplicates." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
   <!-- Bootstrap CSS (CDN) -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -12,23 +24,61 @@
   />
   <style>
     body {
-      padding-top: 1.5rem;
+      padding-top: 0;
       padding-bottom: 1.5rem;
+      background:
+        radial-gradient(1000px 500px at 20% 0%, rgba(91,70,255,.12), transparent 60%),
+        linear-gradient(180deg,#f6f7ff,#eef2ff);
     }
     textarea {
-      font-family: monospace;
+      font-family: var(--mono);
       font-size: 0.9rem;
     }
+
+    .card{
+      border-radius:1rem;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:0 10px 30px rgba(20,30,70,.12);
+      overflow:hidden;
+    }
+    .card-header{
+      background:linear-gradient(180deg,#ffffff,#f4f6ff);
+      border-bottom:1px solid rgba(0,0,0,.06);
+      font-weight:600;
+    }
+    .panel{
+      border-radius:1rem;
+      border:1px solid rgba(0,0,0,.06);
+      background:rgba(255,255,255,.85);
+      padding:1rem;
+      box-shadow:0 10px 30px rgba(20,30,70,.10);
+    }
+    .mono{ font-family: var(--mono); }
+    .helper{ color: rgba(0,0,0,.60); }
+
+    [data-theme="dark"] body{
+      background:
+        radial-gradient(1000px 520px at 18% 0%, rgba(124,92,255,.18), transparent 60%),
+        linear-gradient(180deg,#070a12,#0b1020) !important;
+    }
+    [data-theme="dark"] .panel{
+      background:#0f152a;
+      border-color:#1c2a55;
+      box-shadow:0 16px 36px rgba(0,0,0,.45);
+    }
+    [data-theme="dark"] .helper{ color: rgba(231,236,255,.65); }
   </style>
 </head>
 <body>
-<div class="container" id="app">
+<div class="container page-wrap" id="app">
+  <div class="panel page-header">
+    <h1 class="page-title">TPPC Rainbow Dex Checklist</h1>
+    <div class="page-subtitle">Build a clean checklist and missing list for your TPPC Rainbow Dex.</div>
+  </div>
   <!-- Input view -->
   <div id="input-view">
-    <h1 class="mb-3">TPPC Rainbow Dex Checklist (Web)</h1>
-
-    <div class="mb-3">
-      <label for="inputList" class="form-label">
+    <div class="panel mb-3">
+      <label for="inputList" class="form-label fw-semibold">
         Paste your TPPC Pokémon list here
       </label>
       <textarea id="inputList" class="form-control" rows="15"
@@ -41,70 +91,62 @@ GoldenMagnemite  5  $630
 Magnemite  5  $630
 DarkMagnemite  5  $630
 ShinyMagnemite  5  $630"></textarea>
+      <div class="row g-3 mt-3">
+        <div class="col-md-4">
+          <label for="minRarity" class="form-label fw-semibold">Min Rarity to check</label>
+          <input
+            type="number"
+            class="form-control"
+            id="minRarity"
+            value="10"
+            min="0"
+          />
+          <div class="form-text">Only show missing with Rarity &gt; this value.</div>
+        </div>
+        <div class="col-md-4">
+          <label for="maxMissing" class="form-label fw-semibold">Max Missing per variant</label>
+          <input
+            type="number"
+            class="form-control"
+            id="maxMissing"
+            value="20"
+            min="0"
+          />
+          <div class="form-text">0 = show all missing per Normal/Shiny/Dark/Golden.</div>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="includeGolds" checked />
+            <label class="form-check-label" for="includeGolds">
+              Include Goldens in missing list
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button id="runButton" class="btn btn-primary">Generate Checklist</button>
+        <div class="mt-3 small text-muted" id="status"></div>
+      </div>
     </div>
-
-    <div class="row mb-3">
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="minRarity" class="form-label">Min Rarity to check</label>
-        <input
-          type="number"
-          class="form-control"
-          id="minRarity"
-          value="10"
-          min="0"
-        />
-        <div class="form-text">
-          Only show missing with Rarity &gt; this value.
-        </div>
-      </div>
-      <div class="col-md-4 mb-3 mb-md-0">
-        <label for="maxMissing" class="form-label">Max Missing per variant</label>
-        <input
-          type="number"
-          class="form-control"
-          id="maxMissing"
-          value="20"
-          min="0"
-        />
-        <div class="form-text">
-          0 = show all missing per Normal/Shiny/Dark/Golden.
-        </div>
-      </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="includeGolds" checked />
-          <label class="form-check-label" for="includeGolds">
-            Include Goldens in missing list
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <button id="runButton" class="btn btn-primary">
-      Generate Checklist
-    </button>
-
-    <div class="mt-3 small text-muted" id="status"></div>
   </div>
 
   <!-- Output view -->
   <div id="output-view" class="d-none">
-    <h2 class="mb-3">Output</h2>
-    <p class="text-muted">
-      Copy these blocks into your TPPC forum post / notes.
-    </p>
+    <div class="panel">
+      <h2 class="mb-1">Output</h2>
+      <p class="text-muted mb-3">Copy these blocks into your TPPC forum post / notes.</p>
 
-    <label for="outputChecklist" class="form-label">Rainbow Dex Checklist (BBCode)</label>
-    <textarea id="outputChecklist" class="form-control mb-3" rows="20" readonly></textarea>
+      <label for="outputChecklist" class="form-label fw-semibold">Rainbow Dex Checklist (BBCode)</label>
+      <textarea id="outputChecklist" class="form-control mb-3" rows="20" readonly></textarea>
 
-    <label for="outputExtras" class="form-label mt-3">
-      High-rarity missing list + duplicates
-    </label>
-    <textarea id="outputExtras" class="form-control" rows="14" readonly></textarea>
+      <label for="outputExtras" class="form-label fw-semibold">
+        High-rarity missing list + duplicates
+      </label>
+      <textarea id="outputExtras" class="form-control" rows="14" readonly></textarea>
 
-    <button id="backButton" class="btn btn-secondary mt-3">
-      Back to input
-    </button>
+      <button id="backButton" class="btn btn-secondary mt-3">Back to input</button>
+    </div>
   </div>
 
 </div>
@@ -598,22 +640,8 @@ backButton.addEventListener("click", () => {
 </script>
 
 
-<footer style="
-  margin-top: 3rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid #ddd;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666;
-">
-  © <span id="copyright-year"></span> Darkness AKA Shiva — All rights reserved. v1.3.1
-</footer>
 
-<script>
-  // Auto-updates the year
-  document.getElementById("copyright-year").textContent =
-    new Date().getFullYear();
-</script>
+<script defer src="/assets/site.js"></script>
 
 </body>
 </html>
