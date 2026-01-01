@@ -16,8 +16,8 @@ export async function fetchEvolutionData() {
 }
 
 export async function fetchUEUGSet() {
-  const res = await fetch("https://Coldsp33d.github.io/ueug_list.txt");
-  if (!res.ok) throw new Error("Failed to fetch ueug_list.txt");
+  const res = await fetch("https://Coldsp33d.github.io/data/ueug_list.txt");
+  if (!res.ok) throw new Error("Failed to fetch data/ueug_list.txt");
   const text = await res.text();
   const lines = text.split(/\r?\n/);
   const names = [];
@@ -79,4 +79,3 @@ export async function fetchLevel4RarityMap() {
   }
   return map;
 }
-

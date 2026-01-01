@@ -495,7 +495,7 @@
     if (ueugLoadPromise) return ueugLoadPromise;
 
     ueugLoadPromise = (async () => {
-      const set = await loadTextSetOnce("ueug_list.txt");
+      const set = await loadTextSetOnce("data/ueug_list.txt");
       ueugSet = set;
       if (set.size) setStatus(`UE/UG list loaded: ${set.size.toLocaleString("en-US")} entries.`);
       ueugLoadPromise = null;
