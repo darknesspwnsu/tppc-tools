@@ -6,11 +6,15 @@
   <meta name="theme-color" content="#eef2ff" />
   <title>TPPC Tools by Darkness</title>
   <meta name="description" content="An index of useful TPPC tools and utilities by Darkness." />
+  <meta property="og:title" content="TPPC Tools by Darkness" />
+  <meta property="og:description" content="An index of useful TPPC tools and utilities by Darkness." />
+  <meta property="og:type" content="website" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
 
   <style>
     :root{
@@ -61,7 +65,7 @@
     a{ color:inherit; text-decoration:none; }
 
     .wrap{
-      width:min(980px, 92vw);
+      width:min(1100px, 92vw);
       margin:0 auto;
       padding:28px 0 46px;
       min-height:100vh;
@@ -302,7 +306,6 @@
       padding:10px 14px;
       border-radius:12px;
       border:1px solid var(--line);
-      background:linear-gradient(135deg,rgba(91,70,255,.15),rgba(0,183,255,.12));
       white-space:nowrap;
     }
 
@@ -373,23 +376,6 @@
 
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <h1>TPPC Tools by Darkness</h1>
-          <div class="sub">utilities • organizers • calculators</div>
-        </div>
-      </div>
-      <div class="actions">
-        <a class="btn" href="https://github.com/coldsp33d" target="_blank">↗ GitHub</a>
-        <button id="themeBtn" class="btn">
-          <span id="themeIcon">☾</span>
-          <span id="themeText">Dark</span>
-        </button>
-      </div>
-    </div>
-
     <section class="hero">
       <h2>An index of useful TPPC tools and utilities</h2>
       <p>
@@ -412,59 +398,62 @@
 
     <div class="list" id="list"></div>
 
-    <footer>
-      <div>© <span id="year"></span> Darkness</div>
-      <div>GitHub Pages</div>
-    </footer>
+    
   </div>
 
   <script>
     const TOOLS = [
       {
         name: "Box Organizer",
-        url: "https://coldsp33d.github.io/box_organizer",
+        url: "box_organizer.html",
         desc: "Organize Pokémon quickly and effectively into logically sensible groups with several options for customization.",
         tags: ["organizer", "box"]
       },
       {
         name: "Perfect Exp Calculator",
-        url: "https://coldsp33d.github.io/perfect_exp",
+        url: "perfect_exp.html",
         desc: "Calculate the number of battles needed to perfect EXP a Pokémon at any level.",
         tags: ["calculator", "exp"]
       },
       {
         name: "Sell Page Guide",
-        url: "https://coldsp33d.github.io/sell_guide",
+        url: "sell_guide.html",
         desc: "Convert RPG money (buyer pays or seller receives) into the exact Pokémon level needed to sell.",
         tags: ["calculator", "money"]
       },
       {
         name: "Exp Utilities",
-        url: "https://coldsp33d.github.io/exp_utils",
+        url: "exp_utils.html",
         desc: "Useful powertools for trainers.",
         tags: ["utilities", "exp", "calculator"]
       },
       {
         name: "PokeSprite Generator",
-        url: "https://coldsp33d.github.io/pokesprite_generator",
+        url: "pokesprite_generator.html",
         desc: "Generate PokeSprites in BBCode to post in your threads!",
         tags: ["generator", "bbcode", "utilities"]
       },
       {
+        name: "Evolution Viewer",
+        url: "evolution_viewer.html",
+        desc: "Look up evolution requirements and lowest obtainable levels by variant.",
+        tags: ["utilities", "evolution"]
+      },
+      {
         name: "Ungendered (?) Collection Sorter",
-        url: "https://coldsp33d.github.io/sort_ungendered",
+        url: "sort_ungendered.html",
         desc: "Sorts ungendered Pokémon collections by families and lists missing Pokémon.",
         tags: ["organizer", "ungendered", "collection"]
       },
       {
         name: "Ungendered (?) Collection Diffchecker",
-        url: "https://coldsp33d.github.io/diff_ungendered",
+        url: "diff_ungendered.html",
         desc: "Diffs two (?) collections and helps collectors quickly figure out swap trades.",
         tags: ["diff", "ungendered", "collection"]
       },
       {
         name: "Rainbow Dex Organizer",
-        url: "https://coldsp33d.github.io/rainbow_dex_sorter",
+        url: "rainbow_dex_sorter.html",
         desc: "Helps organize rainbow dex collections easily. This is really only for kobk :p",
         tags: ["organizer", "dex", "rainbow"]
       }
@@ -673,27 +662,10 @@
 
     window.addEventListener("hashchange", applyHash);
 
-    // theme toggle (unchanged from your original)
-    const root=document.documentElement;
-    const btn=document.getElementById("themeBtn");
-    const icon=document.getElementById("themeIcon");
-    const text=document.getElementById("themeText");
-    const saved=localStorage.getItem("tppc_tools_theme")||"light";
-    setTheme(saved);
-
-    function setTheme(m){
-      root.setAttribute("data-theme",m);
-      localStorage.setItem("tppc_tools_theme",m);
-      const dark=m==="dark";
-      icon.textContent=dark?"☀":"☾";
-      text.textContent=dark?"Light":"Dark";
-      document.querySelector('meta[name="theme-color"]').setAttribute("content",dark?"#0b1020":"#eef2ff");
-    }
-
-    btn.onclick=()=>setTheme(root.getAttribute("data-theme")==="dark"?"light":"dark");
-
-    document.getElementById("year").textContent=new Date().getFullYear();
+    const footerYear = document.getElementById("site-footer-year");
+    if (footerYear) footerYear.textContent = String(new Date().getFullYear());
     applyHash(); // initial render respects hash if present
   </script>
+  <script defer src="/assets/site.js"></script>
 </body>
 </html>
