@@ -178,7 +178,7 @@
             <input class="form-check-input" type="checkbox" id="filterJunk" />
             <label class="form-check-label" for="filterJunk">
               Filter out Maps/Swaps and junk unless level is <b>&ge; 1000</b>
-              (uses <code>maps.txt</code>, <code>secret_swaps.txt</code>, <code>genderless.txt</code>)
+              (uses <code>maps.txt</code>, <code>secret_swaps.txt</code>, <code>data/genderless.txt</code>)
             </label>
           </div>
         </div>
@@ -522,7 +522,7 @@
     }
     if (!genderlessSet && !genderlessLoadPromise) {
       genderlessLoadPromise = (async () => {
-        genderlessSet = await loadTextSetOnce("genderless.txt");
+        genderlessSet = await loadTextSetOnce("data/genderless.txt");
         genderlessLoadPromise = null;
         return genderlessSet;
       })();
