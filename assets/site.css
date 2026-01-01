@@ -34,9 +34,7 @@ html, body{
   min-height: 100%;
 }
 
-.page-wrap{
-  padding-top: 1rem;
-}
+.page-wrap{}
 
 body.site-standard{
   color: #0b1020;
