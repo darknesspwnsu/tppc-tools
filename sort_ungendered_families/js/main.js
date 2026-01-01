@@ -1,7 +1,6 @@
 import { getDomRefs } from "./dom.js";
 import { runDexSorter } from "./sorter.js";
 import { buildVariantColorMapFromInputs, renderTagCloud } from "./cloud.js";
-import { initDarkMode } from "./darkmode.js";
 
 function copyToClipboard(text) {
   if (!text) return;
@@ -217,4 +216,4 @@ syncCloudSampleOptionVisibility(dom.visualizeCloudEl, dom.cloudSampleControlsEl)
 
 document.getElementById("copyright-year").textContent = new Date().getFullYear();
 
-initDarkMode(dom.darkModeToggleEl);
+ 

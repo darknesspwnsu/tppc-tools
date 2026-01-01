@@ -49,8 +49,6 @@ export function getDomRefs() {
   const cloudStatusEl = document.getElementById("cloudStatus");
   const rerollCloudBtn = document.getElementById("rerollCloudBtn");
 
-  const darkModeToggleEl = document.getElementById("darkModeToggle");
-
   return {
     runButton, clearButton, statusEl, jumpStatusEl,
     inputListEl, outputTextEl, outputMissingEl, outputSinglesEl, familiesSinglesBlock,
@@ -62,7 +60,6 @@ export function getDomRefs() {
     visualizeCloudEl, cloudSampleControlsEl, cloudSampleSizeEl,
     colorGoldenEl, colorShinyEl, colorDarkEl, colorNormalEl,
     copyMainBtn, copyMissingBtn, copySinglesBtn,
-    cloudRowEl, tagCloudSvgEl, cloudStatusEl, rerollCloudBtn,
-    darkModeToggleEl
+    cloudRowEl, tagCloudSvgEl, cloudStatusEl, rerollCloudBtn
   };
 }
