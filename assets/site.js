@@ -62,7 +62,12 @@
   drawerLinks.forEach((link) => {
     const href = link.getAttribute("href") || "";
     const target = normalizePath(href);
-    if (current && current === target) link.classList.add("active");
+    if (current && current === target) {
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+      link.setAttribute("tabindex", "-1");
+      link.addEventListener("click", (e) => e.preventDefault());
+    }
   });
 
   const menuBtn = document.getElementById("siteMenuBtn");
