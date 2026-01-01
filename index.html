@@ -64,10 +64,11 @@
 
     a{ color:inherit; text-decoration:none; }
 
-    .wrap{
-      width:min(1100px, 92vw);
+    .page-wrap{
+      width:100%;
+      max-width:1320px;
       margin:0 auto;
-      padding:28px 0 46px;
+      padding:1rem 12px 46px;
       min-height:100vh;
     }
 
@@ -135,7 +136,7 @@
       border-radius:var(--radius);
       background:linear-gradient(180deg,var(--card),var(--card2));
       box-shadow:var(--shadow);
-      padding:22px;
+      padding:1rem;
       margin-bottom:16px;
     }
 
@@ -299,13 +300,14 @@
       text-overflow:ellipsis;
     }
 
-    .open{
+    .tool .open{
       align-self:center;
       font-family:var(--mono);
       font-size:12px;
       padding:10px 14px;
       border-radius:12px;
       border:1px solid var(--line);
+      background:linear-gradient(135deg,rgba(91,70,255,.28),rgba(0,183,255,.24));
       white-space:nowrap;
     }
 
@@ -375,7 +377,7 @@
 </head>
 
 <body>
-  <div class="wrap">
+    <div class="page-wrap">
     <section class="hero">
       <h2>An index of useful TPPC tools and utilities</h2>
       <p>
