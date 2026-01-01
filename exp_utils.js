@@ -269,6 +269,54 @@ function _enterKeySetup() {
   });
 }
 
+function _setJumpHighlight(target, { sticky = false } = {}) {
+  if (!target) return;
+  document.querySelectorAll(".card.jump-highlight").forEach(el => {
+    if (el !== target) el.classList.remove("jump-highlight");
+  });
+  target.classList.add("jump-highlight");
+  if (!sticky) {
+    window.setTimeout(() => target.classList.remove("jump-highlight"), 1400);
+  }
+}
+
+function _jumpHighlightSetup() {
+  const links = document.querySelectorAll(".jump-link");
+  if (!links.length) return;
+
+  links.forEach(link => {
+    link.addEventListener("click", () => {
+      const href = link.getAttribute("href") || "";
+      if (!href.startsWith("#")) return;
+      const target = document.querySelector(href);
+      _setJumpHighlight(target, { sticky: true });
+    });
+  });
+
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) _setJumpHighlight(target, { sticky: true });
+  }
+}
+
+function _cardFocusHighlightSetup() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (!(e.target instanceof HTMLElement)) return;
+      if (e.target.closest("a")) return;
+      _setJumpHighlight(card, { sticky: true });
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.closest(".card")) return;
+    if (target.closest(".jump-link") || target.closest(".jump-bar")) return;
+    document.querySelectorAll(".card.jump-highlight").forEach(el => el.classList.remove("jump-highlight"));
+  });
+}
+
 function _wireRepeater(containerId, inputClass, minRows, label) {
   const box = document.getElementById(containerId);
 
@@ -337,6 +385,8 @@ function __expUtilsInit() {
   _copySetup?.();
   _scrollTopSetup?.();
   _enterKeySetup?.();
+  _jumpHighlightSetup?.();
+  _cardFocusHighlightSetup?.();
   _repeatersSetup?.();
 }
 
