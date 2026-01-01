@@ -349,8 +349,10 @@
       sellerOut.textContent = "$—";
       return;
     }
+    const meaning = meaningSellerGets.checked ? "seller" : "buyer";
+    const isPP = (meaning === "seller") ? true : ppControlled.checked;
     const m = marketPrice(L);
-    const bp = buyerPays(L, ppControlled.checked);
+    const bp = buyerPays(L, isPP);
     const sr = sellerReceives(L);
 
     marketOut.textContent = formatDollarsBI(m);
