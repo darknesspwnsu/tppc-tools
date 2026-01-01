@@ -42,6 +42,12 @@ window.TPPC_TOOLS = [
     tags: ["organizer", "ungendered", "collection"]
   },
   {
+    name: "Ungendered (?) Families Sorter",
+    url: "sort_ungendered_families/index.html",
+    desc: "Sorts ungendered Pokémon collections by family grouping.",
+    tags: ["organizer", "ungendered", "collection"]
+  },
+  {
     name: "Ungendered (?) Collection Diffchecker",
     url: "diff_ungendered.html",
     desc: "Diffs two (?) collections and helps collectors quickly figure out swap trades.",
