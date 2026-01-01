@@ -129,7 +129,6 @@
 const JSON_URL = "./evolution_min_levels.json";
 
 const els = {
-  year: document.getElementById("site-footer-year"),
   input: document.getElementById("pokeInput"),
   list: document.getElementById("pokeList"),
   out: document.getElementById("out"),
@@ -247,7 +246,6 @@ els.copyBtn.addEventListener("click", async ()=>{
 });
 
 (function init(){
-  if (els.year) els.year.textContent = String(new Date().getFullYear());
   load();
 })();
 </script>

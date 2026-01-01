@@ -290,7 +290,6 @@ const els = {
   previewCanvas: document.getElementById("previewCanvas"),
   previewEmpty: document.getElementById("previewEmpty"),
   previewPane: document.getElementById("previewPane"),
-  copyrightYear: document.getElementById("site-footer-year"),
 };
 
 let nameIndex = new Map();
@@ -788,9 +787,6 @@ window.addEventListener("resize", () => {
 
 (async function init(){
   try{
-    // footer year (site footer)
-    if (els.copyrightYear) els.copyrightYear.textContent = String(new Date().getFullYear());
-
     setPreviewEmpty();
     clearSynthPreview();
     setStatus("Fetching pokemon.json…");

@@ -610,8 +610,6 @@
 
     window.addEventListener("hashchange", applyHash);
 
-    const footerYear = document.getElementById("site-footer-year");
-    if (footerYear) footerYear.textContent = String(new Date().getFullYear());
     applyHash(); // initial render respects hash if present
   </script>
   <script defer src="/assets/site.js"></script>
