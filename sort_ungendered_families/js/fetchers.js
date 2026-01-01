@@ -1,8 +1,8 @@
 import { canonicalKey } from "./utils.js";
 
 export async function fetchDexMapping() {
-  const res = await fetch("https://Coldsp33d.github.io/name_to_dex.json");
-  if (!res.ok) throw new Error("Failed to fetch name_to_dex.json");
+  const res = await fetch("https://Coldsp33d.github.io/data/name_to_dex.json");
+  if (!res.ok) throw new Error("Failed to fetch data/name_to_dex.json");
   const obj = await res.json();
   const nameToDex = {};
   for (const [k, v] of Object.entries(obj)) nameToDex[k] = Number(v);

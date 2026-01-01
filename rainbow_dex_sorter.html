@@ -250,8 +250,8 @@ function colorOrderIndex(name) {
 // ===============================
 
 async function fetchDexMapping() {
-  const res = await fetch("name_to_dex.json");
-  if (!res.ok) throw new Error("Failed to fetch name_to_dex.json");
+  const res = await fetch("data/name_to_dex.json");
+  if (!res.ok) throw new Error("Failed to fetch data/name_to_dex.json");
   const obj = await res.json();
   const nameToDex = {};
   for (const [k, v] of Object.entries(obj)) nameToDex[k] = Number(v);
