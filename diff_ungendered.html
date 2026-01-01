@@ -30,6 +30,48 @@
     textarea {
       font-family: var(--mono);
       font-size: 0.9rem;
+      background: #f1f4ff;
+      border-color: rgba(0,0,0,.12);
+    }
+    [data-theme="dark"] textarea{
+      background: #121a34;
+      border-color: #1c2a55;
+    }
+    .section-title{
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .section-hint{
+      color: rgba(0,0,0,.60);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    [data-theme="dark"] .section-hint{
+      color: rgba(231,236,255,.65);
+    }
+    .action-bar{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top: 0.75rem;
+    }
+    .status-pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.7);
+      color: rgba(0,0,0,.60);
+    }
+    [data-theme="dark"] .status-pill{
+      border-color: #1c2a55;
+      background: #151c3a;
+      color: rgba(231,236,255,.75);
+    }
+    .panel-muted{
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -41,9 +83,10 @@
   </div>
 
   <div class="panel">
-    <div class="panel panel-muted">
+    <div class="section-title">Input lists</div>
+    <div class="section-hint">Paste each list below. Supports multi-line entries or the compact “(Level: N)” format.</div>
     <!-- Input row -->
-    <div class="row mb-3">
+    <div class="row g-3">
       <div class="col-md-6">
         <label for="input1" class="form-label">Input Box 1</label>
         <textarea
@@ -64,14 +107,14 @@
       </div>
     </div>
 
-    <button id="runButton" class="btn btn-primary">
-      Compare Lists
-    </button>
-    <span id="status" class="ms-3 small text-muted"></span>
+    <div class="action-bar">
+      <button id="runButton" class="btn btn-primary">Compare Lists</button>
+      <span id="status" class="status-pill">Ready.</span>
     </div>
 
     <!-- Output row -->
     <div id="output-section" class="panel panel-muted mt-4 d-none">
+    <div class="section-title">Results</div>
     <div class="row">
       <div class="col-md-6">
         <label for="output1" class="form-label">Results for Box 1</label>

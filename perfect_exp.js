@@ -233,27 +233,60 @@ async function main() {
     );
 
     const infoDiv = document.getElementById("calculation-info");
-    infoDiv.innerHTML = "";
-    infoDiv.innerHTML = `While training during the ${
+    infoDiv.innerHTML = `Training during <span class="fw-semibold">${
       isNightTime ? "NIGHT" : "DAY"
-    } time`;
-    infoDiv.style.display = "block";
+    }</span> time`;
+    infoDiv.classList.remove("d-none");
 
     // Populate the results table
     const resultsTableBody = document
       .getElementById("results-table")
       .querySelector("tbody");
     resultsTableBody.innerHTML = "";
+    const fmt = (n) => Number(n).toLocaleString("en-US");
+    const parseTrainer = (label) => {
+      const match = String(label).match(/^(.*?)(?:\s*\((\d+)\))?$/);
+      if (!match) return { name: label, id: "" };
+      return { name: (match[1] || "").trim(), id: match[2] || "" };
+    };
+
     for (const [trainer, battleData] of Object.entries(trainers)) {
+      const parsed = parseTrainer(trainer);
+      const idCell = parsed.id
+        ? `<div class="d-flex align-items-center justify-content-end gap-2">
+             <span class="mono">${parsed.id}</span>
+             <button class="btn btn-outline-secondary btn-sm copy-id" type="button" data-copy="${parsed.id}" aria-label="Copy RPG ID"><i class="bi bi-clipboard"></i></button>
+           </div>`
+        : "—";
       const row = document.createElement("tr");
       row.innerHTML = `
-      <td>${trainer}</td>
-      <td>${battleData.expGain}</td>
-      <td>${battleData.numBattles}</td>
-      <td>${battleData.expAfter}</td>
+      <td>${parsed.name || trainer}</td>
+      <td>${idCell}</td>
+      <td>${fmt(battleData.expGain)}</td>
+      <td>${fmt(battleData.numBattles)}</td>
+      <td>${fmt(battleData.expAfter)}</td>
     `;
       resultsTableBody.appendChild(row);
     }
+
+    resultsTableBody.querySelectorAll(".copy-id").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-copy") || "";
+        if (!id) return;
+        try {
+          await navigator.clipboard.writeText(id);
+        } catch (_) {
+          const ta = document.createElement("textarea");
+          ta.value = id;
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
 
     // Replace the history state with the URL params
     const params = new URLSearchParams({
