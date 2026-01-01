@@ -1,14 +1,9 @@
 (() => {
-  const NAV_ITEMS = [
-    { name: "Box Organizer", href: "/box_organizer.html" },
-    { name: "Perfect Exp Calculator", href: "/perfect_exp.html" },
-    { name: "Sell Page Guide", href: "/sell_guide.html" },
-    { name: "Exp Utilities", href: "/exp_utils.html" },
-    { name: "PokeSprite Generator", href: "/pokesprite_generator.html" },
-    { name: "Ungendered Sorter", href: "/sort_ungendered.html" },
-    { name: "Ungendered Diffchecker", href: "/diff_ungendered.html" },
-    { name: "Rainbow Dex Organizer", href: "/rainbow_dex_sorter.html" }
-  ];
+  const TOOL_DATA = window.TPPC_TOOLS || [];
+  const NAV_ITEMS = TOOL_DATA.map((item) => ({
+    name: item.name,
+    href: item.url
+  }));
 
   const nav = document.createElement("nav");
   nav.className = "site-nav";
@@ -57,6 +52,7 @@
     const clean = (p || "").split("?")[0].split("#")[0];
     return clean.replace(/index\.html$/, "")
       .replace(/\.html$/, "")
+      .replace(/^\//, "")
       .replace(/\/$/, "")
       .toLowerCase();
   };
