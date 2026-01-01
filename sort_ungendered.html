@@ -261,9 +261,9 @@ async function fetchDexMapping() {
 
 // 2) Evolution JSON (local)
 async function fetchEvolutionData() {
-  const res = await fetch("pokemon_evolution.json");
+  const res = await fetch("data/pokemon_evolution.json");
   if (!res.ok) {
-    throw new Error("Failed to fetch pokemon_evolution.json");
+    throw new Error("Failed to fetch data/pokemon_evolution.json");
   }
   return res.json();
 }

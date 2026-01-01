@@ -10,8 +10,8 @@ export async function fetchDexMapping() {
 }
 
 export async function fetchEvolutionData() {
-  const res = await fetch("https://Coldsp33d.github.io/pokemon_evolution.json");
-  if (!res.ok) throw new Error("Failed to fetch pokemon_evolution.json");
+  const res = await fetch("https://Coldsp33d.github.io/data/pokemon_evolution.json");
+  if (!res.ok) throw new Error("Failed to fetch data/pokemon_evolution.json");
   return res.json();
 }
 
