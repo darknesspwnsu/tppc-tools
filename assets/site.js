@@ -1,8 +1,15 @@
 (() => {
   const TOOL_DATA = window.TPPC_TOOLS || [];
+  const toAbsolute = (href) => {
+    if (!href) return "";
+    if (/^https?:\/\//i.test(href)) return href;
+    if (href.startsWith("/")) return href;
+    return `/${href}`;
+  };
+
   const NAV_ITEMS = TOOL_DATA.map((item) => ({
     name: item.name,
-    href: item.url
+    href: toAbsolute(item.url)
   }));
 
   const nav = document.createElement("nav");
