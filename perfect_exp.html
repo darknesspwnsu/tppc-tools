@@ -1,103 +1,101 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <title>Calculate Perfect Exp</title>
+  <title>Perfect Exp. Calculator</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate optimal trainer battles to perfect EXP in TPPC." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="Perfect Exp. Calculator" />
+  <meta property="og:description" content="Calculate optimal trainer battles to perfect EXP in TPPC." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-  <!-- Custom CSS -->
   <style>
-    body {
-      padding: 2rem;
+    body { padding: 0; }
+    .page-wrap {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
     }
-
-    h1 {
-      margin-bottom: 2rem;
-    }
-
-    #results-table,
-    #calculation-info {
-      margin-top: 2rem;
-    }
+    #results-table, #calculation-info { margin-top: 2rem; }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1>Calculate Perfect Exp
-          <small class="text-muted">by finding optimal trainer battles
-          </small>
-        </h1>
-        <h2 class="text-muted">~~maintained by Shiva</h2>
-        <div class="alert alert-warning" role="alert">
-          These calculations are based on the info on Wiki. Please use at your own risk.
-          <br><small> Double checking the math is always a good idea.</small>
-        </div>
-        <div class="alert alert-warning" role="alert">
-          <strong>Update 5/14/23</strong>
+  <div class="container page-wrap">
+    <div class="panel page-header">
+      <h1 class="page-title">Perfect Exp. Calculator</h1>
+      <div class="page-subtitle">By finding optimal trainer battles.</div>
+    </div>
 
-          <br><br>I ran into a situation where one of the listed training accounts didn't end up giving the exp as advertised.
-
-          <br><br>I advise you to double check via a dummy battle if a training account you're not familiar with gives the reqd. amount of exp before applying the exp to your poke. Alternatively, only fight the first 5 blisseys, leave the battle and then have the calculator re-calculate the list of accounts to fight.
-        </div>
-        <form id="input-form" onsubmit="return false;">
-          <div class="mb-3">
-            <label for="current-exp" class="form-label">Current Exp:</label>
-            <input type="number" class="form-control" id="current-exp" name="current-exp" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="desired-exp" class="form-label">Desired Exp:</label>
-            <input type="number" class="form-control" id="desired-exp" name="desired-exp" required>
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="highest-beatable-trainer">Highest gym you can KO with Exp Freeze:</label>
-            <select class="form-control" id="highest-beatable-trainer" name="highest-beatable-trainer">
-              <option disabled>Loading...</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="use-exp-night">Calculate for night time (it is currently <span id="time-of-day">daytime</span> in TPPC land):</label>
-            <input type="checkbox" id="use-exp-night" name="use-exp-night" value="false">
-          </div>
-          <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
-        <div class="alert alert-info" id="calculation-info" style="display:none;" role="alert">
-
-        </div>
-
-        <table id="results-table" class="table">
-          <thead>
-            <tr>
-              <th scope="col">Trainer</th>
-              <th scope="col">Exp. per Battle</th>
-              <th scope="col">Battles Required</th>
-              <th scope="col">Exp. After</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+    <div class="panel">
+      <div class="alert alert-warning" role="alert">
+        These calculations are based on the info on Wiki. Please use at your own risk.
+        <br><small> Double checking the math is always a good idea.</small>
       </div>
+      <div class="alert alert-warning" role="alert">
+        <strong>Update 5/14/23</strong>
+
+        <br><br>I ran into a situation where one of the listed training accounts didn't end up giving the exp as advertised.
+
+        <br><br>I advise you to double check via a dummy battle if a training account you're not familiar with gives the reqd. amount of exp before applying the exp to your poke. Alternatively, only fight the first 5 blisseys, leave the battle and then have the calculator re-calculate the list of accounts to fight.
+      </div>
+
+      <form id="input-form" onsubmit="return false;">
+        <div class="mb-3">
+          <label for="current-exp" class="form-label">Current Exp:</label>
+          <input type="number" class="form-control" id="current-exp" name="current-exp" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="desired-exp" class="form-label">Desired Exp:</label>
+          <input type="number" class="form-control" id="desired-exp" name="desired-exp" required>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="highest-beatable-trainer">Highest gym you can KO with Exp Freeze:</label>
+          <select class="form-control" id="highest-beatable-trainer" name="highest-beatable-trainer">
+            <option disabled>Loading...</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="use-exp-night">Calculate for night time (it is currently <span id="time-of-day">daytime</span> in TPPC land):</label>
+          <input type="checkbox" id="use-exp-night" name="use-exp-night" value="false">
+        </div>
+        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <div class="alert alert-info" id="calculation-info" style="display:none;" role="alert"></div>
+
+      <table id="results-table" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Trainer</th>
+            <th scope="col">Exp. per Battle</th>
+            <th scope="col">Battles Required</th>
+            <th scope="col">Exp. After</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Custom JS -->
   <script src="perfect_exp.js"></script>
+  <script defer src="/assets/site.js"></script>
 </body>
-
 </html>
