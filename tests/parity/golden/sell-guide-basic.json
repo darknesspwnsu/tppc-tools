@@ -1,0 +1,12 @@
+{
+  "id": "sell-guide-basic",
+  "slug": "sell-guide",
+  "source": "/sell_guide.html",
+  "snapshot": {
+    "levelInput": "610",
+    "marketOut": "$2,269,810,010",
+    "buyerOut": "$2,269,810,010",
+    "sellerOut": "$1,134,905,005",
+    "status": "Level 610 → Buyer pays $2,269,810,010."
+  }
+}

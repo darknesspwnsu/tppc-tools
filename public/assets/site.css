@@ -424,76 +424,35 @@ a {
   border-radius: 999px;
 }
 
-.embed-shell {
-  border: 1px solid color-mix(in oklab, var(--panel-border), var(--accent-soft) 26%);
-  background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.08), transparent 45%),
-    var(--bg-elev-soft);
+.native-tool-stage {
+  margin-top: 0.75rem;
+}
+
+.native-tool-content {
   border-radius: 1rem;
-  padding: 0.95rem;
-}
-
-[data-theme="dark"] .embed-shell {
+  border: 1px solid color-mix(in oklab, var(--panel-border), var(--accent-soft) 24%);
   background:
-    linear-gradient(165deg, rgba(132, 188, 232, 0.14), transparent 46%),
-    var(--bg-elev-soft);
-}
-
-.embed-shell-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.embed-shell-title {
-  margin: 0;
-  font-size: 0.96rem;
-  font-weight: 700;
-}
-
-.embed-shell-subtitle {
-  margin: 0.2rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.embed-shell-meta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1px solid color-mix(in oklab, var(--panel-border), var(--accent-soft) 30%);
-  background: color-mix(in oklab, var(--bg-elev), transparent 10%);
-  color: color-mix(in oklab, var(--text-main), var(--accent) 20%);
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  white-space: nowrap;
-}
-
-.embed-shell-note {
-  margin-top: 0.55rem;
-  color: var(--text-muted);
-  font-size: 0.88rem;
-}
-
-.embed-shell-frame {
-  margin-top: 0.8rem;
-  border-radius: 0.85rem;
-  overflow: hidden;
-  border: 1px solid color-mix(in oklab, var(--panel-border), var(--accent-soft) 22%);
+    linear-gradient(165deg, rgba(255, 255, 255, 0.08), transparent 42%),
+    var(--panel-bg);
   box-shadow: var(--shadow-sm);
+  padding: 0.85rem;
 }
 
-.embed-shell-iframe {
+[data-theme="dark"] .native-tool-content {
+  background:
+    linear-gradient(165deg, rgba(132, 188, 232, 0.12), transparent 44%),
+    var(--panel-bg);
+}
+
+.native-tool-content .page-wrap {
+  max-width: 100%;
   width: 100%;
-  min-height: 80vh;
-  border: 0;
-  background: transparent;
-  display: block;
+  min-height: auto;
+  padding: 0;
+}
+
+.native-tool-content .container {
+  max-width: 100%;
 }
 
 code,
@@ -606,18 +565,6 @@ textarea::placeholder {
     padding: 6px 9px;
   }
 
-  .embed-shell {
-    padding: 0.75rem;
-  }
-
-  .embed-shell-meta {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-
-  .embed-shell-iframe {
-    min-height: 74vh;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

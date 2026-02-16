@@ -1,0 +1,10 @@
+{
+  "id": "ungendered-diff-basic",
+  "slug": "ungendered-diff",
+  "source": "/diff_ungendered.html",
+  "snapshot": {
+    "output1": "=== Results for Box 1 ===\n\n=== Unique to this box (compared to the other) ===\nNone\n\n=== Duplicates within this box (ignoring level) ===\nNone",
+    "output2": "=== Results for Box 2 ===\n\n=== Unique to this box (compared to the other) ===\nNone\n\n=== Duplicates within this box (ignoring level) ===\nNone",
+    "status": "Done."
+  }
+}

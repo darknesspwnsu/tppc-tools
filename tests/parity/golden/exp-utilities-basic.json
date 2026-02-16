@@ -1,0 +1,10 @@
+{
+  "id": "exp-utilities-basic",
+  "slug": "exp-utilities",
+  "source": "/exp_utils.html",
+  "snapshot": {
+    "levelExpOutput": "1000001",
+    "expLevelOutput": "99.99996666665552",
+    "levelDiffOutput": "9.561010846468605"
+  }
+}

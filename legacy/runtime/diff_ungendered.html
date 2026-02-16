@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TPPC (?) List Diffchecker</title>
+  <meta name="description" content="Diff two TPPC ungendered lists to find uniques and duplicates." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="TPPC Ungendered Diffchecker" />
+  <meta property="og:description" content="Diff two TPPC ungendered lists to find uniques and duplicates." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css" />
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      padding-top: 0;
+      padding-bottom: 1.5rem;
+    }
+    textarea {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      background: #f1f4ff;
+      border-color: rgba(0,0,0,.12);
+    }
+    [data-theme="dark"] textarea{
+      background: #121a34;
+      border-color: #1c2a55;
+    }
+    .section-title{
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .section-hint{
+      color: rgba(0,0,0,.60);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    [data-theme="dark"] .section-hint{
+      color: rgba(231,236,255,.65);
+    }
+    .action-bar{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top: 0.75rem;
+    }
+    .status-pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.7);
+      color: rgba(0,0,0,.60);
+    }
+    [data-theme="dark"] .status-pill{
+      border-color: #1c2a55;
+      background: #151c3a;
+      color: rgba(231,236,255,.75);
+    }
+    .panel-muted{
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container page-wrap">
+  <div class="panel page-header">
+    <h1 class="page-title">TPPC (?) List Diffchecker</h1>
+    <div class="page-subtitle">Compare two ungendered lists and spot uniques fast.</div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Input lists</div>
+    <div class="section-hint">Paste each list below. Supports multi-line entries or the compact “(Level: N)” format.</div>
+    <!-- Input row -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="input1" class="form-label">Input Box 1</label>
+        <textarea
+          id="input1"
+          class="form-control"
+          rows="12"
+          placeholder="Paste TPPC list here (multi-line or squished '(Level: N)' format)"
+        ></textarea>
+      </div>
+      <div class="col-md-6">
+        <label for="input2" class="form-label">Input Box 2</label>
+        <textarea
+          id="input2"
+          class="form-control"
+          rows="12"
+          placeholder="Paste TPPC list here (multi-line or squished '(Level: N)' format)"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button id="runButton" class="btn btn-primary">Compare Lists</button>
+      <span id="status" class="status-pill">Ready.</span>
+    </div>
+
+    <!-- Output row -->
+    <div id="output-section" class="panel panel-muted mt-4 d-none">
+    <div class="section-title">Results</div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="output1" class="form-label">Results for Box 1</label>
+        <textarea id="output1" class="form-control" rows="16" readonly></textarea>
+      </div>
+      <div class="col-md-6">
+        <label for="output2" class="form-label">Results for Box 2</label>
+        <textarea id="output2" class="form-control" rows="16" readonly></textarea>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===============================
+// Shared utility: preprocessing
+// ===============================
+
+// Same name regex as sorter page
+const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
+
+// Simple color classifier by prefix
+function colorCategory(name) {
+  const n = (name || "").trim().toLowerCase();
+  if (n.startsWith("golden")) return "golden";
+  if (n.startsWith("shiny"))  return "shiny";
+  if (n.startsWith("dark"))   return "dark";
+  return "normal";
+}
+
+// Rank for ordering variants in the output lists
+// Golden (0) < Shiny (1) < Dark (2) < Normal (3)
+function dupVariantRank(name) {
+  const cat = colorCategory(name);
+  if (cat === "golden") return 0;
+  if (cat === "shiny")  return 1;
+  if (cat === "dark")   return 2;
+  return 3;
+}
+
+// Sorter used for BOTH uniques and duplicates
+function sortNamesByVariantThenName(a, b) {
+  const ra = dupVariantRank(a);
+  const rb = dupVariantRank(b);
+  if (ra !== rb) return ra - rb;
+
+  const la = a.toLowerCase();
+  const lb = b.toLowerCase();
+  if (la < lb) return -1;
+  if (la > lb) return 1;
+  return 0;
+}
+
+/**
+ * Preprocess input text into an array of entries.
+ * - Supports:
+ *   * Multi-line format: one Pokémon per line.
+ *   * Compact squished format: "... (?) (Level: N)..."
+ * - Keeps only lines with "(?)" (ungendered).
+ * - Returns array of { full_name, line }.
+ *   full_name includes the "(?)" bit, no money.
+ */
+function preprocessEntries(inputText) {
+  const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
+  if (!raw) return [];
+
+  const entries = [];
+
+  // --- 1) Try compact "(Level: N)" parsing over the entire text ---
+  // Example segment:
+  //   "DarkLugia (?) (Level: 3,499)"
+  const compactEntryRegex =
+    /([A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))\s*\(Level:\s*([\d,]+)\)/g;
+
+  let hadCompactMatch = false;
+  let m;
+  while ((m = compactEntryRegex.exec(raw)) !== null) {
+    hadCompactMatch = true;
+
+    const name = m[1].trim();      // e.g. "DarkLugia (?)"
+    const lvlRaw = m[2];           // e.g. "3,499" or "12000"
+
+    // Normalize level number (add commas if 4+ digits)
+    const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+    const lvlFmt = Number.isFinite(lvlInt)
+      ? lvlInt.toLocaleString("en-US")
+      : lvlRaw.replace(/\s+/g, "");
+
+    // Only keep ungendered "(?)" mons
+    if (!name.includes("(?)")) {
+      continue;
+    }
+
+    // Normalized line if we ever want to show it: "DarkLugia (?) 3,499"
+    const line = `${name} ${lvlFmt}`;
+
+    entries.push({
+      full_name: name,
+      line: line,
+    });
+  }
+
+  // If we found at least one compact match, we assume the whole blob
+  // is in that format and we're done.
+  if (hadCompactMatch) {
+    return entries;
+  }
+
+  // --- 2) Fallback: normal multi-line / clipboard list ---
+  const logicalLines = raw.split("\n");
+
+  for (const rawLine of logicalLines) {
+    const line = rawLine.trim();
+    if (!line) continue;               // remove blank lines
+    if (!line.includes("(?)")) continue; // skip gendered mons
+
+    const m2 = line.match(nameRegex);
+    if (!m2) continue;
+
+    const fullName = m2[1].trim();     // e.g. "DarkSquirtle (?)"
+
+    entries.push({
+      full_name: fullName,
+      line: line,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Given entries array, build:
+ * - nameSet: Set of unique full_name
+ * - dupSet:  Set of full_name that appear 2+ times
+ */
+function buildSets(entries) {
+  const counts = new Map();
+  for (const e of entries) {
+    const key = e.full_name; // ignore level for diff and duplicates
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+
+  const nameSet = new Set(counts.keys());
+  const dupSet = new Set(
+    [...counts.entries()]
+      .filter(([_, c]) => c > 1)
+      .map(([name]) => name)
+  );
+
+  return { nameSet, dupSet };
+}
+
+/**
+ * Build result text for one box:
+ * - unique to this box (vs otherSet) → sorted by variant, then name
+ * - duplicates within this box (dupSet) → sorted by variant, then name
+ */
+function buildResultText(boxLabel, nameSet, otherSet, dupSet) {
+  const unique = [...nameSet]
+    .filter((n) => !otherSet.has(n))
+    .sort(sortNamesByVariantThenName);
+
+  const dups = [...dupSet].sort(sortNamesByVariantThenName);
+
+  const lines = [];
+  lines.push(`=== Results for ${boxLabel} ===`);
+  lines.push("");
+
+  lines.push("=== Unique to this box (compared to the other) ===");
+  if (unique.length === 0) {
+    lines.push("None");
+  } else {
+    for (const name of unique) {
+      lines.push(name);
+    }
+  }
+
+  lines.push("");
+  lines.push("=== Duplicates within this box (ignoring level) ===");
+  if (dups.length === 0) {
+    lines.push("None");
+  } else {
+    for (const name of dups) {
+      lines.push(name);
+    }
+  }
+
+  return lines.join("\n");
+}
+
+// ===============================
+// UI wiring
+// ===============================
+
+const input1El = document.getElementById("input1");
+const input2El = document.getElementById("input2");
+const output1El = document.getElementById("output1");
+const output2El = document.getElementById("output2");
+const statusEl = document.getElementById("status");
+const runButton = document.getElementById("runButton");
+const outputSection = document.getElementById("output-section");
+
+runButton.addEventListener("click", () => {
+  const text1 = input1El.value.trim();
+  const text2 = input2El.value.trim();
+
+  if (!text1 && !text2) {
+    statusEl.textContent = "Please paste a list into at least one box.";
+    return;
+  }
+
+  statusEl.textContent = "Parsing & comparing...";
+  runButton.disabled = true;
+
+  try {
+    const entries1 = preprocessEntries(text1);
+    const entries2 = preprocessEntries(text2);
+
+    const { nameSet: set1, dupSet: dup1 } = buildSets(entries1);
+    const { nameSet: set2, dupSet: dup2 } = buildSets(entries2);
+
+    const result1 = buildResultText("Box 1", set1, set2, dup1);
+    const result2 = buildResultText("Box 2", set2, set1, dup2);
+
+    output1El.value = result1;
+    output2El.value = result2;
+
+    outputSection.classList.remove("d-none");
+    statusEl.textContent = "Done.";
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Error: " + err.message;
+  } finally {
+    runButton.disabled = false;
+  }
+});
+</script>
+</body>
+
+
+<script defer src="assets/tools.js"></script>
+  <script defer src="assets/site.js"></script>
+
+</html>
