@@ -545,6 +545,35 @@ a {
   max-width: 100%;
 }
 
+.native-tool-content .jump-link {
+  transition:
+    transform 0.16s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.native-tool-content .jump-link.is-active,
+.native-tool-content .jump-link[aria-current="true"] {
+  border-color: color-mix(in oklab, var(--accent), var(--panel-border) 38%);
+  background:
+    linear-gradient(var(--bg-elev), var(--bg-elev)) padding-box,
+    linear-gradient(
+      130deg,
+      color-mix(in oklab, var(--accent-soft), #ffffff 22%),
+      color-mix(in oklab, var(--accent-alt), #ffffff 12%)
+    ) border-box;
+  color: var(--text-main);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px color-mix(in oklab, var(--accent), transparent 74%);
+}
+
+[data-theme="dark"] .native-tool-content .jump-link.is-active,
+[data-theme="dark"] .native-tool-content .jump-link[aria-current="true"] {
+  box-shadow: 0 12px 26px rgba(8, 20, 33, 0.62);
+}
+
 code,
 .site-link,
 .site-action,

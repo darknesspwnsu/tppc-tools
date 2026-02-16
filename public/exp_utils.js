@@ -280,6 +280,17 @@ function _setJumpHighlight(target, { sticky = false } = {}) {
   }
 }
 
+function _setActiveJumpLinkById(cardId) {
+  const links = document.querySelectorAll(".jump-link");
+  links.forEach(link => {
+    const href = link.getAttribute("href") || "";
+    const active = Boolean(cardId) && href === `#${cardId}`;
+    link.classList.toggle("is-active", active);
+    if (active) link.setAttribute("aria-current", "true");
+    else link.removeAttribute("aria-current");
+  });
+}
+
 function _jumpHighlightSetup() {
   const links = document.querySelectorAll(".jump-link");
   if (!links.length) return;
@@ -290,12 +301,27 @@ function _jumpHighlightSetup() {
       if (!href.startsWith("#")) return;
       const target = document.querySelector(href);
       _setJumpHighlight(target, { sticky: true });
+      _setActiveJumpLinkById(target && target.id ? target.id : "");
     });
+  });
+
+  window.addEventListener("hashchange", () => {
+    const hash = window.location.hash || "";
+    if (!hash.startsWith("#")) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    _setJumpHighlight(target, { sticky: true });
+    _setActiveJumpLinkById(target.id || "");
   });
 
   if (window.location.hash) {
     const target = document.querySelector(window.location.hash);
-    if (target) _setJumpHighlight(target, { sticky: true });
+    if (target) {
+      _setJumpHighlight(target, { sticky: true });
+      _setActiveJumpLinkById(target.id || "");
+    }
+  } else {
+    _setActiveJumpLinkById("");
   }
 }
 
@@ -305,6 +331,7 @@ function _cardFocusHighlightSetup() {
       if (!(e.target instanceof HTMLElement)) return;
       if (e.target.closest("a")) return;
       _setJumpHighlight(card, { sticky: true });
+      _setActiveJumpLinkById(card.id || "");
     });
   });
 
@@ -314,6 +341,7 @@ function _cardFocusHighlightSetup() {
     if (target.closest(".card")) return;
     if (target.closest(".jump-link") || target.closest(".jump-bar")) return;
     document.querySelectorAll(".card.jump-highlight").forEach(el => el.classList.remove("jump-highlight"));
+    _setActiveJumpLinkById("");
   });
 }
 
