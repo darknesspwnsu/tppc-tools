@@ -45,7 +45,7 @@
 	    nav.innerHTML = `
 	      <div class="site-nav-inner">
 	        <button class="site-hamburger" id="siteMenuBtn" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="Open menu">≡</button>
-	        <a class="site-brand" href="${toAbsolute("")}">
+	        <a class="site-brand" href="${toAbsolute("/")}">
 	          <span class="site-logo"></span>
 	          <span class="site-title">TPPC Tools by Darkness</span>
 	        </a>
