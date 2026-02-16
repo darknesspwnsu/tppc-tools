@@ -68,8 +68,8 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
   };
 
   return (
-    <div>
-      <section className="panel page-header">
+    <div className="tools-index">
+      <section className="panel page-header site-hero">
         <h1 className="page-title">TPPC Tools by Darkness</h1>
         <div className="page-subtitle">
           An index of useful TPPC tools and utilities. New canonical routes live under{" "}
@@ -77,8 +77,8 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
         </div>
       </section>
 
-      <section className="panel">
-        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <section className="panel tools-panel">
+        <div className="d-flex flex-wrap align-items-center justify-content-between tools-toolbar">
           <div className="d-flex flex-wrap align-items-center gap-2">
             <div className="fw-semibold">Tools</div>
             <div className="text-muted small">
@@ -89,8 +89,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
           <div className="d-flex align-items-center gap-2">
             <span className="text-muted small">⌕</span>
             <input
-              className="form-control form-control-sm"
-              style={{ width: 240 }}
+              className="form-control form-control-sm tool-search-input"
               placeholder="Search tools…"
               value={query}
               onChange={(e) => {
@@ -107,7 +106,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               <button
                 key={t}
                 type="button"
-                className="site-link"
+                className="site-link tag-chip"
                 onClick={() => setActiveTags((prev) => prev.filter((x) => x !== t))}
                 title="Remove tag"
               >
@@ -116,7 +115,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
             ))}
             <button
               type="button"
-              className="site-link"
+              className="site-link tag-chip"
               onClick={() => setActiveTags([])}
               title="Clear tags"
             >
@@ -132,7 +131,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               <button
                 key={tg}
                 type="button"
-                className="site-link"
+                className="site-link tag-chip"
                 style={{
                   borderColor: on ? "color-mix(in oklab, var(--nav-line), var(--nav-accent2) 55%)" : undefined
                 }}
@@ -149,22 +148,22 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
           })}
         </div>
 
-        <div className="row g-3 mt-2">
+        <div className="row g-3 tool-grid">
           {filteredSorted.map((t) => {
             const matches = tagMatchCount(t);
             return (
               <div className="col-12 col-lg-6" key={t.slug}>
-                <div className="panel panel-muted h-100">
+                <div className="panel panel-muted h-100 tool-card">
                   <div className="d-flex align-items-start justify-content-between gap-3">
                     <div>
-                      <div className="fw-semibold">{t.name}</div>
-                      <div className="text-muted small mt-1">{t.desc}</div>
-                      <div className="text-muted small mt-2">
+                      <div className="tool-card-title">{t.name}</div>
+                      <div className="text-muted small mt-1 tool-card-desc">{t.desc}</div>
+                      <div className="text-muted small mt-2 tool-card-path">
                         <code>/tools/{t.slug}/</code>
                       </div>
                     </div>
                     <div className="d-flex flex-column gap-2" style={{ minWidth: 140 }}>
-                      <Link className="btn btn-primary btn-sm" href={`/tools/${t.slug}/`}>
+                      <Link className="btn btn-primary btn-sm tool-open-btn" href={`/tools/${t.slug}/`}>
                         Open
                       </Link>
                     </div>
@@ -178,7 +177,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                         <button
                           key={nt}
                           type="button"
-                          className="site-link"
+                          className="site-link tag-chip"
                           style={{
                             opacity: matches > 0 && !on ? 0.85 : 1
                           }}

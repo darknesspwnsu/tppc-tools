@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1600" viewBox="0 0 2400 1600" fill="none">
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="2400" y2="1600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#121a1e"/>
+      <stop offset="0.52" stop-color="#1c252a"/>
+      <stop offset="1" stop-color="#1b2328"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1840 620) rotate(90) scale(610)">
+      <stop stop-color="#ff7f72" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ff7f72" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cool" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1300 540) rotate(90) scale(470)">
+      <stop stop-color="#8fdfff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#8fdfff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="2400" height="1600" fill="url(#night)"/>
+  <circle cx="1840" cy="620" r="620" fill="url(#glow)"/>
+  <circle cx="1300" cy="540" r="480" fill="url(#cool)"/>
+
+  <g opacity="0.9">
+    <path d="M1914 271L1768 455L1706 437L1755 583L1482 742L1392 686L1473 621L1272 688L1326 782L1238 842L1110 811L1080 930L978 1012L1116 1004L1208 954L1227 1034L1362 1026L1488 917L1546 954L1693 867L1731 921L1857 857L1874 789L1988 741L2080 536L2124 552L2232 441L2163 422L2232 365L2054 374L1914 271Z" fill="#ff6f61"/>
+    <path d="M1670 396L1728 454L1662 492L1600 436L1670 396Z" fill="#cce9f5"/>
+    <path d="M1760 467L1853 469L1786 538L1678 534L1760 467Z" fill="#11191d"/>
+    <path d="M1647 451L1734 522L1718 565L1570 494L1647 451Z" fill="#11191d"/>
+    <path d="M1884 792L2055 824L2171 886L2124 944L1992 956L1838 879L1884 792Z" fill="#11191d"/>
+    <path d="M2028 606L2136 642L2246 709L2205 762L2087 747L1990 698L2028 606Z" fill="#11191d"/>
+  </g>
+
+  <g opacity="0.33" fill="#d9ebf3">
+    <circle cx="264" cy="258" r="2.2"/>
+    <circle cx="482" cy="346" r="1.8"/>
+    <circle cx="638" cy="194" r="2.4"/>
+    <circle cx="906" cy="332" r="2.1"/>
+    <circle cx="1160" cy="207" r="1.7"/>
+    <circle cx="1430" cy="290" r="2.2"/>
+    <circle cx="2192" cy="254" r="2.2"/>
+  </g>
+</svg>

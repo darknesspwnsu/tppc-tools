@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1600" viewBox="0 0 2400 1600" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f9f8ff"/>
+      <stop offset="1" stop-color="#eef0f7"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1580 340) rotate(90) scale(440)">
+      <stop stop-color="#fff8d6" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#fff8d6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hill" x1="0" y1="1090" x2="2400" y2="1540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9dce8"/>
+      <stop offset="1" stop-color="#cfd6e6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="2400" height="1600" fill="url(#sky)"/>
+  <circle cx="1580" cy="340" r="450" fill="url(#sun)"/>
+
+  <path d="M0 1140C222 1014 483 1007 783 1120C1072 1229 1334 1236 1568 1139C1839 1023 2116 1028 2400 1150V1600H0V1140Z" fill="url(#hill)"/>
+
+  <g opacity="0.72">
+    <ellipse cx="1894" cy="977" rx="300" ry="198" fill="#f4f5fb"/>
+    <ellipse cx="2093" cy="850" rx="114" ry="112" fill="#6b5757"/>
+    <ellipse cx="2080" cy="844" rx="96" ry="98" fill="#5f4e4f"/>
+    <ellipse cx="2138" cy="849" rx="20" ry="30" fill="#fff4cb"/>
+    <ellipse cx="2138" cy="849" rx="12" ry="17" fill="#33393b"/>
+    <ellipse cx="2066" cy="854" rx="20" ry="11" fill="#f1a4b6"/>
+    <path d="M1978 948C1919 905 1865 873 1816 853C1792 843 1776 825 1782 807C1788 788 1809 786 1844 802C1898 827 1947 860 1990 902L1978 948Z" fill="#b3b4bb"/>
+    <path d="M1788 1050C1866 1020 1948 1021 2032 1053C2068 1068 2077 1092 2060 1127C2039 1172 2012 1209 1978 1237L1882 1262C1842 1240 1806 1214 1774 1184C1750 1162 1747 1137 1765 1111C1774 1098 1782 1086 1788 1074V1050Z" fill="#b3b4bb"/>
+    <path d="M2269 1408C2319 1400 2365 1407 2400 1427V1600H2230C2218 1573 2219 1541 2234 1505C2243 1481 2254 1449 2269 1408Z" fill="#6b5757"/>
+    <path d="M2040 1393C2080 1394 2118 1406 2150 1428C2129 1508 2087 1566 2024 1600H1898C1888 1570 1892 1538 1910 1505C1942 1447 1985 1410 2040 1393Z" fill="#6b5757"/>
+    <path d="M1880 1397C1903 1415 1913 1441 1908 1477C1885 1499 1857 1510 1823 1510C1783 1510 1764 1491 1766 1453C1791 1418 1829 1400 1880 1397Z" fill="#6b5757"/>
+  </g>
+
+  <g opacity="0.58" fill="#ffffff">
+    <ellipse cx="420" cy="320" rx="170" ry="56"/>
+    <ellipse cx="610" cy="310" rx="112" ry="44"/>
+    <ellipse cx="298" cy="337" rx="95" ry="34"/>
+  </g>
+</svg>

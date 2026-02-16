@@ -22,12 +22,12 @@ export default async function ToolWrapperPage({
 
   return (
     <div>
-      <section className="panel page-header">
+      <section className="panel page-header site-hero">
         <h1 className="page-title">{tool.name}</h1>
         <div className="page-subtitle">{tool.desc}</div>
         <div className="mt-2 d-flex flex-wrap gap-2">
           {tool.tags.map((t) => (
-            <span key={t} className="site-link" style={{ pointerEvents: "none" }}>
+            <span key={t} className="site-link tag-chip" style={{ pointerEvents: "none" }}>
               #{t}
             </span>
           ))}
@@ -35,17 +35,26 @@ export default async function ToolWrapperPage({
       </section>
 
       <section className="panel">
-        <div className="text-muted small">
-          Legacy tool embedded for compatibility.
-        </div>
+        <div className="embed-shell">
+          <div className="embed-shell-head">
+            <div>
+              <h2 className="embed-shell-title">Tool Workspace</h2>
+              <p className="embed-shell-subtitle">Running the original {tool.name} interface in an updated shell.</p>
+            </div>
+            <span className="embed-shell-meta">Legacy Runtime</span>
+          </div>
+          <p className="embed-shell-note">
+            All tool behavior is preserved; this wrapper provides consistent navigation, theming, and presentation.
+          </p>
 
-        <div className="mt-3" style={{ borderRadius: 16, overflow: "hidden", border: "1px solid rgba(0,0,0,.08)" }}>
-          <iframe
-            title={tool.name}
-            src={iframeSrc}
-            style={{ width: "100%", height: "80vh", border: 0, background: "transparent" }}
-            allow="clipboard-write"
-          />
+          <div className="embed-shell-frame">
+            <iframe
+              title={tool.name}
+              src={iframeSrc}
+              className="embed-shell-iframe"
+              allow="clipboard-write"
+            />
+          </div>
         </div>
       </section>
     </div>

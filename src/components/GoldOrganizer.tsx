@@ -152,7 +152,7 @@ export function GoldOrganizer({
 
   return (
     <div>
-      <section className="panel page-header">
+      <section className="panel page-header site-hero">
         <h1 className="page-title">Gold Organizer</h1>
         <div className="page-subtitle">
           Uses the same input formats as Box Organizer, keeps only <code>Golden...</code> Pokemon,
@@ -384,4 +384,3 @@ export function GoldOrganizer({
     </div>
   );
 }
-
