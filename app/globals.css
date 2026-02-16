@@ -1,0 +1,14 @@
+/* Next-only glue. The heavy styling lives in /public/assets/site.css for consistency with legacy tools. */
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.page-wrap {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1rem 12px 46px;
+  min-height: 100vh;
+}

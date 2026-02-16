@@ -1,0 +1,1082 @@
+[
+  {
+    "name": "GoldenLugia",
+    "release_date": "2000-10-22",
+    "event": "First Gold Promo",
+    "date_text": "October 22, 2000"
+  },
+  {
+    "name": "GoldenOddish",
+    "release_date": "2001-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2001"
+  },
+  {
+    "name": "GoldenWobbuffet",
+    "release_date": "2001-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2001"
+  },
+  {
+    "name": "GoldenLapras",
+    "release_date": "2002-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2001-2002"
+  },
+  {
+    "name": "GoldenScyther",
+    "release_date": "2002-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2001-2002"
+  },
+  {
+    "name": "GoldenHoundour",
+    "release_date": "",
+    "event": "Apology Promo 1st Crash",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenMeowth",
+    "release_date": "",
+    "event": "Apology Promo 2nd Crash",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenGloom",
+    "release_date": "2002-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2002"
+  },
+  {
+    "name": "GoldenDelibird",
+    "release_date": "2003-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2002-2003"
+  },
+  {
+    "name": "GoldenWooper",
+    "release_date": "2003-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2002-2003"
+  },
+  {
+    "name": "GoldenAbsol",
+    "release_date": "2003-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2003"
+  },
+  {
+    "name": "GoldenHeracross",
+    "release_date": "2003-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2003"
+  },
+  {
+    "name": "GoldenSudowoodo",
+    "release_date": "2004-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2003-2004"
+  },
+  {
+    "name": "GoldenFarfetch'd",
+    "release_date": "2004-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2003-2004"
+  },
+  {
+    "name": "GoldenSnorlax",
+    "release_date": "2004-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2004"
+  },
+  {
+    "name": "GoldenMawile",
+    "release_date": "2004-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2004"
+  },
+  {
+    "name": "GoldenShroomish",
+    "release_date": "2005-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2004-2005"
+  },
+  {
+    "name": "GoldenMareep",
+    "release_date": "2005-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2004-2005"
+  },
+  {
+    "name": "GoldenMiltank",
+    "release_date": "2005-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2005"
+  },
+  {
+    "name": "GoldenKabuto",
+    "release_date": "2005-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2005"
+  },
+  {
+    "name": "GoldenGastly",
+    "release_date": "2006-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2005-2006"
+  },
+  {
+    "name": "GoldenSpheal",
+    "release_date": "2006-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2005-2006"
+  },
+  {
+    "name": "GoldenSlowpoke",
+    "release_date": "",
+    "event": "World Reputation",
+    "date_text": "No longer available"
+  },
+  {
+    "name": "GoldenShuckle",
+    "release_date": "",
+    "event": "World Reputation",
+    "date_text": "No longer available"
+  },
+  {
+    "name": "GoldenCharmander",
+    "release_date": "2006-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2006"
+  },
+  {
+    "name": "GoldenVulpix",
+    "release_date": "2007-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2006-2007"
+  },
+  {
+    "name": "GoldenPoochyena",
+    "release_date": "2007-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2006-2007"
+  },
+  {
+    "name": "GoldenBeldum",
+    "release_date": "2007-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2007"
+  },
+  {
+    "name": "GoldenRiolu",
+    "release_date": "2008-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2007-2008"
+  },
+  {
+    "name": "GoldenAron",
+    "release_date": "2008-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2007-2008"
+  },
+  {
+    "name": "GoldenGeodude",
+    "release_date": "2008-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2008"
+  },
+  {
+    "name": "GoldenSunkern",
+    "release_date": "2008-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2008"
+  },
+  {
+    "name": "GoldenLotad",
+    "release_date": "2009-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2008-2009"
+  },
+  {
+    "name": "GoldenDratini",
+    "release_date": "2009-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2008-2009"
+  },
+  {
+    "name": "GoldenMudkip",
+    "release_date": "",
+    "event": "User of the Month | Nino's Contests",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenRalts",
+    "release_date": "2009-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2009"
+  },
+  {
+    "name": "GoldenPoliwag",
+    "release_date": "2009-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2009"
+  },
+  {
+    "name": "GoldenDuskull",
+    "release_date": "2009-10-31",
+    "event": "Team Stats Special Promo",
+    "date_text": "Halloween 2009"
+  },
+  {
+    "name": "GoldenPsyduck",
+    "release_date": "2010-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2009-2010"
+  },
+  {
+    "name": "GoldenSnover",
+    "release_date": "2010-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2009-2010"
+  },
+  {
+    "name": "GoldenLarvitar",
+    "release_date": "",
+    "event": "Kife's Contests",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenCranidos",
+    "release_date": "2010-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2010"
+  },
+  {
+    "name": "GoldenAbra",
+    "release_date": "2010-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2010"
+  },
+  {
+    "name": "GoldenRotom",
+    "release_date": "2010-09-24",
+    "event": "Radio Tower",
+    "date_text": "September 24, 2010 - January 3, 2021"
+  },
+  {
+    "name": "GoldenBagon",
+    "release_date": "2011-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2010-2011"
+  },
+  {
+    "name": "GoldenCacnea",
+    "release_date": "2011-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2010-2011"
+  },
+  {
+    "name": "GoldenBuneary",
+    "release_date": "2011-04-24",
+    "event": "Buneary Madness",
+    "date_text": "April 24, 2011"
+  },
+  {
+    "name": "GoldenMagnemite",
+    "release_date": "2011-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2011"
+  },
+  {
+    "name": "GoldenTimburr",
+    "release_date": "2011-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2011"
+  },
+  {
+    "name": "GoldenSnivy",
+    "release_date": "2011-11-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "November 1, 2011 - March 1, 2014"
+  },
+  {
+    "name": "GoldenTepig",
+    "release_date": "2011-11-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "November 1, 2011 - March 1, 2014"
+  },
+  {
+    "name": "GoldenOshawott",
+    "release_date": "2011-11-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "November 1, 2011 - March 1, 2014"
+  },
+  {
+    "name": "GoldenTyrogue",
+    "release_date": "2012-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2011-2012"
+  },
+  {
+    "name": "GoldenRoggenrola",
+    "release_date": "2012-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2011-2012"
+  },
+  {
+    "name": "GoldenGolett",
+    "release_date": "2012-04-07",
+    "event": "Buneary Madness",
+    "date_text": "April 7-8, 2012"
+  },
+  {
+    "name": "GoldenMaractus",
+    "release_date": "2012-05-05",
+    "event": "Cinco de Mayo Event",
+    "date_text": "May 5, 2012"
+  },
+  {
+    "name": "GoldenGenesect",
+    "release_date": "2012-05-30",
+    "event": "SS Anne Special Prize",
+    "date_text": "May 30, 2012 - December 25, 2018"
+  },
+  {
+    "name": "GoldenMagikarp",
+    "release_date": "2012-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2012"
+  },
+  {
+    "name": "GoldenGible",
+    "release_date": "2012-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2012"
+  },
+  {
+    "name": "GoldenDruddigon",
+    "release_date": "2012-10-01",
+    "event": "Light vs Dark | Halloween Event",
+    "date_text": "October 2012"
+  },
+  {
+    "name": "GoldenKrabby",
+    "release_date": "2013-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2012-2013"
+  },
+  {
+    "name": "GoldenYanma",
+    "release_date": "2013-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2012-2013"
+  },
+  {
+    "name": "GoldenHeatmor",
+    "release_date": "2013-04-01",
+    "event": "Million Battle March",
+    "date_text": "April 1, 2013"
+  },
+  {
+    "name": "GoldenLarvesta",
+    "release_date": "2013-04-01",
+    "event": "Million Battle March",
+    "date_text": "April 1, 2013"
+  },
+  {
+    "name": "GoldenMantyke",
+    "release_date": "2013-08-02",
+    "event": "Shrimpy's Birthday (Special)",
+    "date_text": "August 2, 2013"
+  },
+  {
+    "name": "GoldenMantine",
+    "release_date": "2013-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2013"
+  },
+  {
+    "name": "GoldenBulbasaur",
+    "release_date": "2013-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2013"
+  },
+  {
+    "name": "GoldenChatot",
+    "release_date": "2013-10-01",
+    "event": "Light vs Dark | Halloween Event",
+    "date_text": "October 2013"
+  },
+  {
+    "name": "GoldenCubone",
+    "release_date": "2014-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2013-2014"
+  },
+  {
+    "name": "GoldenLitwick",
+    "release_date": "2014-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2013-2014"
+  },
+  {
+    "name": "GoldenMewtwo",
+    "release_date": "2014-01-01",
+    "event": "Christmas Promo - Mysterious Trainer Battle",
+    "date_text": "New Year 2013-2014"
+  },
+  {
+    "name": "GoldenPansage",
+    "release_date": "2014-03-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "March 1, 2014 - September 1, 2016"
+  },
+  {
+    "name": "GoldenPansear",
+    "release_date": "2014-03-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "March 1, 2014 - September 1, 2016"
+  },
+  {
+    "name": "GoldenPanpour",
+    "release_date": "2014-03-01",
+    "event": "Training Challenge 1st Place",
+    "date_text": "March 1, 2014 - September 1, 2016"
+  },
+  {
+    "name": "GoldenMinccino",
+    "release_date": "2014-04-19",
+    "event": "Buneary Madness",
+    "date_text": "April 19-20, 2014"
+  },
+  {
+    "name": "GoldenSquirtle",
+    "release_date": "2014-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2014"
+  },
+  {
+    "name": "GoldenSandile",
+    "release_date": "2014-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2014"
+  },
+  {
+    "name": "GoldenAxew",
+    "release_date": "2015-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2014-2015"
+  },
+  {
+    "name": "GoldenWailmer",
+    "release_date": "2015-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2014-2015"
+  },
+  {
+    "name": "GoldenJirachi",
+    "release_date": "2015-01-01",
+    "event": "Christmas Promo - Mysterious Trainer Battle",
+    "date_text": "New Year 2014-2015"
+  },
+  {
+    "name": "GoldenElectrike",
+    "release_date": "2015-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2015"
+  },
+  {
+    "name": "GoldenSwinub",
+    "release_date": "2015-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2015"
+  },
+  {
+    "name": "GoldenShinx",
+    "release_date": "2016-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2015-2016"
+  },
+  {
+    "name": "GoldenTauros",
+    "release_date": "2016-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2015-2016"
+  },
+  {
+    "name": "GoldenEevee",
+    "release_date": "2016-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2016"
+  },
+  {
+    "name": "GoldenGrowlithe",
+    "release_date": "2016-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2016"
+  },
+  {
+    "name": "GoldenLitleo",
+    "release_date": "2016-08-02",
+    "event": "Shrimpy's Birthday (Special)",
+    "date_text": "August 2, 2016"
+  },
+  {
+    "name": "GoldenChespin",
+    "release_date": "2016-09-01",
+    "event": "Training Challenge 1st-5th Place",
+    "date_text": "September 1, 2016 - January 3, 2021"
+  },
+  {
+    "name": "GoldenFennekin",
+    "release_date": "2016-09-01",
+    "event": "Training Challenge 1st-5th Place",
+    "date_text": "September 1, 2016 - January 3, 2021"
+  },
+  {
+    "name": "GoldenFroakie",
+    "release_date": "2016-09-01",
+    "event": "Training Challenge 1st-5th Place",
+    "date_text": "September 1, 2016 - January 3, 2021"
+  },
+  {
+    "name": "GoldenPancham",
+    "release_date": "2017-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2016-2017"
+  },
+  {
+    "name": "GoldenFletchling",
+    "release_date": "2017-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2016-2017"
+  },
+  {
+    "name": "GoldenZygarde",
+    "release_date": "2017-04-01",
+    "event": "Speed Tower Fastest Ever",
+    "date_text": "April 1, 2017 - Present"
+  },
+  {
+    "name": "GoldenXerneas",
+    "release_date": "",
+    "event": "Speed Tower Monthly Prize",
+    "date_text": "Alternates Monthly with GoldenYveltal"
+  },
+  {
+    "name": "GoldenYveltal",
+    "release_date": "",
+    "event": "Speed Tower Monthly Prize",
+    "date_text": "Alternates Monthly with GoldenXerneas"
+  },
+  {
+    "name": "GoldenBunnelby",
+    "release_date": "2017-04-15",
+    "event": "Swarming Bunnelby",
+    "date_text": "April 15-16, 2017, | April 22-23, 2017, | March 31, 2018 | and | April 1, 2018"
+  },
+  {
+    "name": "GoldenScatterbug",
+    "release_date": "",
+    "event": "Swarm Saturdays Grand Prize",
+    "date_text": "Every Saturday"
+  },
+  {
+    "name": "GoldenBlitzle",
+    "release_date": "2017-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2017"
+  },
+  {
+    "name": "GoldenFeebas",
+    "release_date": "2017-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2017"
+  },
+  {
+    "name": "GoldenTyrunt",
+    "release_date": "2018-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2017-2018"
+  },
+  {
+    "name": "GoldenPichu",
+    "release_date": "2018-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2017-2018"
+  },
+  {
+    "name": "GoldenOmanyte",
+    "release_date": "2018-05-28",
+    "event": "Server Update Celebration Promo",
+    "date_text": "May 28, 2018"
+  },
+  {
+    "name": "GoldenZorua",
+    "release_date": "2018-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2018"
+  },
+  {
+    "name": "GoldenChansey",
+    "release_date": "2018-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2018"
+  },
+  {
+    "name": "GoldenHappiny",
+    "release_date": "2018-08-02",
+    "event": "Shrimpy's Birthday (Special)",
+    "date_text": "August 2, 2018"
+  },
+  {
+    "name": "GoldenMimikyu",
+    "release_date": "2018-10-31",
+    "event": "Swarming Mimikyu | Halloween Event",
+    "date_text": "October 31, 2018"
+  },
+  {
+    "name": "GoldenVolcanion",
+    "release_date": "2018-12-25",
+    "event": "SS Anne Special Prize",
+    "date_text": "December 25, 2018 - Present"
+  },
+  {
+    "name": "GoldenTorchic",
+    "release_date": "2019-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2018-2019"
+  },
+  {
+    "name": "GoldenMachop",
+    "release_date": "2019-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2018-2019"
+  },
+  {
+    "name": "GoldenEkans",
+    "release_date": "2019-01-01",
+    "event": "Christmas Promo - | New Year's Third Gold",
+    "date_text": "New Year 2018-2019"
+  },
+  {
+    "name": "GoldenHo-Oh",
+    "release_date": "",
+    "event": "Kife's Contests",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenTreecko",
+    "release_date": "2019-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2019"
+  },
+  {
+    "name": "GoldenTrapinch",
+    "release_date": "2019-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2019"
+  },
+  {
+    "name": "GoldenPidgey",
+    "release_date": "2019-08-03",
+    "event": "Swarming Pidgey",
+    "date_text": "August 3, 2019"
+  },
+  {
+    "name": "GoldenArticuno",
+    "release_date": "2020-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2019-2020"
+  },
+  {
+    "name": "GoldenZapdos",
+    "release_date": "2020-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2019-2020"
+  },
+  {
+    "name": "GoldenMoltres",
+    "release_date": "2020-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2019-2020"
+  },
+  {
+    "name": "GoldenTogepi",
+    "release_date": "2020-04-11",
+    "event": "Swarming Togepi",
+    "date_text": "April 11-12, 2020"
+  },
+  {
+    "name": "GoldenExeggcute",
+    "release_date": "2020-04-13",
+    "event": "Swarming Exeggcute",
+    "date_text": "April 13-15, 2020"
+  },
+  {
+    "name": "GoldenRockruff",
+    "release_date": "2020-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2020"
+  },
+  {
+    "name": "GoldenMrMime",
+    "release_date": "2020-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2020"
+  },
+  {
+    "name": "GoldenMime Jr.",
+    "release_date": "2020-08-02",
+    "event": "Shrimpy's Birthday (Special)",
+    "date_text": "August 2, 2020"
+  },
+  {
+    "name": "GoldenHorsea",
+    "release_date": "2020-08-02",
+    "event": "Swarming Horsea",
+    "date_text": "August 2, 2020"
+  },
+  {
+    "name": "GoldenSandygast",
+    "release_date": "2020-10-25",
+    "event": "Ghost Sand Event",
+    "date_text": "October 25 - November 1, 2020"
+  },
+  {
+    "name": "GoldenDucklett",
+    "release_date": "2020-11-25",
+    "event": "Swarming Ducklett",
+    "date_text": "November 25-29, 2020"
+  },
+  {
+    "name": "GoldenSandshrew",
+    "release_date": "2021-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2020-2021"
+  },
+  {
+    "name": "GoldenSandshrew (Alola)",
+    "release_date": "2021-01-01",
+    "event": "Christmas Promo (Special)",
+    "date_text": "New Year 2020-2021"
+  },
+  {
+    "name": "GoldenRayquaza",
+    "release_date": "2021-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2020-2021"
+  },
+  {
+    "name": "GoldenTogedemaru",
+    "release_date": "2021-01-01",
+    "event": "Swarming Togedemaru | Christmas Event",
+    "date_text": "New Year 2020-2021"
+  },
+  {
+    "name": "GoldenKlefki",
+    "release_date": "",
+    "event": "Radio Tower",
+    "date_text": "Every Monday and Thursday"
+  },
+  {
+    "name": "GoldenRowlet",
+    "release_date": "",
+    "event": "Training Challenge",
+    "date_text": "1st-5th place prize"
+  },
+  {
+    "name": "GoldenLitten",
+    "release_date": "",
+    "event": "Training Challenge",
+    "date_text": "1st-5th place prize"
+  },
+  {
+    "name": "GoldenPopplio",
+    "release_date": "",
+    "event": "Training Challenge",
+    "date_text": "1st-5th place prize"
+  },
+  {
+    "name": "GoldenComfey",
+    "release_date": "2021-04-04",
+    "event": "Swarming Comfey",
+    "date_text": "April 4, 2021"
+  },
+  {
+    "name": "GoldenEspurr",
+    "release_date": "2021-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2021"
+  },
+  {
+    "name": "GoldenMurkrow",
+    "release_date": "2021-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2021"
+  },
+  {
+    "name": "GoldenHoopa",
+    "release_date": "2021-10-25",
+    "event": "Swarming Hoopa | Halloween Event",
+    "date_text": "October 25-31, 2021"
+  },
+  {
+    "name": "GoldenSkiddo",
+    "release_date": "2022-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2021-2022"
+  },
+  {
+    "name": "GoldenTotodile",
+    "release_date": "2022-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2021-2022"
+  },
+  {
+    "name": "GoldenPlusle",
+    "release_date": "2022-02-12",
+    "event": "Valentine's Breeding Event",
+    "date_text": "February 12-14, 2022"
+  },
+  {
+    "name": "GoldenMinun",
+    "release_date": "2022-02-12",
+    "event": "Valentine's Breeding Event",
+    "date_text": "February 12-14, 2022"
+  },
+  {
+    "name": "GoldenCherubi",
+    "release_date": "2022-04-15",
+    "event": "Swarming ???",
+    "date_text": "April 15-17, 2022"
+  },
+  {
+    "name": "GoldenHonedge",
+    "release_date": "2022-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2022"
+  },
+  {
+    "name": "GoldenDeino",
+    "release_date": "2022-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2022"
+  },
+  {
+    "name": "GoldenZubat",
+    "release_date": "2022-10-31",
+    "event": "Swarming Zubat | Halloween Event",
+    "date_text": "October 31, 2022"
+  },
+  {
+    "name": "GoldenTurtwig",
+    "release_date": "2023-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2022-2023"
+  },
+  {
+    "name": "GoldenChimchar",
+    "release_date": "2023-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2022-2023"
+  },
+  {
+    "name": "GoldenPiplup",
+    "release_date": "2023-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2022-2023"
+  },
+  {
+    "name": "GoldenMunna",
+    "release_date": "2023-04-15",
+    "event": "Swarming Munna",
+    "date_text": "April 15-16, 2023"
+  },
+  {
+    "name": "GoldenVulpix (Alola)",
+    "release_date": "2023-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2023"
+  },
+  {
+    "name": "GoldenTropius",
+    "release_date": "2023-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2023"
+  },
+  {
+    "name": "GoldenPumpkaboo (Small)",
+    "release_date": "2023-10-25",
+    "event": "Haunted Mansion | Missions",
+    "date_text": "October 25-31, 2023"
+  },
+  {
+    "name": "GoldenPumpkaboo (Average)",
+    "release_date": "2023-10-25",
+    "event": "Haunted Mansion | Missions",
+    "date_text": "October 25-31, 2023"
+  },
+  {
+    "name": "GoldenPumpkaboo (Large)",
+    "release_date": "2023-10-25",
+    "event": "Haunted Mansion | Missions",
+    "date_text": "October 25-31, 2023"
+  },
+  {
+    "name": "GoldenPumpkaboo (Super)",
+    "release_date": "2023-10-25",
+    "event": "Haunted Mansion | Missions",
+    "date_text": "October 25-31, 2023"
+  },
+  {
+    "name": "GoldenPawniard",
+    "release_date": "2024-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2023-2024"
+  },
+  {
+    "name": "GoldenWeedle",
+    "release_date": "2024-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2023-2024"
+  },
+  {
+    "name": "GoldenCryogonal",
+    "release_date": "2024-01-01",
+    "event": "Happy Holidays | Missions",
+    "date_text": "New Year 2023-2024"
+  },
+  {
+    "name": "GoldenDeerling",
+    "release_date": "",
+    "event": "Darkheart's Contests",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenDeoxys",
+    "release_date": "",
+    "event": "Piggachew's Contests",
+    "date_text": "N/A"
+  },
+  {
+    "name": "GoldenSpritzee",
+    "release_date": "2024-02-12",
+    "event": "Valentine's Breeding Event",
+    "date_text": "February 12-14, 2024"
+  },
+  {
+    "name": "GoldenSwirlix",
+    "release_date": "2024-02-12",
+    "event": "Valentine's Breeding Event",
+    "date_text": "February 12-14, 2024"
+  },
+  {
+    "name": "GoldenCaterpie",
+    "release_date": "2024-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2024"
+  },
+  {
+    "name": "GoldenSneasel",
+    "release_date": "2024-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2024"
+  },
+  {
+    "name": "GoldenSneasel (Hisui)",
+    "release_date": "2024-08-02",
+    "event": "Shrimpy's Birthday (Special)",
+    "date_text": "August 2, 2024"
+  },
+  {
+    "name": "GoldenDhelmise",
+    "release_date": "2024-10-31",
+    "event": "Abandoned Ship | Halloween Event",
+    "date_text": "Oct 31-Nov 7, 2024"
+  },
+  {
+    "name": "GoldenPonyta",
+    "release_date": "2025-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2024-2025"
+  },
+  {
+    "name": "GoldenPonyta (Galar)",
+    "release_date": "2025-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2024-2025"
+  },
+  {
+    "name": "GoldenArchen",
+    "release_date": "2025-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2024-2025"
+  },
+  {
+    "name": "GoldenBidoof",
+    "release_date": "2025-04-01",
+    "event": "Swarming Arceus | April Fools' Event",
+    "date_text": "April 1, 2025"
+  },
+  {
+    "name": "GoldenDiancie",
+    "release_date": "2025-07-11",
+    "event": "25th Anniversary Event",
+    "date_text": "July 11-18, 2025"
+  },
+  {
+    "name": "GoldenTeddiursa",
+    "release_date": "2025-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2025"
+  },
+  {
+    "name": "GoldenAerodactyl",
+    "release_date": "2025-08-02",
+    "event": "Shrimpy's Birthday",
+    "date_text": "August 2, 2025"
+  },
+  {
+    "name": "GoldenSinistea",
+    "release_date": "2025-10-25",
+    "event": "Swarming Sinistea | Halloween Event",
+    "date_text": "October 25 - October 31, 2025"
+  },
+  {
+    "name": "GoldenZorua (Hisui)",
+    "release_date": "2025-10-25",
+    "event": "Halloween Event",
+    "date_text": "October 25 - October 31, 2025"
+  },
+  {
+    "name": "GoldenKangaskhan",
+    "release_date": "2026-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2025-2026"
+  },
+  {
+    "name": "GoldenStantler",
+    "release_date": "2026-01-01",
+    "event": "Christmas Promo",
+    "date_text": "New Year 2025-2026"
+  },
+  {
+    "name": "GoldenMeowth (Alola)",
+    "release_date": "2025-08-09",
+    "event": "Donation Contest",
+    "date_text": "August 9, 2025 - January 2, 2026"
+  },
+  {
+    "name": "GoldenPhione",
+    "release_date": "2025-07-19",
+    "event": "Last Man Standing Contest",
+    "date_text": "July 19, 2025 - January 8, 2026"
+  },
+  {
+    "name": "GoldenAudino",
+    "release_date": "2026-02-14",
+    "event": "Valentine's Day 2026 reward for hatching 30 eggs at the Breeding Center",
+    "date_text": "February 14, 2026 - February 15, 2026"
+  }
+]

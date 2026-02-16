@@ -7,6 +7,9 @@ on:
   # Also allow manual trigger from GitHub UI
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-rarity:
     runs-on: ubuntu-latest
@@ -17,17 +20,18 @@ jobs:
 
       - name: Download latest rarity.html
         run: |
-          curl -L "https://www.tppcrpg.net/rarity.html" -o rarity.html
+          mkdir -p public/data
+          curl -L "https://www.tppcrpg.net/rarity.html" -o public/data/rarity.html
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if git status --porcelain | grep "rarity.html"; then
-            git add rarity.html
+          if [[ -n "$(git status --porcelain public/data/rarity.html)" ]]; then
+            git add public/data/rarity.html
             git commit -m "Update rarity.html (automated)"
             git push
           else
-            echo "No changes to rarity.html"
+            echo "No changes to public/data/rarity.html"
           fi

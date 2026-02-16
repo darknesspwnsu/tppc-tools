@@ -33,7 +33,8 @@ export async function fetchUEUGSet() {
 }
 
 export async function fetchRarityTable() {
-  const res = await fetch("https://darknesspwnsu.github.io/tppc-data/data/rarity.html");
+  // Same-origin mirror so this tool works from GitHub Pages project sites.
+  const res = await fetch(siteUrl("data/rarity.html"));
   if (!res.ok) throw new Error("Failed to fetch TPPC rarity list.");
   const html = await res.text();
   const doc = new DOMParser().parseFromString(html, "text/html");
