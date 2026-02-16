@@ -123,7 +123,8 @@ async function prefetchTable() {
 }
 
 function loadTableFromJson() {
-  return fetch("https://coldsp33d.github.io/data/trainers.json")
+  // Same-origin so mirrors (and future domain moves) keep working.
+  return fetch("/data/trainers.json")
     .then((response) => response.json())
     .catch((error) => console.error(error));
 }

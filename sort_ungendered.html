@@ -271,7 +271,7 @@ async function fetchEvolutionData() {
 // 3) UE/UG list from local text file (one name per line)
 async function fetchUEUGSet() {
   // UE/UG list (Coldsp33d) may be newline-separated OR a single space-separated line.
-  const res = await fetch("https://Coldsp33d.github.io/data/ueug_list.txt");
+  const res = await fetch("/data/ueug_list.txt");
   if (!res.ok) {
     throw new Error("Failed to fetch data/ueug_list.txt");
   }

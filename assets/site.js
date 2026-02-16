@@ -23,7 +23,7 @@
         <span class="site-title">TPPC Tools by Darkness</span>
       </a>
       <div class="site-actions">
-        <a class="site-action" href="https://github.com/Coldsp33d/Coldsp33d.github.io/tree/staging" target="_blank" rel="noopener">↗ GitHub</a>
+        <a class="site-action" href="https://github.com/darknesspwnsu/darknesspwnsu.github.io/tree/staging" target="_blank" rel="noopener">↗ GitHub</a>
         <button id="themeBtn" class="site-action site-theme-btn" type="button">
           <span id="themeIcon">☾</span>
           <span id="themeText">Dark</span>

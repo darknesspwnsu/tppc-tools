@@ -1,7 +1,8 @@
 import { canonicalKey } from "./utils.js";
 
 export async function fetchDexMapping() {
-  const res = await fetch("https://Coldsp33d.github.io/data/name_to_dex.json");
+  // Same-origin so the tool works from mirrors (and doesn't depend on an old username site).
+  const res = await fetch("/data/name_to_dex.json");
   if (!res.ok) throw new Error("Failed to fetch data/name_to_dex.json");
   const obj = await res.json();
   const nameToDex = {};
@@ -10,13 +11,13 @@ export async function fetchDexMapping() {
 }
 
 export async function fetchEvolutionData() {
-  const res = await fetch("https://Coldsp33d.github.io/data/pokemon_evolution.json");
+  const res = await fetch("/data/pokemon_evolution.json");
   if (!res.ok) throw new Error("Failed to fetch data/pokemon_evolution.json");
   return res.json();
 }
 
 export async function fetchUEUGSet() {
-  const res = await fetch("https://Coldsp33d.github.io/data/ueug_list.txt");
+  const res = await fetch("/data/ueug_list.txt");
   if (!res.ok) throw new Error("Failed to fetch data/ueug_list.txt");
   const text = await res.text();
   const lines = text.split(/\r?\n/);
@@ -61,7 +62,7 @@ export async function fetchRarityTable() {
 
 // Level 4 rarity list (Name - count)
 export async function fetchLevel4RarityMap() {
-  const res = await fetch("https://coldsp33d.github.io/data/level4_rarity.txt");
+  const res = await fetch("/data/level4_rarity.txt");
   if (!res.ok) throw new Error("Failed to fetch data/level4_rarity.txt");
   const text = await res.text();
 
