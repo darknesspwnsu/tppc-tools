@@ -1,10 +1,28 @@
 (() => {
   const TOOL_DATA = window.TPPC_TOOLS || [];
+
+  // Support both:
+  // - User Pages: https://<user>.github.io/...
+  // - Project Pages: https://<user>.github.io/<repo>/...
+  // by deriving the site root from this script's URL.
+  const scriptUrl = (() => {
+    const cs = document.currentScript;
+    if (cs && cs.src) return new URL(cs.src, window.location.href);
+
+    // Fallback: look for a script tag that ends with assets/site.js
+    const s = document.querySelector('script[src$="assets/site.js"]');
+    if (s && s.src) return new URL(s.src, window.location.href);
+
+    return new URL("assets/site.js", window.location.href);
+  })();
+  const SITE_ROOT = new URL("../", scriptUrl);
+
   const toAbsolute = (href) => {
     if (!href) return "";
-    if (/^https?:\/\//i.test(href)) return href;
-    if (href.startsWith("/")) return href;
-    return `/${href}`;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(href)) return href;
+    const clean = String(href).replace(/^\//, "");
+    const u = new URL(clean, SITE_ROOT);
+    return `${u.pathname}${u.search}${u.hash}`;
   };
 
   const NAV_ITEMS = TOOL_DATA.map((item) => ({
@@ -15,14 +33,14 @@
   const nav = document.createElement("nav");
   nav.className = "site-nav";
 
-  nav.innerHTML = `
-    <div class="site-nav-inner">
-      <button class="site-hamburger" id="siteMenuBtn" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="Open menu">≡</button>
-      <a class="site-brand" href="/index.html">
-        <span class="site-logo"></span>
-        <span class="site-title">TPPC Tools by Darkness</span>
-      </a>
-      <div class="site-actions">
+	  nav.innerHTML = `
+	    <div class="site-nav-inner">
+	      <button class="site-hamburger" id="siteMenuBtn" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="Open menu">≡</button>
+	      <a class="site-brand" href="${toAbsolute("index.html")}">
+	        <span class="site-logo"></span>
+	        <span class="site-title">TPPC Tools by Darkness</span>
+	      </a>
+	      <div class="site-actions">
         <a class="site-action" href="https://github.com/darknesspwnsu/darknesspwnsu.github.io/tree/staging" target="_blank" rel="noopener">↗ GitHub</a>
         <button id="themeBtn" class="site-action site-theme-btn" type="button">
           <span id="themeIcon">☾</span>

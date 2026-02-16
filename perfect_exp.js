@@ -124,7 +124,7 @@ async function prefetchTable() {
 
 function loadTableFromJson() {
   // Same-origin so mirrors (and future domain moves) keep working.
-  return fetch("/data/trainers.json")
+  return fetch("data/trainers.json")
     .then((response) => response.json())
     .catch((error) => console.error(error));
 }

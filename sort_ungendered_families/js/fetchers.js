@@ -1,8 +1,11 @@
 import { canonicalKey } from "./utils.js";
 
+const SITE_ROOT = new URL("../../", import.meta.url);
+const siteUrl = (path) => new URL(String(path || "").replace(/^\//, ""), SITE_ROOT).toString();
+
 export async function fetchDexMapping() {
   // Same-origin so the tool works from mirrors (and doesn't depend on an old username site).
-  const res = await fetch("/data/name_to_dex.json");
+  const res = await fetch(siteUrl("data/name_to_dex.json"));
   if (!res.ok) throw new Error("Failed to fetch data/name_to_dex.json");
   const obj = await res.json();
   const nameToDex = {};
@@ -11,13 +14,13 @@ export async function fetchDexMapping() {
 }
 
 export async function fetchEvolutionData() {
-  const res = await fetch("/data/pokemon_evolution.json");
+  const res = await fetch(siteUrl("data/pokemon_evolution.json"));
   if (!res.ok) throw new Error("Failed to fetch data/pokemon_evolution.json");
   return res.json();
 }
 
 export async function fetchUEUGSet() {
-  const res = await fetch("/data/ueug_list.txt");
+  const res = await fetch(siteUrl("data/ueug_list.txt"));
   if (!res.ok) throw new Error("Failed to fetch data/ueug_list.txt");
   const text = await res.text();
   const lines = text.split(/\r?\n/);
@@ -62,7 +65,7 @@ export async function fetchRarityTable() {
 
 // Level 4 rarity list (Name - count)
 export async function fetchLevel4RarityMap() {
-  const res = await fetch("/data/level4_rarity.txt");
+  const res = await fetch(siteUrl("data/level4_rarity.txt"));
   if (!res.ok) throw new Error("Failed to fetch data/level4_rarity.txt");
   const text = await res.text();
 
