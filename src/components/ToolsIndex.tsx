@@ -23,6 +23,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
 
   const activeTagSet = useMemo(() => new Set(activeTags.map(normTag)), [activeTags]);
+  const hasActiveTags = activeTagSet.size > 0;
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
@@ -106,7 +107,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               <button
                 key={t}
                 type="button"
-                className="site-link tag-chip"
+                className="site-link tag-chip filter-chip is-active"
                 onClick={() => setActiveTags((prev) => prev.filter((x) => x !== t))}
                 title="Remove tag"
               >
@@ -115,7 +116,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
             ))}
             <button
               type="button"
-              className="site-link tag-chip"
+              className="site-link tag-chip filter-chip"
               onClick={() => setActiveTags([])}
               title="Clear tags"
             >
@@ -131,10 +132,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               <button
                 key={tg}
                 type="button"
-                className="site-link tag-chip"
-                style={{
-                  borderColor: on ? "color-mix(in oklab, var(--nav-line), var(--nav-accent2) 55%)" : undefined
-                }}
+                className={`site-link tag-chip filter-chip${on ? " is-active" : ""}`}
                 onClick={(e) => {
                   const multi = e.ctrlKey || e.metaKey;
                   if (multi) toggleTag(tg);
@@ -151,9 +149,16 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
         <div className="row g-3 tool-grid">
           {filteredSorted.map((t) => {
             const matches = tagMatchCount(t);
+            const cardClasses = [
+              "panel panel-muted h-100 tool-card",
+              hasActiveTags && matches > 0 ? "has-tag-match" : "",
+              hasActiveTags && matches === 0 ? "is-dimmed" : ""
+            ]
+              .filter(Boolean)
+              .join(" ");
             return (
               <div className="col-12 col-lg-6" key={t.slug}>
-                <div className="panel panel-muted h-100 tool-card">
+                <div className={cardClasses}>
                   <div className="d-flex align-items-start justify-content-between gap-3">
                     <div>
                       <div className="tool-card-title">{t.name}</div>
@@ -177,10 +182,13 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                         <button
                           key={nt}
                           type="button"
-                          className="site-link tag-chip"
-                          style={{
-                            opacity: matches > 0 && !on ? 0.85 : 1
-                          }}
+                          className={[
+                            "site-link tag-chip filter-chip tool-tag-chip",
+                            on ? "is-active" : "",
+                            hasActiveTags && matches > 0 && !on ? "is-muted" : ""
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
                           onClick={(e) => {
                             const multi = e.ctrlKey || e.metaKey;
                             if (multi) toggleTag(nt);

@@ -420,6 +420,58 @@ a {
   color: color-mix(in oklab, var(--text-muted), var(--text-main) 22%);
 }
 
+.filter-chip {
+  transition:
+    transform 0.18s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.filter-chip.is-active {
+  border-color: color-mix(in oklab, var(--accent), var(--panel-border) 44%);
+  background:
+    linear-gradient(var(--bg-elev), var(--bg-elev)) padding-box,
+    linear-gradient(
+      130deg,
+      color-mix(in oklab, var(--accent-soft), #ffffff 18%),
+      color-mix(in oklab, var(--accent-alt), #ffffff 12%)
+    ) border-box;
+  box-shadow: 0 10px 22px color-mix(in oklab, var(--accent), transparent 70%);
+}
+
+[data-theme="dark"] .filter-chip.is-active {
+  box-shadow: 0 12px 26px rgba(10, 24, 40, 0.6);
+}
+
+.tool-tag-chip.is-muted {
+  opacity: 0.78;
+}
+
+.tool-card.has-tag-match {
+  border-color: color-mix(in oklab, var(--accent), var(--panel-border) 42%);
+  box-shadow: 0 16px 36px color-mix(in oklab, var(--accent), transparent 72%);
+}
+
+[data-theme="dark"] .tool-card.has-tag-match {
+  box-shadow: 0 20px 42px rgba(8, 20, 33, 0.62);
+}
+
+.tool-card.has-tag-match .tool-card-title {
+  color: color-mix(in oklab, var(--text-main), var(--accent) 26%);
+}
+
+.tool-card.is-dimmed {
+  opacity: 0.72;
+  border-color: color-mix(in oklab, var(--panel-border), transparent 24%);
+  box-shadow: none;
+}
+
+.tool-card.is-dimmed .tool-open-btn {
+  filter: saturate(0.86) brightness(0.94);
+}
+
 .tool-open-btn {
   border-color: transparent;
   background: linear-gradient(
