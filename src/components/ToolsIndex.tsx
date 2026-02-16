@@ -161,24 +161,12 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                       <div className="text-muted small mt-1">{t.desc}</div>
                       <div className="text-muted small mt-2">
                         <code>/tools/{t.slug}/</code>
-                        {t.kind === "legacy" && t.legacyPath ? (
-                          <>
-                            {" "}
-                            <span className="text-muted">·</span>{" "}
-                            <code>{t.legacyPath}</code>
-                          </>
-                        ) : null}
                       </div>
                     </div>
                     <div className="d-flex flex-column gap-2" style={{ minWidth: 140 }}>
                       <Link className="btn btn-primary btn-sm" href={`/tools/${t.slug}/`}>
                         Open
                       </Link>
-                      {t.kind === "legacy" && t.legacyPath ? (
-                        <Link className="btn btn-outline-secondary btn-sm" href={t.legacyPath} target="_blank">
-                          Standalone
-                        </Link>
-                      ) : null}
                     </div>
                   </div>
 

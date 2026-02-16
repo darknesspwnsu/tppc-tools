@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getToolBySlug, TOOLS } from "@/tools/registry";
@@ -9,12 +8,17 @@ export function generateStaticParams() {
   return TOOLS.filter((t) => t.kind === "legacy").map((t) => ({ slug: t.slug }));
 }
 
-export default function ToolWrapperPage({ params }: { params: { slug: string } }) {
-  const tool = getToolBySlug(params.slug);
+export default async function ToolWrapperPage({
+  params
+}: {
+  // Next.js 16+ passes params as a Promise for server components.
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const tool = getToolBySlug(slug);
   if (!tool || tool.kind !== "legacy" || !tool.legacyPath) return notFound();
 
-  const standaloneHref = `${BASE_PATH}${tool.legacyPath}`;
-  const iframeSrc = `${standaloneHref}?embed=1`;
+  const iframeSrc = `${BASE_PATH}${tool.legacyPath}?embed=1`;
 
   return (
     <div>
@@ -31,18 +35,8 @@ export default function ToolWrapperPage({ params }: { params: { slug: string } }
       </section>
 
       <section className="panel">
-        <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between">
-          <div className="text-muted small">
-            Embedded legacy page: <code>{tool.legacyPath}</code>
-          </div>
-          <div className="d-flex flex-wrap gap-2">
-            <Link className="btn btn-outline-secondary btn-sm" href={tool.legacyPath} target="_blank">
-              Open standalone
-            </Link>
-            <a className="btn btn-primary btn-sm" href={standaloneHref} target="_blank" rel="noopener">
-              Open in new tab
-            </a>
-          </div>
+        <div className="text-muted small">
+          Legacy tool embedded for compatibility.
         </div>
 
         <div className="mt-3" style={{ borderRadius: 16, overflow: "hidden", border: "1px solid rgba(0,0,0,.08)" }}>
@@ -57,4 +51,3 @@ export default function ToolWrapperPage({ params }: { params: { slug: string } }
     </div>
   );
 }
-
