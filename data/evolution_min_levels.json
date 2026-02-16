@@ -1,0 +1,9479 @@
+{
+  "abomasnow": {
+    "evolves_from": "snover",
+    "lowest_level_possible": {
+      "dark": 80,
+      "golden": 200,
+      "normal": 40,
+      "shiny": 80
+    }
+  },
+  "abra": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "absol": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "accelgor": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aegislash": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aegislash (blade form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aegislash (shield form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aerodactyl": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aggron": {
+    "evolves_from": "lairon",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "aipom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "alakazam": {
+    "evolves_from": "kadabra",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "alcremie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "alomomola": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "altaria": {
+    "evolves_from": "swablu",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "amaura": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ambipom": {
+    "evolves_from": "aipom",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "amoonguss": {
+    "evolves_from": "foongus",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": null,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "ampharos": {
+    "evolves_from": "flaaffy",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "anorith": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "appletun": {
+    "evolves_from": "applin",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 4,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "applin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "araquanid": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "arbok": {
+    "evolves_from": "ekans",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "arcanine": {
+    "evolves_from": "growlithe",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "arcanine (hisui)": {
+    "evolves_from": "growlithe (hisui)",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "arceus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "archen": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "archeops": {
+    "evolves_from": "archen",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "arctovish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "arctozolt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "ariados": {
+    "evolves_from": "spinarak",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "armaldo": {
+    "evolves_from": "anorith",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": null,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "aromatisse": {
+    "evolves_from": "spritzee",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "aron": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "arrokuda": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "articuno": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "articuno (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "audino": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "aurorus": {
+    "evolves_from": "amaura",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 1000,
+      "shiny": 2000
+    }
+  },
+  "avalugg": {
+    "evolves_from": "bergmite",
+    "lowest_level_possible": {
+      "dark": 1200,
+      "golden": null,
+      "normal": 600,
+      "shiny": 1200
+    }
+  },
+  "avalugg (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "axew": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "azelf": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "azumarill": {
+    "evolves_from": "marill",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "azurill": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bagon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "baltoy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "banette": {
+    "evolves_from": "shuppet",
+    "lowest_level_possible": {
+      "dark": 150,
+      "golden": null,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "barbaracle": {
+    "evolves_from": "binacle",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 500,
+      "shiny": 4
+    }
+  },
+  "barboach": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "barraskewda": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "basculegion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "basculegion (female)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "basculegion (male)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "basculin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "basculin (blue-striped)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "basculin (red-striped)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "basculin (red-striped/blue-striped)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "basculin (white-striped)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "bastiodon": {
+    "evolves_from": "shieldon",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "bayleef": {
+    "evolves_from": "chikorita",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "beartic": {
+    "evolves_from": "cubchoo",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "beautifly": {
+    "evolves_from": "silcoon",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": null,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "beedrill": {
+    "evolves_from": "kakuna",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": 250,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "beheeyem": {
+    "evolves_from": "elgyem",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": null,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "beldum": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bellossom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bellsprout": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bergmite": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bewear": {
+    "evolves_from": "stufful",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "bibarel": {
+    "evolves_from": "bidoof",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": 150,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "bidoof": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "binacle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bisharp": {
+    "evolves_from": "pawniard",
+    "lowest_level_possible": {
+      "dark": 900,
+      "golden": 2250,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "blacephalon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "blastoise": {
+    "evolves_from": "wartortle",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "blaziken": {
+    "evolves_from": "combusken",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "blipbug": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "blissey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "blitzle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "boldore": {
+    "evolves_from": "roggenrola",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "boltund": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "bonsly": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "bouffalant": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bounsweet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "braixen": {
+    "evolves_from": "fennekin",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "braviary": {
+    "evolves_from": "rufflet",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "braviary (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "breloom": {
+    "evolves_from": "shroomish",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "brionne": {
+    "evolves_from": "popplio",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "bronzong": {
+    "evolves_from": "bronzor",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": null,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "bronzor": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bruxish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "budew": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "buizel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bulbasaur": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "buneary": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "bunnelby": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "burmy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "burmy (plant)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "burmy (sandy)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "burmy (trash)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "butterfree": {
+    "evolves_from": "metapod",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": 250,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "buzzwole": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "cacnea": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cacturne": {
+    "evolves_from": "cacnea",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "calyrex": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "calyrex (ice rider)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "calyrex (shadow rider)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "camerupt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "carbink": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "carkol": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "carnivine": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "carracosta": {
+    "evolves_from": "tirtouga",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": null,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "carvanha": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cascoon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "castform": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "castform (castform)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "castform (rainy (castform w))": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "castform (snowy (castform i))": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "castform (sunny (castform f))": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "caterpie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "celebi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "celesteela": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "centiskorch": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "chandelure": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "chansey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "charizard": {
+    "evolves_from": "charmeleon",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "charjabug": {
+    "evolves_from": "grubbin",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 150,
+      "shiny": null
+    }
+  },
+  "charmander": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "charmeleon": {
+    "evolves_from": "charmander",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "chatot": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cherrim": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cherrim (overcast form)": {
+    "evolves_from": "cherubi",
+    "lowest_level_possible": {
+      "dark": 150,
+      "golden": 375,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "cherrim (sunshine form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cherubi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chesnaught": {
+    "evolves_from": "quilladin",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "chespin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chewtle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "chikorita": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chimchar": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chimecho": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chinchou": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "chingling": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cinccino": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cinderace": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "clamperl": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "clauncher": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "clawitzer": {
+    "evolves_from": "clauncher",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": null
+    }
+  },
+  "claydol": {
+    "evolves_from": "baltoy",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "clefable": {
+    "evolves_from": "clefairy",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "clefairy": {
+    "evolves_from": "cleffa",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "cleffa": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "clobbopus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cloyster": {
+    "evolves_from": "shellder",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "coalossal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cobalion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cofagrigus": {
+    "evolves_from": "yamask",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": null,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "combee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "combusken": {
+    "evolves_from": "torchic",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "comfey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "conkeldurr": {
+    "evolves_from": "gurdurr",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "copperajah": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "corphish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "corsola": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "corsola (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "corviknight": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "corvisquire": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cosmoem": {
+    "evolves_from": "cosmog",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": null,
+      "normal": null,
+      "shiny": 250
+    }
+  },
+  "cosmog": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": null,
+      "shiny": 4
+    }
+  },
+  "cottonee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "crabominable": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "crabrawler": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cradily": {
+    "evolves_from": "lileep",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": null,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "cramorant": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "cramorant (gorging)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "cramorant (gulping)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "cranidos": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "crawdaunt": {
+    "evolves_from": "corphish",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "cresselia": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "croagunk": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "crobat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "croconaw": {
+    "evolves_from": "totodile",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "crustle": {
+    "evolves_from": "dwebble",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "cryogonal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cubchoo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cubone": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cufant": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "cursola": {
+    "evolves_from": "corsola (galar)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "cutiefly": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "cyndaquil": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "darkrai": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "darmanitan": {
+    "evolves_from": "darumaka",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "darmanitan (zen mode (galar))": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "darmanitan (zen mode)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dartrix": {
+    "evolves_from": "rowlet",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "darumaka": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "darumaka (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "decidueye": {
+    "evolves_from": "dartrix",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "decidueye (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "dedenne": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deerling": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "deino": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "delcatty": {
+    "evolves_from": "skitty",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "delibird": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "delphox": {
+    "evolves_from": "braixen",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "deoxys": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (attack form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (attack forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (defense form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (defense forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (speed form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "deoxys (speed forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dewgong": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dewott": {
+    "evolves_from": "oshwawott",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 4,
+      "shiny": 200
+    }
+  },
+  "dewpider": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dhelmise": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dialga": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "diancie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "diggersby": {
+    "evolves_from": "bunnelby",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "diglett": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "diglett (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "ditto": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dodrio": {
+    "evolves_from": "doduo",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "doduo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "donphan": {
+    "evolves_from": "phanpy",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "dottler": {
+    "evolves_from": "blipbug",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 50,
+      "shiny": null
+    }
+  },
+  "doublade": {
+    "evolves_from": "honedge",
+    "lowest_level_possible": {
+      "dark": 1500,
+      "golden": 3750,
+      "normal": 750,
+      "shiny": 1500
+    }
+  },
+  "dracovish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dracozolt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dragalge": {
+    "evolves_from": "skrelp",
+    "lowest_level_possible": {
+      "dark": 1500,
+      "golden": null,
+      "normal": 750,
+      "shiny": 1500
+    }
+  },
+  "dragapult": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dragonair": {
+    "evolves_from": "dratini",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "dragonite": {
+    "evolves_from": "dragonair",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "drakloak": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "drampa": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "drapion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dratini": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "drednaw": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dreepy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "drifblim": {
+    "evolves_from": "drifloon",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": null,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "drifloon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "drilbur": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "drizzile": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "drowzee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "druddigon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dubwool": {
+    "evolves_from": "wooloo",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 400,
+      "shiny": null
+    }
+  },
+  "ducklett": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dugtrio": {
+    "evolves_from": "diglett",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "dugtrio (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "dunsparce": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "duosion": {
+    "evolves_from": "solosis",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": null,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "duraludon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "durant": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dusclops": {
+    "evolves_from": "duskull",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "dusknoir": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "duskull": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "dustox": {
+    "evolves_from": "cascoon",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": null,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "dwebble": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "eelektrik": {
+    "evolves_from": "tynamo",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": null,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "eelektross": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "eevee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "eiscue": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "eiscue (ice face)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "eiscue (noice face)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "ekans": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "eldegoss": {
+    "evolves_from": "gossifleur",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 250,
+      "shiny": null
+    }
+  },
+  "electabuzz": {
+    "evolves_from": "elekid",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "electivire": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "electrike": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "electrode": {
+    "evolves_from": "voltorb",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "electrode (hisui)": {
+    "evolves_from": "voltorb (hisui)",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "elekid": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "elgyem": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "emboar": {
+    "evolves_from": "pignite",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "emolga": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "empoleon": {
+    "evolves_from": "prinplup",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "enamorus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "entei": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "escavalier": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "espeon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "espurr": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "eternatus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "excadrill": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "exeggcute": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "exeggutor": {
+    "evolves_from": "exeggcute",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 4,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "exeggutor (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "exploud": {
+    "evolves_from": "loudred",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "falinks": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "farfetchd": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "farfetchd (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "fearow": {
+    "evolves_from": "spearow",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "feebas": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "fennekin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "feraligatr": {
+    "evolves_from": "croconaw",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "ferroseed": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ferrothorn": {
+    "evolves_from": "ferroseed",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": null,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "finneon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "flaaffy": {
+    "evolves_from": "mareep",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "flab\u00e9b\u00e9": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "flapple": {
+    "evolves_from": "applin",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 4,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "flareon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "fletchinder": {
+    "evolves_from": "fletchling",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "fletchling": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "floatzel": {
+    "evolves_from": "buizel",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "floette": {
+    "evolves_from": "flab\u00e9b\u00e9",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "florges": {
+    "evolves_from": "floette",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "flygon": {
+    "evolves_from": "vibrava",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "fomantis": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "foongus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "forretress": {
+    "evolves_from": "pineco",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "fraxure": {
+    "evolves_from": "axew",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "frillish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "froakie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "frogadier": {
+    "evolves_from": "froakie",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "froslass": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "frosmoth": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "furfrou": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "furret": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gabite": {
+    "evolves_from": "gible",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": 250,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "gallade": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "galvantula": {
+    "evolves_from": "joltik",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "garbodor": {
+    "evolves_from": "trubbish",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": null,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "garchomp": {
+    "evolves_from": "gabite",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "gardevoir": {
+    "evolves_from": "kirlia",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "gastly": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gastrodon": {
+    "evolves_from": "shellos",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "genesect": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gengar": {
+    "evolves_from": "haunter",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "geodude": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "geodude (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "gible": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gigalith": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "girafarig": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "giratina": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "giratina (altered forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "giratina (origin forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "glaceon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "glalie": {
+    "evolves_from": "snorunt",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": null,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "glameow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "glastrier": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "gligar": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gliscor": {
+    "evolves_from": "gligar",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "gloom": {
+    "evolves_from": "oddish",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "gogoat": {
+    "evolves_from": "skiddo",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 3750,
+      "normal": 750,
+      "shiny": 1500
+    }
+  },
+  "golbat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "goldeen": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "golduck": {
+    "evolves_from": "psyduck",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "golem": {
+    "evolves_from": "graveler",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "golem (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "golett": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "golisopod": {
+    "evolves_from": "wimpod",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 500,
+      "shiny": null
+    }
+  },
+  "golurk": {
+    "evolves_from": "golett",
+    "lowest_level_possible": {
+      "dark": 900,
+      "golden": 2250,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "goodra": {
+    "evolves_from": "sliggoo",
+    "lowest_level_possible": {
+      "dark": 3000,
+      "golden": null,
+      "normal": 1500,
+      "shiny": 3000
+    }
+  },
+  "goodra (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "goomy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gorebyss": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gossifleur": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "gothita": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gothitelle": {
+    "evolves_from": "gothorita",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "gothorita": {
+    "evolves_from": "gothita",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": null,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "gourgeist": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gourgeist (average size)": {
+    "evolves_from": "pumpkaboo (average)",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "gourgeist (large size)": {
+    "evolves_from": "pumpkaboo (large)",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "gourgeist (small size)": {
+    "evolves_from": "pumpkaboo (small)",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "gourgeist (super size)": {
+    "evolves_from": "pumpkaboo (super)",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "granbull": {
+    "evolves_from": "snubbull",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "grapploct": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "graveler": {
+    "evolves_from": "geodude",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "graveler (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "greedent": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "greninja": {
+    "evolves_from": "frogadier",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "grimer": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "grimer (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "grimmsnarl": {
+    "evolves_from": "morgrem",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 600,
+      "shiny": null
+    }
+  },
+  "grookey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "grotle": {
+    "evolves_from": "turtwig",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "groudon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "groudon (primal)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "grovyle": {
+    "evolves_from": "treecko",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "growlithe": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "growlithe (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "grubbin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "grumpig": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gulpin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "gumshoos": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "gurdurr": {
+    "evolves_from": "timburr",
+    "lowest_level_possible": {
+      "dark": 150,
+      "golden": 375,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "guzzlord": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "gyarados": {
+    "evolves_from": "magikarp",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "hakamo-o": {
+    "evolves_from": "jangmo-o",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "happiny": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hariyama": {
+    "evolves_from": "makuhita",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "hatenna": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "hatterene": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "hattrem": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "haunter": {
+    "evolves_from": "gastly",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "hawlucha": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "haxorus": {
+    "evolves_from": "fraxure",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": 2000,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "heatmor": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "heatran": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "heliolisk": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "helioptile": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "heracross": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "herdier": {
+    "evolves_from": "lillipup",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 4,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "hippopotas": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hippowdon": {
+    "evolves_from": "hippopotas",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": null,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "hitmonchan": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hitmonlee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hitmontop": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ho-oh": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "honchkrow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "honedge": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hoopa": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hoopa (confined)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hoopa (unbound)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hoothoot": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hoppip": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "horsea": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "houndoom": {
+    "evolves_from": "houndour",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "houndour": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "huntail": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "hydreigon": {
+    "evolves_from": "zweilous",
+    "lowest_level_possible": {
+      "dark": 1100,
+      "golden": 2750,
+      "normal": 550,
+      "shiny": 1100
+    }
+  },
+  "hypno": {
+    "evolves_from": "drowzee",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "igglybuff": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "illumise": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "impidimp": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "incineroar": {
+    "evolves_from": "torracat",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "indeedee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "indeedee (female)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "indeedee (male)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "infernape": {
+    "evolves_from": "monferno",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "inkay": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "inteleon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "ivysaur": {
+    "evolves_from": "bulbasaur",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "jangmo-o": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "jellicent": {
+    "evolves_from": "frillish",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": null,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "jigglypuff": {
+    "evolves_from": "igglybuff",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "jirachi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "jolteon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "joltik": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "jumpluff": {
+    "evolves_from": "skiploom",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "jynx": {
+    "evolves_from": "smoochum",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "kabuto": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kabutops": {
+    "evolves_from": "kabuto",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "kadabra": {
+    "evolves_from": "abra",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "kakuna": {
+    "evolves_from": "weedle",
+    "lowest_level_possible": {
+      "dark": 50,
+      "golden": 125,
+      "normal": 25,
+      "shiny": 50
+    }
+  },
+  "kangaskhan": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "karrablast": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kartana": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "kecleon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "keldeo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "kingdra": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kingler": {
+    "evolves_from": "krabby",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "kirlia": {
+    "evolves_from": "ralts",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "klang": {
+    "evolves_from": "klink",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "kleavor": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "klefki": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "klink": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "klinklang": {
+    "evolves_from": "klang",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": null,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "koffing": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "komala": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "kommo-o": {
+    "evolves_from": "hakamo-o",
+    "lowest_level_possible": {
+      "dark": 2000,
+      "golden": null,
+      "normal": 1000,
+      "shiny": 2000
+    }
+  },
+  "krabby": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kricketot": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kricketune": {
+    "evolves_from": "kricketot",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "krokorok": {
+    "evolves_from": "sandile",
+    "lowest_level_possible": {
+      "dark": 150,
+      "golden": 375,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "krookodile": {
+    "evolves_from": "krokorok",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "kubfu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "kyogre": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kyogre (primal)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "kyurem": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "kyurem (black kyurem)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "kyurem (white kyurem)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "lairon": {
+    "evolves_from": "aron",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "lampent": {
+    "evolves_from": "litwick",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 1750,
+      "normal": 350,
+      "shiny": null
+    }
+  },
+  "landorus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "lanturn": {
+    "evolves_from": "chinchou",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "lapras": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "larvesta": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "larvitar": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "latias": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "latios": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "leafeon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "leavanny": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ledian": {
+    "evolves_from": "ledyba",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "ledyba": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lickilicky": {
+    "evolves_from": "lickitung",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "lickitung": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "liepard": {
+    "evolves_from": "purrloin",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "lileep": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lilligant": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lilligant (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "lilligant (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lillipup": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "linoone": {
+    "evolves_from": "zigzagoon",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "linoone (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "litleo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "litten": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "litwick": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "lombre": {
+    "evolves_from": "lotad",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "lopunny": {
+    "evolves_from": "buneary",
+    "lowest_level_possible": {
+      "dark": 150,
+      "golden": 375,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "lotad": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "loudred": {
+    "evolves_from": "whismur",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "lucario": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ludicolo": {
+    "evolves_from": "lombre",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "lugia": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lumineon": {
+    "evolves_from": "finneon",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "lunala": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": null,
+      "shiny": 4
+    }
+  },
+  "lunatone": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lurantis": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "luvdisc": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "luxio": {
+    "evolves_from": "shinx",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": 250,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "luxray": {
+    "evolves_from": "luxio",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "lycanroc": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lycanroc (dusk)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lycanroc (midday)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "lycanroc (midnight)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "machamp": {
+    "evolves_from": "machoke",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "machoke": {
+    "evolves_from": "machop",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "machop": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "magby": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "magcargo": {
+    "evolves_from": "slugma",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "magearna": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "magearna (original)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "magikarp": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "magmar": {
+    "evolves_from": "magby",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "magmortar": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "magnemite": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "magneton": {
+    "evolves_from": "magnemite",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "magnezone": {
+    "evolves_from": "magneton",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "makuhita": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "malamar": {
+    "evolves_from": "inkay",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "mamoswine": {
+    "evolves_from": "piloswine",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "manaphy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mandibuzz": {
+    "evolves_from": "vullaby",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "manectric": {
+    "evolves_from": "electrike",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "mankey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mantine": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mantyke": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "maractus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mareanie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "mareep": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "marill": {
+    "evolves_from": "azurill",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": null,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "marowak": {
+    "evolves_from": "cubone",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "marowak (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "marshadow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "marshtomp": {
+    "evolves_from": "mudkip",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "masquerain": {
+    "evolves_from": "surskit",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "mawile": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "medicham": {
+    "evolves_from": "meditite",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "meditite": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "meganium": {
+    "evolves_from": "bayleef",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "melmetal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "meloetta": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "meloetta (aria forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "meloetta (pirouette forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "meltan": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "meowstic": {
+    "evolves_from": "espurr",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": null
+    }
+  },
+  "meowth": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "meowth (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "meowth (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mesprit": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "metagross": {
+    "evolves_from": "metang",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": 1750,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "metang": {
+    "evolves_from": "beldum",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "metapod": {
+    "evolves_from": "caterpie",
+    "lowest_level_possible": {
+      "dark": 50,
+      "golden": 125,
+      "normal": 25,
+      "shiny": 50
+    }
+  },
+  "mew": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mewtwo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mienfoo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mienshao": {
+    "evolves_from": "mienfoo",
+    "lowest_level_possible": {
+      "dark": 900,
+      "golden": null,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "mightyena": {
+    "evolves_from": "poochyena",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "milcery": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "milotic": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "miltank": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mimikyu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "minccino": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "minior": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "minior (core)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "minior (meteor)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "minun": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "misdreavus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mismagius": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "moltres": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "moltres (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "monferno": {
+    "evolves_from": "chimchar",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "morelull": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "morgrem": {
+    "evolves_from": "impidimp",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 200,
+      "shiny": null
+    }
+  },
+  "morpeko": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "morpeko (full belly)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "morpeko (hangry)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "mothim": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mr mime": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mr mime (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "mr rime": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "mudbray": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mudkip": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "mudsdale": {
+    "evolves_from": "mudbray",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "muk": {
+    "evolves_from": "grimer",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "muk (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "munchlax": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "munna": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "murkrow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "musharna": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "naganadel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "natu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "necrozma": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "necrozma (dawnwings)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "necrozma (duskmane)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "necrozma (ultra)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "nickit": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "nidoking": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "nidoqueen": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "nidoranf": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "nidoranm": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "nidorina": {
+    "evolves_from": "nidoranf",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "nidorino": {
+    "evolves_from": "nidoranm",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "nihilego": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "nincada": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ninetales": {
+    "evolves_from": "vulpix",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "ninetales (alola)": {
+    "evolves_from": "vulpix (alola)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 750,
+      "normal": 150,
+      "shiny": null
+    }
+  },
+  "ninjask": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "noctowl": {
+    "evolves_from": "hoothoot",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "noibat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "noivern": {
+    "evolves_from": "noibat",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 1000,
+      "shiny": 2000
+    }
+  },
+  "nosepass": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "numel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "nuzleaf": {
+    "evolves_from": "seedot",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "obstagoon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "octillery": {
+    "evolves_from": "remoraid",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "oddish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "omanyte": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "omastar": {
+    "evolves_from": "omanyte",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "onix": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "oranguru": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "orbeetle": {
+    "evolves_from": "dottler",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 100,
+      "shiny": null
+    }
+  },
+  "oricorio": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "oricorio (baile)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "oricorio (pa'u)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "oricorio (pom-pom)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "oricorio (sensu)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "oshawott": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "oshwawott": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "overqwil": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "pachirisu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "palkia": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "palossand": {
+    "evolves_from": "sandygast",
+    "lowest_level_possible": {
+      "dark": 1400,
+      "golden": 3500,
+      "normal": 700,
+      "shiny": 1400
+    }
+  },
+  "palpitoad": {
+    "evolves_from": "tympole",
+    "lowest_level_possible": {
+      "dark": 70,
+      "golden": null,
+      "normal": 35,
+      "shiny": null
+    }
+  },
+  "pancham": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pangoro": {
+    "evolves_from": "pancham",
+    "lowest_level_possible": {
+      "dark": 1500,
+      "golden": 3750,
+      "normal": 750,
+      "shiny": 1500
+    }
+  },
+  "panpour": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pansage": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pansear": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "paras": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "parasect": {
+    "evolves_from": "paras",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "passimian": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "patrat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pawniard": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pelipper": {
+    "evolves_from": "wingull",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "perrserker": {
+    "evolves_from": "meowth (galar)",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "persian": {
+    "evolves_from": "meowth",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "persian (alola)": {
+    "evolves_from": "meowth (alola)",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "petilil": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "phanpy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "phantump": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pheromosa": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "phione": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "pichu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pidgeot": {
+    "evolves_from": "pidgeotto",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "pidgeotto": {
+    "evolves_from": "pidgey",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "pidgey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pidove": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pignite": {
+    "evolves_from": "tepig",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "pikachu": {
+    "evolves_from": "pichu",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": 150,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "pikipek": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "piloswine": {
+    "evolves_from": "swinub",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "pincurchin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "pineco": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pinsir": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "piplup": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "plusle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "poipole": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "politoed": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "poliwag": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "poliwhirl": {
+    "evolves_from": "poliwag",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "poliwrath": {
+    "evolves_from": "poliwhirl",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "polteageist": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ponyta": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ponyta (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "poochyena": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "popplio": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "porygon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "porygon-z": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "porygon2": {
+    "evolves_from": "porygon",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "primarina": {
+    "evolves_from": "brionne",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "primeape": {
+    "evolves_from": "mankey",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "prinplup": {
+    "evolves_from": "piplup",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "probopass": {
+    "evolves_from": "nosepass",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "psyduck": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (average size)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (average)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (large size)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (large)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (small size)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (small)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (super size)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pumpkaboo (super)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "pupitar": {
+    "evolves_from": "larvitar",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "purrloin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "purugly": {
+    "evolves_from": "glameow",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "pyroar": {
+    "evolves_from": "litleo",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": null
+    }
+  },
+  "pyukumuku": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "quagsire": {
+    "evolves_from": "wooper",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "quilava": {
+    "evolves_from": "cyndaquil",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "quilladin": {
+    "evolves_from": "chespin",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "qwilfish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "qwilfish (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "raboot": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "raichu": {
+    "evolves_from": "pikachu",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "raichu (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "raikou": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ralts": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rampardos": {
+    "evolves_from": "cranidos",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "rapidash": {
+    "evolves_from": "ponyta",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "rapidash (galar)": {
+    "evolves_from": "ponyta (galar)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 750,
+      "normal": 150,
+      "shiny": null
+    }
+  },
+  "raticate": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "raticate (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rattata": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rattata (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rayquaza": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "regice": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "regidrago": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "regieleki": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "regigigas": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "regirock": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "registeel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "relicanth": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "remoraid": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "reshiram": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "reuniclus": {
+    "evolves_from": "duosion",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "rhydon": {
+    "evolves_from": "rhyhorn",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "rhyhorn": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rhyperior": {
+    "evolves_from": "rhydon",
+    "lowest_level_possible": {
+      "dark": 1200,
+      "golden": null,
+      "normal": 600,
+      "shiny": 1200
+    }
+  },
+  "ribombee": {
+    "evolves_from": "cutiefly",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "rillaboom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "riolu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rockruff": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "roggenrola": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rolycoly": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "rookidee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "roselia": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "roserade": {
+    "evolves_from": "roselia",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": null,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "rotom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rotom (fan)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rotom (frost)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rotom (heat)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rotom (mow)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rotom (wash)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rowlet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "rufflet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "runerigus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "sableye": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "salamence": {
+    "evolves_from": "shelgon",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": 1750,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "salandit": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "salazzle": {
+    "evolves_from": "salandit",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "samurott": {
+    "evolves_from": "dewott",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "samurott (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "sandaconda": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "sandile": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sandshrew": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sandshrew (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "sandslash": {
+    "evolves_from": "sandshrew",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "sandslash (alola)": {
+    "evolves_from": "sandshrew (alola)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": null
+    }
+  },
+  "sandygast": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sawk": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sawsbuck": {
+    "evolves_from": "deerling",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": null
+    }
+  },
+  "scatterbug": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sceptile": {
+    "evolves_from": "grovyle",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "scizor": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "scolipede": {
+    "evolves_from": "whirlipede",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "scorbunny": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "scrafty": {
+    "evolves_from": "scraggy",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "scraggy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "scyther": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "seadra": {
+    "evolves_from": "horsea",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "seaking": {
+    "evolves_from": "goldeen",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "sealeo": {
+    "evolves_from": "spheal",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": 625,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "seedot": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "seel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "seismitoad": {
+    "evolves_from": "palpitoad",
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 100,
+      "shiny": null
+    }
+  },
+  "sentret": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "serperior": {
+    "evolves_from": "servine",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "servine": {
+    "evolves_from": "snivy",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "seviper": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sewaddle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sharpedo": {
+    "evolves_from": "carvanha",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "shaymin": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shaymin (land forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shaymin (sky forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shedinja": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shelgon": {
+    "evolves_from": "bagon",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "shellder": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shellos": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shelmet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shieldon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shiftry": {
+    "evolves_from": "nuzleaf",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "shiinotic": {
+    "evolves_from": "morelull",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 300,
+      "shiny": null
+    }
+  },
+  "shinx": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shroomish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shuckle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "shuppet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sigilyph": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "silcoon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "silicobra": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "silvally": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "simipour": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "simisage": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "simisear": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sinistea": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sirfetch'd": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "sizzlipede": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "skarmory": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "skiddo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "skiploom": {
+    "evolves_from": "hoppip",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "skitty": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "skorupi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "skrelp": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "skuntank": {
+    "evolves_from": "stunky",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "skwovet": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "slaking": {
+    "evolves_from": "vigoroth",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "slakoth": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sliggoo": {
+    "evolves_from": "goomy",
+    "lowest_level_possible": {
+      "dark": 1500,
+      "golden": null,
+      "normal": 750,
+      "shiny": 1500
+    }
+  },
+  "sliggoo (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "slowbro": {
+    "evolves_from": "slowpoke",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "slowbro (galar)": {
+    "evolves_from": "slowpoke (galar)",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "slowking": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "slowking (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "slowpoke": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "slowpoke (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "slugma": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "slurpuff": {
+    "evolves_from": "swirlix",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "smeargle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "smoochum": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sneasel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sneasel (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "sneasler": {
+    "evolves_from": "sneasel (hisui)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 2000,
+      "normal": 400,
+      "shiny": null
+    }
+  },
+  "snivy": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "snom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "snorlax": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "snorunt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "snover": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "snubbull": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sobble": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "solgaleo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": null,
+      "shiny": 4
+    }
+  },
+  "solosis": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "solrock": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spearow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spectrier": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "spewpa": {
+    "evolves_from": "scatterbug",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "spheal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spinarak": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spinda": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spiritomb": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spoink": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "spritzee": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "squirtle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "stakataka": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "stantler": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "staraptor": {
+    "evolves_from": "staravia",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "staravia": {
+    "evolves_from": "starly",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "starly": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "starmie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "staryu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "steelix": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "steenee": {
+    "evolves_from": "bounsweet",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "stonjourner": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "stoutland": {
+    "evolves_from": "herdier",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 4,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "stufful": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "stunfisk": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "stunfisk (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "stunky": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sudowoodo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "suicune": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sunflora": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sunkern": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "surskit": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "swablu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "swadloon": {
+    "evolves_from": "sewaddle",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 75,
+      "shiny": 150
+    }
+  },
+  "swalot": {
+    "evolves_from": "gulpin",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "swampert": {
+    "evolves_from": "marshtomp",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "swanna": {
+    "evolves_from": "ducklett",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "swellow": {
+    "evolves_from": "taillow",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "swinub": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "swirlix": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "swoobat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "sylveon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "taillow": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "talonflame": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tangela": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tangrowth": {
+    "evolves_from": "tangela",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": null,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "tapu bulu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "tapu fini": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "tapu koko": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "tapu lele": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "tauros": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "teddiursa": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tentacool": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tentacruel": {
+    "evolves_from": "tentacool",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "tepig": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "terrakion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "thievul": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "throh": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "thundurus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "thwackey": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "timburr": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tirtouga": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "togedemaru": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "togekiss": {
+    "evolves_from": "togetic",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "togepi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "togetic": {
+    "evolves_from": "togepi",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": 250,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "torchic": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "torkoal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tornadus": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "torracat": {
+    "evolves_from": "litten",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "torterra": {
+    "evolves_from": "grotle",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "totodile": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "toucannon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "toxapex": {
+    "evolves_from": "mareanie",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 600,
+      "shiny": null
+    }
+  },
+  "toxel": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "toxicroak": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "toxtricity": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "toxtricity (amped form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "toxtricity (low key form)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "tranquill": {
+    "evolves_from": "pidove",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 4,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "trapinch": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "treecko": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "trevenant": {
+    "evolves_from": "phantump",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 1000,
+      "shiny": 2000
+    }
+  },
+  "tropius": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "trubbish": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "trumbeak": {
+    "evolves_from": "pikipek",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 100,
+      "shiny": null
+    }
+  },
+  "tsareena": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "turtonator": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "turtwig": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tympole": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "tynamo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "type: null": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "typhlosion": {
+    "evolves_from": "quilava",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "typhlosion (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "tyranitar": {
+    "evolves_from": "pupitar",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "tyrantrum": {
+    "evolves_from": "tyrunt",
+    "lowest_level_possible": {
+      "dark": 2000,
+      "golden": 5000,
+      "normal": 1000,
+      "shiny": null
+    }
+  },
+  "tyrogue": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "tyrunt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "umbreon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "unfezant": {
+    "evolves_from": "tranquill",
+    "lowest_level_possible": {
+      "dark": 700,
+      "golden": 4,
+      "normal": 350,
+      "shiny": 700
+    }
+  },
+  "unown": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ursaluna": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "ursaluna (bloodmoon)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "ursaring": {
+    "evolves_from": "teddiursa",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": 750,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "urshifu": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "urshifu (rapid strike)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "urshifu (single strike)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "uxie": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "vanillish": {
+    "evolves_from": "vanillite",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "vanillite": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "vanilluxe": {
+    "evolves_from": "vanillish",
+    "lowest_level_possible": {
+      "dark": 600,
+      "golden": null,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "vaporeon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "venipede": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "venomoth": {
+    "evolves_from": "venonat",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "venonat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "venusaur": {
+    "evolves_from": "ivysaur",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "vespiquen": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "vibrava": {
+    "evolves_from": "trapinch",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "victini": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "victreebel": {
+    "evolves_from": "weepinbell",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": null,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "vigoroth": {
+    "evolves_from": "slakoth",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "vikavolt": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "vileplume": {
+    "evolves_from": "gloom",
+    "lowest_level_possible": {
+      "dark": 400,
+      "golden": 1000,
+      "normal": 200,
+      "shiny": 400
+    }
+  },
+  "virizion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "vivillon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "volbeat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "volcanion": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "volcarona": {
+    "evolves_from": "larvesta",
+    "lowest_level_possible": {
+      "dark": 1100,
+      "golden": 2750,
+      "normal": 550,
+      "shiny": 1100
+    }
+  },
+  "voltorb": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "voltorb (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "vullaby": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "vulpix": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "vulpix (alola)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "wailmer": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wailord": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "walrein": {
+    "evolves_from": "sealeo",
+    "lowest_level_possible": {
+      "dark": 450,
+      "golden": 1125,
+      "normal": 225,
+      "shiny": 450
+    }
+  },
+  "wartortle": {
+    "evolves_from": "squirtle",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": 500,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "watchog": {
+    "evolves_from": "patrat",
+    "lowest_level_possible": {
+      "dark": 250,
+      "golden": 4,
+      "normal": 125,
+      "shiny": 250
+    }
+  },
+  "weavile": {
+    "evolves_from": "sneasel",
+    "lowest_level_possible": {
+      "dark": 800,
+      "golden": 2000,
+      "normal": 400,
+      "shiny": 800
+    }
+  },
+  "weedle": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "weepinbell": {
+    "evolves_from": "bellsprout",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "weezing": {
+    "evolves_from": "koffing",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "weezing (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "whimsicott": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "whirlipede": {
+    "evolves_from": "venipede",
+    "lowest_level_possible": {
+      "dark": 100,
+      "golden": null,
+      "normal": 50,
+      "shiny": 100
+    }
+  },
+  "whiscash": {
+    "evolves_from": "barboach",
+    "lowest_level_possible": {
+      "dark": 200,
+      "golden": null,
+      "normal": 100,
+      "shiny": 200
+    }
+  },
+  "whismur": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wigglytuff": {
+    "evolves_from": "jigglypuff",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "wimpod": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "wingull": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wishiwashi": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wishiwashi (school)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "wishiwashi (solo)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "wobbuffet": {
+    "evolves_from": "wynaut",
+    "lowest_level_possible": {
+      "dark": 60,
+      "golden": 4,
+      "normal": 30,
+      "shiny": 60
+    }
+  },
+  "woobat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wooloo": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "wooper": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wormadam": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wormadam (plant)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wormadam (sandy)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wormadam (trash)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wurmple": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wynaut": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "wyrdeer": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "xatu": {
+    "evolves_from": "natu",
+    "lowest_level_possible": {
+      "dark": 300,
+      "golden": null,
+      "normal": 150,
+      "shiny": 300
+    }
+  },
+  "xerneas": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": null,
+      "shiny": 4
+    }
+  },
+  "xurkitree": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "yamask": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "yamask (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "yamper": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "yanma": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "yanmega": {
+    "evolves_from": "yanma",
+    "lowest_level_possible": {
+      "dark": 1000,
+      "golden": 2500,
+      "normal": 500,
+      "shiny": 1000
+    }
+  },
+  "yungoos": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "yveltal": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": null,
+      "shiny": 4
+    }
+  },
+  "zacian": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zacian (crowned)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zacian (hero)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zamazenta": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zamazenta (crowned)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zamazenta (hero)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zangoose": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zapdos": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zapdos (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "zarude": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zebstrika": {
+    "evolves_from": "blitzle",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 1500,
+      "normal": 300,
+      "shiny": 600
+    }
+  },
+  "zekrom": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zeraora": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "zigzagoon": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": null,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zigzagoon (galar)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": null,
+      "normal": null,
+      "shiny": null
+    }
+  },
+  "zoroark": {
+    "evolves_from": "zorua",
+    "lowest_level_possible": {
+      "dark": 500,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": 500
+    }
+  },
+  "zoroark (hisui)": {
+    "evolves_from": "zorua (hisui)",
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 1250,
+      "normal": 250,
+      "shiny": null
+    }
+  },
+  "zorua": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zorua (hisui)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zubat": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zweilous": {
+    "evolves_from": "deino",
+    "lowest_level_possible": {
+      "dark": 900,
+      "golden": 2250,
+      "normal": 450,
+      "shiny": 900
+    }
+  },
+  "zygarde": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zygarde (10% forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zygarde (50% forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  },
+  "zygarde (base stats)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": 4,
+      "golden": 4,
+      "normal": 4,
+      "shiny": 4
+    }
+  },
+  "zygarde (complete forme)": {
+    "evolves_from": null,
+    "lowest_level_possible": {
+      "dark": null,
+      "golden": 4,
+      "normal": 4,
+      "shiny": null
+    }
+  }
+}

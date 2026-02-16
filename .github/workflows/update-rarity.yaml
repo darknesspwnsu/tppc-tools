@@ -1,0 +1,33 @@
+name: Update TPPC rarity.html
+
+on:
+  # Run once a day at 04:00 UTC (adjust as you like)
+  schedule:
+    - cron: "0 4 * * *"
+  # Also allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  update-rarity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download latest rarity.html
+        run: |
+          curl -L "https://www.tppcrpg.net/rarity.html" -o rarity.html
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git status --porcelain | grep "rarity.html"; then
+            git add rarity.html
+            git commit -m "Update rarity.html (automated)"
+            git push
+          else
+            echo "No changes to rarity.html"
+          fi
