@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 import { normalizeEvolutionDb, lookupEvolution } from "@/features/evolution-viewer/core";
 import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/core";
+import { findOptimalTrainers } from "@/features/perfect-exp/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
 import { TOOLS, type Tool } from "@/tools/registry";
@@ -81,6 +82,23 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       compute: lookupEvolution,
       initialState: {
         selectedName: ""
+      }
+    };
+  }
+
+  if (tool.slug === "perfect-exp") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      parse: (value: unknown) => Number(value),
+      compute: (current: unknown, desired: unknown, table: unknown, isNight: unknown, highestGym: unknown) =>
+        findOptimalTrainers(Number(current), Number(desired), table as any, Boolean(isNight), true, Number(highestGym)),
+      initialState: {
+        currentExp: "",
+        desiredExp: "",
+        useExpNight: false,
+        highestGym: ""
       }
     };
   }

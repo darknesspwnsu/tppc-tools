@@ -26,7 +26,7 @@ export const TOOLS: readonly Tool[] = [
     name: "Perfect Exp Calculator",
     desc: "Calculate the number of battles needed to perfect EXP a Pokemon at any level.",
     tags: ["calculator", "exp"],
-    implementation: "legacy",
+    implementation: "native",
     route: "/tools/perfect-exp/",
     status: "active",
     legacyRedirects: ["/perfect_exp.html"]
