@@ -8,6 +8,7 @@ import { parseInputList, runRainbowDexChecklist } from "@/features/rainbow-dex/c
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { runUngenderedSorter } from "@/features/ungendered-sorter/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
+import { runUngenderedFamilies } from "@/features/ungendered-families/core";
 import { organizeBox, parseBoxInput } from "@/features/box-organizer/core";
 import { TOOLS, type Tool } from "@/tools/registry";
 
@@ -163,6 +164,21 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
         minUngendered: 10,
         maxMissing: 20,
         includeGolds: false
+      }
+    };
+  }
+
+  if (tool.slug === "ungendered-families") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      compute: runUngenderedFamilies,
+      initialState: {
+        inputText: "",
+        minUngendered: 10,
+        maxMissing: 20,
+        partitionOutput: false
       }
     };
   }

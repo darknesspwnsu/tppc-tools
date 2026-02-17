@@ -86,7 +86,7 @@ export const TOOLS: readonly Tool[] = [
     name: "Ungendered (?) Families Sorter",
     desc: "Sorts ungendered Pokemon collections by family grouping.",
     tags: ["organizer", "ungendered", "collection"],
-    implementation: "legacy",
+    implementation: "native",
     route: "/tools/ungendered-families/",
     status: "active",
     legacyRedirects: ["/sort_ungendered_families/index.html"]
