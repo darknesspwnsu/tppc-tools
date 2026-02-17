@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   addLevels,
@@ -52,6 +52,18 @@ function newRow() {
   return { id: Math.random().toString(36).slice(2), value: "" };
 }
 
+const EXP_SECTION_LINKS = [
+  { id: "levelToExp", label: "Lv \u2192 Exp" },
+  { id: "levelToExpBillion", label: "Lv \u2192 Exp (B)" },
+  { id: "expToLevel", label: "Exp \u2192 Lv" },
+  { id: "expToLevelBillion", label: "Exp (B) \u2192 Lv" },
+  { id: "levelDiff", label: "Diff" },
+  { id: "expAdd", label: "Add" },
+  { id: "expInBillAdd", label: "Add (B)" },
+  { id: "addLevels", label: "Add Lv" },
+  { id: "level24499s", label: "4499s" }
+] as const;
+
 export function ExpUtilitiesTool() {
   const [levelInput, setLevelInput] = useState("");
   const [levelInputBillion, setLevelInputBillion] = useState("");
@@ -80,8 +92,43 @@ export function ExpUtilitiesTool() {
   const [expAddSumHint, setExpAddSumHint] = useState("");
   const [expBillAddSumHint, setExpBillAddSumHint] = useState("");
   const [addLevelsSumHint, setAddLevelsSumHint] = useState("");
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   const [showTopButton, setShowTopButton] = useState(false);
+  const jumpHighlightTimeoutRef = useRef<number | null>(null);
+
+  const clearJumpHighlightTimer = useCallback(() => {
+    if (jumpHighlightTimeoutRef.current !== null) {
+      window.clearTimeout(jumpHighlightTimeoutRef.current);
+      jumpHighlightTimeoutRef.current = null;
+    }
+  }, []);
+
+  const setJumpHighlight = useCallback((cardId: string, sticky = false) => {
+    clearJumpHighlightTimer();
+    setActiveCardId(cardId);
+    if (!sticky) {
+      jumpHighlightTimeoutRef.current = window.setTimeout(() => {
+        setActiveCardId((current) => (current === cardId ? null : current));
+        jumpHighlightTimeoutRef.current = null;
+      }, 1400);
+    }
+  }, [clearJumpHighlightTimer]);
+
+  const focusCard = useCallback((cardId: string, sticky = true) => {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    const navHeight = (document.querySelector(".site-nav") as HTMLElement | null)?.offsetHeight ?? 72;
+    const top = card.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+    window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+    setJumpHighlight(cardId, sticky);
+  }, [setJumpHighlight]);
+
+  const handleJumpClick = useCallback((event: MouseEvent<HTMLAnchorElement>, cardId: string) => {
+    event.preventDefault();
+    window.history.replaceState(null, "", `#${cardId}`);
+    focusCard(cardId, true);
+  }, [focusCard]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -90,6 +137,33 @@ export function ExpUtilitiesTool() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (!hash) return;
+      if (!EXP_SECTION_LINKS.some((entry) => entry.id === hash)) return;
+      setJumpHighlight(hash, true);
+    };
+    onHashChange();
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [setJumpHighlight]);
+
+  useEffect(() => {
+    const onDocumentClick = (event: globalThis.MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.closest(".card")) return;
+      if (target.closest(".jump-bar")) return;
+      clearJumpHighlightTimer();
+      setActiveCardId(null);
+    };
+    document.addEventListener("click", onDocumentClick);
+    return () => document.removeEventListener("click", onDocumentClick);
+  }, [clearJumpHighlightTimer]);
+
+  useEffect(() => () => clearJumpHighlightTimer(), [clearJumpHighlightTimer]);
 
   const expAddItems = useMemo(() => expAddRows.map((row) => toNum(row.value)), [expAddRows]);
   const expBillAddItems = useMemo(() => expBillAddRows.map((row) => toNum(row.value)), [expBillAddRows]);
@@ -146,15 +220,16 @@ export function ExpUtilitiesTool() {
         <div className="jump-bar">
           <div className="jump-title mono">Quick Jump</div>
           <div className="jump-links">
-            <a className="jump-link" href="#levelToExp">Lv → Exp</a>
-            <a className="jump-link" href="#levelToExpBillion">Lv → Exp (B)</a>
-            <a className="jump-link" href="#expToLevel">Exp → Lv</a>
-            <a className="jump-link" href="#expToLevelBillion">Exp (B) → Lv</a>
-            <a className="jump-link" href="#levelDiff">Diff</a>
-            <a className="jump-link" href="#expAdd">Add</a>
-            <a className="jump-link" href="#expInBillAdd">Add (B)</a>
-            <a className="jump-link" href="#addLevels">Add Lv</a>
-            <a className="jump-link" href="#level24499s">4499s</a>
+            {EXP_SECTION_LINKS.map((entry) => (
+              <a
+                key={entry.id}
+                className="jump-link"
+                href={`#${entry.id}`}
+                onClick={(event) => handleJumpClick(event, entry.id)}
+              >
+                {entry.label}
+              </a>
+            ))}
           </div>
         </div>
 
@@ -165,7 +240,11 @@ export function ExpUtilitiesTool() {
         </div>
 
         <div className="masonry">
-          <div className="card" id="levelToExp">
+          <div
+            className={`card${activeCardId === "levelToExp" ? " jump-highlight" : ""}`}
+            id="levelToExp"
+            onClick={() => setJumpHighlight("levelToExp", true)}
+          >
             <div className="card-header">Level → Experience</div>
             <div className="card-body">
               <input
@@ -210,7 +289,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="levelToExpBillion">
+          <div
+            className={`card${activeCardId === "levelToExpBillion" ? " jump-highlight" : ""}`}
+            id="levelToExpBillion"
+            onClick={() => setJumpHighlight("levelToExpBillion", true)}
+          >
             <div className="card-header">Level → Exp (Billion)</div>
             <div className="card-body">
               <input
@@ -255,7 +338,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="expToLevel">
+          <div
+            className={`card${activeCardId === "expToLevel" ? " jump-highlight" : ""}`}
+            id="expToLevel"
+            onClick={() => setJumpHighlight("expToLevel", true)}
+          >
             <div className="card-header">Experience → Level</div>
             <div className="card-body">
               <input
@@ -300,7 +387,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="expToLevelBillion">
+          <div
+            className={`card${activeCardId === "expToLevelBillion" ? " jump-highlight" : ""}`}
+            id="expToLevelBillion"
+            onClick={() => setJumpHighlight("expToLevelBillion", true)}
+          >
             <div className="card-header">Exp (Billion) → Level</div>
             <div className="card-body">
               <input
@@ -351,7 +442,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="levelDiff">
+          <div
+            className={`card${activeCardId === "levelDiff" ? " jump-highlight" : ""}`}
+            id="levelDiff"
+            onClick={() => setJumpHighlight("levelDiff", true)}
+          >
             <div className="card-header">Level Difference</div>
             <div className="card-body">
               <div className="input-group">
@@ -410,7 +505,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="expAdd">
+          <div
+            className={`card${activeCardId === "expAdd" ? " jump-highlight" : ""}`}
+            id="expAdd"
+            onClick={() => setJumpHighlight("expAdd", true)}
+          >
             <div className="card-header">Add Experience</div>
             <div className="card-body">
               <label className="form-label" htmlFor="levelInput3">Starting Level</label>
@@ -505,7 +604,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="expInBillAdd">
+          <div
+            className={`card${activeCardId === "expInBillAdd" ? " jump-highlight" : ""}`}
+            id="expInBillAdd"
+            onClick={() => setJumpHighlight("expInBillAdd", true)}
+          >
             <div className="card-header">Add Exp (Billion)</div>
             <div className="card-body">
               <label className="form-label" htmlFor="levelInput4">Starting Level</label>
@@ -600,7 +703,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="addLevels">
+          <div
+            className={`card${activeCardId === "addLevels" ? " jump-highlight" : ""}`}
+            id="addLevels"
+            onClick={() => setJumpHighlight("addLevels", true)}
+          >
             <div className="card-header">Add Levels</div>
             <div className="card-body">
               <label className="form-label">Levels to add (two or more)</label>
@@ -684,7 +791,11 @@ export function ExpUtilitiesTool() {
             </div>
           </div>
 
-          <div className="card" id="level24499s">
+          <div
+            className={`card${activeCardId === "level24499s" ? " jump-highlight" : ""}`}
+            id="level24499s"
+            onClick={() => setJumpHighlight("level24499s", true)}
+          >
             <div className="card-header">Level → # of 4499s</div>
             <div className="card-body">
               <input

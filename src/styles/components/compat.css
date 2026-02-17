@@ -393,6 +393,7 @@ textarea.form-control.io-output {
   margin: 0 0 0.95rem;
   display: inline-block;
   width: 100%;
+  scroll-margin-top: 6rem;
 }
 
 @media (min-width: 900px) {
@@ -439,6 +440,22 @@ textarea.form-control.io-output {
   font-size: 0.7rem;
   padding: 0.32rem 0.52rem;
   text-decoration: none;
+}
+
+.card.jump-highlight {
+  border-color: transparent;
+  background:
+    linear-gradient(color-mix(in oklab, var(--color-surface), transparent 2%), color-mix(in oklab, var(--color-surface), transparent 2%))
+      padding-box,
+    linear-gradient(135deg, rgba(72, 255, 190, 0.72), rgba(0, 183, 255, 0.72), rgba(91, 70, 255, 0.72)) border-box;
+  box-shadow: 0 18px 44px rgba(0, 183, 255, 0.2);
+}
+
+[data-theme="dark"] .card.jump-highlight {
+  background:
+    linear-gradient(color-mix(in oklab, var(--color-surface-strong), transparent 4%), color-mix(in oklab, var(--color-surface-strong), transparent 4%))
+      padding-box,
+    linear-gradient(135deg, rgba(72, 255, 190, 0.58), rgba(0, 183, 255, 0.58), rgba(91, 70, 255, 0.58)) border-box;
 }
 
 .scroll-top {
