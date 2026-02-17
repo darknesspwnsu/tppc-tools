@@ -1,5 +1,16 @@
 import type { ComponentType } from "react";
 
+import { BoxOrganizerTool } from "@/components/tools/BoxOrganizerTool";
+import { EvolutionViewerTool } from "@/components/tools/EvolutionViewerTool";
+import { ExpUtilitiesTool } from "@/components/tools/ExpUtilitiesTool";
+import { GoldOrganizerModuleTool } from "@/components/tools/GoldOrganizerModuleTool";
+import { PerfectExpTool } from "@/components/tools/PerfectExpTool";
+import { PokespriteGeneratorTool } from "@/components/tools/PokespriteGeneratorTool";
+import { RainbowDexTool } from "@/components/tools/RainbowDexTool";
+import { SellGuideTool } from "@/components/tools/SellGuideTool";
+import { UngenderedDiffTool } from "@/components/tools/UngenderedDiffTool";
+import { UngenderedFamiliesTool } from "@/components/tools/UngenderedFamiliesTool";
+import { UngenderedSorterTool } from "@/components/tools/UngenderedSorterTool";
 import { normalizeEvolutionDb, lookupEvolution } from "@/features/evolution-viewer/core";
 import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/core";
 import { findOptimalTrainers } from "@/features/perfect-exp/core";
@@ -22,16 +33,12 @@ export type ToolModule = {
   initialState: Record<string, unknown>;
 };
 
-function LegacyPlaceholder() {
-  return null;
-}
-
 export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
   if (tool.slug === "sell-guide") {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: SellGuideTool as ComponentType<Record<string, never>>,
       parse: parseMoneyToDollars,
       compute: computeSellGuide,
       initialState: {
@@ -48,7 +55,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: UngenderedDiffTool as ComponentType<Record<string, never>>,
       parse: preprocessEntries,
       compute: runUngenderedDiff,
       initialState: {
@@ -62,7 +69,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: ExpUtilitiesTool as ComponentType<Record<string, never>>,
       parse: (rawLevel: unknown) => Number(rawLevel),
       compute: (a: unknown, b: unknown) => ({
         levelToExp: level2Exp(Number(a)),
@@ -82,7 +89,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: EvolutionViewerTool as ComponentType<Record<string, never>>,
       parse: normalizeEvolutionDb,
       compute: lookupEvolution,
       initialState: {
@@ -95,7 +102,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: PerfectExpTool as ComponentType<Record<string, never>>,
       parse: (value: unknown) => Number(value),
       compute: (current: unknown, desired: unknown, table: unknown, isNight: unknown, highestGym: unknown) =>
         findOptimalTrainers(Number(current), Number(desired), table as any, Boolean(isNight), true, Number(highestGym)),
@@ -112,7 +119,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: BoxOrganizerTool as ComponentType<Record<string, never>>,
       parse: parseBoxInput,
       compute: organizeBox,
       initialState: {
@@ -126,7 +133,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: RainbowDexTool as ComponentType<Record<string, never>>,
       parse: parseInputList,
       compute: runRainbowDexChecklist,
       initialState: {
@@ -142,7 +149,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: PokespriteGeneratorTool as ComponentType<Record<string, never>>,
       parse: resolvePokemonByName,
       compute: imageDataToBbcode,
       initialState: {
@@ -156,7 +163,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: UngenderedSorterTool as ComponentType<Record<string, never>>,
       parse: (input: unknown) => String(input || ""),
       compute: runUngenderedSorter,
       initialState: {
@@ -172,7 +179,7 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     return {
       id: tool.slug,
       slug: tool.slug,
-      Component: LegacyPlaceholder,
+      Component: UngenderedFamiliesTool as ComponentType<Record<string, never>>,
       compute: runUngenderedFamilies,
       initialState: {
         inputText: "",
@@ -183,12 +190,16 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
     };
   }
 
-  return {
-    id: tool.slug,
-    slug: tool.slug,
-    Component: LegacyPlaceholder,
-    initialState: {}
-  };
+  if (tool.slug === "gold-organizer") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: GoldOrganizerModuleTool as ComponentType<Record<string, never>>,
+      initialState: {}
+    };
+  }
+
+  throw new Error(`No native tool module configured for slug: ${tool.slug}`);
 });
 
 export function getToolModule(slug: string): ToolModule | undefined {
