@@ -6,6 +6,7 @@ import { findOptimalTrainers } from "@/features/perfect-exp/core";
 import { imageDataToBbcode, resolvePokemonByName } from "@/features/pokesprite-generator/core";
 import { parseInputList, runRainbowDexChecklist } from "@/features/rainbow-dex/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
+import { runUngenderedSorter } from "@/features/ungendered-sorter/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
 import { organizeBox, parseBoxInput } from "@/features/box-organizer/core";
 import { TOOLS, type Tool } from "@/tools/registry";
@@ -146,6 +147,22 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       initialState: {
         pokeInput: "",
         sizePreset: 2
+      }
+    };
+  }
+
+  if (tool.slug === "ungendered-sorter") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      parse: (input: unknown) => String(input || ""),
+      compute: runUngenderedSorter,
+      initialState: {
+        inputText: "",
+        minUngendered: 10,
+        maxMissing: 20,
+        includeGolds: false
       }
     };
   }

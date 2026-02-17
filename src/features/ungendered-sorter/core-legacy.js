@@ -1,0 +1,730 @@
+const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+const withBasePath = (path) => `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
+// ===============================
+// Utility helpers
+// ===============================
+
+function stripPrefixes(name) {
+  // Remove color prefixes (Shiny/Dark/Golden) for species/sorting/UEUG matching.
+  return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
+}
+
+function speciesFromFullName(fullName) {
+  // Remove Dark/Shiny/Golden, drop form in parentheses
+  const noPrefix = stripPrefixes(fullName);
+  const base = noPrefix.split("(")[0].trim();
+  return base;
+}
+
+function canonicalKey(name) {
+  // Normalize accents, casing, symbols, and collapse Unown variants to "unown"
+  let norm = name.normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, ""); // remove diacritics
+  norm = norm.replace("♀", "F").replace("♂", "M");
+  norm = norm.toLowerCase();
+  const stripped = norm.replace(/[^a-z0-9]/g, "");
+  if (stripped.startsWith("unown") && stripped.length > "unown".length) {
+    return "unown";
+  }
+  return stripped;
+}
+
+function extractForm(fullName) {
+  // Forms like (Alola), (Galar), (Hisui), ...
+  const noPrefix = stripPrefixes(fullName);
+  const m = noPrefix.match(/\(([^)]+)\)/);
+  if (m) {
+    return m[1].trim();
+  }
+  return "";
+}
+
+const FORM_PRIORITY = {
+  "": 0,
+  "normal": 0,
+  "alola": 1,
+  "galarian": 2,
+  "hisui": 3,
+  "paldea": 4,
+};
+
+function formRank(form) {
+  return FORM_PRIORITY[form.toLowerCase()] ?? 10;
+}
+
+function colorCategory(name) {
+  const n = name.trim().toLowerCase();
+  if (n.startsWith("golden")) return "golden";
+  if (n.startsWith("shiny")) return "shiny";
+  if (n.startsWith("dark")) return "dark";
+  return "normal";
+}
+
+function colorRank(name) {
+  // Normal (0) < Dark (1) < Shiny (2) < Golden (3)
+  const cat = colorCategory(name);
+  if (cat === "golden") return 3;
+  if (cat === "shiny") return 2;
+  if (cat === "dark") return 1;
+  return 0;
+}
+
+function isGoldenName(name) {
+  return name.trim().toLowerCase().startsWith("golden");
+}
+
+// Compare two "tuple" arrays lexicographically
+function compareTuple(a, b) {
+  const len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    const av = a[i];
+    const bv = b[i];
+    if (av < bv) return -1;
+    if (av > bv) return 1;
+  }
+  return 0;
+}
+
+// ===============================
+// Fetch helpers
+// (Assuming name_to_dex.json, pokemon_evolution.json, ueug_list.txt,
+//  and a rarity proxy or frozen rarity file are set up as earlier.)
+// ===============================
+
+// 1) PokémonDB dex table – from local JSON
+async function fetchDexMapping() {
+  const res = await fetch(withBasePath("/data/name_to_dex.json"));
+  if (!res.ok) {
+    throw new Error("Failed to fetch data/name_to_dex.json");
+  }
+  const obj = await res.json();
+  const nameToDex = {};
+  for (const [k, v] of Object.entries(obj)) {
+    nameToDex[k] = Number(v);
+  }
+  return nameToDex;
+}
+
+// 2) Evolution JSON (local)
+async function fetchEvolutionData() {
+  const res = await fetch(withBasePath("/data/pokemon_evolution.json"));
+  if (!res.ok) {
+    throw new Error("Failed to fetch data/pokemon_evolution.json");
+  }
+  return res.json();
+}
+
+// 3) UE/UG list from local text file (one name per line)
+async function fetchUEUGSet() {
+  // UE/UG list (Coldsp33d) may be newline-separated OR a single space-separated line.
+  const res = await fetch(withBasePath("/data/ueug_list.txt"));
+  if (!res.ok) {
+    throw new Error("Failed to fetch data/ueug_list.txt");
+  }
+  let text = await res.text();
+  text = text.replace(/\r\n/g, "\n").trim();
+  if (!text) return new Set();
+
+  // Special-case a known multi-word species
+  text = text.replace(/Type:\s*Null/g, "Type:Null");
+
+  let entries = [];
+
+  const lines = text.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  if (lines.length > 1) {
+    // Classic one-per-line file
+    entries = lines;
+  } else {
+    // Single-line file: extract "Name" or "Name (Form)" chunks
+    const re = /[A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:[:!?\.][A-Za-z0-9'’À-ÖØ-öø-ÿ-]+)?[!?]?(?:\s*\([^)]+\))?/g;
+    entries = text.match(re) || [];
+  }
+
+  const ueugSet = new Set(entries.map((n) => canonicalKey(n)));
+  return ueugSet;
+}
+
+// 4) TPPC rarity table (mirrored into this repo for same-origin fetches)
+async function fetchRarityTable() {
+  const res = await fetch(withBasePath("/data/rarity.html"));
+  if (!res.ok) {
+    throw new Error("Failed to fetch TPPC rarity list.");
+  }
+  const html = await res.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const table = doc.querySelector("table");
+  if (!table) {
+    throw new Error("Could not find rarity table.");
+  }
+
+  const rows = Array.from(table.querySelectorAll("tr"));
+  if (rows.length < 2) {
+    throw new Error("No rows in rarity table.");
+  }
+
+  const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) =>
+    c.textContent.trim()
+  );
+  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
+  const idxUng = headerCells.findIndex((h) => h.toLowerCase().startsWith("ungendered"));
+
+  if (idxPokemon === -1 || idxUng === -1) {
+    throw new Error("Could not locate Pokémon/Ungendered columns in rarity table.");
+  }
+
+  const out = [];
+  for (let i = 1; i < rows.length; i++) {
+    const cells = Array.from(rows[i].querySelectorAll("td"));
+    if (cells.length <= Math.max(idxPokemon, idxUng)) continue;
+    const pokemon = cells[idxPokemon].textContent.trim();
+    const ungStr = cells[idxUng].textContent.replace(/,/g, "").trim();
+    const ung = parseInt(ungStr, 10) || 0;
+    out.push({ pokemon, ungendered: ung });
+  }
+
+  return out;
+}
+
+// ===============================
+// Main logic (ported from Python)
+// ===============================
+
+async function runDexSorter({
+  inputText,
+  minUngendered,
+  maxMissing,
+  includeGolds,
+  colors,
+  statusEl,
+}) {
+  statusEl.textContent = "Fetching Dex mapping...";
+  const nameToDex = await fetchDexMapping();
+
+  statusEl.textContent = "Loading evolution data...";
+  const evoData = await fetchEvolutionData();
+  const pokemonNameMap = evoData["pokemon_name"];
+  const evolutionsMap = evoData["evolutions"];
+
+  statusEl.textContent = "Building evolution graph...";
+  const graph = new Map();    // undirected adjacency
+  const children = new Map(); // base -> set of evolutions
+  const parents = new Map();  // evolution -> set of bases
+  const evoDepth = {};        // canonical_key -> depth
+
+  function ensureSet(map, key) {
+    if (!map.has(key)) {
+      map.set(key, new Set());
+    }
+    return map.get(key);
+  }
+
+  // Build edges from evolution JSON
+  for (const [idxStr, baseName] of Object.entries(pokemonNameMap)) {
+    const baseKey = canonicalKey(baseName);
+    const evoList = evolutionsMap[idxStr] || [];
+    for (const evo of evoList) {
+      const evoName = evo["pokemon_name"];
+      const evoKey = canonicalKey(evoName);
+
+      ensureSet(graph, baseKey).add(evoKey);
+      ensureSet(graph, evoKey).add(baseKey);
+
+      ensureSet(children, baseKey).add(evoKey);
+      ensureSet(parents, evoKey).add(baseKey);
+    }
+    if (!graph.has(baseKey)) {
+      graph.set(baseKey, new Set());
+    }
+  }
+
+  statusEl.textContent = "Parsing input list...";
+  const nameRegex = /^\s*([\w’'À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?)/;
+  const rows = [];
+
+  // --- Normalize raw input ---
+  const raw = (inputText || "").replace(/\r\n/g, "\n").trim();
+
+  // Early out if nothing
+  if (!raw) {
+    throw new Error("No input provided.");
+  }
+
+  // Count how many "(Level: N)" patterns we see (with optional commas)
+  const levelMatches = raw.match(/\(Level:\s*[\d,]+\)/gi) || [];
+  const lineCount = raw.split(/\n/).length;
+  const isCompact = lineCount < 2 && levelMatches.length >= 2;
+
+  let logicalLines = [];
+
+  if (isCompact) {
+    // Example blob:
+    // "Abra (?) (Level: 9)ShinyAbra (?) (Level: 5)ShinyAbsol (?) (Level: 5)..."
+    statusEl.textContent = "Detected compact '(Level: N)' format, pre-splitting...";
+
+    // Stricter compact matcher:
+    //   "<Name (optional form)> (?) (Level: <digits/commas>)"
+    const compactEntryRegex =
+      /([A-Za-z0-9'’À-ÖØ-öø-ÿ-]+(?:\s*\([^)]+\))?\s*\(\?\))\s*\(Level:\s*([\d,]+)\)/g;
+
+    let m;
+    while ((m = compactEntryRegex.exec(raw)) !== null) {
+      const name = m[1].trim();   // e.g. "DarkLugia (?)"
+      const lvlRaw = m[2];        // e.g. "3,499" or "12000"
+
+      // Strip commas, parse as int
+      const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+
+      // Re-add commas every thousandth place
+      const lvlFmt = Number.isFinite(lvlInt)
+        ? lvlInt.toLocaleString("en-US")
+        : lvlRaw.replace(/\s+/g, "");
+
+      // Extra safety: only keep ungendered "(?)" mons
+      if (!name.includes("(?)")) continue;
+
+      // Normalize into the same shape as your old lines:
+      //   "DarkLugia (?) 3,499"
+      logicalLines.push(`${name} ${lvlFmt}`);
+    }
+  } else {
+    // Normal multi-line format
+    logicalLines = raw.split("\n");
+  }
+
+  // --- Now parse logicalLines like before ---
+  for (const rawLine of logicalLines) {
+    const line = rawLine.trim();
+    if (!line) continue;              // drop blank lines
+
+    // Skip gendered lines: only keep "(?)"
+    if (!line.includes("(?)")) continue;
+
+    const m = line.match(nameRegex);
+    if (!m) continue;
+
+    const fullName = m[1].trim();
+    rows.push({
+      line,
+      full_name: fullName,
+    });
+  }
+
+  if (rows.length === 0) {
+    throw new Error("No valid Pokémon lines with '(?)' found in input.");
+  }
+
+
+  // Attach species + dex
+  const uniqueSpecies = new Set();
+  for (const r of rows) {
+    const species = speciesFromFullName(r.full_name);
+    r.species = species;
+    uniqueSpecies.add(species);
+  }
+
+  const missingSpecies = [];
+  for (const r of rows) {
+    const species = r.species;
+    const key = canonicalKey(species);
+    let dex = nameToDex[key];
+    if (dex === undefined) {
+      missingSpecies.push(species);
+      dex = 9999;
+    }
+    r.dex = dex;
+  }
+  if (missingSpecies.length > 0) {
+    console.warn("WARNING: Could not find dex for:", Array.from(new Set(missingSpecies)));
+  }
+
+  statusEl.textContent = "Computing evo families & depths...";
+  const rowSpeciesKeys = new Set();
+  for (const r of rows) {
+    const k = canonicalKey(r.species);
+    rowSpeciesKeys.add(k);
+    if (!graph.has(k)) {
+      graph.set(k, new Set());
+    }
+  }
+
+  const familyAnchor = {}; // canonical_key -> family_id
+  const visited = new Set();
+
+  for (const start of rowSpeciesKeys) {
+    if (visited.has(start)) continue;
+
+    const stack = [start];
+    const component = new Set();
+
+    while (stack.length > 0) {
+      const u = stack.pop();
+      if (visited.has(u)) continue;
+      visited.add(u);
+      component.add(u);
+      const nbrs = graph.get(u) || new Set();
+      for (const v of nbrs) {
+        if (!visited.has(v)) stack.push(v);
+      }
+    }
+
+    const present = new Set();
+    for (const k of component) {
+      if (rowSpeciesKeys.has(k)) present.add(k);
+    }
+
+    let minDex;
+    if (present.size > 0) {
+      minDex = Infinity;
+      for (const k of present) {
+        const d = nameToDex[k] ?? 9999;
+        if (d < minDex) minDex = d;
+      }
+    } else {
+      minDex = Infinity;
+      for (const k of component) {
+        const d = nameToDex[k] ?? 9999;
+        if (d < minDex) minDex = d;
+      }
+    }
+    if (!Number.isFinite(minDex)) minDex = 9999;
+
+    for (const k of component) {
+      familyAnchor[k] = minDex;
+    }
+
+    // Compute evoDepth within this component
+    const componentList = Array.from(component);
+    const roots = [];
+
+    for (const k of componentList) {
+      const parentSet = parents.get(k);
+      const hasParentInComponent =
+        parentSet && Array.from(parentSet).some((p) => component.has(p));
+      if (!hasParentInComponent) {
+        roots.push(k);
+      }
+    }
+
+    if (roots.length === 0) {
+      let minRoot = componentList[0];
+      let bestDex = nameToDex[minRoot] ?? 9999;
+      for (const k of componentList.slice(1)) {
+        const d = nameToDex[k] ?? 9999;
+        if (d < bestDex) {
+          bestDex = d;
+          minRoot = k;
+        }
+      }
+      roots.push(minRoot);
+    }
+
+    const queue = [];
+    const seenLocal = new Set();
+    for (const rroot of roots) {
+      queue.push([rroot, 0]);
+    }
+
+    while (queue.length > 0) {
+      const [node, depth] = queue.shift();
+      if (seenLocal.has(node)) continue;
+      seenLocal.add(node);
+
+      if (evoDepth[node] === undefined || depth < evoDepth[node]) {
+        evoDepth[node] = depth;
+      }
+
+      const childSet = children.get(node) || new Set();
+      for (const child of childSet) {
+        if (component.has(child)) {
+          queue.push([child, depth + 1]);
+        }
+      }
+    }
+  }
+
+  function getFamilyId(speciesName) {
+    const k = canonicalKey(speciesName);
+    if (familyAnchor[k] !== undefined) return familyAnchor[k];
+    const d = nameToDex[k];
+    return d !== undefined ? d : 9999;
+  }
+
+  // Sort rows
+  statusEl.textContent = "Sorting Pokémon...";
+  const rowsSorted = rows.slice().sort((a, b) => {
+    const familyA = getFamilyId(a.species);
+    const familyB = getFamilyId(b.species);
+
+    const speciesKeyA = canonicalKey(a.species);
+    const speciesKeyB = canonicalKey(b.species);
+    const depthA = evoDepth[speciesKeyA] ?? 0;
+    const depthB = evoDepth[speciesKeyB] ?? 0;
+
+    const baseA = speciesFromFullName(a.full_name);
+    const baseB = speciesFromFullName(b.full_name);
+
+    const formA = extractForm(a.full_name);
+    const formB = extractForm(b.full_name);
+    const frA = formRank(formA);
+    const frB = formRank(formB);
+
+    const crA = colorRank(a.full_name);
+    const crB = colorRank(b.full_name);
+
+    const keyA = [
+      familyA,
+      depthA,
+      a.dex,
+      baseA.toLowerCase(),
+      frA,
+      crA,
+      a.full_name,
+    ];
+    const keyB = [
+      familyB,
+      depthB,
+      b.dex,
+      baseB.toLowerCase(),
+      frB,
+      crB,
+      b.full_name,
+    ];
+    return compareTuple(keyA, keyB);
+  });
+
+  // Fetch UE/UG list
+  statusEl.textContent = "Fetching UE/UG list...";
+  const ueugSet = await fetchUEUGSet();
+
+  // Build BBCode output (decorated names), with configurable colors
+  function decorateName(fullName) {
+    const cat = colorCategory(fullName);
+    const baseForUeug = stripPrefixes(fullName);
+    const key = canonicalKey(baseForUeug);
+    const isUeugNormal = cat === "normal" && ueugSet.has(key);
+
+    const wrapColor = (color, text) =>
+      color && color.trim().length > 0
+        ? `[color="${color.trim()}"]${text}[/color]`
+        : text;
+
+    if (cat === "dark") {
+      return wrapColor(colors.dark, fullName);
+    } else if (cat === "shiny") {
+      return wrapColor(colors.shiny, fullName);
+    } else if (cat === "golden") {
+      return wrapColor(colors.golden, fullName);
+    } else {
+      // normal
+      let name = fullName;
+      if (isUeugNormal) {
+        name = `[B]${name}[/B]`;
+      }
+      return wrapColor(colors.normal, name);
+    }
+  }
+
+  statusEl.textContent = "Formatting sorted output...";
+  const linesOut = [];
+  let prevFamily = null;
+
+  for (const r of rowsSorted) {
+    const fam = getFamilyId(r.species);
+    if (prevFamily !== null && fam !== prevFamily) {
+      linesOut.push("");
+    }
+
+    const origLine = r.line;
+    const m = origLine.match(nameRegex);
+    if (!m) {
+      linesOut.push(origLine);
+      prevFamily = fam;
+      continue;
+    }
+    const afterName = origLine.slice(m[0].length).trim();
+    const decorated = decorateName(r.full_name);
+
+    let restParts = afterName.split(/\s+/).filter((x) => x.length > 0);
+    if (restParts.length > 0 && restParts[restParts.length - 1].startsWith("$")) {
+      restParts = restParts.slice(0, -1);
+    }
+    const remainder = restParts.join(" ");
+
+    const outLine = remainder ? `${decorated} ${remainder}` : decorated;
+    linesOut.push(outLine);
+    prevFamily = fam;
+  }
+
+  const finalSortedOutput = linesOut.join("\n");
+
+  // Summary stats (Unowns counted only once)
+  statusEl.textContent = "Computing summary stats...";
+  const shinyKeys = new Set();
+  const darkKeys = new Set();
+  const goldenKeys = new Set();
+  const normalKeys = new Set();
+  const ueugNormalKeys = new Set();
+
+  for (const r of rowsSorted) {
+    const fullName = r.full_name;
+    const baseSpecies = speciesFromFullName(fullName);
+    const baseKey = canonicalKey(baseSpecies);
+    const cat = colorCategory(fullName);
+
+    if (cat === "shiny") {
+      shinyKeys.add(baseKey);
+    } else if (cat === "dark") {
+      darkKeys.add(baseKey);
+    } else if (cat === "golden") {
+      goldenKeys.add(baseKey);
+    } else {
+      normalKeys.add(baseKey);
+      const baseForUeug = stripPrefixes(fullName);
+      const keyUeug = canonicalKey(baseForUeug);
+      if (ueugSet.has(keyUeug)) {
+        ueugNormalKeys.add(baseKey);
+      }
+    }
+  }
+
+  const summaryLines = [];
+  summaryLines.push("=== Summary Stats ===");
+  summaryLines.push(`Unique Shiny species:  ${shinyKeys.size}`);
+  summaryLines.push(`Unique Dark species:   ${darkKeys.size}`);
+  summaryLines.push(`Unique Golden species: ${goldenKeys.size}`);
+  summaryLines.push(`Unique Normal species: ${normalKeys.size}`);
+  summaryLines.push(`UE/UG Normal species you have: ${ueugNormalKeys.size}`);
+  summaryLines.push('* Note: Unowns are only counted once.');
+  summaryLines.push("");
+
+  const bbcodeBlock = [
+    "[code]",
+    finalSortedOutput,
+    "[/code]"
+  ]; // Missing Ungendered (per variant)
+  statusEl.textContent = "Fetching rarity & computing missing list...";
+  const rarityRows = await fetchRarityTable();
+
+  // Keys you have (keep color/forms distinct)
+  const haveKeys = new Set(rows.map((r) => canonicalKey(r.full_name)));
+
+  // Filter by Ungendered threshold
+  const candidates = rarityRows
+    .filter((row) => row.ungendered > minUngendered)
+    .sort((a, b) => b.ungendered - a.ungendered);
+
+  const missingByVariant = {
+    golden: [],
+    shiny: [],
+    dark: [],
+  };
+
+  // Normal is split into:
+  //  - UE/UG (unevolved/ungoldenized) normals: only those present in Coldsp33d's UE/UG list
+  //  - Other normals (evolved/goldenized / everything else)
+  const missingNormalUeug = [];
+  const missingNormalOther = [];
+
+  for (const row of candidates) {
+    const pokeName = row.pokemon;
+    const cat = colorCategory(pokeName);
+
+    if (!includeGolds && cat === "golden") {
+      continue;
+    }
+
+    const key = canonicalKey(pokeName);
+    if (haveKeys.has(key)) continue;
+
+    if (cat === "normal") {
+      // Only match normals against UE/UG list
+      if (ueugSet.has(key)) {
+        missingNormalUeug.push({ name: pokeName, u: row.ungendered });
+      } else {
+        missingNormalOther.push({ name: pokeName, u: row.ungendered });
+      }
+    } else {
+      missingByVariant[cat].push({ name: pokeName, u: row.ungendered });
+    }
+  }
+
+  // Apply maxMissing per section
+  function sliceVariant(list) {
+    if (maxMissing && maxMissing > 0) {
+      return list.slice(0, maxMissing);
+    }
+    return list;
+  }
+
+  function formatMissingLine(name, u) {
+    const withMarker = name.includes("(?)") ? name : `${name} (?)`;
+    return `${withMarker} (${u} in game)`;
+  }
+
+  const missingLines = [];
+  missingLines.push(
+    `=== Missing Ungendered > ${minUngendered} (per variant; ${
+      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per section" : "all shown"
+    }) ===`
+  );
+  if (includeGolds) {
+    missingLines.push("Goldens are included (see Golden section).");
+  } else {
+    missingLines.push("Goldens are excluded from this missing list.");
+  }
+
+  function emitVariant(label, list, showOnlyIfGoldFlag = false) {
+    if (showOnlyIfGoldFlag && !includeGolds) return;
+    if (!list) return;
+
+    const all = list;
+    if (all.length === 0) return;
+
+    const shown = sliceVariant(all);
+
+    missingLines.push("");
+    missingLines.push(`--- ${label} ---`);
+    missingLines.push(`Total missing ${label.toLowerCase()}: ${all.length}`);
+
+    if (shown.length === 0) {
+      missingLines.push("You have all of them.");
+    } else {
+      for (const { name, u } of shown) {
+        missingLines.push(formatMissingLine(name, u));
+      }
+    }
+  }
+
+  // Print in order: Golden, Shiny, Dark, then Normal split
+  emitVariant("Golden", missingByVariant.golden, true);
+  emitVariant("Shiny", missingByVariant.shiny);
+  emitVariant("Dark", missingByVariant.dark);
+
+  // Normal split sections
+  if (missingNormalUeug.length > 0 || missingNormalOther.length > 0) {
+    emitVariant("Normal (UE/UG: Unevolved/Ungoldenized)", missingNormalUeug);
+    emitVariant("Normal (Other: Evolved/Goldenized)", missingNormalOther);
+  }
+
+  statusEl.textContent = "Done.";
+
+  const mainText =
+    summaryLines.join("\n") + "\n" + bbcodeBlock.join("\n");
+  const missingText = missingLines.join("\n");
+
+  return { mainText, missingText };
+}
+
+// ===============================
+// UI wiring
+// ===============================
+
+export {
+  stripPrefixes,
+  speciesFromFullName,
+  canonicalKey,
+  parseInputList,
+  runDexSorter
+};
