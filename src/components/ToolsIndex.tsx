@@ -69,70 +69,73 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
   };
 
   return (
-    <div className="tools-index">
-      <section className="panel page-header site-hero">
+    <div className="stack">
+      <section className="surface hero tools-header">
+        <div className="kicker">Toolkit</div>
         <h1 className="page-title">TPPC Tools by Darkness</h1>
-        <div className="page-subtitle">
-          An index of useful TPPC tools and utilities. New canonical routes live under{" "}
+        <p className="page-subtitle">
+          Community utilities for collectors, traders, and organizers. Canonical routes live under{" "}
           <code>/tools/&lt;slug&gt;/</code>.
-        </div>
+        </p>
       </section>
 
-      <section className="panel tools-panel">
-        <div className="d-flex flex-wrap align-items-center justify-content-between tools-toolbar">
-          <div className="d-flex flex-wrap align-items-center gap-2">
-            <div className="fw-semibold">Tools</div>
-            <div className="text-muted small">
+      <section className="surface surface-strong">
+        <div className="tools-toolbar">
+          <div className="tools-toolbar-left">
+            <span className="pill-label">Tools</span>
+            <span className="text-muted mono" style={{ fontSize: "0.78rem" }}>
               {filteredSorted.length} / {tools.length} shown
-            </div>
+            </span>
           </div>
 
-          <div className="d-flex align-items-center gap-2">
-            <span className="text-muted small">⌕</span>
+          <label style={{ minWidth: "min(340px, 100%)", display: "grid", gap: "0.35rem" }}>
+            <span className="text-muted mono" style={{ fontSize: "0.72rem" }}>
+              Search
+            </span>
             <input
-              className="form-control form-control-sm tool-search-input"
-              placeholder="Search tools…"
+              className="field"
+              placeholder="Search tools..."
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
                 setActiveTags([]);
               }}
             />
-          </div>
+          </label>
         </div>
 
         {activeTags.length ? (
-          <div className="mt-2 d-flex flex-wrap gap-2">
+          <div className="tags-row" style={{ padding: "0 1.1rem 0.2rem" }}>
             {activeTags.map((t) => (
               <button
                 key={t}
                 type="button"
-                className="site-link tag-chip filter-chip is-active"
+                className="tag-btn active"
                 onClick={() => setActiveTags((prev) => prev.filter((x) => x !== t))}
                 title="Remove tag"
               >
-                #{t} <span style={{ marginLeft: 6 }}>×</span>
+                #{t} ×
               </button>
             ))}
             <button
               type="button"
-              className="site-link tag-chip filter-chip"
+              className="tag-btn"
               onClick={() => setActiveTags([])}
               title="Clear tags"
             >
-              Clear <span style={{ marginLeft: 6 }}>×</span>
+              clear ×
             </button>
           </div>
         ) : null}
 
-        <div className="mt-3 d-flex flex-wrap gap-2">
+        <div className="tags-row" style={{ padding: "0 1.1rem 0.3rem" }}>
           {allTags.map((tg) => {
             const on = activeTagSet.has(tg);
             return (
               <button
                 key={tg}
                 type="button"
-                className={`site-link tag-chip filter-chip${on ? " is-active" : ""}`}
+                className={`tag-btn${on ? " active" : ""}`}
                 onClick={(e) => {
                   const multi = e.ctrlKey || e.metaKey;
                   if (multi) toggleTag(tg);
@@ -146,62 +149,55 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
           })}
         </div>
 
-        <div className="row g-3 tool-grid">
+        <div className="tools-grid" style={{ padding: "0 1.1rem 1.1rem" }}>
           {filteredSorted.map((t) => {
             const matches = tagMatchCount(t);
             const cardClasses = [
-              "panel panel-muted h-100 tool-card",
-              hasActiveTags && matches > 0 ? "has-tag-match" : "",
-              hasActiveTags && matches === 0 ? "is-dimmed" : ""
+              "tool-card",
+              hasActiveTags && matches > 0 ? "match" : "",
+              hasActiveTags && matches === 0 ? "dim" : ""
             ]
               .filter(Boolean)
               .join(" ");
+
             return (
-              <div className="col-12 col-lg-6" key={t.slug}>
-                <div className={cardClasses}>
-                  <div className="d-flex align-items-start justify-content-between gap-3">
-                    <div>
-                      <div className="tool-card-title">{t.name}</div>
-                      <div className="text-muted small mt-1 tool-card-desc">{t.desc}</div>
-                      <div className="text-muted small mt-2 tool-card-path">
-                        <code>/tools/{t.slug}/</code>
-                      </div>
-                    </div>
-                    <div className="d-flex flex-column gap-2" style={{ minWidth: 140 }}>
-                      <Link className="btn btn-primary btn-sm tool-open-btn" href={`/tools/${t.slug}/`}>
-                        Open
-                      </Link>
+              <article className={cardClasses} key={t.slug}>
+                <div className="tool-card-head">
+                  <div>
+                    <div className="tool-card-title">{t.name}</div>
+                    <div className="tool-card-desc">{t.desc}</div>
+                    <div className="tool-card-path">
+                      <code>{t.route}</code>
                     </div>
                   </div>
-
-                  <div className="mt-3 d-flex flex-wrap gap-2">
-                    {(t.tags || []).map((tag) => {
-                      const nt = normTag(tag);
-                      const on = activeTagSet.has(nt);
-                      return (
-                        <button
-                          key={nt}
-                          type="button"
-                          className={[
-                            "site-link tag-chip filter-chip tool-tag-chip",
-                            on ? "is-active" : "",
-                            hasActiveTags && matches > 0 && !on ? "is-muted" : ""
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
-                          onClick={(e) => {
-                            const multi = e.ctrlKey || e.metaKey;
-                            if (multi) toggleTag(nt);
-                            else setSingleTag(nt);
-                          }}
-                        >
-                          #{nt}
-                        </button>
-                      );
-                    })}
+                  <div>
+                    <Link className="btn-primary-soft" href={t.route}>
+                      Open
+                    </Link>
                   </div>
                 </div>
-              </div>
+
+                <div className="tags-row">
+                  {(t.tags || []).map((tag) => {
+                    const nt = normTag(tag);
+                    const on = activeTagSet.has(nt);
+                    return (
+                      <button
+                        key={nt}
+                        type="button"
+                        className={`tag-btn${on ? " active" : ""}`}
+                        onClick={(e) => {
+                          const multi = e.ctrlKey || e.metaKey;
+                          if (multi) toggleTag(nt);
+                          else setSingleTag(nt);
+                        }}
+                      >
+                        #{nt}
+                      </button>
+                    );
+                  })}
+                </div>
+              </article>
             );
           })}
         </div>

@@ -29,7 +29,7 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
     () =>
       tools.map((t) => ({
         name: t.name,
-        href: `/tools/${t.slug}/`
+        href: t.route
       })),
     [tools]
   );
@@ -72,10 +72,10 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
 
   return (
     <>
-      <nav className="site-nav">
-        <div className="site-nav-inner">
+      <nav className="main-nav">
+        <div className="main-nav-inner">
           <button
-            className="site-hamburger"
+            className="nav-icon-btn"
             id="siteMenuBtn"
             type="button"
             aria-controls="site-drawer"
@@ -83,17 +83,17 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
             aria-label="Open menu"
             onClick={() => setDrawerOpen(true)}
           >
-            ≡
+            <span aria-hidden>≡</span>
           </button>
 
-          <Link className="site-brand" href="/">
-            <span className="site-logo" />
-            <span className="site-title">TPPC Tools by Darkness</span>
+          <Link className="nav-brand" href="/">
+            <span className="nav-brand-mark" />
+            <span className="nav-brand-text">TPPC Tools by Darkness</span>
           </Link>
 
-          <div className="site-actions">
+          <div className="nav-actions">
             <a
-              className="site-action"
+              className="chip"
               href="https://github.com/darknesspwnsu/tppc-tools"
               target="_blank"
               rel="noopener"
@@ -102,27 +102,27 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
             </a>
 
             <button
-              className="site-action site-theme-btn"
+              className="chip"
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
             >
               <span>{theme === "dark" ? "☀" : "☾"}</span>
-              <span style={{ marginLeft: 6 }}>{theme === "dark" ? "Light" : "Dark"}</span>
+              <span>{theme === "dark" ? "Light" : "Dark"}</span>
             </button>
           </div>
         </div>
       </nav>
 
       <aside
-        className={`site-drawer${drawerOpen ? " open" : ""}`}
+        className={`tool-drawer${drawerOpen ? " open" : ""}`}
         id="site-drawer"
         aria-hidden={drawerOpen ? "false" : "true"}
       >
-        <div className="site-drawer-head">
-          <div className="site-drawer-title">Tools</div>
+        <div className="tool-drawer-head">
+          <div className="kicker">Tools</div>
           <button
-            className="site-drawer-close"
+            className="nav-icon-btn"
             type="button"
             aria-label="Close menu"
             onClick={() => setDrawerOpen(false)}
@@ -131,14 +131,14 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
           </button>
         </div>
 
-        <div className="site-drawer-links">
+        <div className="tool-drawer-links">
           {navItems.map((it) => {
             const target = normalizePath(it.href);
             const active = current === target || current.startsWith(target.replace(/\/$/, "") + "/");
             return (
               <Link
                 key={it.href}
-                className={`site-link${active ? " active" : ""}`}
+                className={`chip${active ? " chip-active" : ""}`}
                 href={it.href}
                 aria-current={active ? "page" : undefined}
               >
@@ -150,11 +150,10 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
       </aside>
 
       <div
-        className={`site-drawer-backdrop${drawerOpen ? " show" : ""}`}
+        className={`tool-drawer-backdrop${drawerOpen ? " open" : ""}`}
         id="site-drawer-backdrop"
         onClick={() => setDrawerOpen(false)}
       />
     </>
   );
 }
-

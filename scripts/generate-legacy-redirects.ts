@@ -60,10 +60,10 @@ function buildMappings(): RedirectMapping[] {
   const mappings: RedirectMapping[] = [];
 
   for (const tool of TOOLS) {
-    for (const legacyPath of tool.legacyPaths || []) {
+    for (const legacyPath of tool.legacyRedirects || []) {
       mappings.push({
         legacyPath,
-        canonicalPath: `/tools/${tool.slug}/`
+        canonicalPath: tool.route
       });
     }
   }

@@ -135,3 +135,6 @@ dist
 public/data/golden_pokemon_genders.tsv
 public/data/golden_pokemon_genders_from_rarity.csv
 public/data/golden_pokemon_genders_meta.json
+
+# Playwright local artifacts
+test-results/

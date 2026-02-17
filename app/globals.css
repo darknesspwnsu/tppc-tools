@@ -1,22 +1,7 @@
-/* Next-only glue. The heavy styling lives in /public/assets/site.css for consistency with legacy tools. */
-html,
-body {
-  min-height: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-body.site-standard {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-.page-wrap {
-  flex: 1 0 auto;
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 1rem 14px 2rem;
-  min-height: 0;
-}
+@import "../src/styles/tokens.css";
+@import "../src/styles/base.css";
+@import "../src/styles/components/layout.css";
+@import "../src/styles/components/nav.css";
+@import "../src/styles/components/tools.css";
+@import "../src/styles/components/forms.css";
+@import "../src/styles/tool-template.css";

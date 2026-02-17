@@ -51,11 +51,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `}
         </Script>
       </head>
-      <body className="site-standard">
+      <body className="site-standard app-shell">
         <SiteNav tools={TOOLS} />
-        <main className="page-wrap">{children}</main>
-        <footer className="site-footer">
-          <div className="site-footer-inner">
+        <main className="app-main">{children}</main>
+        <footer className="app-footer">
+          <div>
             © {new Date().getFullYear()} Darkness AKA Shiva — TPPC Tools
           </div>
         </footer>

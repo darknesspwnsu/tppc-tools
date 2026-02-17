@@ -1,0 +1,57 @@
+.field,
+.field-select,
+.field-area {
+  width: 100%;
+  color: var(--color-text);
+  background: color-mix(in oklab, var(--color-bg-elev), transparent 6%);
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  border-radius: 0.7rem;
+  padding: 0.56rem 0.72rem;
+  font: inherit;
+}
+
+.field-area {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.btn-primary-soft,
+.btn-secondary-soft,
+.btn-outline-soft {
+  border-radius: 0.68rem;
+  padding: 0.48rem 0.74rem;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.btn-primary-soft {
+  background: linear-gradient(
+    128deg,
+    color-mix(in oklab, var(--color-accent), #fff 16%),
+    color-mix(in oklab, var(--color-accent-2), #fff 8%)
+  );
+  color: #fff;
+  box-shadow: 0 12px 24px color-mix(in oklab, var(--color-accent), transparent 80%);
+}
+
+.btn-secondary-soft {
+  background: color-mix(in oklab, var(--color-bg-soft), transparent 8%);
+  border-color: color-mix(in oklab, var(--color-border), transparent 12%);
+  color: var(--color-text);
+}
+
+.btn-outline-soft {
+  background: transparent;
+  border-color: color-mix(in oklab, var(--color-border), transparent 12%);
+  color: var(--color-text);
+}
+
+.btn-primary-soft:disabled,
+.btn-secondary-soft:disabled,
+.btn-outline-soft:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+

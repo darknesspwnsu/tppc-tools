@@ -72,7 +72,11 @@ export async function waitForToolRuntime(page: Page) {
   await page.waitForFunction(() => {
     const isLegacyStandalone = /\.html$/i.test(window.location.pathname);
     if (isLegacyStandalone) return document.readyState === "complete";
-    return (window as { __TPPC_TOOL_READY?: boolean }).__TPPC_TOOL_READY === true;
+    const hasLegacyHost = Boolean(document.querySelector(".native-tool-content"));
+    const marker = (window as { __TPPC_TOOL_READY?: boolean }).__TPPC_TOOL_READY;
+    if (hasLegacyHost) return marker === true;
+    if (typeof marker === "undefined") return document.readyState === "complete";
+    return marker === true;
   });
 }
 

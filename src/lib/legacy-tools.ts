@@ -14,6 +14,10 @@ export type LegacyToolPage = {
   fetchShim: string;
 };
 
+const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "")
+  .trim()
+  .replace(/\/+$/, "");
+
 function extractSection(source: string, tag: "head" | "body") {
   const re = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i");
   const m = source.match(re);
@@ -21,7 +25,7 @@ function extractSection(source: string, tag: "head" | "body") {
 }
 
 function isAbsoluteUrl(url: string) {
-  return /^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/i.test(url);
+  return /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(url);
 }
 
 function ensureTrailingSlash(p: string) {
@@ -29,10 +33,19 @@ function ensureTrailingSlash(p: string) {
   return p.endsWith("/") ? p : `${p}/`;
 }
 
+function withBasePath(pathname: string) {
+  const clean = String(pathname || "").trim() || "/";
+  if (!BASE_PATH) return clean;
+  if (clean === BASE_PATH || clean.startsWith(`${BASE_PATH}/`)) return clean;
+  if (clean.startsWith("/")) return `${BASE_PATH}${clean}`;
+  return `${BASE_PATH}/${clean}`;
+}
+
 function resolveLegacyUrl(legacyPath: string, rel: string) {
   if (isAbsoluteUrl(rel)) return rel;
+  if (rel.startsWith("/")) return withBasePath(rel);
   const base = new URL(legacyPath, "https://example.invalid");
-  return new URL(rel, base).pathname;
+  return withBasePath(new URL(rel, base).pathname);
 }
 
 function rewriteTagAttrUrls(html: string, legacyPath: string) {
@@ -91,15 +104,21 @@ function getLegacyPathDir(legacyPath: string) {
 }
 
 function makeFetchShim(dirPath: string) {
-  const safeDir = JSON.stringify(dirPath);
+  const safeDir = JSON.stringify(withBasePath(dirPath));
+  const safeBasePath = JSON.stringify(BASE_PATH);
   return `
     (function () {
       var BASE_DIR = ${safeDir};
+      var BASE_PATH = ${safeBasePath};
       if (!window.fetch) return;
       var orig = window.fetch.bind(window);
       function resolve(input) {
         if (typeof input !== "string") return input;
-        if (/^(?:[a-z][a-z0-9+.-]*:|\\/\\/|data:|blob:|#|\\/)/i.test(input)) return input;
+        if (/^(?:[a-z][a-z0-9+.-]*:|\\/\\/|data:|blob:|#)/i.test(input)) return input;
+        if (input.charAt(0) === "/") {
+          if (!BASE_PATH) return input;
+          return input.indexOf(BASE_PATH + "/") === 0 || input === BASE_PATH ? input : (BASE_PATH + input);
+        }
         return new URL(input, window.location.origin + BASE_DIR).toString();
       }
       window.fetch = function (input, init) {

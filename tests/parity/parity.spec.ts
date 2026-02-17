@@ -4,6 +4,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 import { PARITY_SCENARIOS, installDeterministicNetwork, waitForToolRuntime } from "./scenarios";
+import { getParityTarget, scenarioPathForTarget, withParityBasePath } from "./shared";
 
 const ROOT = process.cwd();
 
@@ -17,8 +18,9 @@ async function loadGolden(id: string) {
 for (const scenario of PARITY_SCENARIOS) {
   test(`parity: ${scenario.id}`, async ({ page }) => {
     await installDeterministicNetwork(page);
+    const target = getParityTarget();
 
-    await page.goto(scenario.canonicalPath, { waitUntil: "domcontentloaded" });
+    await page.goto(scenarioPathForTarget(scenario, target), { waitUntil: "domcontentloaded" });
     await waitForToolRuntime(page);
     await scenario.run(page);
 
@@ -35,7 +37,7 @@ for (const scenario of PARITY_SCENARIOS) {
 }
 
 test("gold-organizer native route works without iframe", async ({ page }) => {
-  await page.goto("/tools/gold-organizer/", { waitUntil: "domcontentloaded" });
+  await page.goto(withParityBasePath("/tools/gold-organizer/"), { waitUntil: "domcontentloaded" });
 
   await page.fill(
     "#input",
