@@ -20,5 +20,8 @@ export type SellGuideOutputs = {
   normalizedMoneyInput: string;
   status: string;
   statusKind: "light" | "danger";
+  modeBadgeLabel: string;
+  modeBadgeTone: "secondary" | "success" | "primary";
+  moneyHint: string;
+  formulaLatex: string;
 };
-

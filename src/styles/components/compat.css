@@ -193,6 +193,17 @@
 textarea.form-control {
   min-height: 8rem;
   resize: vertical;
+  font-family: var(--mono);
+}
+
+textarea.form-control.io-input {
+  background: var(--io-input-bg);
+  border-color: var(--io-input-border);
+}
+
+textarea.form-control.io-output {
+  background: var(--io-output-bg);
+  border-color: var(--io-output-border);
 }
 
 .form-select {
@@ -312,4 +323,250 @@ textarea.form-control {
 
 .alert-light {
   background: color-mix(in oklab, var(--color-bg-soft), transparent 8%);
+}
+
+.card {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  background: color-mix(in oklab, var(--color-surface), transparent 2%);
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  padding: 0.62rem 0.78rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.card-body {
+  padding: 0.78rem;
+}
+
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group > .form-control,
+.input-group > .field {
+  border-radius: 0;
+}
+
+.input-group > :first-child {
+  border-top-left-radius: 0.68rem !important;
+  border-bottom-left-radius: 0.68rem !important;
+}
+
+.input-group > :last-child {
+  border-top-right-radius: 0.68rem !important;
+  border-bottom-right-radius: 0.68rem !important;
+}
+
+.input-group-text {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.56rem 0.72rem;
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  background: color-mix(in oklab, var(--color-bg-soft), transparent 8%);
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.copy-btn {
+  white-space: nowrap;
+}
+
+.vstack {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.masonry {
+  column-gap: 0.95rem;
+  column-count: 1;
+}
+
+.masonry > .card {
+  break-inside: avoid;
+  margin: 0 0 0.95rem;
+  display: inline-block;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1300px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+
+.jump-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.jump-title {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.jump-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  background: color-mix(in oklab, var(--color-bg-elev), transparent 18%);
+  color: var(--color-text);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.32rem 0.52rem;
+  text-decoration: none;
+}
+
+.scroll-top {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 30;
+}
+
+.scroll-top.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.split-wrap {
+  min-height: clamp(26rem, 62vh, 46rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.preview-pane {
+  flex: 8;
+  min-height: clamp(18rem, 48vh, 36rem);
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--color-surface-strong), transparent 4%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-empty {
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.bbcode-pane {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-height: 0;
+}
+
+@media (max-width: 992px) {
+  .split-wrap {
+    min-height: 24rem;
+  }
+
+  .preview-pane {
+    min-height: 17rem;
+  }
+}
+
+.table-shell {
+  border-radius: 0.68rem;
+  overflow: auto;
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+}
+
+.calc-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
+  padding: 0.3rem 0.56rem;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  background: color-mix(in oklab, var(--color-bg-soft), transparent 8%);
+  display: inline-block;
+}
+
+.eq {
+  font-size: clamp(1.8rem, 6vw, 3.6rem);
+  line-height: 1;
+  font-weight: 800;
+  opacity: 0.66;
+  user-select: none;
+}
+
+.mode-badge {
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.48rem;
+}
+
+.mode-badge.tone-secondary {
+  background: color-mix(in oklab, var(--color-muted), transparent 76%);
+}
+
+.mode-badge.tone-success {
+  background: color-mix(in oklab, var(--color-ok), transparent 72%);
+}
+
+.mode-badge.tone-primary {
+  background: color-mix(in oklab, var(--color-accent), transparent 70%);
+}
+
+.formula-latex {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.cloud-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.86);
+  color: #fff;
+  padding: 0.5rem 0.62rem;
+  border-radius: 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  max-width: 360px;
+  white-space: pre-line;
+  display: none;
 }

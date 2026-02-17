@@ -97,3 +97,68 @@ test("ungendered-sorter renders under reduced motion preference", async ({ page 
   const reduced = await page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   expect(reduced).toBe(true);
 });
+
+test("perfect-exp copy ID button works", async ({ page }) => {
+  await stubClipboard(page);
+
+  await page.goto(withParityBasePath("/tools/perfect-exp/"), { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => {
+    const sel = document.querySelector("#highest-beatable-trainer") as HTMLSelectElement | null;
+    return Boolean(sel && sel.options.length > 1);
+  });
+
+  await page.fill("#current-exp", "1");
+  await page.fill("#desired-exp", "2000");
+  await page.click("#submit");
+  await page.waitForFunction(() => document.querySelectorAll("#results-table tbody tr").length > 0);
+  await page.click(".copy-id");
+
+  const copied = await page.evaluate(() => (window as { __copiedText?: string }).__copiedText || "");
+  expect(copied).toMatch(/^\d+$/);
+});
+
+test("ungendered-sorter copy actions work", async ({ page }) => {
+  await stubClipboard(page);
+
+  await page.goto(withParityBasePath("/tools/ungendered-sorter/"), { waitUntil: "domcontentloaded" });
+  await page.fill(
+    "#inputList",
+    ["GoldenMew (?) (Level: 5)", "ShinyMew (?) (Level: 6)", "DarkMew (?) (Level: 7)", "Mew (?) (Level: 8)"].join("\n")
+  );
+  await page.click("#runButton");
+  await page.waitForFunction(() => {
+    const out = document.querySelector("#outputText") as HTMLTextAreaElement | null;
+    return Boolean(out && out.value.trim().length > 0);
+  });
+
+  await page.click("#copyOutputBtn");
+  const copiedMain = await page.evaluate(() => (window as { __copiedText?: string }).__copiedText || "");
+  expect(copiedMain).toContain("Mew");
+
+  await page.click("#copyMissingBtn");
+  const copiedMissing = await page.evaluate(() => (window as { __copiedText?: string }).__copiedText || "");
+  expect(copiedMissing.length).toBeGreaterThan(0);
+});
+
+test("ungendered-families cloud controls and copy actions work", async ({ page }) => {
+  await stubClipboard(page);
+
+  await page.goto(withParityBasePath("/tools/ungendered-families/"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#cloudSampleControls")).toHaveClass(/d-none/);
+  await page.check("#visualizeCloud");
+  await expect(page.locator("#cloudSampleControls")).not.toHaveClass(/d-none/);
+
+  await page.fill(
+    "#inputList",
+    ["GoldenMew (?) (Level: 5)", "ShinyMew (?) (Level: 6)", "DarkMew (?) (Level: 7)", "Mew (?) (Level: 8)"].join("\n")
+  );
+  await page.click("#runButton");
+  await page.waitForFunction(() => {
+    const out = document.querySelector("#outputText") as HTMLTextAreaElement | null;
+    return Boolean(out && out.value.trim().length > 0);
+  });
+
+  await page.click("#copyMainBtn");
+  const copiedMain = await page.evaluate(() => (window as { __copiedText?: string }).__copiedText || "");
+  expect(copiedMain).toContain("Mew");
+});

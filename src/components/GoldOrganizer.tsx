@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { usePersistentOptions } from "@/hooks/usePersistentOptions";
+import { PREFS_KEYS } from "@/lib/prefs-keys";
 import type {
   GoldenRarity,
   GoldenTimelineItemRaw,
@@ -10,7 +12,7 @@ import type {
 } from "@/lib/gold-organizer";
 import { organizeGold, parseInput } from "@/lib/gold-organizer";
 
-const PREFS_KEY = "tppc_gold_organizer_prefs_v1";
+const LEGACY_PREFS_KEY = "tppc_gold_organizer_prefs_v1";
 
 type Prefs = Pick<
   GoldOrganizerOpts,
@@ -71,7 +73,13 @@ export function GoldOrganizer({
   rarity: GoldenRarity;
 }) {
   const [input, setInput] = useState("");
-  const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS);
+  const [prefs, setPrefs, prefsLoaded] = usePersistentOptions<Prefs>(PREFS_KEYS.goldOrganizer, DEFAULT_PREFS, {
+    version: 1,
+    migrate: (raw) => {
+      if (!raw || typeof raw !== "object") return DEFAULT_PREFS;
+      return { ...DEFAULT_PREFS, ...(raw as Partial<Prefs>) };
+    }
+  });
   const [status, setStatus] = useState("");
 
   const [output, setOutput] = useState("");
@@ -83,36 +91,25 @@ export function GoldOrganizer({
     [timelineRaw]
   );
 
-  // Load prefs
   useEffect(() => {
+    if (!prefsLoaded) return;
     try {
-      const raw = localStorage.getItem(PREFS_KEY);
+      // Only run one-time migration when current v2 key is absent.
+      const existing = localStorage.getItem(PREFS_KEYS.goldOrganizer);
+      if (existing) return;
+      const raw = localStorage.getItem(LEGACY_PREFS_KEY);
       if (!raw) return;
-      const parsed = JSON.parse(raw);
-      const next: Prefs = {
-        ...DEFAULT_PREFS,
-        ...(parsed && typeof parsed === "object" ? parsed : {})
-      };
 
-      // Guard types
-      if (next.preferredGender !== "M" && next.preferredGender !== "F" && next.preferredGender !== "U") {
+      const parsed = JSON.parse(raw) as Partial<Prefs>;
+      const next: Prefs = { ...DEFAULT_PREFS, ...(parsed || {}) };
+      if (!["M", "F", "U"].includes(next.preferredGender)) {
         next.preferredGender = "U";
       }
-
       setPrefs(next);
-    } catch (_) {
-      // ignore malformed/blocked storage
-    }
-  }, []);
-
-  // Save prefs
-  useEffect(() => {
-    try {
-      localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
     } catch (_) {
       // ignore
     }
-  }, [prefs]);
+  }, [prefsLoaded, setPrefs]);
 
   useEffect(() => {
     setStatus(`Loaded timeline with ${fmt(timelineCount)} gold releases.`);
@@ -168,7 +165,7 @@ export function GoldOrganizer({
             </label>
             <textarea
               id="input"
-              className="field-area mono"
+              className="field-area mono io-input"
               rows={16}
               placeholder="Paste your box text here..."
               value={input}
@@ -193,7 +190,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="combine"
                   checked={prefs.combine}
-                  onChange={(e) => setPrefs((p) => ({ ...p, combine: e.target.checked }))}
+                  onChange={(e) => setPrefs({ combine: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="combine">
                   Combine Pokemon with the same gender and level into one entry
@@ -206,7 +203,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="dupeDesc"
                   checked={prefs.dupeDesc}
-                  onChange={(e) => setPrefs((p) => ({ ...p, dupeDesc: e.target.checked }))}
+                  onChange={(e) => setPrefs({ dupeDesc: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="dupeDesc">
                   Sort dupes by level descending
@@ -219,7 +216,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="plainLevel"
                   checked={prefs.plainLevel}
-                  onChange={(e) => setPrefs((p) => ({ ...p, plainLevel: e.target.checked }))}
+                  onChange={(e) => setPrefs({ plainLevel: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="plainLevel">
                   Display levels as <code>X</code> instead of <code>(Level: X)</code>
@@ -232,7 +229,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="missingRows"
                   checked={prefs.missingRows}
-                  onChange={(e) => setPrefs((p) => ({ ...p, missingRows: e.target.checked }))}
+                  onChange={(e) => setPrefs({ missingRows: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="missingRows">
                   Add missing release rows inline in grey
@@ -245,7 +242,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="includeStruckMissing"
                   checked={prefs.includeStruckMissing}
-                  onChange={(e) => setPrefs((p) => ({ ...p, includeStruckMissing: e.target.checked }))}
+                  onChange={(e) => setPrefs({ includeStruckMissing: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="includeStruckMissing">
                   Include struck-through missing Pokemon in the Missing panel
@@ -258,7 +255,7 @@ export function GoldOrganizer({
                   type="checkbox"
                   id="dropDupes"
                   checked={prefs.dropDupes}
-                  onChange={(e) => setPrefs((p) => ({ ...p, dropDupes: e.target.checked }))}
+                  onChange={(e) => setPrefs({ dropDupes: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="dropDupes">
                   Drop duplicates per species (keep only one, lowest level)
@@ -276,7 +273,7 @@ export function GoldOrganizer({
                     disabled={!prefs.dropDupes}
                     value={prefs.preferredGender}
                     onChange={(e) =>
-                      setPrefs((p) => ({ ...p, preferredGender: e.target.value as Prefs["preferredGender"] }))
+                      setPrefs({ preferredGender: e.target.value as Prefs["preferredGender"] })
                     }
                   >
                     <option value="M">M (Male)</option>
@@ -297,7 +294,7 @@ export function GoldOrganizer({
                   type="text"
                   placeholder="#DAA520 or gold"
                   value={prefs.goldColor}
-                  onChange={(e) => setPrefs((p) => ({ ...p, goldColor: e.target.value }))}
+                  onChange={(e) => setPrefs({ goldColor: e.target.value })}
                 />
                 <div className="text-muted small mt-2">
                   Color applies to found names only via <code>[color=...]Name[/color]</code>. Missing rows are always
@@ -318,7 +315,7 @@ export function GoldOrganizer({
             <label className="form-label fw-semibold" htmlFor="output">
               Output (BBCode-friendly)
             </label>
-            <textarea id="output" className="field-area mono" rows={18} readOnly value={output} />
+            <textarea id="output" className="field-area mono io-output" rows={18} readOnly value={output} />
             <div className="mt-3 d-flex flex-wrap gap-2">
               <button
                 className="btn-primary-soft"
@@ -340,7 +337,7 @@ export function GoldOrganizer({
             </label>
             <textarea
               id="droppedOutput"
-              className="field-area mono"
+              className="field-area mono io-output"
               rows={8}
               readOnly
               disabled={!prefs.dropDupes}
@@ -365,7 +362,7 @@ export function GoldOrganizer({
             <label className="form-label fw-semibold" htmlFor="missingOutput">
               Missing Pokemon
             </label>
-            <textarea id="missingOutput" className="field-area mono" rows={8} readOnly value={missingOutput} />
+            <textarea id="missingOutput" className="field-area mono io-output" rows={8} readOnly value={missingOutput} />
             <div className="mt-3 d-flex flex-wrap gap-2">
               <button
                 className="btn-outline-soft text-danger"

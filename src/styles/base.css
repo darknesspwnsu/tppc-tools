@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  --theme-light-bg-image: url("/assets/theme/bg-light-wooloo.jpg");
+  --theme-dark-bg-image: url("/assets/theme/bg-dark-yveltal.png");
+}
+
 html,
 body {
   min-height: 100%;
@@ -15,11 +20,30 @@ body {
   font-family: var(--sans);
   color: var(--color-text);
   background:
-    radial-gradient(1300px 680px at 8% -18%, color-mix(in oklab, var(--color-accent), transparent 82%), transparent),
-    radial-gradient(1000px 520px at 92% -24%, color-mix(in oklab, var(--color-accent-2), transparent 86%), transparent),
-    linear-gradient(180deg, var(--color-bg) 0%, color-mix(in oklab, var(--color-bg), #000 8%) 100%);
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--color-bg), white 7%) 0%,
+      color-mix(in oklab, var(--color-bg), #6aa2ff 16%) 100%
+    ),
+    radial-gradient(1300px 680px at 8% -18%, color-mix(in oklab, var(--color-accent), transparent 84%), transparent),
+    radial-gradient(1000px 520px at 92% -24%, color-mix(in oklab, var(--color-accent-2), transparent 88%), transparent),
+    linear-gradient(rgba(244, 249, 255, 0.56), rgba(240, 247, 255, 0.62)),
+    var(--theme-light-bg-image) center / cover no-repeat fixed;
   line-height: 1.5;
   letter-spacing: 0.01em;
+}
+
+[data-theme="dark"] body {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--color-bg), #0a1734 26%) 0%,
+      color-mix(in oklab, var(--color-bg), #020914 8%) 100%
+    ),
+    radial-gradient(1200px 620px at 8% -18%, color-mix(in oklab, var(--color-accent), transparent 84%), transparent),
+    radial-gradient(1000px 520px at 92% -24%, color-mix(in oklab, var(--color-accent-2), transparent 88%), transparent),
+    linear-gradient(rgba(6, 12, 24, 0.56), rgba(6, 12, 24, 0.66)),
+    var(--theme-dark-bg-image) center / cover no-repeat fixed;
 }
 
 a {
@@ -35,6 +59,17 @@ pre,
 :where(a, button, input, textarea, select):focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Keep Next.js runtime diagnostics overlay, hide only floating dev indicator UI. */
+nextjs-portal [class*="dev-tools-indicator"] {
+  display: none !important;
+}
+
+nextjs-portal [data-nextjs-dev-tools-button],
+nextjs-portal [id*="nextjs-dev-tools-menu"],
+nextjs-portal button[aria-label*="Next.js Dev Tools"] {
+  display: none !important;
 }
 
 .container-max {
@@ -56,4 +91,3 @@ pre,
     scroll-behavior: auto !important;
   }
 }
-

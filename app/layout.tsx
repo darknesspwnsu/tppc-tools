@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import "./globals.css";
 
@@ -13,6 +13,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const basePath = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+  const lightBg = `${basePath}/assets/theme/bg-light-wooloo.jpg`;
+  const darkBg = `${basePath}/assets/theme/bg-dark-yveltal.png`;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -36,7 +40,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `}
         </Script>
       </head>
-      <body className="app-shell">
+      <body
+        className="app-shell"
+        style={
+          {
+            ["--theme-light-bg-image" as string]: `url("${lightBg}")`,
+            ["--theme-dark-bg-image" as string]: `url("${darkBg}")`
+          } as CSSProperties
+        }
+      >
         <SiteNav tools={TOOLS} />
         <main className="app-main">{children}</main>
         <footer className="app-footer">

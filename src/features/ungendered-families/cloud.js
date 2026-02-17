@@ -1,5 +1,10 @@
 import { stripPrefixes, escapeRegex } from "./utils.js";
 
+function getD3() {
+  if (typeof window === "undefined") return null;
+  return window.d3 || null;
+}
+
 export function sampleArray(arr, n) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -18,7 +23,7 @@ export function buildVariantColorMapFromInputs(colorGoldenEl, colorShinyEl, colo
 }
 
 export function chainTooltipText(item) {
-  const pieces = (item.chain || []).map(p => `${p.name}:${p.rarity ?? 0}`);
+  const pieces = (item.chain || []).map((p) => `${p.name}:${p.rarity ?? 0}`);
   const base = item.cumulativeRarity ?? 0;
   const adj = item.adjustedScore ?? base;
 
@@ -47,7 +52,7 @@ export function jumpHighlightWord(wordText, { outputTextEl, outputSinglesEl, out
   const targets = [
     { el: outputTextEl, name: "Main output" },
     { el: outputSinglesEl, name: "Singles output" },
-    { el: outputMissingEl, name: "Missing output" },
+    { el: outputMissingEl, name: "Missing output" }
   ];
 
   const variantsToTry = (() => {
@@ -95,35 +100,70 @@ export function jumpHighlightWord(wordText, { outputTextEl, outputSinglesEl, out
       const lineHeightPx = parseFloat(getComputedStyle(el).lineHeight) || (fontSizePx * 1.2);
       const before = hay.slice(0, bestIdx);
       const lineIndex = before.split("\n").length - 1;
-      const approxTop = Math.max(0, lineIndex * lineHeightPx - (el.clientHeight / 3));
+      const approxTop = Math.max(0, lineIndex * lineHeightPx - el.clientHeight / 3);
       el.scrollTop = approxTop;
 
       jumpStatusEl.textContent = `Jumped to "${word}" in ${t.name}`;
       clearTimeout(jumpHighlightWord._timer);
-      jumpHighlightWord._timer = setTimeout(() => { jumpStatusEl.textContent = ""; }, 1600);
+      jumpHighlightWord._timer = setTimeout(() => {
+        jumpStatusEl.textContent = "";
+      }, 1600);
       return true;
     }
   }
 
   jumpStatusEl.textContent = `Couldn't find "${word}" in outputs.`;
   clearTimeout(jumpHighlightWord._timer);
-  jumpHighlightWord._timer = setTimeout(() => { jumpStatusEl.textContent = ""; }, 1600);
+  jumpHighlightWord._timer = setTimeout(() => {
+    jumpStatusEl.textContent = "";
+  }, 1600);
   return false;
 }
 
+export function stopTagCloudAnimation() {
+  renderTagCloud._token = (renderTagCloud._token || 0) + 1;
+
+  if (renderTagCloud._raf) {
+    cancelAnimationFrame(renderTagCloud._raf);
+    renderTagCloud._raf = null;
+  }
+
+  const tooltipEl = typeof document !== "undefined" ? document.getElementById("cloudTooltip") : null;
+  if (tooltipEl) tooltipEl.style.display = "none";
+}
+
 export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jumpCtx) {
+  const d3lib = getD3();
+  stopTagCloudAnimation();
+  const renderToken = (renderTagCloud._token || 0) + 1;
+  renderTagCloud._token = renderToken;
+  const setStatus = (message) => {
+    if (statusEl) statusEl.textContent = message;
+  };
+
+  if (!d3lib) {
+    setStatus("Cloud runtime not loaded yet (d3 missing).");
+    return;
+  }
+
+  if (!d3lib.layout || typeof d3lib.layout.cloud !== "function") {
+    setStatus("Cloud runtime is loading (d3-cloud missing).");
+    return;
+  }
+
+  if (!svgEl) {
+    setStatus("Cloud SVG is unavailable.");
+    return;
+  }
+
   if (!items || items.length === 0) {
-    statusEl.textContent = "No items to visualize.";
-    if (window.d3) d3.select(svgEl).selectAll("*").remove();
+    setStatus("No items to visualize.");
+    d3lib.select(svgEl).selectAll("*").remove();
     return;
   }
 
   const n = Number.isFinite(sampleSize) && sampleSize > 0 ? Math.floor(sampleSize) : 100;
   const sample = sampleArray(items, n);
-
-  // cancel any previous drift loop
-  if (renderTagCloud._raf) cancelAnimationFrame(renderTagCloud._raf);
-  renderTagCloud._raf = null;
 
   function tScore(v) {
     if (!Number.isFinite(v)) v = 0;
@@ -131,7 +171,7 @@ export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jum
     return Math.log10(1 + v);
   }
 
-  const tVals = sample.map(w => tScore(w.adjustedScore));
+  const tVals = sample.map((w) => tScore(w.adjustedScore));
   const minV = Math.min(...tVals);
   const maxV = Math.max(...tVals);
 
@@ -149,15 +189,16 @@ export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jum
   const width = Math.max(320, Math.floor(bbox.width || 720));
   const height = Math.max(360, Math.floor(bbox.height || 650));
 
-  const svg = d3.select(svgEl);
+  const svg = d3lib.select(svgEl);
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
 
-  statusEl.textContent =
+  setStatus(
     `Sample: ${sample.length}. (Log-scaled) adjusted score min: ${minV.toFixed(3)}, max: ${maxV.toFixed(3)}. ` +
-    `Log10(1+score) → min-max normalized and inverted (lower score => bigger).`;
+    "Log10(1+score) → min-max normalized and inverted (lower score => bigger)."
+  );
 
-  const cloudWords = sample.map(w => {
+  const cloudWords = sample.map((w) => {
     const score = invNormScoreFromTransformed(tScore(w.adjustedScore));
     const size = Math.round(MIN_FONT + score * (MAX_FONT - MIN_FONT));
     const fill = colorMap?.[w.cat] || "#2b2b2b";
@@ -165,85 +206,87 @@ export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jum
       ...w,
       size,
       fill,
-      tooltip: chainTooltipText(w),
+      tooltip: chainTooltipText(w)
     };
   });
 
-  d3.layout.cloud()
+  d3lib
+    .layout
+    .cloud()
     .size([width, height])
     .words(cloudWords)
     .padding(1)
     .spiral("rectangular")
     .rotate(() => (Math.random() < 0.15 ? (Math.random() < 0.5 ? 90 : -90) : 0))
     .font("sans-serif")
-    .fontSize(d => d.size)
+    .fontSize((d) => d.size)
     .on("end", draw)
     .start();
 
   function draw(layoutWords) {
-    const g = svg.append("g")
-      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+    if (renderToken !== renderTagCloud._token) return;
+
+    const g = svg.append("g").attr("transform", `translate(${width / 2}, ${height / 2})`);
 
     const tooltipEl = document.getElementById("cloudTooltip");
 
-    const nodes = g.selectAll("g.word")
+    const nodes = g
+      .selectAll("g.word")
       .data(layoutWords)
       .enter()
       .append("g")
       .attr("class", "word")
-      .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+      .attr("transform", (d) => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
       .style("cursor", "pointer")
       .style("pointer-events", "all");
 
-    // Assign per-word drift params (very small motion)
-    nodes.each(function (d) {
+    nodes.each(function assignDrift(d) {
       d._drift = {
-        ax: 0.9 + Math.random() * 1.2,        // amplitude x (px)
-        ay: 0.9 + Math.random() * 1.2,        // amplitude y (px)
+        ax: 0.9 + Math.random() * 1.2,
+        ay: 0.9 + Math.random() * 1.2,
         phaseX: Math.random() * Math.PI * 2,
         phaseY: Math.random() * Math.PI * 2,
-        speedX: 0.0007 + Math.random() * 0.0010, // radians per ms
-        speedY: 0.0007 + Math.random() * 0.0010
+        speedX: 0.0007 + Math.random() * 0.001,
+        speedY: 0.0007 + Math.random() * 0.001
       };
     });
 
-    nodes.append("text")
-      .style("font-size", d => `${d.size}px`)
+    nodes
+      .append("text")
+      .style("font-size", (d) => `${d.size}px`)
       .style("font-family", "sans-serif")
       .style("text-anchor", "middle")
-      .style("fill", d => d.fill)
+      .style("fill", (d) => d.fill)
       .style("paint-order", "stroke")
       .style("stroke", "rgba(0,0,0,0.25)")
-      .style("stroke-width", d => Math.max(0.6, d.size * 0.04))
-      .each(function (d) {
-        const textEl = d3.select(this);
+      .style("stroke-width", (d) => Math.max(0.6, d.size * 0.04))
+      .each(function appendLabel(d) {
+        const textEl = d3lib.select(this);
 
-        // Main Pokémon name
-        textEl.append("tspan")
-          .text(d.text);
+        textEl.append("tspan").text(d.text);
 
-        // Lv4 annotation (only if exactly level 4)
         if (d.levelNum === 4) {
-          textEl.append("tspan")
+          textEl
+            .append("tspan")
             .text("4")
             .attr("baseline-shift", "sub")
-            .attr("dx", "0.02em")             // tighter horizontal spacing
-            .attr("dy", "0.10em")              // pulls it slightly down & closer
+            .attr("dx", "0.02em")
+            .attr("dy", "0.1em")
             .style("font-size", `${Math.round(d.size * 0.5)}px`)
             .style("font-weight", "bold")
-            .style("fill", "red");          // red
+            .style("fill", "red");
         }
       });
 
     nodes
-      .filter(d => d.cat === "normal" && d.isUeug)
+      .filter((d) => d.cat === "normal" && d.isUeug)
       .append("text")
-      .style("font-size", d => `${d.size}px`)
+      .style("font-size", (d) => `${d.size}px`)
       .style("font-family", "sans-serif")
       .style("text-anchor", "middle")
       .style("fill", "rgba(255,255,255,0.38)")
       .attr("transform", "translate(-1.2,-1.2)")
-      .text(d => d.text);
+      .text((d) => d.text);
 
     function showTip(text, x, y) {
       if (!tooltipEl) return;
@@ -259,16 +302,16 @@ export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jum
 
       const rect = tooltipEl.getBoundingClientRect();
       let left = x + pad;
-      let top  = y + pad;
+      let top = y + pad;
 
       if (left + rect.width > vw - 8) left = x - rect.width - pad;
       if (top + rect.height > vh - 8) top = y - rect.height - pad;
 
       left = Math.max(8, Math.min(left, vw - rect.width - 8));
-      top  = Math.max(8, Math.min(top,  vh - rect.height - 8));
+      top = Math.max(8, Math.min(top, vh - rect.height - 8));
 
       tooltipEl.style.left = `${left}px`;
-      tooltipEl.style.top  = `${top}px`;
+      tooltipEl.style.top = `${top}px`;
     }
 
     function hideTip() {
@@ -286,7 +329,8 @@ export function renderTagCloud(items, svgEl, statusEl, colorMap, sampleSize, jum
       });
 
     function driftLoop(t) {
-      nodes.attr("transform", d => {
+      if (renderToken !== renderTagCloud._token) return;
+      nodes.attr("transform", (d) => {
         const p = d._drift;
         const dx = Math.sin(t * p.speedX + p.phaseX) * p.ax;
         const dy = Math.cos(t * p.speedY + p.phaseY) * p.ay;

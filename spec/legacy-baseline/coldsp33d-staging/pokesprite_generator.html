@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PokéSprite → BBCode Pixel Blocks (Cropped + Size Presets)</title>
+  <meta name="description" content="Generate BBCode PokeSprite pixel blocks with size presets." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="PokeSprite Generator" />
+  <meta property="og:description" content="Generate BBCode PokeSprite pixel blocks with size presets." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --page-bg:#f6f7fb; --border:#e5e7eb; --muted:#6b7280;
+    }
+    body{ background: transparent; padding:0 0 1.25rem; }
+    .card{ border:1px solid var(--border); border-radius:1rem; box-shadow:0 6px 18px rgba(0,0,0,.04); }
+    .mono{ font-family: var(--mono); }
+    .muted{ color:var(--muted); }
+    .no-overflow{ min-width:0; }
+    .preview-box{
+      width: 152px; height: 128px;
+      border:2px solid #d1d5db; border-radius:1rem;
+      background:#f9fafb; display:grid; place-items:center; overflow:hidden; flex:0 0 auto;
+    }
+    .preview-box img{ width:100%; height:100%; object-fit:contain; image-rendering:pixelated; display:none; }
+    .preview-hint{ font-size:.9rem; color:#9ca3af; padding:.5rem; text-align:center; line-height:1.2; }
+    .left-meta{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+    /* Right split panel */
+    .split-wrap{
+      min-height:55vh;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .preview-pane{
+      flex: 8;
+      border:1px solid var(--border);
+      border-radius:1rem;
+      background:#fff; /* plain background per your default */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .preview-pane .preview-empty{
+      color:#9ca3af;
+      font-size:.95rem;
+      padding:1rem;
+      text-align:center;
+    }
+    #previewCanvas{
+      width:auto;
+      height:auto;
+      max-width:100%;
+      max-height:100%;
+      display:none;
+      image-rendering:pixelated;
+    }
+
+    .bbcode-pane{
+      flex: 2;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:0;
+    }
+    #bbcodeOut{
+      width:100%;
+      flex:1 1 auto;
+      min-height:0;
+      resize:none;
+      border-radius:1rem;
+      border:1px solid var(--border);
+      padding:0.75rem 0.9rem;
+      background:#fff;
+    }
+
+    footer.app-footer{
+      margin-top: 1.25rem;
+      padding: 0.9rem 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container page-wrap">
+  <div class="panel page-header">
+    <h1 class="page-title">PokeSprite Generator</h1>
+    <div class="page-subtitle">Render BBCode pixel blocks from TPPC sprites with size presets.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-4">
+
+      <!-- Top controls: name + size on one line; button below -->
+      <div class="row g-3">
+        <div class="col-12 col-lg-9">
+          <label class="form-label">Pokémon name (English)</label>
+          <input id="pokeInput" class="form-control" list="pokeList" placeholder="Start typing… (e.g., Glaceon)">
+          <datalist id="pokeList"></datalist>
+        </div>
+
+        <div class="col-12 col-lg-3">
+          <label class="form-label">Size</label>
+          <select id="sizePreset" class="form-select">
+            <option value="1">Small</option>
+            <option value="2" selected>Normal</option>
+            <option value="3">Large</option>
+          </select>
+        </div>
+
+        <div class="col-12">
+          <button id="renderBtn" class="btn btn-primary w-100">Render BBCode</button>
+          <div id="status" class="muted mt-2">Loading Pokémon list…</div>
+        </div>
+
+        <div class="col-12">
+          <details class="mt-2">
+            <summary class="muted">Advanced options</summary>
+            <div class="row g-3 mt-1">
+              <div class="col-12 col-lg-4">
+                <label class="form-label">Resolution</label>
+                <select id="resMode" class="form-select">
+                  <option value="auto" selected>Auto (native)</option>
+                  <option value="custom">Custom columns</option>
+                </select>
+              </div>
+              <div class="col-6 col-lg-4">
+                <label class="form-label">Columns (Custom mode)</label>
+                <input id="cols" type="number" class="form-control" min="16" max="220" step="1" value="120">
+              </div>
+              <div class="col-6 col-lg-4">
+                <label class="form-label">Alpha threshold</label>
+                <input id="alpha" type="number" class="form-control" min="0" max="255" step="1" value="30">
+              </div>
+              <div class="col-12">
+                <div class="muted" style="font-size:.92rem;">
+                  <ul class="mb-0" style="padding-left:1.1rem;">
+                    <li><b>Auto (native)</b> samples at the cropped sprite’s native width (best definition).</li>
+                    <li><b>Custom columns</b> forces a specific width (higher = more detail, bigger BBCode).</li>
+                    <li><b>Alpha threshold</b> affects what counts as “opaque” for cropping + rendering.</li>
+                    <li><b>Gen 9 support</b>: entries are injected and fetched from a different sprite repo.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <hr class="my-4"/>
+
+      <div class="row g-3">
+        <div class="col-12 col-lg-4 d-flex flex-column gap-3 no-overflow">
+          <div class="d-flex gap-3 align-items-center no-overflow">
+            <div class="preview-box">
+              <img id="spritePreview" alt="sprite preview" />
+              <div id="previewHint" class="preview-hint">No sprite selected</div>
+            </div>
+
+            <div class="no-overflow flex-grow-1">
+              <div class="left-meta"><strong>Resolved:</strong> <span id="resolved" class="muted">—</span></div>
+              <div class="left-meta mono muted mt-1" id="spriteUrl">—</div>
+
+              <div class="mt-3 d-flex gap-2 flex-wrap">
+                <button id="exportBtn" class="btn btn-outline-success btn-sm">Export PNG</button>
+                <button id="clearBtn" class="btn btn-outline-danger btn-sm">Clear</button>
+              </div>
+
+              <div class="muted mt-3" style="font-size:.92rem">
+                Preview shows the synthesized pixel output. BBCode is below in the split panel.
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-light border mb-0" style="border-radius:1rem;">
+            <div class="fw-semibold mb-1">Notes</div>
+            <ul class="mb-0" style="padding-left:1.1rem;">
+              <li>Aspect ratio locked to your 2:1 rule: <span class="mono">Aspect = XScale / 2</span> (auto-derived from Size).</li>
+              <li>Crop padding fixed at <span class="mono">1</span> to remove left empty space while keeping edges.</li>
+              <li>Gen 9 sprites come from <span class="mono">bamq/pokemon-sprites</span> (manual list).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right split panel -->
+        <div class="col-12 col-lg-8 no-overflow">
+          <div class="split-wrap">
+            <div class="preview-pane" id="previewPane">
+              <div class="preview-empty" id="previewEmpty">Preview will appear here after you Render.</div>
+              <canvas id="previewCanvas"></canvas>
+            </div>
+
+            <div class="bbcode-pane">
+              <label class="form-label mb-0">BBCode output</label>
+              <textarea id="bbcodeOut" class="mono" spellcheck="false" readonly placeholder="BBCode will appear here…"></textarea>
+              <button id="copyBtn" class="btn btn-outline-secondary w-100">Copy BBCode</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+
+    </div>
+  </div>
+</div>
+
+<!-- Hidden canvas used for exporting PNG -->
+<canvas id="exportCanvas" style="display:none;"></canvas>
+
+<script>
+const POKEMON_JSON_URL = "https://raw.githubusercontent.com/msikma/pokesprite/master/data/pokemon.json";
+const SPRITE_BASE = "https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/";
+
+// Gen 9 sprite source (bamq)
+const GEN9_BASE = "https://raw.githubusercontent.com/bamq/pokemon-sprites/main/pokemon/regular/";
+
+// Add a BBCode footnote requested (size=2)
+const BB_FOOTNOTE = `[size="2"][url="https://coldsp33d.github.io/pokesprite_generator"]Generated by the PokeSprite Generator[/url][/size]`;
+
+// Manual Gen 9 + related forms list (slugs without .png)
+const GEN9_SPRITES = [
+  "annihilape","arboliva","arcanine-hisui","archaludon","arctibax","armarouge","avalugg-hisui",
+  "basculegion","baxcalibur","bellibolt","bombirdier","brambleghast","bramblin","braviary-hisui",
+  "brute-bonnet","capsakid","ceruledge","cetitan","cetoddle","charcadet","chi-yu","chien-pao",
+  "clodsire","crocalor","cyclizar","dachsbun","decidueye-hisui","dipplin","dolliv","dondozo",
+  "dudunsparce","dudunsparce-three-segment","electrode-hisui","enamorus","enamorus-therian",
+  "espathra","farigiraf","fezandipiti","fidough","finizen","flamigo","flittle","floragato",
+  "flutter-mane","frigibax","fuecoco","garganacl","gholdengo","gimmighoul","gimmighoul-chest",
+  "glimmet","glimmora","goodra-hisui","gouging-fire","grafaiai","great-tusk","greavard",
+  "growlithe-hisui","houndstone","hydrapple","iron-boulder","iron-bundle","iron-crown","iron-hands",
+  "iron-jugulis","iron-leaves","iron-moth","iron-thorns","iron-treads","iron-valiant","kilowattrel",
+  "kingambit","klawf","kleavor","koraidon","lechonk","lilligant-hisui","lokix","mabosstiff",
+  "maschiff","maushold","maushold-family-of-four","meowscarada","miraidon","munkidori","nacli",
+  "naclstack","nymble","ogerpon","ogerpon-cornerstone-mask","ogerpon-hearthflame-mask",
+  "ogerpon-teal-mask","ogerpon-wellspring-mask","oinkologne","okidogi","orthworm","overqwil",
+  "palafin","palafin-hero","pawmi","pawmo","pawmot","pecharunt","poltchageist","quaquaval","quaxly",
+  "quaxwell","qwilfish-hisui","rabsca","raging-bolt","rellor","revavroom","roaring-moon",
+  "samurott-hisui","sandy-shocks","scovillain","scream-tail","shroodle","sinistcha","skeledirge",
+  "sliggoo-hisui","slither-wing","smoliv","sneasel-hisui","sneasler","spidops","sprigatito",
+  "squawkabilly-blue-plumage","squawkabilly-green-plumage","squawkabilly-white-plumage",
+  "squawkabilly-yellow-plumage","tadbulb","tandemaus","tarountula","tatsugiri",
+  "tatsugiri-droopy","tatsugiri-stretchy","tauros-paldea-aqua-breed","tauros-paldea-blaze-breed",
+  "tauros-paldea-combat-breed","terapagos","terapagos-terastal","terapagos-stellar","ting-lu",
+  "tinkatink","tinkaton","tinkatuff","toedscool","toedscruel","typhlosion-hisui","ursaluna",
+  "ursaluna-bloodmoon","varoom","veluza","voltorb-hisui","walking-wake","wattrel","wiglett",
+  "wo-chien","wooper-paldea","wugtrio","wyrdeer","zoroark-hisui","zorua-hisui"
+];
+
+// Locked relationship: X scale : Aspect = 2 : 1  => aspect = xScale / 2
+function aspectFromXScale(xScale){ return xScale / 2; }
+
+// Crop pad fixed to 1
+const DEFAULT_CROP_PAD = 1;
+
+const els = {
+  input: document.getElementById("pokeInput"),
+  list: document.getElementById("pokeList"),
+  status: document.getElementById("status"),
+  sizePreset: document.getElementById("sizePreset"),
+  resMode: document.getElementById("resMode"),
+  cols: document.getElementById("cols"),
+  alpha: document.getElementById("alpha"),
+  renderBtn: document.getElementById("renderBtn"),
+  bbcodeOut: document.getElementById("bbcodeOut"),
+  preview: document.getElementById("spritePreview"),
+  previewHint: document.getElementById("previewHint"),
+  resolved: document.getElementById("resolved"),
+  spriteUrl: document.getElementById("spriteUrl"),
+  copyBtn: document.getElementById("copyBtn"),
+  exportBtn: document.getElementById("exportBtn"),
+  clearBtn: document.getElementById("clearBtn"),
+  exportCanvas: document.getElementById("exportCanvas"),
+  previewCanvas: document.getElementById("previewCanvas"),
+  previewEmpty: document.getElementById("previewEmpty"),
+  previewPane: document.getElementById("previewPane"),
+};
+
+let nameIndex = new Map();
+let nameIndexLower = new Map();
+
+// Holds the last sampled pixel canvas used to generate BBCode + preview + export
+let lastSampleCanvas = null;
+let lastXScale = 2;
+let lastExportName = "pokesprite";
+
+function setStatus(msg){ els.status.textContent = msg; }
+
+async function fetchJson(url){
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(`Fetch failed (${r.status}): ${url}`);
+  return r.json();
+}
+
+function buildAutocomplete(names){
+  els.list.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  for (const n of names){
+    const opt = document.createElement("option");
+    opt.value = n;
+    frag.appendChild(opt);
+  }
+  els.list.appendChild(frag);
+}
+
+function normalizeName(s){ return String(s || "").trim(); }
+
+function resolvePokemonByName(input){
+  const q = normalizeName(input);
+  if (!q) return null;
+
+  const exact = nameIndex.get(q);
+  if (exact) return { name:q, ...exact };
+
+  return nameIndexLower.get(q.toLowerCase()) || null;
+}
+
+function setPreviewEmpty(){
+  els.preview.style.display = "none";
+  els.preview.removeAttribute("src");
+  els.previewHint.style.display = "block";
+}
+function setPreviewSprite(url){
+  els.previewHint.style.display = "none";
+  els.preview.style.display = "block";
+  els.preview.src = url;
+}
+
+function loadImage(src){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Image failed to load: " + src));
+    img.src = src;
+  });
+}
+
+function clampNum(v, lo, hi, fallback){
+  v = Number(v);
+  if (!Number.isFinite(v)) v = fallback;
+  return Math.max(lo, Math.min(hi, v));
+}
+
+function toHex2(n){
+  const s = n.toString(16).toUpperCase();
+  return s.length === 1 ? "0"+s : s;
+}
+function rgbToHex(r,g,b){
+  return "#" + toHex2(r) + toHex2(g) + toHex2(b);
+}
+
+function safeFilename(s){
+  return String(s || "pokesprite")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_\-]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "pokesprite";
+}
+
+// Turn a slug like "wo-chien" or "tauros-paldea-aqua-breed" into a nice display name.
+function slugToDisplayName(slug){
+  return String(slug)
+    .split("-")
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function clearSynthPreview(){
+  const c = els.previewCanvas;
+  const ctx = c.getContext("2d");
+  c.width = 1; c.height = 1;
+  ctx.clearRect(0,0,1,1);
+  els.previewCanvas.style.display = "none";
+  els.previewEmpty.style.display = "block";
+}
+
+function makeSampleCanvasForPreview(cropCanvas, {
+  resMode = "auto",
+  cols = 120,
+  maxAutoCols = 180,
+} = {}){
+  const srcW = cropCanvas.width;
+  const srcH = cropCanvas.height;
+  if (srcW <= 0 || srcH <= 0) return null;
+
+  let sampleCols;
+  if (resMode === "auto"){
+    sampleCols = Math.min(maxAutoCols, srcW);
+  } else {
+    sampleCols = clampNum(cols, 16, 220, 120);
+  }
+
+  // IMPORTANT: no character-cell compensation here
+  const aspect = srcH / srcW;
+  const sampleRows = Math.max(1, Math.round(sampleCols * aspect));
+
+  const c = document.createElement("canvas");
+  const ctx = c.getContext("2d", { willReadFrequently:true });
+  c.width = sampleCols;
+  c.height = sampleRows;
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.drawImage(cropCanvas, 0,0, srcW,srcH, 0,0, sampleCols, sampleRows);
+
+  return c;
+}
+
+function renderSynthPreview(sampleCanvas, xScale){
+  if (!sampleCanvas) { clearSynthPreview(); return; }
+
+  // Build a "BBCode-faithful" source canvas by expanding X by xScale
+  const src = document.createElement("canvas");
+  src.width = sampleCanvas.width * xScale;
+  src.height = sampleCanvas.height * xScale;
+
+  const sctx = src.getContext("2d");
+  sctx.imageSmoothingEnabled = false;
+  sctx.clearRect(0,0,src.width,src.height);
+  sctx.drawImage(sampleCanvas, 0, 0, src.width, src.height);
+
+  const pane = els.previewPane.getBoundingClientRect();
+  const pw = Math.max(1, Math.floor(pane.width));
+  const ph = Math.max(1, Math.floor(pane.height));
+
+  // Integer fit scale (CSS pixels) -> preserves pixel-art crispness
+  const cssScale = Math.max(1, Math.floor(Math.min(pw / src.width, ph / src.height)));
+  const cssW = src.width * cssScale;
+  const cssH = src.height * cssScale;
+
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  const c = els.previewCanvas;
+
+  // Set layout size (preserves aspect ratio because CSS is width/height auto + max-*)
+  c.style.width = cssW + "px";
+  c.style.height = cssH + "px";
+
+  // Set actual backing resolution for sharpness
+  c.width = Math.floor(cssW * dpr);
+  c.height = Math.floor(cssH * dpr);
+
+  const ctx = c.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0,0,cssW,cssH);
+  ctx.drawImage(src, 0, 0, cssW, cssH);
+
+  els.previewEmpty.style.display = "none";
+  els.previewCanvas.style.display = "block";
+}
+
+/**
+ * Find bounding box of non-transparent pixels (alpha >= threshold).
+ */
+function findOpaqueBounds(img, alphaThreshold){
+  const c = document.createElement("canvas");
+  const ctx = c.getContext("2d", { willReadFrequently:true });
+
+  c.width = img.width;
+  c.height = img.height;
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.drawImage(img, 0, 0);
+
+  const { data } = ctx.getImageData(0,0,c.width,c.height);
+
+  let minX = c.width, minY = c.height, maxX = -1, maxY = -1;
+
+  for (let y=0; y<c.height; y++){
+    for (let x=0; x<c.width; x++){
+      const i = (y*c.width + x) * 4;
+      const a = data[i+3];
+      if (a >= alphaThreshold){
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  if (maxX < 0) return null;
+  return { minX, minY, maxX, maxY };
+}
+
+/**
+ * Crop sprite to opaque bounds (+ fixed pad) and return a canvas.
+ */
+function cropToOpaqueCanvas(img, alphaThreshold, pad=1){
+  const b = findOpaqueBounds(img, alphaThreshold);
+  if (!b) return null;
+
+  const x0 = Math.max(0, b.minX - pad);
+  const y0 = Math.max(0, b.minY - pad);
+  const x1 = Math.min(img.width - 1, b.maxX + pad);
+  const y1 = Math.min(img.height - 1, b.maxY + pad);
+
+  const w = x1 - x0 + 1;
+  const h = y1 - y0 + 1;
+
+  const out = document.createElement("canvas");
+  const octx = out.getContext("2d", { willReadFrequently:true });
+  out.width = w;
+  out.height = h;
+
+  octx.imageSmoothingEnabled = false;
+  octx.clearRect(0,0,w,h);
+  octx.drawImage(img, x0, y0, w, h, 0, 0, w, h);
+  return out;
+}
+
+/**
+ * Render the cropped canvas into a sampled "pixel canvas" that preserves sprite colors.
+ * This canvas is also what we export as PNG (after scaling).
+ */
+function makeSampleCanvas(cropCanvas, {
+  resMode = "auto",
+  cols = 120,
+  xScale = 2,          // used only to determine aspect via locked rule
+  maxAutoCols = 180,
+} = {}){
+  const srcW = cropCanvas.width;
+  const srcH = cropCanvas.height;
+  if (srcW <= 0 || srcH <= 0) return null;
+
+  let sampleCols;
+  if (resMode === "auto"){
+    sampleCols = Math.min(maxAutoCols, srcW);
+  } else {
+    sampleCols = clampNum(cols, 16, 220, 120);
+  }
+
+  // aspect locked: charAspect = xScale / 2
+  const charAspect = aspectFromXScale(xScale);
+  const aspect = srcH / srcW;
+  const sampleRows = Math.max(1, Math.round(sampleCols * aspect * charAspect));
+
+  const c = document.createElement("canvas");
+  const ctx = c.getContext("2d", { willReadFrequently:true });
+  c.width = sampleCols;
+  c.height = sampleRows;
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.drawImage(cropCanvas, 0,0, srcW,srcH, 0,0, sampleCols, sampleRows);
+
+  return c;
+}
+
+/**
+ * Sample canvas -> BBCode with per-line run-length encoding by color.
+ */
+function sampleCanvasToBbcode(sampleCanvas, {
+  alphaThreshold = 30,
+  xScale = 2,
+  char = "█",
+  wrapInCode = true,
+  emptyChar = " ",
+} = {}){
+  const w = sampleCanvas.width;
+  const h = sampleCanvas.height;
+  const ctx = sampleCanvas.getContext("2d", { willReadFrequently:true });
+  const { data } = ctx.getImageData(0,0,w,h);
+
+  const lines = [];
+  for (let y=0; y<h; y++){
+    let line = "";
+    let runHex = null;
+    let runCount = 0;
+
+    const flush = () => {
+      if (runCount <= 0) return;
+      const blocks = char.repeat(runCount * xScale);
+      if (runHex === null){
+        line += emptyChar.repeat(runCount * xScale);
+      } else {
+        line += `[color=${runHex}]${blocks}[/color]`;
+      }
+      runCount = 0;
+      runHex = null;
+    };
+
+    for (let x=0; x<w; x++){
+      const i = (y*w + x) * 4;
+      const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+      const hex = (a >= alphaThreshold) ? rgbToHex(r,g,b) : null;
+
+      if (x === 0){
+        runHex = hex; runCount = 1;
+      } else if (hex === runHex){
+        runCount++;
+      } else {
+        flush();
+        runHex = hex; runCount = 1;
+      }
+    }
+    flush();
+    lines.push(line.replace(/[ \t]+$/,""));
+  }
+
+  let out = lines.join("\n");
+  if (wrapInCode) out = `[code]\n${out}\n[/code]`;
+  return out;
+}
+
+function appendFootnote(bbcode){
+  // Keep footnote OUTSIDE [code] so the link stays clickable.
+  return `${bbcode}\n\n${BB_FOOTNOTE}\n`;
+}
+
+/**
+ * Export: scale up the sampled pixel canvas to a crisp PNG and download.
+ */
+function exportSampleCanvasPng(sampleCanvas, {
+  scale = 8,
+  filename = "pokesprite.png",
+  background = "transparent", // "transparent" or "#ffffff" etc.
+} = {}){
+  const out = els.exportCanvas;
+  const w = sampleCanvas.width * scale;
+  const h = sampleCanvas.height * scale;
+
+  out.width = w;
+  out.height = h;
+
+  const ctx = out.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,w,h);
+
+  if (background && background !== "transparent"){
+    ctx.fillStyle = background;
+    ctx.fillRect(0,0,w,h);
+  }
+
+  ctx.drawImage(sampleCanvas, 0, 0, w, h);
+
+  const url = out.toDataURL("image/png");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+async function render(){
+  try{
+    els.bbcodeOut.value = "";
+    els.resolved.textContent = "—";
+    els.spriteUrl.textContent = "—";
+    setPreviewEmpty();
+    clearSynthPreview();
+    lastSampleCanvas = null;
+
+    const xScale = clampNum(els.sizePreset.value, 1, 3, 2);
+
+    // Advanced options
+    const resMode = (els.resMode?.value || "auto");
+    const cols = clampNum(els.cols.value, 16, 220, 120);
+    const alphaThreshold = clampNum(els.alpha.value, 0, 255, 30);
+
+    const info = resolvePokemonByName(els.input.value);
+    if (!info){
+      setStatus("Pick a Pokémon from autocomplete (must match an English name from pokemon.json).");
+      return;
+    }
+
+    const slug = info.slug;
+
+    // Choose sprite source based on index entry
+    const url = (info.source === "gen9")
+      ? `${GEN9_BASE}${slug}.png`
+      : `${SPRITE_BASE}${slug}.png`;
+
+    setStatus(`Loading sprite for ${info.name}…`);
+    els.resolved.textContent = `${info.name} (${info.source === "gen9" ? "Gen 9" : "Gen 1–8"}) → slug: ${slug}`;
+    els.spriteUrl.textContent = url;
+    lastExportName = safeFilename(info.name);
+
+    const img = await loadImage(url);
+    setPreviewSprite(url);
+
+    setStatus("Cropping transparency…");
+    const cropCanvas = cropToOpaqueCanvas(img, alphaThreshold, DEFAULT_CROP_PAD);
+    if (!cropCanvas){
+      setStatus("Sprite appears fully transparent at current alpha threshold.");
+      return;
+    }
+
+    setStatus("Sampling…");
+    const sampleCanvas = makeSampleCanvas(cropCanvas, {
+      resMode,
+      cols,
+      xScale,
+      maxAutoCols: 180,
+    });
+    if (!sampleCanvas){
+      setStatus("Failed to sample sprite.");
+      return;
+    }
+    lastSampleCanvas = sampleCanvas;
+
+    // Preview the synthesized output (same sampled pixels used for BBCode/export)
+    lastXScale = xScale;
+    renderSynthPreview(sampleCanvas, xScale);
+
+    setStatus("Rendering BBCode…");
+    const art = sampleCanvasToBbcode(sampleCanvas, {
+      alphaThreshold,
+      xScale,
+      char: "█",
+      wrapInCode: true,
+      emptyChar: " ",
+    });
+
+    els.bbcodeOut.value = appendFootnote(art);
+    setStatus("Done.");
+  } catch (err){
+    console.error(err);
+    setStatus("Error: " + (err?.message || String(err)));
+  }
+}
+
+els.renderBtn.addEventListener("click", render);
+els.input.addEventListener("keydown", (e) => { if (e.key === "Enter") render(); });
+
+els.copyBtn.addEventListener("click", async () => {
+  try{
+    const txt = els.bbcodeOut.value || "";
+    if (!txt.trim()){ setStatus("Nothing to copy yet."); return; }
+    await navigator.clipboard.writeText(txt);
+    setStatus("Copied BBCode to clipboard.");
+  } catch (e){
+    setStatus("Could not copy (browser blocked clipboard).");
+  }
+});
+
+els.exportBtn.addEventListener("click", () => {
+  if (!lastSampleCanvas){
+    setStatus("Render a Pokémon first, then Export PNG.");
+    return;
+  }
+  const scale = 8;
+  exportSampleCanvasPng(lastSampleCanvas, {
+    scale,
+    filename: `${lastExportName}.png`,
+    background: "transparent",
+  });
+  setStatus("Exported PNG.");
+});
+
+els.clearBtn.addEventListener("click", () => {
+  els.input.value = "";
+  els.bbcodeOut.value = "";
+  els.resolved.textContent = "—";
+  els.spriteUrl.textContent = "—";
+  lastSampleCanvas = null;
+  lastExportName = "pokesprite";
+  setPreviewEmpty();
+  clearSynthPreview();
+  setStatus("Cleared.");
+});
+
+// If the window resizes, re-fit the preview to the pane (if we have one)
+window.addEventListener("resize", () => {
+  if (lastSampleCanvas) renderSynthPreview(lastSampleCanvas, lastXScale);
+});
+
+(async function init(){
+  try{
+    setPreviewEmpty();
+    clearSynthPreview();
+    setStatus("Fetching pokemon.json…");
+    const db = await fetchJson(POKEMON_JSON_URL);
+
+    const names = [];
+
+    // Gen 1–8 from pokemon.json
+    for (const k of Object.keys(db)){
+      const entry = db[k];
+      const nameEng = entry?.name?.eng;
+      const slugEng = entry?.slug?.eng;
+      const idx = entry?.idx || k;
+      if (!nameEng || !slugEng) continue;
+
+      names.push(nameEng);
+      nameIndex.set(nameEng, { idx, slug: slugEng, source: "gen8" });
+      nameIndexLower.set(nameEng.toLowerCase(), { name: nameEng, idx, slug: slugEng, source: "gen8" });
+    }
+
+    // Inject Gen 9 manually
+    for (const slug of GEN9_SPRITES){
+      const displayName = slugToDisplayName(slug);
+      names.push(displayName);
+      nameIndex.set(displayName, { idx: "Gen9", slug, source: "gen9" });
+      nameIndexLower.set(displayName.toLowerCase(), { name: displayName, idx: "Gen9", slug, source: "gen9" });
+    }
+
+    names.sort((a,b) => a.localeCompare(b, "en", { sensitivity:"base" }));
+    buildAutocomplete(names);
+    setStatus(`Loaded ${names.length} Pokémon names (Gen 1–8 + Gen 9). Start typing and press Enter.`);
+  } catch (err){
+    console.error(err);
+    setStatus("Failed to load pokemon.json: " + (err?.message || String(err)));
+  }
+})();
+</script>
+<script defer src="/assets/tools.js"></script>
+  <script defer src="/assets/site.js"></script>
+</body>
+</html>

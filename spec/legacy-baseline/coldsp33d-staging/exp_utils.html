@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXP Utilities • TPPC Tools by Darkness</title>
+  <meta name="description" content="TPPC Level & Experience Utilities by Darkness">
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="EXP Utilities • TPPC Tools by Darkness" />
+  <meta property="og:description" content="TPPC Level & Experience Utilities by Darkness" />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{ --mono:"JetBrains Mono",monospace; }
+    body{ font-family: var(--sans); padding:0 0 1.25rem; }
+    h1,h2,h3,.card-header{ font-weight:600; }
+    .mono{ font-family:var(--mono); }
+
+    .card{
+      border-radius:1rem;
+      border:1px solid rgba(0,0,0,.06);
+      background:rgba(255,255,255,.9);
+      box-shadow:none;
+      overflow:hidden;
+    }
+    .card-header{
+      background:transparent;
+      border-bottom:1px solid rgba(0,0,0,.06);
+      font-weight:600;
+    }
+    [data-theme="dark"] .card{
+      background:#0f152a;
+      border-color:#1c2a55;
+      box-shadow:none;
+    }
+    [data-theme="dark"] .card-header{
+      border-bottom-color:#1c2a55;
+      color:#e7ecff;
+    }
+    .btn-calc{ width:90px; font-weight:600; }
+    .helper{
+      color: rgba(0,0,0,.60);
+      font-size: .95rem;
+      line-height: 1.35rem;
+    }
+    [data-theme="dark"] .helper{ color: rgba(231,236,255,.65); }
+
+    .copy-btn{ display:inline-flex; align-items:center; justify-content:center; }
+
+    .scroll-top{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      opacity:0;
+      pointer-events:none;
+      transition:.25s ease;
+      z-index:999;
+    }
+    .scroll-top.show{ opacity:1; pointer-events:auto; }
+
+    .jump-bar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 12px;
+      align-items:center;
+      margin-bottom: 1rem;
+    }
+    .jump-title{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(0,0,0,.55);
+    }
+    .jump-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .jump-link{
+      font-family: var(--mono);
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.08);
+      background:rgba(255,255,255,.7);
+      color:#0b1020;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .jump-link:hover{
+      border-color:color-mix(in oklab, rgba(0,0,0,.12), #00b7ff 35%);
+    }
+    [data-theme="dark"] .jump-title{ color: rgba(231,236,255,.65); }
+    [data-theme="dark"] .jump-link{
+      border-color:#1c2a55;
+      background:#151c3a;
+      color:#e7ecff;
+    }
+    .card.jump-highlight{
+      border-color:transparent;
+      background:
+        linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)) padding-box,
+        linear-gradient(135deg, rgba(72,255,190,.7), rgba(0,183,255,.7), rgba(91,70,255,.7)) border-box;
+      box-shadow:0 18px 44px rgba(0,183,255,.2);
+    }
+    [data-theme="dark"] .card.jump-highlight{
+      background:
+        linear-gradient(rgba(15,21,42,.98), rgba(15,21,42,.98)) padding-box,
+        linear-gradient(135deg, rgba(72,255,190,.6), rgba(0,183,255,.6), rgba(91,70,255,.6)) border-box;
+      box-shadow:0 18px 44px rgba(0,183,255,.2);
+    }
+
+    /* Masonry (staggered) */
+    .masonry{
+      column-gap:1.5rem;
+      column-count:1;
+    }
+    @media (min-width: 768px){ .masonry{ column-count:2; } }
+    @media (min-width: 1200px){ .masonry{ column-count:3; } }
+    .masonry > .card{
+      break-inside: avoid;
+      margin:0 0 1.5rem;
+      display:inline-block;
+      width:100%;
+      vertical-align:top;
+    }
+    .masonry > .card:last-child{
+      margin-bottom:0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container page-wrap">
+    <div class="panel page-header">
+      <h1 class="page-title">TPPC Level & Experience Utilities</h1>
+      <div class="page-subtitle">Quick reference calculators for TPPC training math</div>
+    </div>
+
+    <div class="panel jump-bar">
+      <div class="jump-title mono">Quick Jump</div>
+      <div class="jump-links">
+        <a class="jump-link" href="#levelToExp">Lv → Exp</a>
+        <a class="jump-link" href="#levelToExpBillion">Lv → Exp (B)</a>
+        <a class="jump-link" href="#expToLevel">Exp → Lv</a>
+        <a class="jump-link" href="#expToLevelBillion">Exp (B) → Lv</a>
+        <a class="jump-link" href="#levelDiff">Diff</a>
+        <a class="jump-link" href="#expAdd">Add</a>
+        <a class="jump-link" href="#expInBillAdd">Add (B)</a>
+        <a class="jump-link" href="#addLevels">Add Lv</a>
+        <a class="jump-link" href="#level24499s">4499s</a>
+      </div>
+    </div>
+
+    <main>
+      <div class="panel">
+        <div class="d-flex justify-content-end mb-2">
+          <button class="btn btn-outline-danger btn-sm" onclick="clearAll()">Clear All</button>
+        </div>
+        <div class="masonry">
+
+      <div class="card" id="levelToExp">
+        <div class="card-header">Level → Experience</div>
+        <div class="card-body">
+          <p class="helper mb-3">Converts a Pokémon level into total experience (TPPC uses <span class="mono">level³ + 1</span>).</p>
+          <input id="levelInput" type="number" class="form-control mb-3" placeholder="Enter Level">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateLevel2Exp()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearLevel2Exp()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="levelExpOutput" class="form-control mono" placeholder="Experience" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="levelExpOutput" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="levelToExpBillion">
+        <div class="card-header">Level → Exp (Billion)</div>
+        <div class="card-body">
+          <p class="helper mb-3">Converts a Pokémon level into total experience, displayed in billions.</p>
+          <input id="levelInputBillion" type="number" class="form-control mb-3" placeholder="Enter Level">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateLevel2ExpInBillion()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearLevel2ExpBillion()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="levelExpOutputBillion" class="form-control mono" placeholder="Exp (B)" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="levelExpOutputBillion" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="expToLevel">
+        <div class="card-header">Experience → Level</div>
+        <div class="card-body">
+          <p class="helper mb-3">Converts total experience into an approximate level (inverse of <span class="mono">level³ + 1</span>).</p>
+          <input id="expInput" type="number" class="form-control mb-3" placeholder="Enter Experience">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateExp2Level()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearExp2Level()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="expLevelOutput" class="form-control mono" placeholder="Level" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="expLevelOutput" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="expToLevelBillion">
+        <div class="card-header">Exp (Billion) → Level</div>
+        <div class="card-body">
+          <p class="helper mb-3">Converts experience in billions into an approximate level.</p>
+          <input id="expInputBillion" type="number" class="form-control mb-3" placeholder="Enter Exp (Billion)">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateExpInBillion2Level()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearExpInBillion2Level()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="expLevelOutputBillion" class="form-control mono" placeholder="Level" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="expLevelOutputBillion" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="levelDiff">
+        <div class="card-header">Level Difference</div>
+        <div class="card-body">
+          <p class="helper mb-3">Computes the level difference between two levels (based on the experience gap).</p>
+          <div class="input-group mb-3">
+            <input id="levelInput1" type="number" class="form-control" placeholder="Level 1">
+            <span class="input-group-text">−</span>
+            <input id="levelInput2" type="number" class="form-control" placeholder="Level 2">
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateLevelDifference()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearLevelDiff()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="levelDiffOutput" class="form-control mono" placeholder="Difference" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="levelDiffOutput" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="expAdd">
+        <div class="card-header">Add Experience</div>
+        <div class="card-body">
+          <p class="helper mb-3">Adds one or more EXP amounts to a starting level, then returns the resulting level.</p>
+
+          <div class="mb-3">
+            <label class="form-label">Starting Level</label>
+            <input id="levelInput3" type="number" class="form-control" placeholder="Level">
+          </div>
+
+          <label class="form-label mb-2">EXP to add (one or more)</label>
+          <div id="expAddList" class="vstack gap-2 mb-3">
+            <div class="input-group">
+              <span class="input-group-text">EXP</span>
+              <input id="expInput2" type="number" class="form-control exp-add-item" placeholder="Enter Exp">
+              <button class="btn btn-outline-secondary" type="button" data-remove disabled title="At least 1 row is required">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-primary" type="button" id="expAddMoreBtn">
+              <i class="bi bi-plus-lg"></i> Add another EXP
+            </button>
+            <button class="btn btn-primary btn-calc" type="button" onclick="calculateExpAdd()">=</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="clearExpAdd()">Clear</button>
+          </div>
+
+          <div class="input-group mt-3">
+            <input id="expLevelOutput2" class="form-control mono" placeholder="Level" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="expLevelOutput2" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+
+          <div class="form-text mt-2 mono" id="expAddSumHint" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="card" id="expInBillAdd">
+        <div class="card-header">Add Exp (Billion)</div>
+        <div class="card-body">
+          <p class="helper mb-3">Adds one or more EXP amounts (in billions) to a starting level, then returns the resulting level.</p>
+
+          <div class="mb-3">
+            <label class="form-label">Starting Level</label>
+            <input id="levelInput4" type="number" class="form-control" placeholder="Level">
+          </div>
+
+          <label class="form-label mb-2">EXP (Billions) to add (one or more)</label>
+          <div id="expBillAddList" class="vstack gap-2 mb-3">
+            <div class="input-group">
+              <span class="input-group-text">B</span>
+              <input id="expInput3" type="number" class="form-control exp-bill-add-item" placeholder="Enter Exp (B)">
+              <button class="btn btn-outline-secondary" type="button" data-remove disabled title="At least 1 row is required">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-primary" type="button" id="expBillAddMoreBtn">
+              <i class="bi bi-plus-lg"></i> Add another (B)
+            </button>
+            <button class="btn btn-primary btn-calc" type="button" onclick="calculateExpInBillAdd()">=</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="clearExpInBillAdd()">Clear</button>
+          </div>
+
+          <div class="input-group mt-3">
+            <input id="expLevelOutput3" class="form-control mono" placeholder="Level" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="expLevelOutput3" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+
+          <div class="form-text mt-2 mono" id="expBillAddSumHint" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="card" id="addLevels">
+        <div class="card-header">Add Levels</div>
+        <div class="card-body">
+          <p class="helper mb-3">Adds two or more levels by converting each to total EXP, summing, then converting back to a level.</p>
+
+          <label class="form-label mb-2">Levels to add (two or more)</label>
+          <div id="addLevelsList" class="vstack gap-2 mb-3">
+            <div class="input-group">
+              <span class="input-group-text">Lv</span>
+              <input type="number" class="form-control add-level-item" placeholder="Enter Level">
+              <button class="btn btn-outline-secondary" type="button" data-remove disabled title="At least 2 rows are required">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">Lv</span>
+              <input type="number" class="form-control add-level-item" placeholder="Enter Level">
+              <button class="btn btn-outline-secondary" type="button" data-remove disabled title="At least 2 rows are required">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-primary" type="button" id="addLevelsMoreBtn">
+              <i class="bi bi-plus-lg"></i> Add another level
+            </button>
+            <button class="btn btn-primary btn-calc" type="button" onclick="calculateAddLevels()">=</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="clearAddLevels()">Clear</button>
+          </div>
+
+          <div class="input-group mt-3">
+            <input id="addLevelsOutput" class="form-control mono" placeholder="Level" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="addLevelsOutput" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+
+          <div class="form-text mt-2 mono" id="addLevelsSumHint" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="card" id="level24499s">
+        <div class="card-header">Level → # of 4499s</div>
+        <div class="card-body">
+          <p class="helper mb-3">Shows how many <span class="mono">Lv 4499</span> equivalents the entered level represents (based on total exp).</p>
+          <input id="levelInput5" type="number" class="form-control mb-3" placeholder="Level">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-calc" onclick="calculateLevelTo4499()">=</button>
+            <button class="btn btn-outline-secondary" onclick="clearLevelTo4499()">Clear</button>
+          </div>
+          <div class="input-group mt-3">
+            <input id="LevelTo4499" class="form-control mono" placeholder="# of 4499s" disabled>
+            <button class="btn btn-outline-secondary copy-btn" type="button" data-copy-target="LevelTo4499" aria-label="Copy output">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+          <button class="btn btn-outline-danger btn-sm" onclick="clearAll()">Clear All</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <button id="scroll-to-top" class="btn btn-primary scroll-top" type="button" aria-label="Scroll to top">
+    <i class="bi bi-arrow-up-square-fill"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="exp_utils.js"></script>
+  <script defer src="/assets/tools.js"></script>
+  <script defer src="/assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TPPC Rainbow Dex Checklist (Web)</title>
+  <meta name="description" content="Build a TPPC Rainbow Dex checklist with missing and duplicates." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="TPPC Rainbow Dex Checklist" />
+  <meta property="og:description" content="Build a TPPC Rainbow Dex checklist with missing and duplicates." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      padding-top: 0;
+      padding-bottom: 1.25rem;
+      background: transparent;
+    }
+    textarea {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+    }
+
+    .card{
+      border-radius:1rem;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:0 10px 30px rgba(20,30,70,.12);
+      overflow:hidden;
+    }
+    .card-header{
+      background:linear-gradient(180deg,#ffffff,#f4f6ff);
+      border-bottom:1px solid rgba(0,0,0,.06);
+      font-weight:600;
+    }
+    .panel{
+      border-radius:1rem;
+      border:1px solid rgba(0,0,0,.06);
+      background:rgba(255,255,255,.85);
+      padding:1rem;
+      box-shadow:0 10px 30px rgba(20,30,70,.10);
+    }
+    .mono{ font-family: var(--mono); }
+    .helper{ color: rgba(0,0,0,.60); }
+
+    [data-theme="dark"] body{
+      background:
+        radial-gradient(1000px 520px at 18% 0%, rgba(124,92,255,.18), transparent 60%),
+        linear-gradient(180deg,#070a12,#0b1020) !important;
+    }
+    [data-theme="dark"] .panel{
+      background:#0f152a;
+      border-color:#1c2a55;
+      box-shadow:0 16px 36px rgba(0,0,0,.45);
+    }
+    [data-theme="dark"] .helper{ color: rgba(231,236,255,.65); }
+  </style>
+</head>
+<body>
+<div class="container page-wrap" id="app">
+  <div class="panel page-header">
+    <h1 class="page-title">TPPC Rainbow Dex Checklist</h1>
+    <div class="page-subtitle">Build a clean checklist and missing list for your TPPC Rainbow Dex.</div>
+  </div>
+  <!-- Input view -->
+  <div id="input-view">
+    <div class="panel mb-3">
+      <label for="inputList" class="form-label fw-semibold">
+        Paste your TPPC Pokémon list here
+      </label>
+      <textarea id="inputList" class="form-control" rows="15"
+        placeholder="Example:
+ShinyAbomasnow ♂  5  $630
+GoldenAbomasnow ♀  226  $58,127,820
+DarkAbomasnow ♀  5  $630
+Abomasnow ♂  100  $5,049,630
+GoldenMagnemite  5  $630
+Magnemite  5  $630
+DarkMagnemite  5  $630
+ShinyMagnemite  5  $630"></textarea>
+      <div class="row g-3 mt-3">
+        <div class="col-md-4">
+          <label for="minRarity" class="form-label fw-semibold">Min Rarity to check</label>
+          <input
+            type="number"
+            class="form-control"
+            id="minRarity"
+            value="10"
+            min="0"
+          />
+          <div class="form-text">Only show missing with Rarity &gt; this value.</div>
+        </div>
+        <div class="col-md-4">
+          <label for="maxMissing" class="form-label fw-semibold">Max Missing per variant</label>
+          <input
+            type="number"
+            class="form-control"
+            id="maxMissing"
+            value="20"
+            min="0"
+          />
+          <div class="form-text">0 = show all missing per Normal/Shiny/Dark/Golden.</div>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="includeGolds" checked />
+            <label class="form-check-label" for="includeGolds">
+              Include Goldens in missing list
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button id="runButton" class="btn btn-primary">Generate Checklist</button>
+        <div class="mt-3 small text-muted" id="status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output view -->
+  <div id="output-view" class="d-none">
+    <div class="panel">
+      <h2 class="mb-1">Output</h2>
+      <p class="text-muted mb-3">Copy these blocks into your TPPC forum post / notes.</p>
+
+      <label for="outputChecklist" class="form-label fw-semibold">Rainbow Dex Checklist (BBCode)</label>
+      <textarea id="outputChecklist" class="form-control mb-3" rows="20" readonly></textarea>
+
+      <label for="outputExtras" class="form-label fw-semibold">
+        High-rarity missing list + duplicates
+      </label>
+      <textarea id="outputExtras" class="form-control" rows="14" readonly></textarea>
+
+      <button id="backButton" class="btn btn-secondary mt-3">Back to input</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===============================
+// Utility helpers
+// ===============================
+
+const GEN_BREAKPOINTS = [
+  { gen: 1, start: 1,   label: "Generation 1" },
+  { gen: 2, start: 152, label: "Generation 2" },
+  { gen: 3, start: 252, label: "Generation 3" },
+  { gen: 4, start: 387, label: "Generation 4" },
+  { gen: 5, start: 494, label: "Generation 5" },
+  { gen: 6, start: 650, label: "Generation 6" },
+  { gen: 7, start: 722, label: "Generation 7" },
+  { gen: 8, start: 810, label: "Generation 8" },
+  { gen: 9, start: 906, label: "Generation 9" },
+];
+
+function genForDex(dex) {
+  let current = GEN_BREAKPOINTS[0];
+  for (const bp of GEN_BREAKPOINTS) {
+    if (dex >= bp.start) current = bp;
+    else break;
+  }
+  return current.gen;
+}
+
+function genTitle(genNum) {
+  // Per your requirement
+  return `[b][u][size="5"]Generation ${genNum}[/size][/u][/b]`;
+}
+
+function stripPrefixes(name) {
+  // Special-case Darkrai: do NOT strip "Dark"
+  if (/^darkrai\b/i.test(name)) return name.trim();
+  return name.replace(/^(shiny|dark|golden)\s*/i, "").trim();
+}
+
+function speciesFromFullName(fullName) {
+  // Remove Dark/Shiny/Golden, drop form in parentheses for dex lookup
+  const noPrefix = stripPrefixes(fullName);
+  const base = noPrefix.split("(")[0].trim();
+  return base;
+}
+
+// ---------- KEY FIX: split canonical keys ----------
+// Use *EXACT* keys for checklist identity, missing, dupes, presence checks.
+// Use *DEX* keys only for name_to_dex lookup (collapses Unown variants).
+
+function canonicalKeyExact(name) {
+  let norm = name.normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace("♀", "F")
+    .replace("♂", "M")
+    .toLowerCase();
+
+  // Keep Darkrai stable
+  const stripped = norm.replace(/[^a-z0-9]/g, "");
+  if (stripped === "darkrai") return "darkrai";
+
+  // Keep Unown variants distinct; allow ! and ?
+  return norm.replace(/[^a-z0-9!?]/g, "");
+}
+
+function canonicalKeyDex(name) {
+  // Collapse Unown variants ONLY for dex lookup
+  const exact = canonicalKeyExact(name);
+  if (exact.startsWith("unown") && exact.length > "unown".length) return "unown";
+  return exact;
+}
+
+function colorCategory(name) {
+  const n = name.trim();
+
+  // --- Special case: Darkrai is NOT a Dark variant ---
+  // Allow ShinyDarkrai / DarkDarkrai / GoldenDarkrai to still work
+  if (/^darkrai\b/i.test(n)) return "normal";
+  if (/^shinydarkrai\b/i.test(n)) return "shiny";
+  if (/^darkdarkrai\b/i.test(n)) return "dark";
+  if (/^goldendarkrai\b/i.test(n)) return "golden";
+
+  const lower = n.toLowerCase();
+  if (lower.startsWith("golden")) return "golden";
+  if (lower.startsWith("shiny")) return "shiny";
+  if (lower.startsWith("dark")) return "dark";
+  return "normal";
+}
+
+// For sorting by color group (Gold, Shiny, Dark, Normal)
+function colorOrderIndex(name) {
+  const cat = colorCategory(name);
+  if (cat === "golden") return 0;
+  if (cat === "shiny") return 1;
+  if (cat === "dark") return 2;
+  return 3;
+}
+
+// ===============================
+// Fetch helpers
+// ===============================
+
+async function fetchDexMapping() {
+  const res = await fetch("data/name_to_dex.json");
+  if (!res.ok) throw new Error("Failed to fetch data/name_to_dex.json");
+  const obj = await res.json();
+  const nameToDex = {};
+  for (const [k, v] of Object.entries(obj)) nameToDex[k] = Number(v);
+  return nameToDex;
+}
+
+async function fetchRarityTable() {
+  const res = await fetch("https://darknesspwnsu.github.io/tppc-data/data/rarity.html");
+  if (!res.ok) throw new Error("Failed to fetch TPPC rarity list.");
+
+  const html = await res.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const table = doc.querySelector("table");
+  if (!table) throw new Error("Could not find rarity table.");
+
+  const rows = Array.from(table.querySelectorAll("tr"));
+  if (rows.length < 2) throw new Error("No rows in rarity table.");
+
+  const headerCells = Array.from(rows[0].querySelectorAll("th, td")).map((c) =>
+    c.textContent.trim()
+  );
+
+  const idxPokemon = headerCells.findIndex((h) => h.toLowerCase().startsWith("pok"));
+  if (idxPokemon === -1) throw new Error("Could not locate Pokémon column in rarity table.");
+
+  // Overall rarity is the LAST column
+  const idxOverall = headerCells.length - 1;
+
+  const out = [];
+  for (let i = 1; i < rows.length; i++) {
+    const cells = Array.from(rows[i].querySelectorAll("td"));
+    if (cells.length <= Math.max(idxPokemon, idxOverall)) continue;
+
+    const pokemon = cells[idxPokemon].textContent.trim();
+    const overallStr = cells[idxOverall].textContent.replace(/,/g, "").trim();
+    const overall = parseInt(overallStr, 10) || 0;
+
+    out.push({ pokemon, overall });
+  }
+
+  return out;
+}
+
+// ===============================
+// Parsing input list
+// ===============================
+
+function parseInputList(inputText) {
+  const rows = [];
+  const rawLines = (inputText || "").replace(/\r\n/g, "\n").split("\n");
+
+  // group1: variant name (with color + form)
+  // group2: optional gender symbol ♂ / ♀
+  // group3: level (digits+commas)
+  const lineRegex = /^(.+?)(?:\s+([♂♀])|\s+\(\?\))?\s+([\d,]+)\b/;
+
+  for (const rawLine of rawLines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    const m = line.match(lineRegex);
+    if (!m) continue;
+
+    let variantName = m[1].trim();
+    let gender = m[2] || "";
+    if (!gender && /\(\?\)/.test(line)) gender = "(?)";
+
+    const lvlRaw = m[3];
+    const lvlInt = parseInt(lvlRaw.replace(/,/g, ""), 10);
+    const levelStr = Number.isFinite(lvlInt) ? lvlInt.toLocaleString("en-US") : lvlRaw.replace(/\s+/g, "");
+
+    rows.push({ line, variantName, gender, levelInt: lvlInt, levelStr });
+  }
+
+  return rows;
+}
+
+// ===============================
+// Main logic
+// ===============================
+
+async function runRainbowDexChecklist({ inputText, minRarity, maxMissing, includeGolds, statusEl }) {
+  statusEl.textContent = "Parsing input list...";
+  const parsedRows = parseInputList(inputText);
+
+  if (parsedRows.length === 0) {
+    throw new Error("No valid Pokémon lines found in input.");
+  }
+
+  statusEl.textContent = "Building best-entry map + duplicates...";
+
+  // IMPORTANT: Use EXACT keys (do not collapse Unown variants)
+  const inputByKey = new Map();    // exact variant key -> best row by level
+  const countsByKey = new Map();   // exact variant key -> count
+
+  for (const r of parsedRows) {
+    const key = canonicalKeyExact(r.variantName);
+    countsByKey.set(key, (countsByKey.get(key) || 0) + 1);
+
+    const existing = inputByKey.get(key);
+    if (!existing) {
+      inputByKey.set(key, r);
+    } else {
+      const newL = Number.isFinite(r.levelInt) ? r.levelInt : -1;
+      const oldL = Number.isFinite(existing.levelInt) ? existing.levelInt : -1;
+      if (newL > oldL) inputByKey.set(key, r);
+    }
+  }
+
+  const duplicates = [];
+  for (const [key, count] of countsByKey.entries()) {
+    if (count > 1) {
+      const bestRow = inputByKey.get(key);
+      duplicates.push(bestRow.variantName);
+    }
+  }
+  duplicates.sort((a, b) => {
+    const oa = colorOrderIndex(a);
+    const ob = colorOrderIndex(b);
+    if (oa !== ob) return oa - ob;
+    return a.localeCompare(b);
+  });
+
+  statusEl.textContent = "Fetching Dex mapping...";
+  const nameToDex = await fetchDexMapping();
+
+  statusEl.textContent = "Fetching rarity list...";
+  const rarityRows = await fetchRarityTable();
+
+  statusEl.textContent = "Building dex -> form checklist...";
+  const dexMap = new Map(); // dex -> (baseFormKeyExact -> record)
+
+  for (const row of rarityRows) {
+    const rarityName = row.pokemon;
+    if (!rarityName) continue;
+
+    const cat = colorCategory(rarityName);
+
+    const baseSpecies = speciesFromFullName(rarityName);
+    const speciesKeyForDex = canonicalKeyDex(baseSpecies);
+    const dex = nameToDex[speciesKeyForDex] ?? 9999;
+
+    const baseFormLabel = stripPrefixes(rarityName); // keeps UnownA distinct, etc.
+    const baseFormKey = canonicalKeyExact(baseFormLabel); // IMPORTANT: exact (no Unown collapse)
+
+    if (!dexMap.has(dex)) dexMap.set(dex, new Map());
+    const formMap = dexMap.get(dex);
+
+    if (!formMap.has(baseFormKey)) {
+      formMap.set(baseFormKey, {
+        dex,
+        baseFormLabel,
+        variants: { normal: null, shiny: null, dark: null, golden: null },
+      });
+    }
+
+    const rec = formMap.get(baseFormKey);
+
+    // Store this variant (exists in rarity) and its overall rarity
+    if (!rec.variants[cat]) {
+      rec.variants[cat] = {
+        rarityName,
+        overall: row.overall || 0,
+      };
+    }
+  }
+
+  // Dex completion counters (counts only variants that exist in rarity table)
+  let totalSlots = 0;
+  let filledSlots = 0;
+
+  function renderCell(variantInfo) {
+    if (!variantInfo) return ""; // variant does not exist at all in rarity
+
+    const rarityName = variantInfo.rarityName;
+    const keyExact = canonicalKeyExact(rarityName);
+
+    totalSlots += 1;
+    const present = inputByKey.get(keyExact);
+    if (present) filledSlots += 1;
+
+    if (present) {
+      // Have it: magenta, show variantName + optional gender + level
+      let txt = present.variantName;
+      if (present.gender && present.levelStr) txt = `${present.variantName} ${present.gender} ${present.levelStr}`;
+      else if (present.gender) txt = `${present.variantName} ${present.gender}`;
+      else if (present.levelStr) txt = `${present.variantName} ${present.levelStr}`;
+      return `[color="magenta"]${txt}[/color]`;
+    }
+
+    // Missing: slategray, show rarityName only (no gender/level)
+    return `[color="slategray"]${rarityName}[/color]`;
+  }
+
+  statusEl.textContent = "Formatting checklist...";
+
+  const blocksByGen = new Map();
+  const dexList = Array.from(dexMap.keys()).sort((a, b) => a - b);
+
+  for (const dex of dexList) {
+    const g = genForDex(dex);
+    if (!blocksByGen.has(g)) blocksByGen.set(g, []);
+
+    const formMap = dexMap.get(dex);
+    const formRecords = Array.from(formMap.values()).sort((a, b) =>
+      a.baseFormLabel.localeCompare(b.baseFormLabel)
+    );
+
+    for (const rec of formRecords) {
+      const dexStr = dex >= 0 && dex < 1000 ? dex.toString().padStart(3, "0") : String(dex);
+      const dexLabel = `[B][color="red"]#${dexStr}[/color][/b]`;
+
+      const normalCell = renderCell(rec.variants.normal);
+      const shinyCell  = renderCell(rec.variants.shiny);
+      const darkCell   = renderCell(rec.variants.dark);
+      const goldenCell = renderCell(rec.variants.golden);
+
+      const rowLine = `${dexLabel} - ${[normalCell, shinyCell, darkCell, goldenCell].join(" | ")}`.trimEnd();
+      blocksByGen.get(g).push(rowLine);
+    }
+  }
+
+  const pct = totalSlots > 0 ? (filledSlots / totalSlots) * 100 : 0;
+  const pctStr = (Math.round(pct * 100) / 100).toFixed(2); // 2 decimals
+
+  // Emit in gen order
+  const checklistParts = [];
+  checklistParts.push(`Dex Completion: ${pctStr}% (${filledSlots} / ${totalSlots})`);
+  checklistParts.push(""); // spacer
+
+  for (const bp of GEN_BREAKPOINTS) {
+    const genNum = bp.gen;
+    const lines = blocksByGen.get(genNum) || [];
+    if (lines.length === 0) continue;
+
+    checklistParts.push(genTitle(genNum));
+    checklistParts.push("[code]");
+    checklistParts.push(...lines);
+    checklistParts.push("[/code]");
+    checklistParts.push("");
+  }
+
+  const checklistText = checklistParts.join("\n").trim();
+
+  // ===============================
+  // High-rarity missing list + dupes
+  // ===============================
+
+  statusEl.textContent = "Computing high-rarity missing list...";
+
+  const missingByVariant = { normal: [], shiny: [], dark: [], golden: [] };
+
+  for (const row of rarityRows) {
+    const name = row.pokemon;
+    if (!name) continue;
+
+    const cat = colorCategory(name);
+    if (!includeGolds && cat === "golden") continue;
+
+    const overall = row.overall || 0;
+    if (overall <= minRarity) continue;
+
+    // Gender-agnostic + Unown-safe: use EXACT key
+    const keyExact = canonicalKeyExact(name);
+    if (inputByKey.has(keyExact)) continue;
+
+    missingByVariant[cat].push({ name, overall });
+  }
+
+  function sliceVariantList(list) {
+    if (maxMissing && maxMissing > 0) return list.slice(0, maxMissing);
+    return list;
+  }
+
+  const extrasLines = [];
+  extrasLines.push(
+    `=== Missing (overall rarity > ${minRarity}) per variant; ${
+      maxMissing && maxMissing > 0 ? "up to " + maxMissing + " shown per variant" : "all shown"
+    } ===`
+  );
+  extrasLines.push(includeGolds
+    ? "Goldens are included in the missing list."
+    : "Goldens are excluded from the missing list."
+  );
+
+  function emitMissingVariant(label, catKey) {
+    const all = missingByVariant[catKey];
+    if (!all || all.length === 0) return;
+
+    all.sort((a, b) => {
+      if (b.overall !== a.overall) return b.overall - a.overall;
+      return a.name.localeCompare(b.name);
+    });
+
+    const shown = sliceVariantList(all);
+
+    extrasLines.push("");
+    extrasLines.push(`--- ${label} ---`);
+    extrasLines.push(`Total missing ${label.toLowerCase()}: ${all.length}`);
+
+    if (shown.length === 0) {
+      extrasLines.push("You have all of them in this range.");
+    } else {
+      for (const { name, overall } of shown) {
+        extrasLines.push(`${name}: Rarity = ${overall.toLocaleString("en-US")}`);
+      }
+    }
+  }
+
+  // Gold, Shiny, Dark, Normal
+  emitMissingVariant("Golden", "golden");
+  emitMissingVariant("Shiny", "shiny");
+  emitMissingVariant("Dark", "dark");
+  emitMissingVariant("Normal", "normal");
+
+  // Duplicates
+  extrasLines.push("");
+  extrasLines.push("=== Duplicates in input (ignoring gender and level, aggregated by mon) ===");
+  if (duplicates.length === 0) extrasLines.push("None");
+  else for (const name of duplicates) extrasLines.push(name);
+
+  const extrasText = extrasLines.join("\n");
+
+  statusEl.textContent = "Done.";
+  return { checklistText, extrasText };
+}
+
+// ===============================
+// UI wiring
+// ===============================
+
+const runButton = document.getElementById("runButton");
+const backButton = document.getElementById("backButton");
+const statusEl = document.getElementById("status");
+const inputView = document.getElementById("input-view");
+const outputView = document.getElementById("output-view");
+const inputListEl = document.getElementById("inputList");
+const outputChecklistEl = document.getElementById("outputChecklist");
+const outputExtrasEl = document.getElementById("outputExtras");
+const minRarityEl = document.getElementById("minRarity");
+const maxMissEl = document.getElementById("maxMissing");
+const includeGoldsEl = document.getElementById("includeGolds");
+
+runButton.addEventListener("click", async () => {
+  const inputText = inputListEl.value.trim();
+  if (!inputText) {
+    statusEl.textContent = "Please paste your list first.";
+    return;
+  }
+
+  const minRarity = parseInt(minRarityEl.value, 10);
+  const maxMissing = parseInt(maxMissEl.value, 10);
+  const includeGolds = includeGoldsEl.checked;
+
+  runButton.disabled = true;
+  statusEl.textContent = "Running rainbow dex checklist...";
+  try {
+    const { checklistText, extrasText } = await runRainbowDexChecklist({
+      inputText,
+      minRarity: Number.isFinite(minRarity) ? minRarity : 10,
+      maxMissing: Number.isFinite(maxMissing) ? maxMissing : 20,
+      includeGolds,
+      statusEl,
+    });
+    outputChecklistEl.value = checklistText;
+    outputExtrasEl.value = extrasText;
+    inputView.classList.add("d-none");
+    outputView.classList.remove("d-none");
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Error: " + err.message;
+  } finally {
+    runButton.disabled = false;
+  }
+});
+
+backButton.addEventListener("click", () => {
+  outputView.classList.add("d-none");
+  inputView.classList.remove("d-none");
+  statusEl.textContent = "";
+});
+</script>
+
+
+
+<script defer src="/assets/tools.js"></script>
+  <script defer src="/assets/site.js"></script>
+
+</body>
+</html>

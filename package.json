@@ -5,6 +5,7 @@
     "build": "tsx scripts/generate-legacy-redirects.ts && next build",
     "start": "next start",
     "sync:gold-data": "node scripts/sync-gold-data.mjs",
+    "sync:coldsp33d-baseline": "tsx scripts/sync-coldsp33d-baseline.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:ci",
     "test:unit": "vitest run",

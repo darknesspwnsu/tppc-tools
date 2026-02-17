@@ -28,7 +28,7 @@ export function UngenderedDiffTool() {
             </label>
             <textarea
               id="input1"
-              className="field-area mono"
+              className="field-area mono io-input"
               rows={14}
               value={input1}
               onChange={(e) => setInput1(e.target.value)}
@@ -41,7 +41,7 @@ export function UngenderedDiffTool() {
             </label>
             <textarea
               id="input2"
-              className="field-area mono"
+              className="field-area mono io-input"
               rows={14}
               value={input2}
               onChange={(e) => setInput2(e.target.value)}
@@ -89,13 +89,13 @@ export function UngenderedDiffTool() {
               <label htmlFor="output1" className="mono" style={{ fontSize: "0.78rem" }}>
                 Results for Box 1
               </label>
-              <textarea id="output1" className="field-area mono" rows={16} readOnly value={output1} />
+              <textarea id="output1" className="field-area mono io-output" rows={16} readOnly value={output1} />
             </div>
             <div>
               <label htmlFor="output2" className="mono" style={{ fontSize: "0.78rem" }}>
                 Results for Box 2
               </label>
-              <textarea id="output2" className="field-area mono" rows={16} readOnly value={output2} />
+              <textarea id="output2" className="field-area mono io-output" rows={16} readOnly value={output2} />
             </div>
           </div>
         </div>
@@ -103,4 +103,3 @@ export function UngenderedDiffTool() {
     </div>
   );
 }
-

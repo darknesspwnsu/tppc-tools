@@ -124,7 +124,20 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       compute: organizeBox,
       initialState: {
         input: "",
-        combine: false
+        combine: false,
+        dupeDesc: false,
+        plainLevel: false,
+        combineSD: false,
+        dedicatedUnknown: false,
+        dedicatedLegends: false,
+        keepGoldsInGolden: false,
+        filterJunk: false,
+        colors: {
+          golden: "",
+          shiny: "",
+          dark: "",
+          normal: ""
+        }
       }
     };
   }
@@ -154,7 +167,10 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       compute: imageDataToBbcode,
       initialState: {
         pokeInput: "",
-        sizePreset: 2
+        sizePreset: 2,
+        resolutionMode: "auto",
+        customColumns: 120,
+        alphaThreshold: 30
       }
     };
   }
@@ -185,7 +201,9 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
         inputText: "",
         minUngendered: 10,
         maxMissing: 20,
-        partitionOutput: false
+        partitionOutput: false,
+        visualizeCloud: false,
+        cloudSampleSize: 100
       }
     };
   }

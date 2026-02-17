@@ -1,6 +1,27 @@
 import { describe, expect, it } from "vitest";
 
 import { organizeBox, parseBoxInput } from "@/features/box-organizer/core";
+import type { BoxOrganizerOptions } from "@/features/box-organizer/types";
+
+function defaultOptions(overrides: Partial<BoxOrganizerOptions> = {}): BoxOrganizerOptions {
+  return {
+    combine: false,
+    dupeDesc: false,
+    plainLevel: false,
+    combineSD: false,
+    dedicatedUnknown: false,
+    dedicatedLegends: false,
+    keepGoldsInGolden: false,
+    filterJunk: false,
+    colors: {
+      golden: "",
+      shiny: "",
+      dark: "",
+      normal: ""
+    },
+    ...overrides
+  };
+}
 
 describe("box-organizer core", () => {
   it("parses compact (Level: X) entries", () => {
@@ -21,7 +42,7 @@ describe("box-organizer core", () => {
         "Bulbasaur (Level: 2)"
       ].join("\n")
     );
-    const out = organizeBox(parsed, { combine: true });
+    const out = organizeBox(parsed, defaultOptions({ combine: true }));
     expect(out.output).toContain("[b]Golden[/b]");
     expect(out.output).toContain("GoldenAbra♀ (Level: 3)");
     expect(out.output).toContain("[b]Normal[/b]");

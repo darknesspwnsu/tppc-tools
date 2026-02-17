@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TPPC Sell Guide</title>
+  <meta name="description" content="Convert TPPC money values to level targets and vice versa." />
+  <meta name="theme-color" content="#eef2ff" />
+  <meta property="og:title" content="TPPC Sell Guide" />
+  <meta property="og:description" content="Convert TPPC money values to level targets and vice versa." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- MathJax (LaTeX rendering) -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body { padding: 0 0 1.25rem; }
+    .mono { font-family: var(--mono); }
+    .eq {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      font-weight: 800;
+      opacity: 0.75;
+      user-select: none;
+    }
+    .form-control.mono { font-size: 1.1rem; }
+    .hint { font-size: .9rem; opacity: .8; }
+    .small-metric { font-size: .95rem; }
+    .pill {
+      border-radius: 999px;
+      padding: .15rem .6rem;
+      background: rgba(0,0,0,.06);
+      display: inline-block;
+    }
+    .app-footer{
+      margin-top: 1.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,.1);
+      text-align: center;
+      opacity: .8;
+      font-size: .95rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container page-wrap">
+    <div class="panel page-header">
+      <h1 class="page-title">TPPC Sell Guide</h1>
+      <div class="page-subtitle">Convert TPPC money values to the right selling level.</div>
+    </div>
+    <div class="panel">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="fw-semibold">Calculator</div>
+        <button id="btnClear" class="btn btn-outline-secondary btn-sm">Clear</button>
+      </div>
+      <div class="row g-3 align-items-center">
+        <!-- MONEY (LEFT) -->
+        <div class="col-12 col-md-5">
+          <label class="form-label d-flex align-items-center gap-2">
+            <span>Money ($)</span>
+            <span id="unitPill" class="pill mono">Millions</span>
+          </label>
+
+          <input id="moneyInput" class="form-control mono" inputmode="decimal" placeholder="e.g. 250 (meaning $250,000,000)" />
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="moneyMeaning" id="meaningBuyerPays" checked>
+              <label class="form-check-label" for="meaningBuyerPays">Money is what <b>buyer pays</b></label>
+            </div>
+            <div class="form-check ms-md-3">
+              <input class="form-check-input" type="radio" name="moneyMeaning" id="meaningSellerGets">
+              <label class="form-check-label" for="meaningSellerGets">Money is what <b>seller receives</b></label>
+            </div>
+          </div>
+
+          <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="exactAmount">
+            <label class="form-check-label" for="exactAmount">Enter exact amount (dollars/cents)</label>
+          </div>
+
+          <div class="form-check mt-2" id="ppRow">
+            <input class="form-check-input" type="checkbox" id="ppControlled">
+            <label class="form-check-label" for="ppControlled">If PP controlled (buyer pays 33% off)</label>
+          </div>
+
+          <div class="hint mt-2" id="moneyHint">
+            Type a number (like <span class="mono">250</span>) → assumes millions by default.
+          </div>
+        </div>
+
+        <!-- EQUAL -->
+        <div class="col-12 col-md-2 text-center">
+          <div class="eq">=</div>
+        </div>
+
+        <!-- LEVEL (RIGHT) -->
+        <div class="col-12 col-md-5">
+          <label class="form-label">Level to sell</label>
+          <input id="levelInput" class="form-control mono" inputmode="numeric" placeholder="e.g. 610" />
+          <div class="hint mt-1">Type a level → updates the money based on your selected meaning.</div>
+
+          <div class="small-metric mt-3">
+            <div><span class="text-muted">Market price (no PP):</span> <span id="marketOut" class="mono fw-semibold">$—</span></div>
+            <div><span class="text-muted">Buyer pays (with PP setting):</span> <span id="buyerOut" class="mono fw-semibold">$—</span></div>
+            <div><span class="text-muted">Seller receives:</span> <span id="sellerOut" class="mono fw-semibold">$—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS (moved above formula panel) -->
+      <div class="row g-3 mt-3">
+        <div class="col-12">
+          <div id="status" class="alert alert-light border mb-0 mono small-metric">Ready.</div>
+        </div>
+      </div>
+
+      <!-- FORMULA PANEL -->
+      <div class="row g-3 mt-3">
+        <div class="col-12">
+          <div class="panel panel-muted">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="fw-semibold">Formula</div>
+              <span id="modeBadge" class="badge text-bg-secondary">—</span>
+            </div>
+
+            <div id="formulaLatex"></div>
+
+            <div class="hint mt-2 mb-0">
+              Note: PP control affects the <b>buyer price only</b>. Seller still receives half of the original (non-discounted) market price.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const moneyInput = $("moneyInput");
+  const levelInput = $("levelInput");
+  const ppControlled = $("ppControlled");
+  const exactAmount = $("exactAmount");
+  const meaningBuyerPays = $("meaningBuyerPays");
+  const meaningSellerGets = $("meaningSellerGets");
+
+  const marketOut = $("marketOut");
+  const buyerOut = $("buyerOut");
+  const sellerOut = $("sellerOut");
+  const status = $("status");
+  const formulaLatex = $("formulaLatex");
+  const modeBadge = $("modeBadge");
+  const unitPill = $("unitPill");
+  const ppRow = $("ppRow");
+  const moneyHint = $("moneyHint");
+  const btnClear = $("btnClear");
+
+  // Footer year (site footer)
+
+  let updating = false;
+
+  // -------- BigInt-safe TPPC math --------
+  function cube(L) { return L * L * L; }
+
+  // TotalEXP = L^3 + 1
+  // MarketPrice = 10*(TotalEXP) = 10*(L^3 + 1) = 10L^3 + 10
+  function marketPrice(L) {
+    return 10n * (cube(L) + 1n);
+  }
+
+  // Buyer pays:
+  // - Not PP: MarketPrice
+  // - PP: floor(2/3 * MarketPrice) in integer math
+  function buyerPays(L, isPP) {
+    const m = marketPrice(L);
+    if (!isPP) return m;
+    return (2n * m) / 3n; // floor
+  }
+
+  function sellerReceives(L) {
+    return marketPrice(L) / 2n;
+  }
+
+  function formatDollarsBI(x) {
+    if (x === null) return "$—";
+    const s = x.toString();
+    return "$" + s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function setStatus(msg, kind="light") {
+    status.className = "alert border mb-0 mono small-metric alert-" + kind;
+    status.textContent = msg;
+  }
+
+  // -------- Money parsing (Millions mode vs exact) --------
+  // Returns:
+  // - null for empty
+  // - "INVALID" for invalid
+  // - BigInt dollars for valid
+  function parseMoneyToDollarsBigInt(s) {
+    if (!s) return null;
+    let str = String(s).trim();
+    if (!str) return null;
+
+    // Allow optional leading $
+    if (str.startsWith("$")) str = str.slice(1).trim();
+    if (!str) return null;
+
+    if (!exactAmount.checked) {
+      // MILLIONS MODE
+      // Valid forms: 250 / 250.5 / 1,200 / $250.75
+      if (!/^[\d,]+(\.\d+)?$/.test(str)) return "INVALID";
+
+      str = str.replace(/,/g, "");
+      if (!str || str === ".") return "INVALID";
+
+      const parts = str.split(".");
+      const whole = parts[0];
+      const frac = (parts[1] || "").slice(0, 6).padEnd(6, "0"); // millionths of a million
+
+      if (!/^\d+$/.test(whole) || !/^\d{6}$/.test(frac)) return "INVALID";
+
+      return BigInt(whole) * 1_000_000n + BigInt(frac);
+    }
+
+    // EXACT MODE
+    // Valid forms: 250000000 / 250,000,000.25 / $250,000,000.00
+    if (!/^[\d,]+(\.\d{1,2})?$/.test(str)) return "INVALID";
+
+    str = str.replace(/,/g, "");
+    const parts = str.split(".");
+    if (!parts[0] || !/^\d+$/.test(parts[0])) return "INVALID";
+
+    let dollars = BigInt(parts[0]);
+    let cents = parts[1] ? parts[1].padEnd(2, "0") : "00";
+    if (!/^\d{2}$/.test(cents)) return "INVALID";
+
+    // Round to nearest dollar
+    if (Number(cents) >= 50) dollars += 1n;
+    return dollars;
+  }
+
+  function moneyDisplayFromDollars(dollarsBI) {
+    if (dollarsBI === null) return "";
+    if (exactAmount.checked) {
+      return dollarsBI.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    const d = dollarsBI;
+    const whole = d / 1_000_000n;
+    const frac = d % 1_000_000n;
+    if (frac === 0n) return whole.toString();
+    let fracStr = frac.toString().padStart(6, "0").replace(/0+$/,"");
+    return whole.toString() + "." + fracStr;
+  }
+
+  // -------- Level solving --------
+  function levelForTarget(targetDollars, meaning, isPP) {
+    const f = (L) => (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
+    if (targetDollars <= 0n) return 1n;
+
+    let lo = 1n, hi = 1n;
+    while (f(hi) < targetDollars) {
+      hi *= 2n;
+      if (hi > 10_000_000n) break;
+    }
+
+    while (lo < hi) {
+      const mid = (lo + hi) / 2n;
+      if (f(mid) >= targetDollars) hi = mid;
+      else lo = mid + 1n;
+    }
+    return lo;
+  }
+
+  function parseLevel(s) {
+    if (!s) return null;
+    const cleaned = String(s).replace(/[^0-9]/g, "");
+    if (!cleaned) return null;
+    return BigInt(cleaned);
+  }
+
+  // -------- Formula panel (MathJax) --------
+  function updateFormulaPanel() {
+    const isPP = ppControlled.checked;
+    const meaning = meaningSellerGets.checked ? "seller" : "buyer";
+
+    // PP row only matters if money refers to buyer pay
+    ppRow.style.display = (meaning === "buyer") ? "" : "none";
+
+    // Badge
+    const label = (meaning === "buyer")
+      ? (isPP ? "Money = Buyer pays (PP controlled)" : "Money = Buyer pays (not PP)")
+      : "Money = Seller receives";
+    modeBadge.textContent = label;
+    modeBadge.className = "badge " + (meaning === "seller" ? "text-bg-primary" : (isPP ? "text-bg-success" : "text-bg-secondary"));
+
+    // Display math (clean: 2/3 MarketPrice)
+    const buyerEq = isPP
+      ? String.raw`\text{BuyerPays}(L) = \frac{2}{3}\,\text{MarketPrice}(L)`
+      : String.raw`\text{BuyerPays}(L) = \text{MarketPrice}(L)`;
+
+    const moneyEq = (meaning === "seller")
+      ? String.raw`\text{MoneyInput} = \text{SellerReceives}(L) = \frac{1}{2}\,\text{MarketPrice}(L)`
+      : String.raw`\text{MoneyInput} = \text{BuyerPays}(L)`;
+
+    formulaLatex.innerHTML =
+      String.raw`
+      \[
+      \text{TotalEXP}(L) = L^3 + 1
+      \]
+      \[
+      \text{MarketPrice}(L) = 10\cdot\text{TotalEXP}(L) = 10(L^3 + 1) = 10L^3 + 10
+      \]
+      \[
+      ${buyerEq}
+      \]
+      \[
+      \text{SellerReceives}(L) = \frac{1}{2}\,\text{MarketPrice}(L)
+      \]
+      \[
+      ${moneyEq}
+      \]
+      `;
+
+    if (window.MathJax) MathJax.typesetPromise();
+  }
+
+  // -------- Output metrics --------
+  function updateOutputsForLevel(L) {
+    if (L === null) {
+      marketOut.textContent = "$—";
+      buyerOut.textContent = "$—";
+      sellerOut.textContent = "$—";
+      return;
+    }
+    const meaning = meaningSellerGets.checked ? "seller" : "buyer";
+    const isPP = (meaning === "seller") ? true : ppControlled.checked;
+    const m = marketPrice(L);
+    const bp = buyerPays(L, isPP);
+    const sr = sellerReceives(L);
+
+    marketOut.textContent = formatDollarsBI(m);
+    buyerOut.textContent = formatDollarsBI(bp);
+    sellerOut.textContent = formatDollarsBI(sr);
+  }
+
+  // -------- Main sync: from money -> level or from level -> money --------
+  function updateFromMoney() {
+    const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
+
+    if (dollars === "INVALID") {
+      levelInput.value = "";             // clear level on invalid
+      updateOutputsForLevel(null);
+      moneyInput.classList.add("is-invalid");
+      setStatus("Invalid input", "danger");
+      return;
+    }
+
+    moneyInput.classList.remove("is-invalid");
+
+    if (dollars === null) {
+      levelInput.value = "";
+      updateOutputsForLevel(null);
+      setStatus("Ready.", "light");
+      return;
+    }
+
+    const meaning = meaningSellerGets.checked ? "seller" : "buyer";
+    const isPP = ppControlled.checked;
+
+    const L = levelForTarget(dollars, meaning, isPP);
+    levelInput.value = L.toString();
+
+    updateOutputsForLevel(L);
+
+    const actual = (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
+
+    setStatus(
+      `${meaning === "seller" ? "Seller receives" : "Buyer pays"} target ${formatDollarsBI(dollars)} → minimum Level ${L.toString()} gives ${formatDollarsBI(actual)}.`,
+      "light"
+    );
+  }
+
+  function updateFromLevel() {
+    const L = parseLevel(levelInput.value);
+    if (L === null) {
+      moneyInput.value = "";
+      moneyInput.classList.remove("is-invalid");
+      updateOutputsForLevel(null);
+      setStatus("Ready.", "light");
+      return;
+    }
+
+    updateOutputsForLevel(L);
+
+    const meaning = meaningSellerGets.checked ? "seller" : "buyer";
+    const isPP = ppControlled.checked;
+    const dollars = (meaning === "seller") ? sellerReceives(L) : buyerPays(L, isPP);
+
+    moneyInput.value = moneyDisplayFromDollars(dollars);
+    moneyInput.classList.remove("is-invalid");
+
+    setStatus(
+      `Level ${L.toString()} → ${meaning === "seller" ? "Seller receives" : "Buyer pays"} ${formatDollarsBI(dollars)}.`,
+      "light"
+    );
+  }
+
+  function withGuard(fn) {
+    if (updating) return;
+    updating = true;
+    try { fn(); } finally { updating = false; }
+  }
+
+  function updateMoneyModeUI() {
+    const exact = exactAmount.checked;
+    unitPill.textContent = exact ? "Exact $" : "Millions";
+    moneyInput.placeholder = exact ? "e.g. $250,000,000.00" : "e.g. 250 (meaning $250,000,000)";
+    moneyHint.innerHTML = exact
+      ? `Enter the exact dollar amount (optional <span class="mono">$</span>, commas and up to 2 decimals).`
+      : `Type a number (like <span class="mono">250</span>) → assumes <b>millions</b> (=$250,000,000). Optional <span class="mono">$</span>. Decimals allowed (e.g. <span class="mono">250.5</span>).`;
+  }
+
+  function onModeChangeRecompute() {
+    updateFormulaPanel();
+
+    const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
+    if (dollars === "INVALID") {
+      levelInput.value = "";
+      updateOutputsForLevel(null);
+      moneyInput.classList.add("is-invalid");
+      setStatus("Invalid input", "danger");
+      return;
+    }
+
+    if (dollars !== null) updateFromMoney();
+    else if (parseLevel(levelInput.value) !== null) updateFromLevel();
+    else setStatus("Ready.", "light");
+  }
+
+  // Events
+  moneyInput.addEventListener("input", () => withGuard(updateFromMoney));
+  levelInput.addEventListener("input", () => withGuard(updateFromLevel));
+
+  ppControlled.addEventListener("change", () => withGuard(onModeChangeRecompute));
+  exactAmount.addEventListener("change", () => withGuard(() => {
+    // Convert displayed money to new mode without changing its meaning in dollars (when valid).
+    const dollars = parseMoneyToDollarsBigInt(moneyInput.value);
+    updateMoneyModeUI();
+    if (dollars !== null && dollars !== "INVALID") moneyInput.value = moneyDisplayFromDollars(dollars);
+    onModeChangeRecompute();
+  }));
+
+  meaningBuyerPays.addEventListener("change", () => withGuard(onModeChangeRecompute));
+  meaningSellerGets.addEventListener("change", () => withGuard(onModeChangeRecompute));
+
+  btnClear.addEventListener("click", () => {
+    moneyInput.value = "";
+    levelInput.value = "";
+    ppControlled.checked = false;
+    exactAmount.checked = false;
+    meaningBuyerPays.checked = true;
+
+    moneyInput.classList.remove("is-invalid");
+
+    updateMoneyModeUI();
+    updateFormulaPanel();
+    updateOutputsForLevel(null);
+    setStatus("Cleared.", "light");
+    moneyInput.focus();
+  });
+
+  // Init
+  updateMoneyModeUI();
+  updateFormulaPanel();
+  updateOutputsForLevel(null);
+})();
+</script>
+<script defer src="/assets/tools.js"></script>
+  <script defer src="/assets/site.js"></script>
+</body>
+</html>

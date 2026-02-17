@@ -31,6 +31,7 @@ Native Next.js static-export site for TPPC utility tools.
   - Captures parity snapshots from native canonical routes.
 - `tests/parity/`
   - Parity fixtures + scenario harness.
+  - `tests/parity/contracts/tool-id-contracts.json` is the required control-ID contract for legacy-compatible UI affordances.
 - `tests/unit/`
   - Core logic and decommission assertions.
 - `tests/e2e/`
@@ -65,6 +66,25 @@ Each tool entry in `src/tools/registry.ts` must define:
 3. Run base-path parity checks:
    - `npm run test:parity:basepath`
 4. If fixture output changed intentionally, commit updates in `tests/parity/golden/*.json` with a short explanation in the commit message.
+
+## External Baseline Sync
+
+Use the pinned legacy baseline from `Coldsp33d/Coldsp33d.github.io@7788118432a23d2f436f7b895b46b6dc8c8a1ab8`:
+
+1. Sync baseline files into `spec/legacy-baseline/coldsp33d-staging/`:
+   - `npm run sync:coldsp33d-baseline`
+2. Compare impacted tool pages/components against baseline IDs/controls before merge.
+3. Treat missing baseline controls as regressions unless explicitly deprecated.
+
+## Parity Contract Policy
+
+1. Do not remove existing tool capabilities during native migration without a documented replacement.
+2. Required legacy-compatible control IDs are enforced by `tests/unit/tool-id-contracts.test.ts`.
+3. If an ID must change, update:
+   - `tests/parity/contracts/tool-id-contracts.json`
+   - E2E/parity selectors
+   - Migration notes in commit message
+4. Default rule: parity-first, then polish.
 
 ## Commands
 

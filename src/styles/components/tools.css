@@ -1,5 +1,5 @@
 .tools-header {
-  margin-top: 0.75rem;
+  margin-top: 0.2rem;
 }
 
 .tools-toolbar {
@@ -42,6 +42,7 @@
   border: 1px solid var(--color-border);
   background: color-mix(in oklab, var(--color-surface), transparent 4%);
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
   transition: transform 0.18s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
@@ -49,6 +50,11 @@
   transform: translateY(-1px);
   border-color: color-mix(in oklab, var(--color-accent), var(--color-border) 56%);
   box-shadow: var(--shadow-md);
+}
+
+.tool-card:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 .tool-card-head {
@@ -111,4 +117,3 @@
     grid-template-columns: 1fr;
   }
 }
-

@@ -1,26 +1,31 @@
 :root {
-  --color-bg: #f5f2eb;
-  --color-bg-elev: #fffdf8;
-  --color-bg-soft: #f2ece0;
-  --color-surface: rgba(255, 252, 245, 0.9);
-  --color-surface-strong: #fffaf1;
-  --color-border: rgba(48, 36, 20, 0.18);
-  --color-text: #2f2415;
-  --color-muted: #675844;
-  --color-accent: #c7641f;
-  --color-accent-2: #0d7c72;
-  --color-accent-soft: rgba(199, 100, 31, 0.12);
-  --color-danger: #a6342b;
-  --color-ok: #17694e;
-  --ring: rgba(199, 100, 31, 0.38);
+  --color-bg: #edf3ff;
+  --color-bg-elev: #f8fbff;
+  --color-bg-soft: #e3edff;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-strong: #ffffff;
+  --color-border: rgba(23, 49, 120, 0.2);
+  --color-text: #10203d;
+  --color-muted: #4a5d85;
+  --color-accent: #1f63e3;
+  --color-accent-2: #0b9fd6;
+  --color-accent-soft: rgba(31, 99, 227, 0.12);
+  --color-danger: #bc2d4d;
+  --color-ok: #137447;
+  --ring: rgba(31, 99, 227, 0.42);
+
+  --io-input-bg: color-mix(in oklab, #8ec6ff, #ffffff 86%);
+  --io-input-border: color-mix(in oklab, #6eaee9, var(--color-border) 52%);
+  --io-output-bg: color-mix(in oklab, #a7dfbf, #ffffff 86%);
+  --io-output-border: color-mix(in oklab, #7db697, var(--color-border) 52%);
 
   --radius-sm: 0.75rem;
   --radius-md: 1rem;
   --radius-lg: 1.25rem;
 
-  --shadow-sm: 0 10px 28px rgba(66, 44, 12, 0.08);
-  --shadow-md: 0 20px 40px rgba(50, 34, 10, 0.12);
-  --shadow-lg: 0 28px 64px rgba(43, 30, 10, 0.2);
+  --shadow-sm: 0 10px 28px rgba(17, 44, 104, 0.08);
+  --shadow-md: 0 20px 40px rgba(12, 37, 92, 0.14);
+  --shadow-lg: 0 28px 64px rgba(11, 30, 76, 0.24);
 
   --content-max: 1160px;
 
@@ -29,23 +34,27 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #12100d;
-  --color-bg-elev: #1b1813;
-  --color-bg-soft: #201c16;
-  --color-surface: rgba(34, 29, 22, 0.9);
-  --color-surface-strong: #241f18;
-  --color-border: rgba(241, 206, 152, 0.18);
-  --color-text: #f6ede0;
-  --color-muted: #c4b39a;
-  --color-accent: #e18847;
-  --color-accent-2: #4ac2b6;
-  --color-accent-soft: rgba(225, 136, 71, 0.16);
-  --color-danger: #d36f67;
-  --color-ok: #56ba98;
-  --ring: rgba(225, 136, 71, 0.48);
+  --color-bg: #081024;
+  --color-bg-elev: #0f1a33;
+  --color-bg-soft: #142244;
+  --color-surface: rgba(15, 26, 51, 0.88);
+  --color-surface-strong: #172949;
+  --color-border: rgba(143, 184, 255, 0.24);
+  --color-text: #e7f0ff;
+  --color-muted: #afc2ea;
+  --color-accent: #63a3ff;
+  --color-accent-2: #47d1ff;
+  --color-accent-soft: rgba(99, 163, 255, 0.2);
+  --color-danger: #ff7e9b;
+  --color-ok: #6fd9ae;
+  --ring: rgba(99, 163, 255, 0.54);
 
-  --shadow-sm: 0 10px 26px rgba(0, 0, 0, 0.34);
-  --shadow-md: 0 22px 48px rgba(0, 0, 0, 0.46);
-  --shadow-lg: 0 34px 74px rgba(0, 0, 0, 0.6);
+  --io-input-bg: color-mix(in oklab, #21486d, var(--color-bg-elev) 72%);
+  --io-input-border: color-mix(in oklab, #3e739f, var(--color-border) 50%);
+  --io-output-bg: color-mix(in oklab, #1e4f3a, var(--color-bg-elev) 72%);
+  --io-output-border: color-mix(in oklab, #4b8b6f, var(--color-border) 50%);
+
+  --shadow-sm: 0 10px 26px rgba(1, 7, 18, 0.44);
+  --shadow-md: 0 22px 48px rgba(1, 7, 18, 0.56);
+  --shadow-lg: 0 34px 74px rgba(1, 7, 18, 0.68);
 }
-

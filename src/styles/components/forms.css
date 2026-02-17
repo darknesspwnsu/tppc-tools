@@ -13,6 +13,17 @@
 .field-area {
   min-height: 8rem;
   resize: vertical;
+  font-family: var(--mono);
+}
+
+.field-area.io-input {
+  background: var(--io-input-bg);
+  border-color: var(--io-input-border);
+}
+
+.field-area.io-output {
+  background: var(--io-output-bg);
+  border-color: var(--io-output-border);
 }
 
 .btn-primary-soft,
@@ -54,4 +65,3 @@
   opacity: 0.56;
   cursor: not-allowed;
 }
-

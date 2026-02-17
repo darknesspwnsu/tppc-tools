@@ -93,8 +93,57 @@ export function levelForTarget(targetDollars: bigint, meaning: MoneyMeaning, isP
   return low;
 }
 
+export function moneyHintText(exactAmount: boolean) {
+  if (exactAmount) {
+    return "Enter the exact dollar amount (optional $, commas and up to 2 decimals).";
+  }
+
+  return "Type a number (like 250) -> assumes millions (=$250,000,000). Optional $, decimals allowed.";
+}
+
+export function modeBadge(meaning: MoneyMeaning, isPPControlled: boolean) {
+  if (meaning === "seller") {
+    return {
+      label: "Money = Seller receives",
+      tone: "primary" as const
+    };
+  }
+
+  if (isPPControlled) {
+    return {
+      label: "Money = Buyer pays (PP controlled)",
+      tone: "success" as const
+    };
+  }
+
+  return {
+    label: "Money = Buyer pays (not PP)",
+    tone: "secondary" as const
+  };
+}
+
+export function formulaLatexText(meaning: MoneyMeaning, isPPControlled: boolean) {
+  const buyerEq = isPPControlled
+    ? String.raw`\text{BuyerPays}(L) = \frac{2}{3}\,\text{MarketPrice}(L)`
+    : String.raw`\text{BuyerPays}(L) = \text{MarketPrice}(L)`;
+
+  const moneyEq = meaning === "seller"
+    ? String.raw`\text{MoneyInput} = \text{SellerReceives}(L) = \frac{1}{2}\,\text{MarketPrice}(L)`
+    : String.raw`\text{MoneyInput} = \text{BuyerPays}(L)`;
+
+  return [
+    String.raw`\[\text{TotalEXP}(L) = L^3 + 1\]`,
+    String.raw`\[\text{MarketPrice}(L) = 10\cdot\text{TotalEXP}(L) = 10(L^3 + 1) = 10L^3 + 10\]`,
+    String.raw`\[${buyerEq}\]`,
+    String.raw`\[\text{SellerReceives}(L) = \frac{1}{2}\,\text{MarketPrice}(L)\]`,
+    String.raw`\[${moneyEq}\]`
+  ].join("\n");
+}
+
 export function computeSellGuide(inputs: SellGuideInputs): SellGuideOutputs {
   const dollars = parseMoneyToDollars(inputs.moneyInput, { exactAmount: inputs.exactAmount });
+  const ppForBuyer = inputs.moneyMeaning === "seller" ? true : inputs.ppControlled;
+  const badge = modeBadge(inputs.moneyMeaning, ppForBuyer);
 
   if (dollars === "INVALID") {
     return {
@@ -104,7 +153,11 @@ export function computeSellGuide(inputs: SellGuideInputs): SellGuideOutputs {
       sellerReceives: null,
       normalizedMoneyInput: inputs.moneyInput,
       status: "Invalid input",
-      statusKind: "danger"
+      statusKind: "danger",
+      modeBadgeLabel: badge.label,
+      modeBadgeTone: badge.tone,
+      moneyHint: moneyHintText(inputs.exactAmount),
+      formulaLatex: formulaLatexText(inputs.moneyMeaning, ppForBuyer)
     };
   }
 
@@ -116,13 +169,17 @@ export function computeSellGuide(inputs: SellGuideInputs): SellGuideOutputs {
       sellerReceives: null,
       normalizedMoneyInput: "",
       status: "Ready.",
-      statusKind: "light"
+      statusKind: "light",
+      modeBadgeLabel: badge.label,
+      modeBadgeTone: badge.tone,
+      moneyHint: moneyHintText(inputs.exactAmount),
+      formulaLatex: formulaLatexText(inputs.moneyMeaning, ppForBuyer)
     };
   }
 
-  const level = levelForTarget(dollars, inputs.moneyMeaning, inputs.ppControlled);
+  const level = levelForTarget(dollars, inputs.moneyMeaning, ppForBuyer);
   const market = marketPrice(level);
-  const buyer = buyerPays(level, inputs.ppControlled);
+  const buyer = buyerPays(level, ppForBuyer);
   const seller = sellerReceives(level);
   const actual = inputs.moneyMeaning === "seller" ? seller : buyer;
 
@@ -135,6 +192,10 @@ export function computeSellGuide(inputs: SellGuideInputs): SellGuideOutputs {
     status: `${
       inputs.moneyMeaning === "seller" ? "Seller receives" : "Buyer pays"
     } target ${formatDollars(dollars)} → minimum Level ${level.toString()} gives ${formatDollars(actual)}.`,
-    statusKind: "light"
+    statusKind: "light",
+    modeBadgeLabel: badge.label,
+    modeBadgeTone: badge.tone,
+    moneyHint: moneyHintText(inputs.exactAmount),
+    formulaLatex: formulaLatexText(inputs.moneyMeaning, ppForBuyer)
   };
 }

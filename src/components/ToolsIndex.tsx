@@ -1,8 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
+import { usePersistentOptions } from "@/hooks/usePersistentOptions";
+import { PREFS_KEYS } from "@/lib/prefs-keys";
 import type { Tool } from "@/tools/registry";
 
 function normTag(s: string) {
@@ -19,8 +21,24 @@ function toolHaystack(t: Tool) {
 }
 
 export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
-  const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [prefs, setPrefs, prefsLoaded] = usePersistentOptions<{ activeTags: string[] }>(
+    PREFS_KEYS.toolsIndex,
+    { activeTags: [] },
+    {
+      version: 1,
+      migrate: (raw) => {
+        if (!raw || typeof raw !== "object") return { activeTags: [] };
+        const candidate = (raw as { activeTags?: unknown }).activeTags;
+        if (!Array.isArray(candidate)) return { activeTags: [] };
+        return {
+          activeTags: candidate.filter((tag): tag is string => typeof tag === "string").map(normTag)
+        };
+      }
+    }
+  );
+  const activeTags = prefs.activeTags;
 
   const activeTagSet = useMemo(() => new Set(activeTags.map(normTag)), [activeTags]);
   const hasActiveTags = activeTagSet.size > 0;
@@ -30,6 +48,14 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
     tools.forEach((t) => (t.tags || []).forEach((tg) => s.add(normTag(tg))));
     return Array.from(s).filter(Boolean).sort();
   }, [tools]);
+
+  useEffect(() => {
+    if (!prefsLoaded || activeTags.length === 0) return;
+    const valid = activeTags.filter((tag) => allTags.includes(tag));
+    if (valid.length !== activeTags.length) {
+      setPrefs({ activeTags: valid });
+    }
+  }, [activeTags, allTags, prefsLoaded, setPrefs]);
 
   const tagMatchCount = (t: Tool) => {
     if (!activeTagSet.size) return 0;
@@ -54,23 +80,24 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
 
   const setSingleTag = (tag: string) => {
     setQuery("");
-    setActiveTags([normTag(tag)]);
+    setPrefs({ activeTags: [normTag(tag)] });
   };
 
   const toggleTag = (tag: string) => {
     const t = normTag(tag);
     setQuery("");
-    setActiveTags((prev) => {
-      const s = new Set(prev.map(normTag));
+    const next = (() => {
+      const s = new Set(activeTags.map(normTag));
       if (s.has(t)) s.delete(t);
       else s.add(t);
       return Array.from(s).sort();
-    });
+    })();
+    setPrefs({ activeTags: next });
   };
 
   return (
-    <div className="stack">
-      <section className="surface hero tools-header">
+    <div className="tool-template">
+      <section className="hero tool-template-header tools-header">
         <div className="kicker">Toolkit</div>
         <h1 className="page-title">TPPC Tools by Darkness</h1>
         <p className="page-subtitle">
@@ -79,7 +106,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
         </p>
       </section>
 
-      <section className="surface surface-strong">
+      <section className="tool-pane">
         <div className="tools-toolbar">
           <div className="tools-toolbar-left">
             <span className="pill-label">Tools</span>
@@ -98,7 +125,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
-                setActiveTags([]);
+                setPrefs({ activeTags: [] });
               }}
             />
           </label>
@@ -111,7 +138,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                 key={t}
                 type="button"
                 className="tag-btn active"
-                onClick={() => setActiveTags((prev) => prev.filter((x) => x !== t))}
+                onClick={() => setPrefs({ activeTags: activeTags.filter((x) => x !== t) })}
                 title="Remove tag"
               >
                 #{t} ×
@@ -120,7 +147,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
             <button
               type="button"
               className="tag-btn"
-              onClick={() => setActiveTags([])}
+              onClick={() => setPrefs({ activeTags: [] })}
               title="Clear tags"
             >
               clear ×
@@ -161,7 +188,19 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
               .join(" ");
 
             return (
-              <article className={cardClasses} key={t.slug}>
+              <article
+                className={cardClasses}
+                key={t.slug}
+                role="link"
+                tabIndex={0}
+                aria-label={`Open ${t.name}`}
+                onClick={() => router.push(t.route)}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" && event.key !== " ") return;
+                  event.preventDefault();
+                  router.push(t.route);
+                }}
+              >
                 <div className="tool-card-head">
                   <div>
                     <div className="tool-card-title">{t.name}</div>
@@ -169,11 +208,6 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                     <div className="tool-card-path">
                       <code>{t.route}</code>
                     </div>
-                  </div>
-                  <div>
-                    <Link className="btn-primary-soft" href={t.route}>
-                      Open
-                    </Link>
                   </div>
                 </div>
 
@@ -187,6 +221,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
                         type="button"
                         className={`tag-btn${on ? " active" : ""}`}
                         onClick={(e) => {
+                          e.stopPropagation();
                           const multi = e.ctrlKey || e.metaKey;
                           if (multi) toggleTag(nt);
                           else setSingleTag(nt);

@@ -1,6 +1,6 @@
 import { runDexSorter } from "./sorter.js";
 
-import type { FamiliesRunOptions, FamiliesRunResult } from "./types";
+import type { FamiliesCloudItem, FamiliesRunOptions, FamiliesRunResult } from "./types";
 
 export async function runUngenderedFamilies(options: FamiliesRunOptions): Promise<FamiliesRunResult> {
   let statusText = "";
@@ -36,6 +36,6 @@ export async function runUngenderedFamilies(options: FamiliesRunOptions): Promis
     mainText: result.mainText || "",
     missingText: result.missingText || "",
     secondaryText: result.secondaryText || "",
-    cloudItems: result.cloudItems || []
+    cloudItems: (result.cloudItems || []) as FamiliesCloudItem[]
   };
 }

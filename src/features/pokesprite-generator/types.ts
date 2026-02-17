@@ -12,3 +12,21 @@ export type ResolvedPokemon = {
   slug: string;
   generationLabel: "Gen 1-8" | "Gen 9";
 };
+
+export type ResolutionMode = "auto" | "custom";
+
+export type RenderSamplingOptions = {
+  resolutionMode: ResolutionMode;
+  customColumns: number;
+  xScale: number;
+  alphaThreshold: number;
+  maxAutoColumns?: number;
+};
+
+export type PokespriteRenderMeta = {
+  sampledColumns: number;
+  sampledRows: number;
+  croppedWidth: number;
+  croppedHeight: number;
+  previewScale: number;
+};

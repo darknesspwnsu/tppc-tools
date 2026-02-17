@@ -9,6 +9,8 @@ import {
   sentenceCaseKey
 } from "@/features/evolution-viewer/core";
 import type { EvolutionDb } from "@/features/evolution-viewer/types";
+import { usePersistentOptions } from "@/hooks/usePersistentOptions";
+import { PREFS_KEYS } from "@/lib/prefs-keys";
 
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
 const JSON_URL = `${BASE_PATH}/data/evolution_min_levels.json`;
@@ -33,7 +35,20 @@ function toOutText(nameKey: string, entry: EvolutionDb[string]) {
 
 export function EvolutionViewerTool() {
   const [db, setDb] = useState<EvolutionDb | null>(null);
-  const [input, setInput] = useState("");
+  const [prefs, setPrefs] = usePersistentOptions<{ selectedName: string }>(
+    PREFS_KEYS.evolutionViewer,
+    { selectedName: "" },
+    {
+      version: 1,
+      migrate: (raw) => {
+        if (!raw || typeof raw !== "object") return { selectedName: "" };
+        return {
+          selectedName: String((raw as { selectedName?: unknown }).selectedName ?? "")
+        };
+      }
+    }
+  );
+  const input = prefs.selectedName;
   const [outText, setOutText] = useState("Loading evolution data...");
   const [jsonOut, setJsonOut] = useState("");
   const [copyText, setCopyText] = useState("Copy JSON");
@@ -114,7 +129,7 @@ export function EvolutionViewerTool() {
               placeholder="Start typing a Pokémon name..."
               value={input}
               onChange={(e) => {
-                setInput(e.target.value);
+                setPrefs({ selectedName: e.target.value });
                 renderForInput(e.target.value);
               }}
             />
@@ -174,7 +189,7 @@ export function EvolutionViewerTool() {
             </label>
             <textarea
               id="jsonOut"
-              className="field-area mono"
+              className="field-area mono io-output"
               rows={9}
               readOnly
               spellCheck={false}
@@ -186,4 +201,3 @@ export function EvolutionViewerTool() {
     </div>
   );
 }
-
