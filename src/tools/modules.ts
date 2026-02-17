@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { normalizeEvolutionDb, lookupEvolution } from "@/features/evolution-viewer/core";
 import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/core";
 import { findOptimalTrainers } from "@/features/perfect-exp/core";
+import { parseInputList, runRainbowDexChecklist } from "@/features/rainbow-dex/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
 import { organizeBox, parseBoxInput } from "@/features/box-organizer/core";
@@ -114,6 +115,22 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       initialState: {
         input: "",
         combine: false
+      }
+    };
+  }
+
+  if (tool.slug === "rainbow-dex") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      parse: parseInputList,
+      compute: runRainbowDexChecklist,
+      initialState: {
+        inputText: "",
+        minRarity: 10,
+        maxMissing: 20,
+        includeGolds: true
       }
     };
   }

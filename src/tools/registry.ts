@@ -106,7 +106,7 @@ export const TOOLS: readonly Tool[] = [
     name: "Rainbow Dex Organizer",
     desc: "Helps organize rainbow dex collections easily. This is really only for kobk :p",
     tags: ["organizer", "dex", "rainbow"],
-    implementation: "legacy",
+    implementation: "native",
     route: "/tools/rainbow-dex/",
     status: "active",
     legacyRedirects: ["/rainbow_dex_sorter.html"]
