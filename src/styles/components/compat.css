@@ -384,27 +384,29 @@ textarea.form-control.io-output {
 }
 
 .masonry {
-  column-gap: 0.95rem;
-  column-count: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.95rem;
+  align-items: start;
+  grid-auto-flow: row;
 }
 
 .masonry > .card {
-  break-inside: avoid;
-  margin: 0 0 0.95rem;
-  display: inline-block;
-  width: 100%;
+  margin: 0;
+  display: block;
+  width: auto;
   scroll-margin-top: 6rem;
 }
 
 @media (min-width: 900px) {
   .masonry {
-    column-count: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1300px) {
   .masonry {
-    column-count: 3;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

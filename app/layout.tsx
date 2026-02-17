@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   const basePath = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
   const lightBg = `${basePath}/assets/theme/bg-light-wooloo.jpg`;
-  const darkBg = `${basePath}/assets/theme/bg-dark-yveltal.png`;
+  const darkBg = `${basePath}/assets/theme/bg-dark-yveltal.jpg`;
 
   return (
     <html lang="en" suppressHydrationWarning>
