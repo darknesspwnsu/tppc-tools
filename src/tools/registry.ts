@@ -56,7 +56,7 @@ export const TOOLS: readonly Tool[] = [
     name: "PokeSprite Generator",
     desc: "Generate PokeSprites in BBCode to post in your threads!",
     tags: ["generator", "bbcode", "utilities"],
-    implementation: "legacy",
+    implementation: "native",
     route: "/tools/pokesprite-generator/",
     status: "active",
     legacyRedirects: ["/pokesprite_generator.html"]

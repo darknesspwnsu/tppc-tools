@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { normalizeEvolutionDb, lookupEvolution } from "@/features/evolution-viewer/core";
 import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/core";
 import { findOptimalTrainers } from "@/features/perfect-exp/core";
+import { imageDataToBbcode, resolvePokemonByName } from "@/features/pokesprite-generator/core";
 import { parseInputList, runRainbowDexChecklist } from "@/features/rainbow-dex/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
@@ -131,6 +132,20 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
         minRarity: 10,
         maxMissing: 20,
         includeGolds: true
+      }
+    };
+  }
+
+  if (tool.slug === "pokesprite-generator") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      parse: resolvePokemonByName,
+      compute: imageDataToBbcode,
+      initialState: {
+        pokeInput: "",
+        sizePreset: 2
       }
     };
   }
