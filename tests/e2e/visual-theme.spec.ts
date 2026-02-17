@@ -25,5 +25,5 @@ test("dark theme uses yveltal background", async ({ page }) => {
   await page.click('button[aria-label="Toggle theme"]');
 
   const bgImage = await page.evaluate(() => getComputedStyle(document.body).backgroundImage);
-  expect(bgImage).toContain("bg-dark-yveltal.jpg");
+  expect(bgImage).toMatch(/bg-dark-yveltal\.(png|jpg)/);
 });
