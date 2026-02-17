@@ -160,15 +160,15 @@ export function GoldOrganizer({
         </div>
       </section>
 
-      <section className="row g-3">
-        <div className="col-12 col-lg-6">
+      <section className="tool-template-grid">
+        <div>
           <div className="panel h-100">
             <label className="form-label fw-semibold" htmlFor="input">
               Input
             </label>
             <textarea
               id="input"
-              className="form-control"
+              className="field-area mono"
               rows={16}
               placeholder="Paste your box text here..."
               value={input}
@@ -176,10 +176,10 @@ export function GoldOrganizer({
             />
 
             <div className="mt-3 d-flex flex-wrap gap-2">
-              <button className="btn btn-primary" type="button" onClick={run}>
+              <button className="btn-primary-soft" type="button" onClick={run}>
                 Sort Golds
               </button>
-              <button className="btn btn-outline-secondary" type="button" onClick={clear}>
+              <button className="btn-outline-soft" type="button" onClick={clear}>
                 Clear
               </button>
             </div>
@@ -272,7 +272,7 @@ export function GoldOrganizer({
                   </label>
                   <select
                     id="preferredGender"
-                    className="form-select"
+                    className="field-select"
                     disabled={!prefs.dropDupes}
                     value={prefs.preferredGender}
                     onChange={(e) =>
@@ -293,7 +293,7 @@ export function GoldOrganizer({
                 </label>
                 <input
                   id="goldColor"
-                  className="form-control"
+                  className="field mono"
                   type="text"
                   placeholder="#DAA520 or gold"
                   value={prefs.goldColor}
@@ -313,15 +313,15 @@ export function GoldOrganizer({
           </div>
         </div>
 
-        <div className="col-12 col-lg-6">
+        <div>
           <div className="panel">
             <label className="form-label fw-semibold" htmlFor="output">
               Output (BBCode-friendly)
             </label>
-            <textarea id="output" className="form-control" rows={18} readOnly value={output} />
+            <textarea id="output" className="field-area mono" rows={18} readOnly value={output} />
             <div className="mt-3 d-flex flex-wrap gap-2">
               <button
-                className="btn btn-success"
+                className="btn-primary-soft"
                 type="button"
                 onClick={async () => {
                   await copyToClipboard(output);
@@ -340,7 +340,7 @@ export function GoldOrganizer({
             </label>
             <textarea
               id="droppedOutput"
-              className="form-control"
+              className="field-area mono"
               rows={8}
               readOnly
               disabled={!prefs.dropDupes}
@@ -348,7 +348,7 @@ export function GoldOrganizer({
             />
             <div className="mt-3 d-flex flex-wrap gap-2">
               <button
-                className="btn btn-outline-success"
+                className="btn-outline-soft"
                 type="button"
                 disabled={!prefs.dropDupes}
                 onClick={async () => {
@@ -365,10 +365,10 @@ export function GoldOrganizer({
             <label className="form-label fw-semibold" htmlFor="missingOutput">
               Missing Pokemon
             </label>
-            <textarea id="missingOutput" className="form-control" rows={8} readOnly value={missingOutput} />
+            <textarea id="missingOutput" className="field-area mono" rows={8} readOnly value={missingOutput} />
             <div className="mt-3 d-flex flex-wrap gap-2">
               <button
-                className="btn btn-outline-danger"
+                className="btn-outline-soft text-danger"
                 type="button"
                 onClick={async () => {
                   await copyToClipboard(missingOutput);

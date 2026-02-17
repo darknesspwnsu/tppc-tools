@@ -4,4 +4,5 @@
 @import "../src/styles/components/nav.css";
 @import "../src/styles/components/tools.css";
 @import "../src/styles/components/forms.css";
+@import "../src/styles/components/compat.css";
 @import "../src/styles/tool-template.css";

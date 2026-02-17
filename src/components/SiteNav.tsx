@@ -16,8 +16,6 @@ function normalizePath(p: string) {
 function applyTheme(mode: ThemeMode, persist = true) {
   const root = document.documentElement;
   root.setAttribute("data-theme", mode);
-  root.setAttribute("data-bs-theme", mode);
-  document.body.classList.toggle("dark-mode", mode === "dark");
   if (persist) localStorage.setItem("tppc_tools_theme", mode);
 }
 

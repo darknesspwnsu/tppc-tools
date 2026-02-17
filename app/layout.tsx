@@ -7,9 +7,6 @@ import "./globals.css";
 import { TOOLS } from "@/tools/registry";
 import { SiteNav } from "@/components/SiteNav";
 
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
-const withBase = (p: string) => `${BASE_PATH}${p}`;
-
 export const metadata: Metadata = {
   title: "TPPC Tools by Darkness",
   description: "An index of useful TPPC tools and utilities by Darkness."
@@ -26,17 +23,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
 
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        />
-
-        <link rel="stylesheet" href={withBase("/assets/site.css")} />
-
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function () {
@@ -45,13 +31,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
                 var mode = saved || (prefersDark ? "dark" : "light");
                 document.documentElement.setAttribute("data-theme", mode);
-                document.documentElement.setAttribute("data-bs-theme", mode);
               } catch (e) {}
             })();
           `}
         </Script>
       </head>
-      <body className="site-standard app-shell">
+      <body className="app-shell">
         <SiteNav tools={TOOLS} />
         <main className="app-main">{children}</main>
         <footer className="app-footer">

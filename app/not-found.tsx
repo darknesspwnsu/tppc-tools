@@ -6,11 +6,10 @@ export default function NotFound() {
       <h1 className="page-title">404</h1>
       <div className="page-subtitle">That page does not exist.</div>
       <div className="mt-3">
-        <Link className="btn btn-primary" href="/">
+        <Link className="btn-primary-soft" href="/">
           Back to tools
         </Link>
       </div>
     </div>
   );
 }
-

@@ -13,13 +13,13 @@ export default function MigrationDashboardPage() {
   };
 
   return (
-    <section className="panel">
+    <section className="surface" style={{ padding: "1rem" }}>
       <h1 className="page-title">Migration Dashboard</h1>
       <p className="page-subtitle">
         Internal tracker for the native migration rollout.
       </p>
 
-      <div className="panel-muted p-3 mt-3">
+      <div className="surface-strong mt-3" style={{ padding: "0.8rem", borderRadius: "0.75rem" }}>
         <div>
           <strong>Total tools:</strong> {TOOLS.length}
         </div>
@@ -32,7 +32,7 @@ export default function MigrationDashboardPage() {
       </div>
 
       <div className="table-responsive mt-3">
-        <table className="table table-sm align-middle">
+        <table className="table align-middle">
           <thead>
             <tr>
               <th scope="col">Tool</th>
@@ -73,4 +73,3 @@ export default function MigrationDashboardPage() {
     </section>
   );
 }
-
