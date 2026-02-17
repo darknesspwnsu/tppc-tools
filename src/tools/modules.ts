@@ -5,6 +5,7 @@ import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/
 import { findOptimalTrainers } from "@/features/perfect-exp/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { preprocessEntries, runUngenderedDiff } from "@/features/ungendered-diff/core";
+import { organizeBox, parseBoxInput } from "@/features/box-organizer/core";
 import { TOOLS, type Tool } from "@/tools/registry";
 
 export type ToolModule = {
@@ -99,6 +100,20 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
         desiredExp: "",
         useExpNight: false,
         highestGym: ""
+      }
+    };
+  }
+
+  if (tool.slug === "box-organizer") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: LegacyPlaceholder,
+      parse: parseBoxInput,
+      compute: organizeBox,
+      initialState: {
+        input: "",
+        combine: false
       }
     };
   }

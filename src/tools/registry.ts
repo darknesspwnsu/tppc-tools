@@ -16,7 +16,7 @@ export const TOOLS: readonly Tool[] = [
     name: "Box Organizer",
     desc: "Organize Pokemon quickly and effectively into logically sensible groups with several options for customization.",
     tags: ["organizer", "box"],
-    implementation: "legacy",
+    implementation: "native",
     route: "/tools/box-organizer/",
     status: "active",
     legacyRedirects: ["/box_organizer.html"]
