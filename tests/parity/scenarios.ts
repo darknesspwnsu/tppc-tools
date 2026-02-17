@@ -125,7 +125,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
       });
       await page.fill("#current-exp", "1");
       await page.fill("#desired-exp", "2000");
-      await setChecked(page, "#use-exp-night", false);
+      await page.uncheck("#use-exp-night");
       await page.click("#submit");
       await page.waitForFunction(() => {
         const rows = document.querySelectorAll("#results-table tbody tr");

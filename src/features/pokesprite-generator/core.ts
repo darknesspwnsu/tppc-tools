@@ -150,11 +150,12 @@ export function makeSampleCanvas(cropCanvas: HTMLCanvasElement, options: RenderS
   const mode: ResolutionMode = options.resolutionMode;
   const maxAutoColumns = clampNum(options.maxAutoColumns || 180, 16, 220, 180);
 
-  let sampledColumns = mode === "auto"
-    ? Math.min(maxAutoColumns, srcWidth)
-    : clampNum(options.customColumns, 16, 220, 120);
+  let sampledColumns =
+    mode === "auto"
+      ? Math.max(1, Math.min(maxAutoColumns, srcWidth))
+      : clampNum(options.customColumns, 16, 220, 120);
 
-  sampledColumns = Math.max(16, Math.floor(sampledColumns));
+  sampledColumns = mode === "auto" ? Math.max(1, Math.floor(sampledColumns)) : Math.max(16, Math.floor(sampledColumns));
 
   const aspect = srcHeight / srcWidth;
   const charAspect = aspectFromXScale(Math.max(1, options.xScale));
@@ -185,10 +186,13 @@ export function makeSampleCanvasForPreview(
   const maxAutoColumns = clampNum(options.maxAutoColumns || 180, 16, 220, 180);
   let sampledColumns =
     options.resolutionMode === "auto"
-      ? Math.min(maxAutoColumns, srcWidth)
+      ? Math.max(1, Math.min(maxAutoColumns, srcWidth))
       : clampNum(options.customColumns, 16, 220, 120);
 
-  sampledColumns = Math.max(16, Math.floor(sampledColumns));
+  sampledColumns =
+    options.resolutionMode === "auto"
+      ? Math.max(1, Math.floor(sampledColumns))
+      : Math.max(16, Math.floor(sampledColumns));
 
   const aspect = srcHeight / srcWidth;
   const sampledRows = Math.max(1, Math.round(sampledColumns * aspect));
