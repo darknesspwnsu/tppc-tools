@@ -8,13 +8,13 @@
     "typecheck": "tsc --noEmit",
     "test": "npm run test:ci",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
     "test:parity": "playwright test tests/parity",
     "test:parity:native": "PARITY_TARGET=native playwright test tests/parity",
-    "test:parity:legacy": "PARITY_TARGET=legacy playwright test tests/parity",
     "test:parity:basepath": "NEXT_PUBLIC_BASE_PATH=/tppc-tools PARITY_BASE_PATH=/tppc-tools PARITY_TARGET=native playwright test tests/parity",
-    "test:ci": "npm run typecheck && npm run test:unit && npm run test:parity && NEXT_PUBLIC_BASE_PATH=/tppc-tools npm run build",
-    "capture:legacy-fixtures": "tsx scripts/capture-legacy-fixtures.ts"
+    "test:ci": "npm run typecheck && npm run test:unit && npm run test:e2e && npm run test:parity && NEXT_PUBLIC_BASE_PATH=/tppc-tools npm run build",
+    "capture:parity-fixtures": "tsx scripts/capture-legacy-fixtures.ts",
+    "capture:legacy-fixtures": "npm run capture:parity-fixtures"
   },
   "dependencies": {
     "next": "^16.1.6",

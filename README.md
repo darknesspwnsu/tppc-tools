@@ -1,42 +1,83 @@
 # TPPC Tools
 
-Next.js static-export site for TPPC utility tools.
+Native Next.js static-export site for TPPC utility tools.
 
-## Architecture
+## Architecture (Native-Only)
 
-- `app/tools/[slug]/page.tsx`
-  - Compatibility wrapper for tools still on legacy runtime HTML.
-- `app/tools/<tool>/page.tsx`
-  - Native tool routes (migrated tools).
+- `app/tools/<slug>/page.tsx`
+  - One native route per tool page.
+- `src/components/tools/*.tsx`
+  - Native React tool UIs.
+- `src/features/<tool>/core.ts`
+  - Pure tool logic used by UI and tests.
+- `src/features/<tool>/types.ts`
+  - Tool input/output contracts.
 - `src/tools/registry.ts`
-  - Source of truth for tool metadata and rollout status.
+  - Canonical tool metadata:
+    - `implementation`
+    - `route`
+    - `legacyRedirects`
+    - `status`
 - `src/tools/modules.ts`
-  - Per-tool module contract (`Component`, `parse`, `compute`, `serialize`, `initialState`).
-- `src/features/<tool>/`
-  - Extracted pure logic modules for native tools and migration targets.
+  - Tool module contract:
+    - `Component`
+    - `parse`
+    - `compute`
+    - `serialize`
+    - `initialState`
+- `scripts/generate-legacy-redirects.ts`
+  - Generates static redirect stubs from `legacyRedirects`.
+- `scripts/capture-legacy-fixtures.ts`
+  - Captures parity snapshots from native canonical routes.
 - `tests/parity/`
-  - Snapshot parity checks against golden fixtures.
+  - Parity fixtures + scenario harness.
+- `tests/unit/`
+  - Core logic and decommission assertions.
+- `tests/e2e/`
+  - Native route/integration coverage.
 
-## Migration Metadata
+## Tool Metadata Contract
 
-Each tool in `src/tools/registry.ts` declares:
+Each tool entry in `src/tools/registry.ts` must define:
 
-- `implementation`: `native` or `legacy`
-- `route`: canonical route (`/tools/<slug>/`)
-- `legacyRedirects`: old URLs that must continue to work
-- `status`: rollout status
+- `implementation: "native"`
+- `route: "/tools/<slug>/"`
+- `legacyRedirects: string[]`
+- `status: "active" | "beta" | "deprecated"`
+
+## Add a New Native Tool
+
+1. Create `src/features/<tool>/types.ts` and `src/features/<tool>/core.ts`.
+2. Build UI in `src/components/tools/<ToolName>Tool.tsx`.
+3. Add route in `app/tools/<slug>/page.tsx` with page `metadata`.
+4. Add tool entry to `src/tools/registry.ts`.
+5. Wire module in `src/tools/modules.ts`.
+6. Add unit tests in `tests/unit/`.
+7. Add parity scenario in `tests/parity/scenarios.ts` if parity coverage is required.
+8. Regenerate redirect stubs via build (`npm run build`) or directly run `tsx scripts/generate-legacy-redirects.ts`.
+
+## Parity Fixture Refresh Workflow
+
+1. Capture fixtures from native pages:
+   - `npm run capture:parity-fixtures`
+2. Run native parity checks:
+   - `npm run test:parity:native`
+3. Run base-path parity checks:
+   - `npm run test:parity:basepath`
+4. If fixture output changed intentionally, commit updates in `tests/parity/golden/*.json` with a short explanation in the commit message.
 
 ## Commands
 
 - `npm run dev`
 - `npm run typecheck`
 - `npm run test:unit`
+- `npm run test:e2e`
 - `npm run test:parity`
 - `npm run test:parity:native`
-- `npm run test:parity:legacy`
 - `npm run test:parity:basepath`
 - `npm run test:ci`
+- `npm run capture:parity-fixtures`
 
 ## Internal Dashboard
 
-- `/internal/migration/` shows migration status and metadata in-app.
+- `/internal/migration/` shows in-app migration metadata and module presence.

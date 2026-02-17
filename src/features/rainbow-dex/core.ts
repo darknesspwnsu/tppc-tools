@@ -25,7 +25,7 @@ function setStatus(cb: RainbowRunOptions["onStatus"], message: string) {
 }
 
 function genForDex(dex: number) {
-  let current = GEN_BREAKPOINTS[0];
+  let current: (typeof GEN_BREAKPOINTS)[number] = GEN_BREAKPOINTS[0];
   for (const bp of GEN_BREAKPOINTS) {
     if (dex >= bp.start) current = bp;
     else break;

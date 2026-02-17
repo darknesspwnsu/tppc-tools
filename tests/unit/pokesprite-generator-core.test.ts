@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   formatBbcode,
   imageDataToBbcode,
-  resolvePokemonByName
+  resolvePokemonByName,
+  spriteUrlForPokemon
 } from "@/features/pokesprite-generator/core";
 
 describe("pokesprite-generator core", () => {
@@ -17,6 +18,20 @@ describe("pokesprite-generator core", () => {
     };
     const out = resolvePokemonByName("pikachu", data);
     expect(out?.slug).toBe("pikachu");
+    expect(out?.generationLabel).toBe("Gen 1-8");
+  });
+
+  it("resolves gen9 pokemon to the gen9 sprite base", () => {
+    const data = {
+      "906": {
+        idx: 906,
+        slug: { eng: "sprigatito" },
+        name: { eng: "Sprigatito" }
+      }
+    };
+    const out = resolvePokemonByName("sprigatito", data);
+    expect(out?.generationLabel).toBe("Gen 9");
+    expect(out ? spriteUrlForPokemon(out) : "").toContain("pokemon-sprites/main/pokemon/regular/sprigatito.png");
   });
 
   it("renders 2x2 red pixels into bbcode rows", () => {

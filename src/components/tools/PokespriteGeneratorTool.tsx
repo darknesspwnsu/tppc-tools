@@ -7,7 +7,7 @@ import {
   imageDataToBbcode,
   POKEMON_JSON_URL,
   resolvePokemonByName,
-  SPRITE_BASE
+  spriteUrlForPokemon
 } from "@/features/pokesprite-generator/core";
 import type { PokespriteData } from "@/features/pokesprite-generator/types";
 
@@ -51,6 +51,18 @@ async function copyText(text: string) {
     document.execCommand("copy");
   } catch (_) {}
   document.body.removeChild(ta);
+}
+
+async function canvasToPngBlob(canvas: HTMLCanvasElement) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        reject(new Error("Canvas export failed."));
+        return;
+      }
+      resolve(blob);
+    }, "image/png");
+  });
 }
 
 export function PokespriteGeneratorTool() {
@@ -150,7 +162,7 @@ export function PokespriteGeneratorTool() {
                     return;
                   }
 
-                  const url = `${SPRITE_BASE}${target.slug}.png`;
+                  const url = spriteUrlForPokemon(target);
                   setSpriteUrl(url);
                   setPreviewSrc(url);
                   setResolved(`${target.name} (${target.generationLabel.replace("-", "–")}) → slug: ${target.slug}`);
@@ -256,6 +268,38 @@ export function PokespriteGeneratorTool() {
                 }}
               >
                 {copyLabel}
+              </button>
+              <button
+                id="exportBtn"
+                type="button"
+                className="btn-outline-soft"
+                onClick={async () => {
+                  const canvas = canvasRef.current;
+                  if (!canvas || !canvas.width || !canvas.height) {
+                    setStatus("Render a sprite before exporting PNG.");
+                    return;
+                  }
+
+                  try {
+                    const blob = await canvasToPngBlob(canvas);
+                    const fileStem = input.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "-") || "pokesprite";
+                    const fileName = `${fileStem}.png`;
+                    const href = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = href;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(href);
+                    setStatus(`Exported ${fileName}.`);
+                  } catch (error) {
+                    console.error(error);
+                    setStatus(`Export error: ${error instanceof Error ? error.message : String(error)}`);
+                  }
+                }}
+              >
+                Export PNG
               </button>
             </div>
           </div>

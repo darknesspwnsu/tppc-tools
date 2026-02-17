@@ -8,6 +8,12 @@ export function normalizeName(s: string) {
   return String(s || "").trim().toLowerCase();
 }
 
+function resolveDexNumber(id: string, idx: number | undefined) {
+  if (Number.isFinite(idx)) return Number(idx);
+  const parsed = Number(id);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 export function resolvePokemonByName(input: string, data: PokespriteData): ResolvedPokemon | null {
   const q = normalizeName(input);
   if (!q) return null;
@@ -18,16 +24,22 @@ export function resolvePokemonByName(input: string, data: PokespriteData): Resol
     if (!name || !slug) continue;
 
     if (normalizeName(name) === q || normalizeName(slug) === q) {
+      const dex = resolveDexNumber(id, entry.idx);
       return {
         id,
         name,
         slug,
-        generationLabel: "Gen 1-8"
+        generationLabel: dex >= 906 ? "Gen 9" : "Gen 1-8"
       };
     }
   }
 
   return null;
+}
+
+export function spriteUrlForPokemon(target: ResolvedPokemon) {
+  const base = target.generationLabel === "Gen 9" ? GEN9_BASE : SPRITE_BASE;
+  return `${base}${target.slug}.png`;
 }
 
 export function rgbaToHex(r: number, g: number, b: number) {

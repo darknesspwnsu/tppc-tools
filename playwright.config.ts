@@ -22,7 +22,7 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: `npm run dev -- --port ${PORT}`,
     url: `http://127.0.0.1:${PORT}${READY_PATH}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 180_000
   }
 };
