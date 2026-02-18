@@ -13,7 +13,9 @@ function extractAssignedJson(text, varName) {
 
 async function main() {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-  const inDir = process.env.GOLD_DATA_DIR || "/Users/shivadeviah/Desktop/tppc/data";
+  // Default to a sibling `tppc/data` directory so this works regardless of home folder layout.
+  const inDir =
+    process.env.GOLD_DATA_DIR || process.env.TPPC_DATA_DIR || path.resolve(root, "..", "tppc", "data");
   const outDir = path.join(root, "src", "data", "gold");
   await mkdir(outDir, { recursive: true });
 
