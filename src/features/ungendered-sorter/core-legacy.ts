@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
 const withBasePath = (path) => `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
 // ===============================

@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="./">
   <meta http-equiv="refresh" content="0;url=./">
-  <script>window.location.replace("./");</script>
+  <script>
+    (function () {
+      var target = "./";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="./">Continue</a></p>

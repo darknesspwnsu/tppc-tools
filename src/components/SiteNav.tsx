@@ -22,13 +22,17 @@ function applyTheme(mode: ThemeMode, persist = true) {
 export function SiteNav({ tools }: { tools: readonly Tool[] }) {
   const pathname = usePathname() || "/";
   const current = normalizePath(pathname);
+  const userscriptsPath = "/userscripts/";
 
   const navItems = useMemo(
     () =>
-      tools.map((t) => ({
-        name: t.name,
-        href: t.route
-      })),
+      [
+        { name: "Userscripts", href: userscriptsPath },
+        ...tools.map((t) => ({
+          name: t.name,
+          href: t.route
+        }))
+      ],
     [tools]
   );
 
@@ -118,7 +122,7 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
         aria-hidden={drawerOpen ? "false" : "true"}
       >
         <div className="tool-drawer-head">
-          <div className="kicker">Tools</div>
+          <div className="kicker">Tools & Scripts</div>
           <button
             className="nav-icon-btn"
             type="button"

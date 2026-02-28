@@ -1,4 +1,4 @@
-import { runDexSorter } from "./sorter.js";
+import { runDexSorter } from "./sorter";
 
 import type { FamiliesCloudItem, FamiliesRunOptions, FamiliesRunResult } from "./types";
 

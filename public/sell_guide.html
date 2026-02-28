@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/sell-guide/">
   <meta http-equiv="refresh" content="0;url=tools/sell-guide/">
-  <script>window.location.replace("tools/sell-guide/");</script>
+  <script>
+    (function () {
+      var target = "tools/sell-guide/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/sell-guide/">Continue</a></p>

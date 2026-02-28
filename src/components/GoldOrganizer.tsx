@@ -86,6 +86,14 @@ export function GoldOrganizer({
   const [droppedOutput, setDroppedOutput] = useState("");
   const [missingOutput, setMissingOutput] = useState("");
 
+  const hasNonDefaultPrefs = useMemo(
+    () =>
+      (Object.keys(DEFAULT_PREFS) as Array<keyof Prefs>).some(
+        (key) => prefs[key] !== DEFAULT_PREFS[key]
+      ),
+    [prefs]
+  );
+
   const timelineCount = useMemo(
     () => (Array.isArray(timelineRaw) ? timelineRaw.filter((x) => x && x.name).length : 0),
     [timelineRaw]
@@ -93,6 +101,8 @@ export function GoldOrganizer({
 
   useEffect(() => {
     if (!prefsLoaded) return;
+    // Avoid clobbering any user edits made before migration checks complete.
+    if (hasNonDefaultPrefs) return;
     try {
       // Only run one-time migration when current v2 key is absent.
       const existing = localStorage.getItem(PREFS_KEYS.goldOrganizer);
@@ -109,7 +119,7 @@ export function GoldOrganizer({
     } catch (_) {
       // ignore
     }
-  }, [prefsLoaded, setPrefs]);
+  }, [hasNonDefaultPrefs, prefsLoaded, setPrefs]);
 
   useEffect(() => {
     setStatus(`Loaded timeline with ${fmt(timelineCount)} gold releases.`);

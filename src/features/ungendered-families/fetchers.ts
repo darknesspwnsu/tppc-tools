@@ -1,7 +1,9 @@
-import { canonicalKey } from "./utils.js";
+// @ts-nocheck
 
-const SITE_ROOT = new URL("../../", import.meta.url);
-const siteUrl = (path) => new URL(String(path || "").replace(/^\//, ""), SITE_ROOT).toString();
+import { canonicalKey } from "./utils";
+
+const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+const siteUrl = (path) => `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
 
 export async function fetchDexMapping() {
   // Same-origin so the tool works from mirrors (and doesn't depend on an old username site).

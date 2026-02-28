@@ -17,6 +17,54 @@ function mergeWithDefaults<T extends object>(defaults: T, candidate: unknown): T
   return { ...defaults, ...(candidate as Partial<T>) };
 }
 
+type ResolvePersistentOptionsStateArgs<T extends object> = {
+  defaults: T;
+  rawStorageValue: string | null;
+  version: number;
+  migrate?: (raw: unknown) => T;
+  pendingPatch?: Partial<T> | null;
+};
+
+export function resolvePersistentOptionsState<T extends object>({
+  defaults,
+  rawStorageValue,
+  version,
+  migrate,
+  pendingPatch
+}: ResolvePersistentOptionsStateArgs<T>): T {
+  let next = defaults;
+
+  try {
+    if (rawStorageValue) {
+      const parsed = JSON.parse(rawStorageValue) as unknown;
+
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        "version" in parsed &&
+        "data" in parsed
+      ) {
+        const env = parsed as PersistedEnvelope<unknown>;
+        if (env.version === version) {
+          next = mergeWithDefaults(defaults, env.data);
+        } else if (migrate) {
+          next = mergeWithDefaults(defaults, migrate(env.data));
+        }
+      } else if (migrate) {
+        next = mergeWithDefaults(defaults, migrate(parsed));
+      }
+    }
+  } catch {
+    next = defaults;
+  }
+
+  if (pendingPatch && typeof pendingPatch === "object") {
+    next = { ...next, ...pendingPatch };
+  }
+
+  return next;
+}
+
 export function usePersistentOptions<T extends object>(
   storageKey: string,
   defaults: T,
@@ -27,6 +75,8 @@ export function usePersistentOptions<T extends object>(
 
   const defaultsRef = useRef(defaults);
   const migrateRef = useRef(migrate);
+  const loadedRef = useRef(false);
+  const pendingPatchRef = useRef<Partial<T> | null>(null);
   const stableDefaults = defaultsRef.current;
   const [state, setState] = useState<T>(stableDefaults);
   const [loaded, setLoaded] = useState(false);
@@ -36,35 +86,21 @@ export function usePersistentOptions<T extends object>(
   }, [migrate]);
 
   useEffect(() => {
-    let next = stableDefaults;
-    const migrateFn = migrateRef.current;
+    loadedRef.current = loaded;
+  }, [loaded]);
 
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (raw) {
-        const parsed = JSON.parse(raw) as unknown;
+  useEffect(() => {
+    const next = resolvePersistentOptionsState<T>({
+      defaults: stableDefaults,
+      rawStorageValue: localStorage.getItem(storageKey),
+      version,
+      migrate: migrateRef.current,
+      pendingPatch: pendingPatchRef.current
+    });
 
-        if (
-          parsed &&
-          typeof parsed === "object" &&
-          "version" in parsed &&
-          "data" in parsed
-        ) {
-          const env = parsed as PersistedEnvelope<unknown>;
-          if (env.version === version) {
-            next = mergeWithDefaults(stableDefaults, env.data);
-          } else if (migrateFn) {
-            next = mergeWithDefaults(stableDefaults, migrateFn(env.data));
-          }
-        } else if (migrateFn) {
-          next = mergeWithDefaults(stableDefaults, migrateFn(parsed));
-        }
-      }
-    } catch {
-      next = stableDefaults;
-    }
-
+    pendingPatchRef.current = null;
     setState(next);
+    loadedRef.current = true;
     setLoaded(true);
   }, [stableDefaults, storageKey, version]);
 
@@ -83,6 +119,12 @@ export function usePersistentOptions<T extends object>(
   }, [loaded, state, storageKey, version]);
 
   const patchState = useCallback((patch: Partial<T>) => {
+    if (!loadedRef.current) {
+      pendingPatchRef.current = {
+        ...(pendingPatchRef.current || {}),
+        ...patch
+      };
+    }
     setState((prev) => ({ ...prev, ...patch }));
   }, []);
 

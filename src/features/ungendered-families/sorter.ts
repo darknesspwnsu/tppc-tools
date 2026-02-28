@@ -1,4 +1,5 @@
-// sorter.js
+// @ts-nocheck
+// sorter.ts
 import {
   stripPrefixes,
   speciesFromFullName,
@@ -13,7 +14,7 @@ import {
   parseLeadingLevelFromRemainder,
   decorateMissingInline,
   isVariantFiltered
-} from "./utils.js";
+} from "./utils";
 
 import {
   fetchDexMapping,
@@ -21,7 +22,7 @@ import {
   fetchUEUGSet,
   fetchRarityTable,
   fetchLevel4RarityMap
-} from "./fetchers.js";
+} from "./fetchers";
 
 // ===============================
 // Main logic
@@ -186,7 +187,9 @@ export async function runDexSorter({
   }
 
   const familyAnchor = {};
+  const missingFamilyAnchor = {};
   const familyMembers = new Map();
+  const missingFamilySize = new Map();
   const visited = new Set();
 
   for (const start of rowSpeciesKeys) {
@@ -260,6 +263,7 @@ export async function runDexSorter({
   function getFamilyId(speciesName) {
     const k = canonicalKey(speciesName);
     if (familyAnchor[k] !== undefined) return familyAnchor[k];
+    if (missingFamilyAnchor[k] !== undefined) return missingFamilyAnchor[k];
     const d = nameToDex[k];
     return d !== undefined ? d : 9999;
   }
@@ -581,6 +585,73 @@ export async function runDexSorter({
     rarityFamilySize.set(famId, c);
   }
 
+  const useMissingFamilies = addMissingInline && !missingOnlyFamilyNeeded;
+
+  function ensureMissingFamilyForKey(startKey) {
+    if (familyAnchor[startKey] !== undefined || missingFamilyAnchor[startKey] !== undefined) return;
+
+    const stack = [startKey];
+    const component = new Set();
+
+    while (stack.length > 0) {
+      const u = stack.pop();
+      if (component.has(u)) continue;
+      component.add(u);
+      const nbrs = graph.get(u) || new Set();
+      for (const v of nbrs) if (!component.has(v)) stack.push(v);
+    }
+
+    let minDex = Infinity;
+    for (const k of component) {
+      const d = nameToDex[k] ?? 9999;
+      if (d < minDex) minDex = d;
+    }
+    if (!Number.isFinite(minDex)) minDex = 9999;
+
+    for (const k of component) missingFamilyAnchor[k] = minDex;
+
+    if (!missingFamilySize.has(minDex)) {
+      let c = 0;
+      for (const k of component) if (raritySpeciesKeysPresent.has(k)) c++;
+      missingFamilySize.set(minDex, c);
+    }
+
+    const componentList = Array.from(component);
+    const roots = [];
+
+    for (const k of componentList) {
+      const parentSet = parents.get(k);
+      const hasParentInComponent =
+        parentSet && Array.from(parentSet).some((p) => component.has(p));
+      if (!hasParentInComponent) roots.push(k);
+    }
+
+    if (roots.length === 0) {
+      let minRoot = componentList[0];
+      let bestDex = nameToDex[minRoot] ?? 9999;
+      for (const k of componentList.slice(1)) {
+        const d = nameToDex[k] ?? 9999;
+        if (d < bestDex) { bestDex = d; minRoot = k; }
+      }
+      roots.push(minRoot);
+    }
+
+    const queue = [];
+    const seenLocal = new Set();
+    for (const rroot of roots) queue.push([rroot, 0]);
+
+    while (queue.length > 0) {
+      const [node, depth] = queue.shift();
+      if (seenLocal.has(node)) continue;
+      seenLocal.add(node);
+
+      if (evoDepth[node] === undefined || depth < evoDepth[node]) evoDepth[node] = depth;
+
+      const childSet = children.get(node) || new Set();
+      for (const child of childSet) if (component.has(child)) queue.push([child, depth + 1]);
+    }
+  }
+
   // ===============================
   // Missing list computation
   // ===============================
@@ -601,7 +672,10 @@ export async function runDexSorter({
     const key = canonicalKey(pokeName);
     if (haveKeys.has(key)) continue;
 
-    const famId = getFamilyId(speciesFromFullName(pokeName));
+    const missSpecies = speciesFromFullName(pokeName);
+    const sk = canonicalKey(missSpecies);
+    if (useMissingFamilies) ensureMissingFamilyForKey(sk);
+    const famId = getFamilyId(missSpecies);
     const famSize = rarityFamilySize.get(famId) ?? 1;
     if (famSize > 1) incompleteFamilyIds.add(famId);
   }
@@ -617,7 +691,10 @@ export async function runDexSorter({
     const key = canonicalKey(pokeName);
     if (haveKeys.has(key)) continue;
 
-    const famId = getFamilyId(speciesFromFullName(pokeName));
+    const missSpecies = speciesFromFullName(pokeName);
+    const sk = canonicalKey(missSpecies);
+    if (useMissingFamilies) ensureMissingFamilyForKey(sk);
+    const famId = getFamilyId(missSpecies);
     const famSize = rarityFamilySize.get(famId) ?? 1;
 
     if (missingOnlyFamilyNeeded) {
@@ -625,8 +702,6 @@ export async function runDexSorter({
       if (!incompleteFamilyIds.has(famId)) continue;
     }
 
-    const missSpecies = speciesFromFullName(pokeName);
-    const sk = canonicalKey(missSpecies);
     const prefix = (cat === "golden") ? "Golden" : (cat === "shiny") ? "Shiny" : (cat === "dark") ? "Dark" : "";
     const form = extractForm(pokeName);
 
@@ -753,22 +828,30 @@ export async function runDexSorter({
   const familyLines = [];
   const singleLines = [];
 
-  const famIdsInOrder = Array.from(rowsByFamily.keys()).sort((a, b) => a - b);
+  const famIdsInOrder = (() => {
+    if (!addMissingInline) return Array.from(rowsByFamily.keys()).sort((a, b) => a - b);
+    const ids = new Set(rowsByFamily.keys());
+    for (const famId of missingByFamily.keys()) ids.add(famId);
+    return Array.from(ids).sort((a, b) => a - b);
+  })();
 
   for (const famId of famIdsInOrder) {
-    const famSizeRarity = rarityFamilySize.get(famId) ?? 1;
+    const famSizeRarity = rarityFamilySize.get(famId) ?? missingFamilySize.get(famId) ?? 1;
     const isSingleSet = partitionOutput && famSizeRarity <= 1;
     const target = isSingleSet ? singleLines : familyLines;
 
-    if (!noGroupSpacing && target.length > 0) target.push("");
-
     const existing = rowsByFamily.get(famId) || [];
+    const missingListForFamily = missingByFamily.get(famId) || [];
+    const inlineMissing = addMissingInline && missingListForFamily.length > 0;
 
-    if (!addMissingInline || isSingleSet || famSizeRarity <= 1) {
+    if (!inlineMissing) {
+      if (existing.length === 0) continue;
+      if (!noGroupSpacing && target.length > 0) target.push("");
       for (const r of existing) target.push(formatExistingRow(r));
       continue;
     }
 
+    if (!noGroupSpacing && target.length > 0) target.push("");
     const items = [];
 
     for (const r of existing) {
@@ -781,7 +864,6 @@ export async function runDexSorter({
       });
     }
 
-    const missingListForFamily = missingByFamily.get(famId) || [];
     for (const miss of missingListForFamily) {
       items.push({
         kind: "missing",
