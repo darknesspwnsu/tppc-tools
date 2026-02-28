@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   findOptimalTrainers,
@@ -82,6 +82,7 @@ export function PerfectExpTool() {
 
   const [info, setInfo] = useState("");
   const [rows, setRows] = useState<ResultRow[]>([]);
+  const [autoRunFromQuery, setAutoRunFromQuery] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -114,7 +115,7 @@ export function PerfectExpTool() {
     return topTrainerOptions(table, useExpNight, 10);
   }, [table, useExpNight]);
 
-  const calculate = () => {
+  const calculate = useCallback(() => {
     if (!table) return;
     const current = Number(currentExp);
     const desired = Number(desiredExp);
@@ -125,13 +126,14 @@ export function PerfectExpTool() {
     }
 
     const selectedGym = Number(highestGym);
+    const hasSelectedGym = highestGym.trim() !== "" && Number.isFinite(selectedGym);
     const plans = findOptimalTrainers(
       current,
       desired,
       table,
       useExpNight,
       true,
-      Number.isFinite(selectedGym) ? selectedGym : undefined
+      hasSelectedGym ? selectedGym : undefined
     );
 
     const nextRows: ResultRow[] = Object.entries(plans).map(([label, plan]) => {
@@ -141,7 +143,37 @@ export function PerfectExpTool() {
 
     setRows(nextRows);
     setInfo(`Training during ${useExpNight ? "NIGHT" : "DAY"} time`);
-  };
+
+    const params = new URLSearchParams({
+      currentExp: String(currentExp).trim(),
+      desiredExp: String(desiredExp).trim()
+    });
+    if (hasSelectedGym) {
+      params.set("highestGym", String(selectedGym));
+    }
+    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}${window.location.hash || ""}`);
+  }, [currentExp, desiredExp, highestGym, table, useExpNight]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const queryCurrentExp = params.get("currentExp");
+    const queryDesiredExp = params.get("desiredExp");
+    const queryHighestGym = params.get("highestGym");
+
+    if (queryCurrentExp !== null) setCurrentExp(queryCurrentExp);
+    if (queryDesiredExp !== null) setDesiredExp(queryDesiredExp);
+    if (queryHighestGym !== null) setPrefs({ highestGym: queryHighestGym });
+
+    if ((queryCurrentExp || "").trim() && (queryDesiredExp || "").trim()) {
+      setAutoRunFromQuery(true);
+    }
+  }, [setPrefs]);
+
+  useEffect(() => {
+    if (!autoRunFromQuery || !table || isLoading) return;
+    calculate();
+    setAutoRunFromQuery(false);
+  }, [autoRunFromQuery, calculate, isLoading, table]);
 
   return (
     <div className="tool-template">

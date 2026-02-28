@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/ungendered-sorter/">
   <meta http-equiv="refresh" content="0;url=tools/ungendered-sorter/">
-  <script>window.location.replace("tools/ungendered-sorter/");</script>
+  <script>
+    (function () {
+      var target = "tools/ungendered-sorter/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/ungendered-sorter/">Continue</a></p>

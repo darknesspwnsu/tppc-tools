@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/pokesprite-generator/">
   <meta http-equiv="refresh" content="0;url=tools/pokesprite-generator/">
-  <script>window.location.replace("tools/pokesprite-generator/");</script>
+  <script>
+    (function () {
+      var target = "tools/pokesprite-generator/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/pokesprite-generator/">Continue</a></p>

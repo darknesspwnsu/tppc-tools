@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/perfect-exp/">
   <meta http-equiv="refresh" content="0;url=tools/perfect-exp/">
-  <script>window.location.replace("tools/perfect-exp/");</script>
+  <script>
+    (function () {
+      var target = "tools/perfect-exp/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/perfect-exp/">Continue</a></p>

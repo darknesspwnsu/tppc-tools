@@ -117,6 +117,19 @@ test("perfect-exp copy ID button works", async ({ page }) => {
   expect(copied).toMatch(/^\d+$/);
 });
 
+test("legacy perfect-exp links keep query state and auto-run", async ({ page }) => {
+  await page.goto(withParityBasePath("/perfect_exp.html?currentExp=1&desiredExp=2000"), { waitUntil: "domcontentloaded" });
+  await page.waitForURL((url) => /\/tools\/perfect-exp\/$/.test(url.pathname));
+
+  await expect(page.locator("#current-exp")).toHaveValue("1");
+  await expect(page.locator("#desired-exp")).toHaveValue("2000");
+  await page.waitForFunction(() => document.querySelectorAll("#results-table tbody tr").length > 0);
+
+  const redirected = new URL(page.url());
+  expect(redirected.searchParams.get("currentExp")).toBe("1");
+  expect(redirected.searchParams.get("desiredExp")).toBe("2000");
+});
+
 test("ungendered-sorter copy actions work", async ({ page }) => {
   await stubClipboard(page);
 

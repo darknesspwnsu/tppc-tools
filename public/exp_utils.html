@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/exp-utilities/">
   <meta http-equiv="refresh" content="0;url=tools/exp-utilities/">
-  <script>window.location.replace("tools/exp-utilities/");</script>
+  <script>
+    (function () {
+      var target = "tools/exp-utilities/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/exp-utilities/">Continue</a></p>

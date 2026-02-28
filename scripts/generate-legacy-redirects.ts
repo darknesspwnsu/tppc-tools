@@ -39,6 +39,7 @@ function toRelativeTarget(fromLegacyPath: string, canonicalPath: string) {
 
 function makeRedirectHtml(targetHref: string) {
   const escapedHref = escapeHtml(targetHref);
+  const serializedTarget = JSON.stringify(targetHref);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -47,7 +48,14 @@ function makeRedirectHtml(targetHref: string) {
   <title>Redirecting…</title>
   <link rel="canonical" href="${escapedHref}">
   <meta http-equiv="refresh" content="0;url=${escapedHref}">
-  <script>window.location.replace(${JSON.stringify(targetHref)});</script>
+  <script>
+    (function () {
+      var target = ${serializedTarget};
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="${escapedHref}">Continue</a></p>

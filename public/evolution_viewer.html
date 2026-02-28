@@ -6,7 +6,14 @@
   <title>Redirecting…</title>
   <link rel="canonical" href="tools/evolution-viewer/">
   <meta http-equiv="refresh" content="0;url=tools/evolution-viewer/">
-  <script>window.location.replace("tools/evolution-viewer/");</script>
+  <script>
+    (function () {
+      var target = "tools/evolution-viewer/";
+      var search = window.location.search || "";
+      var hash = window.location.hash || "";
+      window.location.replace(target + search + hash);
+    })();
+  </script>
 </head>
 <body>
   <p>Redirecting… <a href="tools/evolution-viewer/">Continue</a></p>
