@@ -203,7 +203,7 @@ export function UngenderedFamiliesTool() {
         await ensureScript(D3_CDN);
         await ensureScript(D3_CLOUD_CDN);
 
-        const cloudModule = await import("@/features/ungendered-families/cloud.js");
+        const cloudModule = await import("@/features/ungendered-families/cloud");
         renderCloudRef.current = cloudModule.renderTagCloud;
         stopCloudRef.current = cloudModule.stopTagCloudAnimation;
 

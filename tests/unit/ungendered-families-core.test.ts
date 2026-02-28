@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { canonicalKey, colorCategory, speciesFromFullName } from "@/features/ungendered-families/utils.js";
+import { canonicalKey, colorCategory, speciesFromFullName } from "@/features/ungendered-families/utils";
 
 describe("ungendered-families utilities", () => {
   it("normalizes canonical keys", () => {

@@ -67,15 +67,6 @@ Each tool entry in `src/tools/registry.ts` must define:
    - `npm run test:parity:basepath`
 4. If fixture output changed intentionally, commit updates in `tests/parity/golden/*.json` with a short explanation in the commit message.
 
-## External Baseline Sync
-
-Use the pinned legacy baseline from `Coldsp33d/Coldsp33d.github.io@7788118432a23d2f436f7b895b46b6dc8c8a1ab8`:
-
-1. Sync baseline files into `spec/legacy-baseline/coldsp33d-staging/`:
-   - `npm run sync:coldsp33d-baseline`
-2. Compare impacted tool pages/components against baseline IDs/controls before merge.
-3. Treat missing baseline controls as regressions unless explicitly deprecated.
-
 ## Parity Contract Policy
 
 1. Do not remove existing tool capabilities during native migration without a documented replacement.
