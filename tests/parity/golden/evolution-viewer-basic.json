@@ -1,7 +1,7 @@
 {
   "id": "evolution-viewer-basic",
   "slug": "evolution-viewer",
-  "source": "/evolution_viewer.html",
+  "source": "/tools/evolution-viewer/",
   "snapshot": {
     "out": "Bulbasaur\nevolves from: none\nNormal\n4\nShiny\n4\nDark\n4\nGolden\n4",
     "jsonOut": "{\n  \"bulbasaur\": {\n    \"evolves_from\": null,\n    \"lowest_level_possible\": {\n      \"dark\": 4,\n      \"golden\": 4,\n      \"normal\": 4,\n      \"shiny\": 4\n    }\n  }\n}"

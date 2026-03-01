@@ -1,7 +1,7 @@
 {
   "id": "perfect-exp-basic",
   "slug": "perfect-exp",
-  "source": "/perfect_exp.html",
+  "source": "/tools/perfect-exp/",
   "snapshot": {
     "info": "Training during DAY time",
     "rows": "300 XP Gym\t\n3487664\n\t1,800\t1\t1,801\n1 XP Gym\t\n2380615\n\t18\t11\t1,999\nshedinja w/ EXP SHARE\t\n2380615\n\t1\t1\t2,000"

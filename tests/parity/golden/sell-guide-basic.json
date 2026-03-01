@@ -1,7 +1,7 @@
 {
   "id": "sell-guide-basic",
   "slug": "sell-guide",
-  "source": "/sell_guide.html",
+  "source": "/tools/sell-guide/",
   "snapshot": {
     "levelInput": "610",
     "marketOut": "$2,269,810,010",

@@ -1,7 +1,7 @@
 {
   "id": "pokesprite-generator-basic",
   "slug": "pokesprite-generator",
-  "source": "/pokesprite_generator.html",
+  "source": "/tools/pokesprite-generator/",
   "snapshot": {
     "resolved": "Pikachu (Gen 1–8) → slug: pikachu",
     "status": "Done.",
