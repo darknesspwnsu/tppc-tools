@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/generate-route-aliases.ts && next build",
+    "build": "next build",
     "start": "next start",
     "sync:gold-data": "node scripts/sync-gold-data.mjs",
     "typecheck": "tsc --noEmit",

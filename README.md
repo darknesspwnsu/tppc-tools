@@ -15,7 +15,6 @@ Native Next.js static-export site for TPPC utility tools.
 - `src/tools/registry.ts`
   - Canonical tool metadata:
     - `route`
-    - `routeAliases`
     - `status`
 - `src/tools/modules.ts`
   - Tool module contract:
@@ -24,8 +23,6 @@ Native Next.js static-export site for TPPC utility tools.
     - `compute`
     - `serialize`
     - `initialState`
-- `scripts/generate-route-aliases.ts`
-  - Generates static redirect stubs from `routeAliases`.
 - `scripts/capture-parity-fixtures.ts`
   - Captures parity snapshots from native canonical routes.
 - `tests/parity/`
@@ -41,7 +38,6 @@ Native Next.js static-export site for TPPC utility tools.
 Each tool entry in `src/tools/registry.ts` must define:
 
 - `route: "/tools/<slug>/"`
-- `routeAliases: string[]`
 - `status: "active" | "beta" | "deprecated"`
 
 ## Add a New Native Tool
@@ -53,7 +49,6 @@ Each tool entry in `src/tools/registry.ts` must define:
 5. Wire module in `src/tools/modules.ts`.
 6. Add unit tests in `tests/unit/`.
 7. Add parity scenario in `tests/parity/scenarios.ts` if parity coverage is required.
-8. Regenerate redirect stubs via build (`npm run build`) or directly run `tsx scripts/generate-route-aliases.ts`.
 
 ## Parity Fixture Refresh Workflow
 
@@ -68,7 +63,7 @@ Each tool entry in `src/tools/registry.ts` must define:
 ## Parity Contract Policy
 
 1. Do not remove existing tool capabilities during native migration without a documented replacement.
-2. Required compatibility control IDs are enforced by `tests/unit/tool-id-contracts.test.ts`.
+2. Required parity control IDs are enforced by `tests/unit/tool-id-contracts.test.ts`.
 3. If an ID must change, update:
    - `tests/parity/contracts/tool-id-contracts.json`
    - E2E/parity selectors

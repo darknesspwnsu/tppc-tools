@@ -31,7 +31,7 @@ for (const scenario of PARITY_SCENARIOS) {
 
     await expect(page.locator("iframe")).toHaveCount(0);
     const bodyText = (await page.textContent("body")) || "";
-    expect(bodyText).not.toContain("Legacy Runtime");
+    expect(bodyText).not.toContain("Compatibility Runtime");
     expect(bodyText).not.toContain("embedded for compatibility");
   });
 }

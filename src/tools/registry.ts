@@ -5,8 +5,6 @@ export type Tool = {
   tags: string[];
   route: `/tools/${string}/`;
   status: "active" | "beta" | "deprecated";
-  // Route aliases retained for redirect stubs.
-  routeAliases: string[];
 };
 
 export const TOOLS: readonly Tool[] = [
@@ -16,8 +14,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Organize Pokemon quickly and effectively into logically sensible groups with several options for customization.",
     tags: ["organizer", "box"],
     route: "/tools/box-organizer/",
-    status: "active",
-    routeAliases: ["/box_organizer.html"]
+    status: "active"
   },
   {
     slug: "perfect-exp",
@@ -25,8 +22,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Calculate the number of battles needed to perfect EXP a Pokemon at any level.",
     tags: ["calculator", "exp"],
     route: "/tools/perfect-exp/",
-    status: "active",
-    routeAliases: ["/perfect_exp.html"]
+    status: "active"
   },
   {
     slug: "sell-guide",
@@ -34,8 +30,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Convert RPG money (buyer pays or seller receives) into the exact Pokemon level needed to sell.",
     tags: ["calculator", "money"],
     route: "/tools/sell-guide/",
-    status: "active",
-    routeAliases: ["/sell_guide.html"]
+    status: "active"
   },
   {
     slug: "exp-utilities",
@@ -43,8 +38,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Useful powertools for trainers.",
     tags: ["utilities", "exp", "calculator"],
     route: "/tools/exp-utilities/",
-    status: "active",
-    routeAliases: ["/exp_utils.html"]
+    status: "active"
   },
   {
     slug: "pokesprite-generator",
@@ -52,8 +46,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Generate PokeSprites in BBCode to post in your threads!",
     tags: ["generator", "bbcode", "utilities"],
     route: "/tools/pokesprite-generator/",
-    status: "active",
-    routeAliases: ["/pokesprite_generator.html"]
+    status: "active"
   },
   {
     slug: "evolution-viewer",
@@ -61,8 +54,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Look up evolution requirements and lowest obtainable levels by variant.",
     tags: ["utilities", "evolution"],
     route: "/tools/evolution-viewer/",
-    status: "active",
-    routeAliases: ["/evolution_viewer.html"]
+    status: "active"
   },
   {
     slug: "ungendered-sorter",
@@ -70,8 +62,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Sorts ungendered Pokemon collections by families and lists missing Pokemon.",
     tags: ["organizer", "ungendered", "collection"],
     route: "/tools/ungendered-sorter/",
-    status: "active",
-    routeAliases: ["/sort_ungendered.html"]
+    status: "active"
   },
   {
     slug: "ungendered-families",
@@ -79,8 +70,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Sorts ungendered Pokemon collections by family grouping.",
     tags: ["organizer", "ungendered", "collection"],
     route: "/tools/ungendered-families/",
-    status: "active",
-    routeAliases: ["/sort_ungendered_families/index.html"]
+    status: "active"
   },
   {
     slug: "ungendered-diff",
@@ -88,8 +78,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Diffs two (?) collections and helps collectors quickly figure out swap trades.",
     tags: ["diff", "ungendered", "collection"],
     route: "/tools/ungendered-diff/",
-    status: "active",
-    routeAliases: ["/diff_ungendered.html"]
+    status: "active"
   },
   {
     slug: "rainbow-dex",
@@ -97,8 +86,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Helps organize rainbow dex collections easily. This is really only for kobk :p",
     tags: ["organizer", "dex", "rainbow"],
     route: "/tools/rainbow-dex/",
-    status: "active",
-    routeAliases: ["/rainbow_dex_sorter.html"]
+    status: "active"
   },
   {
     slug: "gold-organizer",
@@ -106,8 +94,7 @@ export const TOOLS: readonly Tool[] = [
     desc: "Extract and organize Golden Pokemon from TPPC box text in chronological release order (with missing list and dupe rules).",
     tags: ["organizer", "gold", "collection"],
     route: "/tools/gold-organizer/",
-    status: "active",
-    routeAliases: []
+    status: "active"
   }
 ] as const;
 

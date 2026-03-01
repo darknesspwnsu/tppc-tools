@@ -50,7 +50,7 @@ async function loadSources(): Promise<SourceFile[]> {
 describe("runtime decommission assertions", () => {
   it("removes runtime injection references from app code", async () => {
     const sources = await loadSources();
-    const forbidden = ["LegacyToolContent", "src/lib/legacy-tools", "app/tools/[slug]/page", "legacy/runtime"];
+    const forbidden = ["EmbeddedToolContent", "src/lib/tool-compat", "app/tools/[slug]/page", "runtime/compat"];
 
     const hits = sources
       .flatMap(({ file, contents }) =>
