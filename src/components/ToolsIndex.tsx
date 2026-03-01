@@ -7,11 +7,27 @@ import { usePersistentOptions } from "@/hooks/usePersistentOptions";
 import { PREFS_KEYS } from "@/lib/prefs-keys";
 import type { Tool } from "@/tools/registry";
 
+type IndexEntry = {
+  slug: string;
+  name: string;
+  desc: string;
+  tags: string[];
+  route: string;
+};
+
+const USERSCRIPTS_INDEX_ENTRY: IndexEntry = {
+  slug: "userscripts",
+  name: "Userscripts",
+  desc: "Copy-paste scripts and one-off console helpers for TPPC workflows.",
+  tags: ["userscripts", "scripts", "repository"],
+  route: "/userscripts/"
+};
+
 function normTag(s: string) {
   return String(s || "").trim().toLowerCase();
 }
 
-function toolHaystack(t: Tool) {
+function toolHaystack(t: IndexEntry) {
   return (
     `${t.name} ` +
     `${t.desc} ` +
@@ -23,6 +39,10 @@ function toolHaystack(t: Tool) {
 export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const indexEntries = useMemo<readonly IndexEntry[]>(
+    () => [USERSCRIPTS_INDEX_ENTRY, ...tools],
+    [tools]
+  );
   const [prefs, setPrefs, prefsLoaded] = usePersistentOptions<{ activeTags: string[] }>(
     PREFS_KEYS.toolsIndex,
     { activeTags: [] },
@@ -45,9 +65,9 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
-    tools.forEach((t) => (t.tags || []).forEach((tg) => s.add(normTag(tg))));
+    indexEntries.forEach((t) => (t.tags || []).forEach((tg) => s.add(normTag(tg))));
     return Array.from(s).filter(Boolean).sort();
-  }, [tools]);
+  }, [indexEntries]);
 
   useEffect(() => {
     if (!prefsLoaded || activeTags.length === 0) return;
@@ -57,7 +77,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
     }
   }, [activeTags, allTags, prefsLoaded, setPrefs]);
 
-  const tagMatchCount = (t: Tool) => {
+  const tagMatchCount = (t: IndexEntry) => {
     if (!activeTagSet.size) return 0;
     let n = 0;
     for (const tg of (t.tags || []).map(normTag)) if (activeTagSet.has(tg)) n++;
@@ -66,7 +86,9 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
 
   const filteredSorted = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = !q ? [...tools] : tools.filter((t) => toolHaystack(t).includes(q));
+    const filtered = !q
+      ? [...indexEntries]
+      : indexEntries.filter((t) => toolHaystack(t).includes(q));
 
     // Tags do not filter; they sort stronger matches to the top.
     const out = filtered.slice().sort((a, b) => {
@@ -76,7 +98,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
       return a.name.localeCompare(b.name);
     });
     return out;
-  }, [tools, query, activeTagSet]);
+  }, [indexEntries, query, activeTagSet]);
 
   const setSingleTag = (tag: string) => {
     setQuery("");
@@ -101,8 +123,8 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
         <div className="kicker">Toolkit</div>
         <h1 className="page-title">TPPC Tools by Darkness</h1>
         <p className="page-subtitle">
-          Community utilities for collectors, traders, and organizers. Canonical routes live under{" "}
-          <code>/tools/&lt;slug&gt;/</code>.
+          Community utilities for collectors, traders, and organizers. Tool routes live under{" "}
+          <code>/tools/&lt;slug&gt;/</code>, with scripts at <code>/userscripts/</code>.
         </p>
       </section>
 
@@ -111,7 +133,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
           <div className="tools-toolbar-left">
             <span className="pill-label">Tools</span>
             <span className="text-muted mono" style={{ fontSize: "0.78rem" }}>
-              {filteredSorted.length} / {tools.length} shown
+              {filteredSorted.length} / {indexEntries.length} shown
             </span>
           </div>
 
@@ -121,7 +143,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
             </span>
             <input
               className="field"
-              placeholder="Search tools..."
+              placeholder="Search tools or scripts..."
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);

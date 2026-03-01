@@ -29,16 +29,14 @@ export function SiteNav({
   const pathname = usePathname() || "/";
   const current = normalizePath(pathname);
   const userscriptsPath = "/userscripts/";
+  const userscriptsTarget = normalizePath(userscriptsPath);
 
   const navItems = useMemo(
     () =>
-      [
-        { name: "Userscripts", href: userscriptsPath },
-        ...tools.map((t) => ({
-          name: t.name,
-          href: t.route
-        }))
-      ],
+      tools.map((t) => ({
+        name: t.name,
+        href: t.route
+      })),
     [tools]
   );
 
@@ -153,6 +151,24 @@ export function SiteNav({
         </div>
 
         <div className="tool-drawer-links">
+          <Link
+            className={`chip${
+              current === userscriptsTarget ||
+              current.startsWith(userscriptsTarget.replace(/\/$/, "") + "/")
+                ? " chip-active"
+                : ""
+            }`}
+            href={userscriptsPath}
+            aria-current={
+              current === userscriptsTarget ||
+              current.startsWith(userscriptsTarget.replace(/\/$/, "") + "/")
+                ? "page"
+                : undefined
+            }
+          >
+            Userscripts
+          </Link>
+
           {navItems.map((it) => {
             const target = normalizePath(it.href);
             const active = current === target || current.startsWith(target.replace(/\/$/, "") + "/");
