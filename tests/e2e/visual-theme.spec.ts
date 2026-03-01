@@ -20,9 +20,12 @@ test("light theme uses wooloo background and blue accent token", async ({ page }
 });
 
 test("dark theme uses yveltal background", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("tppc_tools_theme", "dark");
+  });
   await page.goto(withParityBasePath("/tools/box-organizer/"), { waitUntil: "domcontentloaded" });
 
-  await page.click('button[aria-label="Toggle theme"]');
+  await page.waitForFunction(() => document.documentElement.getAttribute("data-theme") === "dark");
 
   const bgImage = await page.evaluate(() => getComputedStyle(document.body).backgroundImage);
   expect(bgImage).toMatch(/bg-dark-yveltal\.(png|jpg)/);

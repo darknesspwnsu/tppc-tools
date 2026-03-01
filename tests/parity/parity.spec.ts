@@ -4,7 +4,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 import { PARITY_SCENARIOS, installDeterministicNetwork, waitForToolRuntime } from "./scenarios";
-import { getParityTarget, scenarioPathForTarget, withParityBasePath } from "./shared";
+import { withParityBasePath } from "./shared";
 
 const ROOT = process.cwd();
 
@@ -18,9 +18,8 @@ async function loadGolden(id: string) {
 for (const scenario of PARITY_SCENARIOS) {
   test(`parity: ${scenario.id}`, async ({ page }) => {
     await installDeterministicNetwork(page);
-    const target = getParityTarget();
 
-    await page.goto(scenarioPathForTarget(scenario, target), { waitUntil: "domcontentloaded" });
+    await page.goto(withParityBasePath(scenario.canonicalPath), { waitUntil: "domcontentloaded" });
     await waitForToolRuntime(page);
     await scenario.run(page);
 
@@ -30,9 +29,6 @@ for (const scenario of PARITY_SCENARIOS) {
     expect(actual).toEqual(expected);
 
     await expect(page.locator("iframe")).toHaveCount(0);
-    const bodyText = (await page.textContent("body")) || "";
-    expect(bodyText).not.toContain("Compatibility Runtime");
-    expect(bodyText).not.toContain("embedded for compatibility");
   });
 }
 

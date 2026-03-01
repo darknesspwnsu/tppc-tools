@@ -8,7 +8,6 @@ export const ADVANCED_PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "box-organizer-options-matrix",
     slug: "box-organizer",
-    baselinePath: "/box_organizer.html",
     canonicalPath: "/tools/box-organizer/",
     async run(page) {
       await page.waitForSelector("#input");
@@ -36,7 +35,6 @@ export const ADVANCED_PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "sell-guide-formula-mode",
     slug: "sell-guide",
-    baselinePath: "/sell_guide.html",
     canonicalPath: "/tools/sell-guide/",
     async run(page) {
       await page.waitForSelector("#moneyInput");
@@ -55,7 +53,6 @@ export const ADVANCED_PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "pokesprite-advanced-render",
     slug: "pokesprite-generator",
-    baselinePath: "/pokesprite_generator.html",
     canonicalPath: "/tools/pokesprite-generator/",
     async run(page) {
       await page.waitForSelector("#pokeInput");

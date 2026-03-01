@@ -27,7 +27,7 @@ Native Next.js static-export site for TPPC utility tools.
   - Captures parity snapshots from native canonical routes.
 - `tests/parity/`
   - Parity fixtures + scenario harness.
-  - `tests/parity/contracts/tool-id-contracts.json` is the required control-ID contract for compatibility UI affordances.
+  - `tests/parity/contracts/tool-id-contracts.json` is the required control-ID contract for stable UI selectors.
 - `tests/unit/`
   - Core logic and decommission assertions.
 - `tests/e2e/`

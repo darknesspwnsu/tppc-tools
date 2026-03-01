@@ -26,7 +26,7 @@ async function loadContracts() {
 }
 
 describe("tool ID contracts", () => {
-  it("keeps required compatibility control IDs in native tool components", async () => {
+  it("keeps required parity control IDs in native tool components", async () => {
     const contracts = await loadContracts();
 
     for (const [slug, ids] of Object.entries(contracts)) {
