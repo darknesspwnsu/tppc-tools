@@ -16,10 +16,16 @@ function normalizePath(p: string) {
 function applyTheme(mode: ThemeMode, persist = true) {
   const root = document.documentElement;
   root.setAttribute("data-theme", mode);
+  root.style.colorScheme = mode;
   if (persist) localStorage.setItem("tppc_tools_theme", mode);
+  document.cookie = `tppc_tools_theme=${mode}; path=/; max-age=31536000; samesite=lax`;
 }
 
-export function SiteNav({ tools }: { tools: readonly Tool[] }) {
+export function SiteNav({
+  tools
+}: {
+  tools: readonly Tool[];
+}) {
   const pathname = usePathname() || "/";
   const current = normalizePath(pathname);
   const userscriptsPath = "/userscripts/";
@@ -37,7 +43,7 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
   );
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [theme, setTheme] = useState<ThemeMode | null>(null);
 
   useEffect(() => {
     // Close drawer on route change
@@ -54,12 +60,19 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
 
   useEffect(() => {
     try {
+      const rootTheme = document.documentElement.getAttribute("data-theme");
+      if (rootTheme === "dark" || rootTheme === "light") {
+        applyTheme(rootTheme, true);
+        setTheme(rootTheme as ThemeMode);
+        return;
+      }
+
       const saved = localStorage.getItem("tppc_tools_theme");
       const prefersDark =
         window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
       const initial: ThemeMode =
         saved === "dark" || saved === "light" ? (saved as ThemeMode) : prefersDark ? "dark" : "light";
-      applyTheme(initial, false);
+      applyTheme(initial, true);
       setTheme(initial);
     } catch (_) {
       // ignore
@@ -67,10 +80,16 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
   }, []);
 
   const toggleTheme = () => {
-    const next: ThemeMode = theme === "dark" ? "light" : "dark";
+    const current: ThemeMode =
+      theme ||
+      (document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    const next: ThemeMode = current === "dark" ? "light" : "dark";
     applyTheme(next, true);
     setTheme(next);
   };
+
+  const themeToggleIcon = theme ? (theme === "dark" ? "☀" : "☾") : "◐";
+  const themeToggleLabel = theme ? (theme === "dark" ? "Light" : "Dark") : "Theme";
 
   return (
     <>
@@ -109,8 +128,8 @@ export function SiteNav({ tools }: { tools: readonly Tool[] }) {
               onClick={toggleTheme}
               aria-label="Toggle theme"
             >
-              <span>{theme === "dark" ? "☀" : "☾"}</span>
-              <span>{theme === "dark" ? "Light" : "Dark"}</span>
+              <span>{themeToggleIcon}</span>
+              <span>{themeToggleLabel}</span>
             </button>
           </div>
         </div>
