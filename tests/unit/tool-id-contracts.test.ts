@@ -7,10 +7,14 @@ const ROOT = process.cwd();
 
 const COMPONENT_PATHS: Record<string, string> = {
   "box-organizer": "src/components/tools/BoxOrganizerTool.tsx",
+  "evolution-viewer": "src/components/tools/EvolutionViewerTool.tsx",
   "exp-utilities": "src/components/tools/ExpUtilitiesTool.tsx",
+  "gold-organizer": "src/components/GoldOrganizer.tsx",
   "pokesprite-generator": "src/components/tools/PokespriteGeneratorTool.tsx",
   "perfect-exp": "src/components/tools/PerfectExpTool.tsx",
+  "rainbow-dex": "src/components/tools/RainbowDexTool.tsx",
   "sell-guide": "src/components/tools/SellGuideTool.tsx",
+  "ungendered-diff": "src/components/tools/UngenderedDiffTool.tsx",
   "ungendered-sorter": "src/components/tools/UngenderedSorterTool.tsx",
   "ungendered-families": "src/components/tools/UngenderedFamiliesTool.tsx"
 };

@@ -61,6 +61,19 @@
     "calculation-info",
     "results-table"
   ],
+  "rainbow-dex": [
+    "inputList",
+    "minRarity",
+    "maxMissing",
+    "includeGolds",
+    "runButton",
+    "clearButton",
+    "status",
+    "outputChecklist",
+    "copyChecklistBtn",
+    "outputExtras",
+    "copyExtrasBtn"
+  ],
   "sell-guide": [
     "moneyInput",
     "levelInput",
@@ -84,6 +97,37 @@
     "copyOutputBtn",
     "copyMissingBtn",
     "status"
+  ],
+  "ungendered-diff": [
+    "input1",
+    "input2",
+    "runButton",
+    "status",
+    "output-section",
+    "output1",
+    "output2"
+  ],
+  "evolution-viewer": [
+    "pokeInput",
+    "pokeList",
+    "reloadBtn",
+    "copyBtn",
+    "out",
+    "jsonOut"
+  ],
+  "gold-organizer": [
+    "input",
+    "combine",
+    "dupeDesc",
+    "plainLevel",
+    "missingRows",
+    "includeStruckMissing",
+    "dropDupes",
+    "preferredGender",
+    "goldColor",
+    "output",
+    "droppedOutput",
+    "missingOutput"
   ],
   "ungendered-families": [
     "inputList",
