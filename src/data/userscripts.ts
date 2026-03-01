@@ -3,6 +3,7 @@ export type UserscriptSnippet = {
   title: string;
   description: string;
   code: string;
+  language?: "javascript" | "plaintext";
 };
 
 export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
@@ -439,7 +440,7 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
       "}",
       ":root." + ROOT_CLASS + " #left li,",
       ":root." + ROOT_CLASS + " #right li {",
-      "  border-color: var(--tppc-border) !important;",
+      "  border-color: transparent !important;",
       "}",
       ":root." + ROOT_CLASS + " #left li :is(a, span),",
       ":root." + ROOT_CLASS + " #right li :is(a, span) {",
@@ -455,6 +456,11 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
       ":root." + ROOT_CLASS + " #right li.r1 a {",
       "  display: block !important;",
       "  background: var(--tppc-surface-2) !important;",
+      "  border-left: none !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #left li.r2 a,",
+      ":root." + ROOT_CLASS + " #right li.r2 a {",
+      "  border-left: none !important;",
       "}",
       ":root." + ROOT_CLASS + " #left li a:hover,",
       ":root." + ROOT_CLASS + " #right li a:hover {",

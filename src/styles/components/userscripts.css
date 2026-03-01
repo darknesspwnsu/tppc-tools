@@ -29,7 +29,11 @@
   padding: 0.78rem 0.82rem;
   border-radius: 0.78rem;
   border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
-  background: color-mix(in oklab, var(--color-bg-elev), transparent 8%);
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--color-bg-elev), #09131f 32%),
+    color-mix(in oklab, var(--color-bg-elev), #0f1a2a 38%)
+  );
   color: var(--color-text);
   max-height: 26rem;
   overflow: auto;
@@ -37,6 +41,37 @@
   font-family: var(--mono);
   font-size: 0.75rem;
   line-height: 1.42;
+}
+
+.userscript-code code {
+  display: block;
+}
+
+.userscript-code .token-comment {
+  color: #7f8fb3;
+  font-style: italic;
+}
+
+.userscript-code .token-meta {
+  color: #71d6ff;
+}
+
+.userscript-code .token-string {
+  color: #8be28f;
+}
+
+.userscript-code .token-keyword {
+  color: #ff8bc7;
+  font-weight: 600;
+}
+
+.userscript-code .token-number {
+  color: #ffbe78;
+}
+
+.userscript-code .token-literal {
+  color: #b29dff;
+  font-weight: 600;
 }
 
 .userscript-actions {
