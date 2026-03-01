@@ -79,6 +79,48 @@
   justify-content: flex-start;
 }
 
+.userscript-details {
+  border: 1px solid color-mix(in oklab, var(--color-border), transparent 12%);
+  border-radius: 0.72rem;
+  background: color-mix(in oklab, var(--color-bg-elev), transparent 10%);
+  overflow: hidden;
+}
+
+.userscript-expand-summary {
+  padding: 0.58rem 0.72rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: color-mix(in oklab, var(--color-text), #a8d7ff 20%);
+  list-style: none;
+}
+
+.userscript-expand-summary::-webkit-details-marker {
+  display: none;
+}
+
+.userscript-expand-summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.44rem;
+  transform-origin: center;
+  transition: transform 0.15s ease;
+}
+
+.userscript-details[open] .userscript-expand-summary::before {
+  transform: rotate(90deg);
+}
+
+.userscript-details[open] .userscript-expand-summary {
+  border-bottom: 1px solid color-mix(in oklab, var(--color-border), transparent 20%);
+}
+
+.userscript-details .userscript-code {
+  border: 0;
+  border-radius: 0;
+}
+
 .userscript-copy-btn {
   border-radius: 0.68rem;
   padding: 0.5rem 0.78rem;

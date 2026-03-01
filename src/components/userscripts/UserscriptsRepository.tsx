@@ -249,12 +249,6 @@ export function UserscriptsRepository() {
                 <h2 className="userscript-title">{script.title}</h2>
                 <p className="userscript-description">{script.description}</p>
 
-                <UserscriptCodeBlock
-                  title={script.title}
-                  code={script.code}
-                  language={script.language ?? "javascript"}
-                />
-
                 <div className="userscript-actions">
                   <button
                     type="button"
@@ -266,6 +260,15 @@ export function UserscriptsRepository() {
                     {copiedId === script.id ? "Copied!" : failedId === script.id ? "Copy failed" : "Copy code"}
                   </button>
                 </div>
+
+                <details className="userscript-details">
+                  <summary className="userscript-expand-summary">Click to expand code</summary>
+                  <UserscriptCodeBlock
+                    title={script.title}
+                    code={script.code}
+                    language={script.language ?? "javascript"}
+                  />
+                </details>
               </article>
 
               {index < USER_SCRIPTS.length - 1 ? (
