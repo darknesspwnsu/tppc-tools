@@ -1,4 +1,4 @@
-import { runDexSorter } from "./core-legacy";
+import { runDexSorter } from "./core-engine";
 
 import type { UngenderedSorterRunOptions, UngenderedSorterRunResult } from "./types";
 
@@ -6,7 +6,7 @@ export {
   stripPrefixes,
   speciesFromFullName,
   canonicalKey
-} from "./core-legacy";
+} from "./core-engine";
 
 export async function runUngenderedSorter(options: UngenderedSorterRunOptions): Promise<UngenderedSorterRunResult> {
   let statusText = "";

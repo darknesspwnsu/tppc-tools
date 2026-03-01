@@ -259,12 +259,12 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
     id: "global-dark-mode",
     title: "TPPC Global Dark Mode (No Sprite Inversion)",
     description:
-      "Applies a non-inverting dark theme across all TPPC pages with persistent Dracula/Monokai theme support.",
+      "Applies a non-inverting dark theme across all TPPC pages with persistent Dracula/Monokai/Codex theme support.",
     code: `// ==UserScript==
 // @name         TPPC Global Dark Mode
 // @namespace    https://www.tppcrpg.net/
-// @version      1.7
-// @description  Non-inverting dark mode for TPPC with persistent Dracula/Monokai theme toggle.
+// @version      1.8
+// @description  Non-inverting dark mode for TPPC with persistent Dracula/Monokai/Codex theme toggle.
 // @match        https://www.tppcrpg.net/*
 // @match        https://tppcrpg.net/*
 // @grant        none
@@ -283,12 +283,13 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
   const TOGGLE_ID = "tppc-dark-mode-toggle";
   const THEME_TOGGLE_ID = "tppc-dark-mode-theme-toggle";
   const DEFAULT_ENABLED = true;
-  const THEMES = ["dracula", "monokai"];
+  const THEMES = ["dracula", "monokai", "codex"];
   const THEME_LABELS = {
     dracula: "Dracula",
-    monokai: "Monokai"
+    monokai: "Monokai",
+    codex: "Codex"
   };
-  const LEGACY_BG_ATTR_BY_RGB = {
+  const LIGHT_BG_ATTR_BY_RGB = {
     "rgb(243, 240, 233)": "data-tppc-bg-f3f0e9",
     "rgb(238, 255, 187)": "data-tppc-bg-eeffbb"
   };
@@ -390,6 +391,29 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
       "  --tppc-header-chip: #5f3e2b;",
       "  --tppc-side-link: #d6f598;",
       "  --tppc-side-link-hover: #f8f8f2;",
+      "}",
+      ":root." + ROOT_CLASS + "[" + THEME_ATTR + "='codex'] {",
+      "  --tppc-bg: #0b0d10;",
+      "  --tppc-current-line: #171b21;",
+      "  --tppc-text: #e6eaf0;",
+      "  --tppc-comment: #8b93a3;",
+      "  --tppc-cyan: #6ee7ff;",
+      "  --tppc-green: #7dd88f;",
+      "  --tppc-orange: #ffb86b;",
+      "  --tppc-pink: #ff8ab3;",
+      "  --tppc-purple: #b9a7ff;",
+      "  --tppc-red: #ff7d8c;",
+      "  --tppc-yellow: #e6d98a;",
+      "  --tppc-surface: #12161b;",
+      "  --tppc-surface-2: #1a1f27;",
+      "  --tppc-surface-3: #222835;",
+      "  --tppc-border: #313946;",
+      "  --tppc-muted: #aab3c2;",
+      "  --tppc-link: var(--tppc-cyan);",
+      "  --tppc-link-visited: var(--tppc-purple);",
+      "  --tppc-header-chip: #2a313d;",
+      "  --tppc-side-link: #c8d1de;",
+      "  --tppc-side-link-hover: #f3f6fb;",
       "}",
       ":root." + ROOT_CLASS + ":not(." + READY_CLASS + ") {",
       "  background: var(--tppc-bg) !important;",
@@ -589,22 +613,22 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
     (document.head || document.documentElement).appendChild(style);
   }
 
-  function tagElementIfLegacyBg(el) {
+  function tagElementIfLightBg(el) {
     if (!(el instanceof HTMLElement)) return;
     if (el.hasAttribute("data-tppc-bg-f3f0e9") || el.hasAttribute("data-tppc-bg-eeffbb")) return;
 
-    const attr = LEGACY_BG_ATTR_BY_RGB[getComputedStyle(el).backgroundColor];
+    const attr = LIGHT_BG_ATTR_BY_RGB[getComputedStyle(el).backgroundColor];
     if (!attr) return;
     el.setAttribute(attr, "1");
   }
 
-  function tagLegacyLightBackgrounds(rootNode) {
+  function tagKnownLightBackgrounds(rootNode) {
     const scope = rootNode instanceof HTMLElement ? rootNode : document.body;
     if (!scope) return;
 
-    tagElementIfLegacyBg(scope);
+    tagElementIfLightBg(scope);
     const all = scope.querySelectorAll("*");
-    for (const el of all) tagElementIfLegacyBg(el);
+    for (const el of all) tagElementIfLightBg(el);
   }
 
   function startBackgroundObserver() {
@@ -615,7 +639,7 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
       for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
           if (!(node instanceof HTMLElement)) continue;
-          tagLegacyLightBackgrounds(node);
+          tagKnownLightBackgrounds(node);
         }
       }
     });
@@ -643,7 +667,9 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
     btn.style.background =
       safeTheme === "monokai"
         ? "linear-gradient(135deg, #49483e, #272822)"
-        : "linear-gradient(135deg, #44475a, #282a36)";
+        : safeTheme === "codex"
+          ? "linear-gradient(135deg, #222835, #0b0d10)"
+          : "linear-gradient(135deg, #44475a, #282a36)";
   }
 
   function applyTheme(theme) {
@@ -661,7 +687,7 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
   }
 
   function setDarkModeEnabled(enabled) {
-    if (enabled) tagLegacyLightBackgrounds();
+    if (enabled) tagKnownLightBackgrounds();
     document.documentElement.classList.toggle(ROOT_CLASS, enabled);
     if (enabled) document.documentElement.classList.add(READY_CLASS);
     setStoredEnabled(enabled);
@@ -725,7 +751,7 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
     btn.addEventListener("click", () => {
       cycleTheme();
       if (document.documentElement.classList.contains(ROOT_CLASS)) {
-        tagLegacyLightBackgrounds();
+        tagKnownLightBackgrounds();
       }
     });
 
@@ -746,13 +772,13 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
   startBackgroundObserver();
 
   const initUI = () => {
-    tagLegacyLightBackgrounds(document.body || undefined);
+    tagKnownLightBackgrounds(document.body || undefined);
     document.documentElement.classList.add(READY_CLASS);
     buildThemeButton();
     buildToggleButton();
     refreshToggleButton(document.documentElement.classList.contains(ROOT_CLASS));
     refreshThemeButton(getCurrentTheme(), document.documentElement.classList.contains(ROOT_CLASS));
-    window.setTimeout(() => tagLegacyLightBackgrounds(document.body || undefined), 0);
+    window.setTimeout(() => tagKnownLightBackgrounds(document.body || undefined), 0);
   };
 
   if (document.readyState === "loading") {

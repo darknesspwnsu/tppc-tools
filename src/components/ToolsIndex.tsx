@@ -68,7 +68,7 @@ export function ToolsIndex({ tools }: { tools: readonly Tool[] }) {
     const q = query.trim().toLowerCase();
     const filtered = !q ? [...tools] : tools.filter((t) => toolHaystack(t).includes(q));
 
-    // Like the legacy index: tags do not filter, they sort "matches" to the top.
+    // Tags do not filter; they sort stronger matches to the top.
     const out = filtered.slice().sort((a, b) => {
       const da = tagMatchCount(a);
       const db = tagMatchCount(b);

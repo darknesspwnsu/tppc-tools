@@ -12,8 +12,6 @@ import type {
 } from "@/lib/gold-organizer";
 import { organizeGold, parseInput } from "@/lib/gold-organizer";
 
-const LEGACY_PREFS_KEY = "tppc_gold_organizer_prefs_v1";
-
 type Prefs = Pick<
   GoldOrganizerOpts,
   | "combine"
@@ -73,7 +71,7 @@ export function GoldOrganizer({
   rarity: GoldenRarity;
 }) {
   const [input, setInput] = useState("");
-  const [prefs, setPrefs, prefsLoaded] = usePersistentOptions<Prefs>(PREFS_KEYS.goldOrganizer, DEFAULT_PREFS, {
+  const [prefs, setPrefs] = usePersistentOptions<Prefs>(PREFS_KEYS.goldOrganizer, DEFAULT_PREFS, {
     version: 1,
     migrate: (raw) => {
       if (!raw || typeof raw !== "object") return DEFAULT_PREFS;
@@ -86,40 +84,10 @@ export function GoldOrganizer({
   const [droppedOutput, setDroppedOutput] = useState("");
   const [missingOutput, setMissingOutput] = useState("");
 
-  const hasNonDefaultPrefs = useMemo(
-    () =>
-      (Object.keys(DEFAULT_PREFS) as Array<keyof Prefs>).some(
-        (key) => prefs[key] !== DEFAULT_PREFS[key]
-      ),
-    [prefs]
-  );
-
   const timelineCount = useMemo(
     () => (Array.isArray(timelineRaw) ? timelineRaw.filter((x) => x && x.name).length : 0),
     [timelineRaw]
   );
-
-  useEffect(() => {
-    if (!prefsLoaded) return;
-    // Avoid clobbering any user edits made before migration checks complete.
-    if (hasNonDefaultPrefs) return;
-    try {
-      // Only run one-time migration when current v2 key is absent.
-      const existing = localStorage.getItem(PREFS_KEYS.goldOrganizer);
-      if (existing) return;
-      const raw = localStorage.getItem(LEGACY_PREFS_KEY);
-      if (!raw) return;
-
-      const parsed = JSON.parse(raw) as Partial<Prefs>;
-      const next: Prefs = { ...DEFAULT_PREFS, ...(parsed || {}) };
-      if (!["M", "F", "U"].includes(next.preferredGender)) {
-        next.preferredGender = "U";
-      }
-      setPrefs(next);
-    } catch (_) {
-      // ignore
-    }
-  }, [hasNonDefaultPrefs, prefsLoaded, setPrefs]);
 
   useEffect(() => {
     setStatus(`Loaded timeline with ${fmt(timelineCount)} gold releases.`);

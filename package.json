@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/generate-legacy-redirects.ts && next build",
+    "build": "tsx scripts/generate-route-aliases.ts && next build",
     "start": "next start",
     "sync:gold-data": "node scripts/sync-gold-data.mjs",
     "typecheck": "tsc --noEmit",
@@ -13,8 +13,8 @@
     "test:parity:native": "PARITY_TARGET=native playwright test tests/parity",
     "test:parity:basepath": "NEXT_PUBLIC_BASE_PATH=/tppc-tools PARITY_BASE_PATH=/tppc-tools PARITY_TARGET=native playwright test tests/parity",
     "test:ci": "npm run typecheck && npm run test:unit && npm run test:e2e && npm run test:parity && NEXT_PUBLIC_BASE_PATH=/tppc-tools npm run build",
-    "capture:parity-fixtures": "tsx scripts/capture-legacy-fixtures.ts",
-    "capture:legacy-fixtures": "npm run capture:parity-fixtures"
+    "capture:parity-fixtures": "tsx scripts/capture-parity-fixtures.ts",
+    "capture:baseline-fixtures": "npm run capture:parity-fixtures"
   },
   "dependencies": {
     "next": "^16.1.6",

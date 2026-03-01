@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import { TOOLS } from "../src/tools/registry";
 
 type RedirectMapping = {
-  legacyPath: string;
-  canonicalPath: string;
+  fromPath: string;
+  toPath: string;
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,9 +25,9 @@ function escapeHtml(s: string) {
     .replace(/'/g, "&#39;");
 }
 
-function toRelativeTarget(fromLegacyPath: string, canonicalPath: string) {
-  const from = stripLeadingSlash(fromLegacyPath);
-  const canonical = stripLeadingSlash(canonicalPath);
+function toRelativeTarget(fromPath: string, toPath: string) {
+  const from = stripLeadingSlash(fromPath);
+  const canonical = stripLeadingSlash(toPath);
 
   if (!canonical) return "./";
 
@@ -68,18 +68,13 @@ function buildMappings(): RedirectMapping[] {
   const mappings: RedirectMapping[] = [];
 
   for (const tool of TOOLS) {
-    for (const legacyPath of tool.legacyRedirects || []) {
+    for (const aliasPath of tool.routeAliases || []) {
       mappings.push({
-        legacyPath,
-        canonicalPath: tool.route
+        fromPath: aliasPath,
+        toPath: tool.route
       });
     }
   }
-
-  mappings.push({
-    legacyPath: "/index-legacy.html",
-    canonicalPath: "/"
-  });
 
   return mappings;
 }
@@ -88,15 +83,15 @@ async function main() {
   const mappings = buildMappings();
 
   for (const mapping of mappings) {
-    const relLegacy = stripLeadingSlash(mapping.legacyPath);
-    const outFile = path.join(root, "public", relLegacy);
-    const targetHref = toRelativeTarget(mapping.legacyPath, mapping.canonicalPath);
+    const relFromPath = stripLeadingSlash(mapping.fromPath);
+    const outFile = path.join(root, "public", relFromPath);
+    const targetHref = toRelativeTarget(mapping.fromPath, mapping.toPath);
 
     await mkdir(path.dirname(outFile), { recursive: true });
     await writeFile(outFile, makeRedirectHtml(targetHref), "utf8");
   }
 
-  console.log(`Generated ${mappings.length} legacy redirect stub(s).`);
+  console.log(`Generated ${mappings.length} redirect alias stub(s).`);
 }
 
 main().catch((err) => {
