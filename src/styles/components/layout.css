@@ -28,7 +28,7 @@
 .surface {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   box-shadow: var(--shadow-sm);
 }
 
@@ -40,23 +40,6 @@
   padding: 1.2rem;
   position: relative;
   overflow: hidden;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  right: -52px;
-  top: -60px;
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--color-accent), #fff 32%) 0%,
-    transparent 68%
-  );
-  opacity: 0.26;
-  pointer-events: none;
 }
 
 .kicker {

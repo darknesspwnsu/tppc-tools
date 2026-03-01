@@ -41,9 +41,8 @@ body {
       rgba(4, 11, 26, 0.84) 100%
     ),
     radial-gradient(1200px 620px at 8% -18%, rgba(83, 142, 248, 0.16), transparent 62%),
-    radial-gradient(1000px 520px at 92% -24%, rgba(68, 199, 255, 0.12), transparent 64%),
     linear-gradient(rgba(5, 11, 24, 0.56), rgba(5, 11, 24, 0.68)),
-    var(--theme-dark-bg-image) center / cover no-repeat;
+    var(--theme-dark-bg-image) 100% 52% / cover no-repeat;
 }
 
 a {
