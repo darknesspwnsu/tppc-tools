@@ -5,7 +5,7 @@ export type ScenarioSnapshot = Record<string, string>;
 export type ParityScenario = {
   id: string;
   slug: string;
-  legacyPath: string;
+  baselinePath: string;
   canonicalPath: string;
   run: (page: Page) => Promise<void>;
   extract: (page: Page) => Promise<ScenarioSnapshot>;
@@ -70,11 +70,11 @@ export async function installDeterministicNetwork(page: Page) {
 
 export async function waitForToolRuntime(page: Page) {
   await page.waitForFunction(() => {
-    const isLegacyStandalone = /\.html$/i.test(window.location.pathname);
-    if (isLegacyStandalone) return document.readyState === "complete";
-    const hasLegacyHost = Boolean(document.querySelector(".native-tool-content"));
+    const isStandaloneStub = /\.html$/i.test(window.location.pathname);
+    if (isStandaloneStub) return document.readyState === "complete";
+    const hasEmbeddedHost = Boolean(document.querySelector(".native-tool-content"));
     const marker = (window as { __TPPC_TOOL_READY?: boolean }).__TPPC_TOOL_READY;
-    if (hasLegacyHost) return marker === true;
+    if (hasEmbeddedHost) return marker === true;
     if (typeof marker === "undefined") return document.readyState === "complete";
     return marker === true;
   });
@@ -84,7 +84,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "box-organizer-basic",
     slug: "box-organizer",
-    legacyPath: "/box_organizer.html",
+    baselinePath: "/box_organizer.html",
     canonicalPath: "/tools/box-organizer/",
     async run(page) {
       await page.waitForSelector("#input");
@@ -115,7 +115,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "perfect-exp-basic",
     slug: "perfect-exp",
-    legacyPath: "/perfect_exp.html",
+    baselinePath: "/perfect_exp.html",
     canonicalPath: "/tools/perfect-exp/",
     async run(page) {
       await page.waitForSelector("#current-exp");
@@ -142,7 +142,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "sell-guide-basic",
     slug: "sell-guide",
-    legacyPath: "/sell_guide.html",
+    baselinePath: "/sell_guide.html",
     canonicalPath: "/tools/sell-guide/",
     async run(page) {
       await page.waitForSelector("#moneyInput");
@@ -163,7 +163,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "exp-utilities-basic",
     slug: "exp-utilities",
-    legacyPath: "/exp_utils.html",
+    baselinePath: "/exp_utils.html",
     canonicalPath: "/tools/exp-utilities/",
     async run(page) {
       await page.waitForSelector("#levelInput");
@@ -188,7 +188,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "pokesprite-generator-basic",
     slug: "pokesprite-generator",
-    legacyPath: "/pokesprite_generator.html",
+    baselinePath: "/pokesprite_generator.html",
     canonicalPath: "/tools/pokesprite-generator/",
     async run(page) {
       await page.waitForSelector("#pokeInput");
@@ -217,7 +217,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "evolution-viewer-basic",
     slug: "evolution-viewer",
-    legacyPath: "/evolution_viewer.html",
+    baselinePath: "/evolution_viewer.html",
     canonicalPath: "/tools/evolution-viewer/",
     async run(page) {
       await page.waitForSelector("#pokeInput");
@@ -241,7 +241,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "ungendered-sorter-basic",
     slug: "ungendered-sorter",
-    legacyPath: "/sort_ungendered.html",
+    baselinePath: "/sort_ungendered.html",
     canonicalPath: "/tools/ungendered-sorter/",
     async run(page) {
       await page.waitForSelector("#inputList");
@@ -271,7 +271,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "ungendered-families-basic",
     slug: "ungendered-families",
-    legacyPath: "/sort_ungendered_families/",
+    baselinePath: "/sort_ungendered_families/",
     canonicalPath: "/tools/ungendered-families/",
     async run(page) {
       await page.waitForSelector("#inputList");
@@ -302,7 +302,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "ungendered-diff-basic",
     slug: "ungendered-diff",
-    legacyPath: "/diff_ungendered.html",
+    baselinePath: "/diff_ungendered.html",
     canonicalPath: "/tools/ungendered-diff/",
     async run(page) {
       await page.waitForSelector("#input1");
@@ -338,7 +338,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "rainbow-dex-basic",
     slug: "rainbow-dex",
-    legacyPath: "/rainbow_dex_sorter.html",
+    baselinePath: "/rainbow_dex_sorter.html",
     canonicalPath: "/tools/rainbow-dex/",
     async run(page) {
       await page.waitForSelector("#inputList");

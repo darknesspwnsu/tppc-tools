@@ -117,7 +117,7 @@ test("perfect-exp copy ID button works", async ({ page }) => {
   expect(copied).toMatch(/^\d+$/);
 });
 
-test("legacy perfect-exp links keep query state and auto-run", async ({ page }) => {
+test("redirected perfect-exp links keep query state and auto-run", async ({ page }) => {
   await page.goto(withParityBasePath("/perfect_exp.html?currentExp=1&desiredExp=2000"), { waitUntil: "domcontentloaded" });
   await page.waitForURL((url) => /\/tools\/perfect-exp\/$/.test(url.pathname));
 

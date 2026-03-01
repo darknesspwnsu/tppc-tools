@@ -14,9 +14,8 @@ Native Next.js static-export site for TPPC utility tools.
   - Tool input/output contracts.
 - `src/tools/registry.ts`
   - Canonical tool metadata:
-    - `implementation`
     - `route`
-    - `legacyRedirects`
+    - `routeAliases`
     - `status`
 - `src/tools/modules.ts`
   - Tool module contract:
@@ -25,13 +24,13 @@ Native Next.js static-export site for TPPC utility tools.
     - `compute`
     - `serialize`
     - `initialState`
-- `scripts/generate-legacy-redirects.ts`
-  - Generates static redirect stubs from `legacyRedirects`.
-- `scripts/capture-legacy-fixtures.ts`
+- `scripts/generate-route-aliases.ts`
+  - Generates static redirect stubs from `routeAliases`.
+- `scripts/capture-parity-fixtures.ts`
   - Captures parity snapshots from native canonical routes.
 - `tests/parity/`
   - Parity fixtures + scenario harness.
-  - `tests/parity/contracts/tool-id-contracts.json` is the required control-ID contract for legacy-compatible UI affordances.
+  - `tests/parity/contracts/tool-id-contracts.json` is the required control-ID contract for compatibility UI affordances.
 - `tests/unit/`
   - Core logic and decommission assertions.
 - `tests/e2e/`
@@ -41,9 +40,8 @@ Native Next.js static-export site for TPPC utility tools.
 
 Each tool entry in `src/tools/registry.ts` must define:
 
-- `implementation: "native"`
 - `route: "/tools/<slug>/"`
-- `legacyRedirects: string[]`
+- `routeAliases: string[]`
 - `status: "active" | "beta" | "deprecated"`
 
 ## Add a New Native Tool
@@ -55,7 +53,7 @@ Each tool entry in `src/tools/registry.ts` must define:
 5. Wire module in `src/tools/modules.ts`.
 6. Add unit tests in `tests/unit/`.
 7. Add parity scenario in `tests/parity/scenarios.ts` if parity coverage is required.
-8. Regenerate redirect stubs via build (`npm run build`) or directly run `tsx scripts/generate-legacy-redirects.ts`.
+8. Regenerate redirect stubs via build (`npm run build`) or directly run `tsx scripts/generate-route-aliases.ts`.
 
 ## Parity Fixture Refresh Workflow
 
@@ -70,7 +68,7 @@ Each tool entry in `src/tools/registry.ts` must define:
 ## Parity Contract Policy
 
 1. Do not remove existing tool capabilities during native migration without a documented replacement.
-2. Required legacy-compatible control IDs are enforced by `tests/unit/tool-id-contracts.test.ts`.
+2. Required compatibility control IDs are enforced by `tests/unit/tool-id-contracts.test.ts`.
 3. If an ID must change, update:
    - `tests/parity/contracts/tool-id-contracts.json`
    - E2E/parity selectors
@@ -91,4 +89,4 @@ Each tool entry in `src/tools/registry.ts` must define:
 
 ## Internal Dashboard
 
-- `/internal/migration/` shows in-app migration metadata and module presence.
+- `/internal/migration/` shows tool inventory metadata and module presence.

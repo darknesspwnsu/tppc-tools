@@ -1,6 +1,6 @@
 import type { ParityScenario } from "./scenarios";
 
-export type ParityTarget = "native" | "legacy";
+export type ParityTarget = "native" | "baseline";
 
 function normalizeBasePath(p: string) {
   const trimmed = String(p || "").trim();
@@ -11,7 +11,7 @@ function normalizeBasePath(p: string) {
 
 export function getParityTarget(): ParityTarget {
   const raw = String(process.env.PARITY_TARGET || "native").toLowerCase();
-  return raw === "legacy" ? "legacy" : "native";
+  return raw === "baseline" ? "baseline" : "native";
 }
 
 export function withParityBasePath(pathname: string) {
@@ -23,7 +23,6 @@ export function withParityBasePath(pathname: string) {
 }
 
 export function scenarioPathForTarget(scenario: ParityScenario, target: ParityTarget) {
-  const rawPath = target === "legacy" ? scenario.legacyPath : scenario.canonicalPath;
+  const rawPath = target === "baseline" ? scenario.baselinePath : scenario.canonicalPath;
   return withParityBasePath(rawPath);
 }
-

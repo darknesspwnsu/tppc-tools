@@ -538,10 +538,6 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
       ":root." + ROOT_CLASS + " hr {",
       "  border-color: var(--tppc-border) !important;",
       "}",
-      ":root." + ROOT_CLASS + " #profile > li {",
-      "  background: #2e3240 !important;",
-      "  border: 1px solid var(--tppc-border) !important;",
-      "}",
       ":root." + ROOT_CLASS + " #profile > li .i {",
       "  background-color: var(--tppc-surface-3) !important;",
       "}",
@@ -658,12 +654,15 @@ const GLOBAL_DARK_MODE: UserscriptSnippet = {
   function refreshThemeButton(theme, enabled) {
     const btn = document.getElementById(THEME_TOGGLE_ID);
     if (!btn) return;
+    btn.style.display = enabled ? "block" : "none";
+    if (!enabled) return;
+
     const safeTheme = normalizeTheme(theme);
     const label = THEME_LABELS[safeTheme] || "Dracula";
 
     btn.textContent = "Theme: " + label;
     btn.setAttribute("aria-label", "Cycle dark theme");
-    btn.style.opacity = enabled ? "1" : "0.78";
+    btn.style.opacity = "1";
     btn.style.background =
       safeTheme === "monokai"
         ? "linear-gradient(135deg, #49483e, #272822)"

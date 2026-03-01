@@ -47,7 +47,7 @@ async function loadSources(): Promise<SourceFile[]> {
   );
 }
 
-describe("legacy runtime decommission assertions", () => {
+describe("runtime decommission assertions", () => {
   it("removes runtime injection references from app code", async () => {
     const sources = await loadSources();
     const forbidden = ["LegacyToolContent", "src/lib/legacy-tools", "app/tools/[slug]/page", "legacy/runtime"];
@@ -71,7 +71,7 @@ describe("legacy runtime decommission assertions", () => {
     expect(hits).toEqual([]);
   });
 
-  it("app shell has no bootstrap CDN or legacy site.css include", async () => {
+  it("app shell has no bootstrap CDN or old site.css include", async () => {
     const layoutFile = path.join(ROOT, "app", "layout.tsx");
     const layout = await fs.readFile(layoutFile, "utf8");
 
