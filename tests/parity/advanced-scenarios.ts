@@ -60,6 +60,13 @@ export const ADVANCED_PARITY_SCENARIOS: readonly ParityScenario[] = [
     async run(page) {
       await page.waitForSelector("#pokeInput");
       await page.fill("#pokeInput", "Pikachu");
+      await page.evaluate(() => {
+        const details = Array.from(document.querySelectorAll("details")).find((el) =>
+          /advanced options/i.test((el.querySelector("summary")?.textContent || "").trim())
+        ) as HTMLDetailsElement | undefined;
+        if (details) details.open = true;
+      });
+      await page.waitForSelector("#resMode", { state: "visible" });
       await page.selectOption("#resMode", "custom");
       await page.fill("#cols", "64");
       await page.fill("#alpha", "20");
