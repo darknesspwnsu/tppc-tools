@@ -6,8 +6,7 @@ export type UserscriptSnippet = {
   language?: "javascript" | "plaintext";
 };
 
-export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
-  {
+const SELL_PAGE_DRAG_SELECT: UserscriptSnippet = {
     id: "sell-page-drag-select",
     title: "TPPC Sell Page Drag Select",
     description: "Click and drag to bulk check or uncheck Pokemon on the TPPC sell page.",
@@ -121,8 +120,9 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
 
   document.addEventListener("mouseup", stopInteraction);
 })();`
-  },
-  {
+};
+
+const TRADE_INTEREST_DRAG_SELECT: UserscriptSnippet = {
     id: "trade-interest-drag-select",
     title: "TPPC Trade Interest Drag Select",
     description: "Click and drag to bulk check or uncheck Pokemon on the TPPC Trade Interest page.",
@@ -253,8 +253,9 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
 
   document.addEventListener("mouseup", stopInteraction);
 })();`
-  },
-  {
+};
+
+const GLOBAL_DARK_MODE: UserscriptSnippet = {
     id: "global-dark-mode",
     title: "TPPC Global Dark Mode (No Sprite Inversion)",
     description:
@@ -763,8 +764,9 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     initUI();
   }
 })();`
-  },
-  {
+};
+
+const CHECK_ALL_UNOWN_CONSOLE: UserscriptSnippet = {
     id: "check-all-unown-console",
     title: "TPPC Sell Page: Check All Unown (Dev Console)",
     description: "One-time developer console snippet to check every Unown variant on the sell page.",
@@ -795,5 +797,11 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
 
   console.log("Checked " + checked + " Unown entries.");
 })();`
-  }
+};
+
+export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
+  GLOBAL_DARK_MODE,
+  SELL_PAGE_DRAG_SELECT,
+  TRADE_INTEREST_DRAG_SELECT,
+  CHECK_ALL_UNOWN_CONSOLE
 ] as const;
