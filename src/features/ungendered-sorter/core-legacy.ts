@@ -727,6 +727,5 @@ export {
   stripPrefixes,
   speciesFromFullName,
   canonicalKey,
-  parseInputList,
   runDexSorter
 };
