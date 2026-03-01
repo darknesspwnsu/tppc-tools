@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Script from "next/script";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   buyerPays,
@@ -20,6 +21,16 @@ import { usePersistentOptions } from "@/hooks/usePersistentOptions";
 import { PREFS_KEYS } from "@/lib/prefs-keys";
 
 type StatusKind = "light" | "danger";
+
+declare global {
+  interface Window {
+    MathJax?: {
+      startup?: { promise?: Promise<void> };
+      typesetClear?: (elements?: Element[]) => void;
+      typesetPromise?: (elements?: Element[]) => Promise<void>;
+    };
+  }
+}
 
 function modeLabel(meaning: MoneyMeaning) {
   return meaning === "seller" ? "Seller receives" : "Buyer pays";
@@ -64,14 +75,15 @@ export function SellGuideTool() {
   const [buyerOut, setBuyerOut] = useState("$—");
   const [sellerOut, setSellerOut] = useState("$—");
 
-  const ppForMode = moneyMeaning === "seller" ? true : ppControlled;
-  const badge = modeBadge(moneyMeaning, ppForMode);
+  const ppForOutputs = moneyMeaning === "seller" ? true : ppControlled;
+  const badge = modeBadge(moneyMeaning, ppControlled);
 
   const unitPill = useMemo(() => (exactAmount ? "Exact $" : "Millions"), [exactAmount]);
   const moneyHint = useMemo(() => moneyHintText(exactAmount), [exactAmount]);
-  const formulaLatex = useMemo(() => formulaLatexText(moneyMeaning, ppForMode), [moneyMeaning, ppForMode]);
+  const formulaLatex = useMemo(() => formulaLatexText(moneyMeaning, ppControlled), [moneyMeaning, ppControlled]);
+  const formulaNodeRef = useRef<HTMLDivElement>(null);
 
-  const updateOutputsForLevel = (level: bigint | null, meaning = moneyMeaning, pp = ppForMode) => {
+  const updateOutputsForLevel = (level: bigint | null, meaning = moneyMeaning, pp = ppForOutputs) => {
     if (level === null) {
       setMarketOut("$—");
       setBuyerOut("$—");
@@ -187,8 +199,33 @@ export function SellGuideTool() {
     updateOutputsForLevel(null, next.moneyMeaning, next.moneyMeaning === "seller" ? true : next.ppControlled);
   };
 
+  const typesetFormula = useCallback(() => {
+    const node = formulaNodeRef.current;
+    if (!node) return;
+    const mathJax = window.MathJax;
+    if (!mathJax?.typesetPromise) return;
+    mathJax.typesetClear?.([node]);
+    void mathJax.typesetPromise([node]).catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    const node = formulaNodeRef.current;
+    if (!node) return;
+    node.innerHTML = formulaLatex;
+    typesetFormula();
+  }, [formulaLatex, typesetFormula]);
+
   return (
     <div className="tool-template">
+      <Script
+        id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          typesetFormula();
+        }}
+      />
+
       <section className="surface hero tool-template-header">
         <div className="kicker">Calculator</div>
         <h1 className="page-title">TPPC Sell Guide</h1>
@@ -196,7 +233,8 @@ export function SellGuideTool() {
       </section>
 
       <section className="surface tool-pane">
-        <div className="d-flex justify-content-end mb-2">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="fw-semibold">Calculator</div>
           <button
             id="btnClear"
             type="button"
@@ -232,9 +270,10 @@ export function SellGuideTool() {
               }}
             />
 
-            <div className="tool-actions" style={{ marginTop: "0.6rem" }}>
-              <label className="chip">
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              <div className="form-check">
                 <input
+                  className="form-check-input"
                   id="meaningBuyerPays"
                   type="radio"
                   name="moneyMeaning"
@@ -245,11 +284,14 @@ export function SellGuideTool() {
                     recompute(next);
                   }}
                 />
-                Money is what buyer pays
-              </label>
+                <label className="form-check-label" htmlFor="meaningBuyerPays">
+                  Money is what <b>buyer pays</b>
+                </label>
+              </div>
 
-              <label className="chip">
+              <div className="form-check">
                 <input
+                  className="form-check-input"
                   id="meaningSellerGets"
                   type="radio"
                   name="moneyMeaning"
@@ -260,38 +302,42 @@ export function SellGuideTool() {
                     recompute(next);
                   }}
                 />
-                Money is what seller receives
-              </label>
+                <label className="form-check-label" htmlFor="meaningSellerGets">
+                  Money is what <b>seller receives</b>
+                </label>
+              </div>
             </div>
 
-            <div className="tool-actions" style={{ marginTop: "0.4rem" }}>
-              <label className="chip">
-                <input
-                  id="exactAmount"
-                  type="checkbox"
-                  checked={exactAmount}
-                  onChange={(event) => {
-                    const next = { exactAmount: event.target.checked, ppControlled, moneyMeaning };
-                    setPrefs({ exactAmount: event.target.checked });
-                    recompute(next);
-                  }}
-                />
+            <div className="form-check mt-2">
+              <input
+                className="form-check-input"
+                id="exactAmount"
+                type="checkbox"
+                checked={exactAmount}
+                onChange={(event) => {
+                  const next = { exactAmount: event.target.checked, ppControlled, moneyMeaning };
+                  setPrefs({ exactAmount: event.target.checked });
+                  recompute(next);
+                }}
+              />
+              <label className="form-check-label" htmlFor="exactAmount">
                 Enter exact amount (dollars/cents)
               </label>
             </div>
 
-            <div id="ppRow" className={moneyMeaning === "seller" ? "tool-actions d-none" : "tool-actions"} style={{ marginTop: "0.4rem" }}>
-              <label className="chip">
-                <input
-                  id="ppControlled"
-                  type="checkbox"
-                  checked={ppControlled}
-                  onChange={(event) => {
-                    const next = { exactAmount, ppControlled: event.target.checked, moneyMeaning };
-                    setPrefs({ ppControlled: event.target.checked });
-                    recompute(next);
-                  }}
-                />
+            <div id="ppRow" className={moneyMeaning === "seller" ? "form-check mt-2 d-none" : "form-check mt-2"}>
+              <input
+                className="form-check-input"
+                id="ppControlled"
+                type="checkbox"
+                checked={ppControlled}
+                onChange={(event) => {
+                  const next = { exactAmount, ppControlled: event.target.checked, moneyMeaning };
+                  setPrefs({ ppControlled: event.target.checked });
+                  recompute(next);
+                }}
+              />
+              <label className="form-check-label" htmlFor="ppControlled">
                 If PP controlled (buyer pays 33% off)
               </label>
             </div>
@@ -320,21 +366,28 @@ export function SellGuideTool() {
               }}
             />
 
+            <div className="tool-status-line" style={{ marginTop: "0.3rem" }}>
+              Type a level → updates the money based on your selected meaning.
+            </div>
+
             <div className="stack" style={{ marginTop: "0.75rem", gap: "0.3rem" }}>
               <div>
-                Market price: <strong id="marketOut">{marketOut}</strong>
+                <span className="text-muted">Market price (no PP): </span>
+                <strong id="marketOut" className="mono fw-semibold">{marketOut}</strong>
               </div>
               <div>
-                Buyer pays: <strong id="buyerOut">{buyerOut}</strong>
+                <span className="text-muted">Buyer pays (with PP setting): </span>
+                <strong id="buyerOut" className="mono fw-semibold">{buyerOut}</strong>
               </div>
               <div>
-                Seller receives: <strong id="sellerOut">{sellerOut}</strong>
+                <span className="text-muted">Seller receives: </span>
+                <strong id="sellerOut" className="mono fw-semibold">{sellerOut}</strong>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="status" className={`alert ${statusKind === "danger" ? "text-danger" : "text-muted"}`} style={{ marginTop: "0.95rem" }}>
+        <div id="status" className={`alert alert-light border mb-0 mono ${statusKind === "danger" ? "text-danger" : "text-muted"}`}>
           {status}
         </div>
 
@@ -346,12 +399,10 @@ export function SellGuideTool() {
             </span>
           </div>
 
-          <pre id="formulaLatex" className="mono formula-latex">
-            {formulaLatex}
-          </pre>
+          <div id="formulaLatex" className="mono formula-latex" ref={formulaNodeRef} style={{ minHeight: "7.75rem" }} />
 
           <div className="tool-status-line" style={{ marginTop: "0.4rem" }}>
-            Note: PP control affects buyer price only. Seller still receives half of non-discounted market price.
+            Note: PP control affects the <b>buyer price only</b>. Seller still receives half of the original (non-discounted) market price.
           </div>
         </div>
       </section>

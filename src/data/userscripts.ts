@@ -256,12 +256,13 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
   {
     id: "global-dark-mode",
     title: "TPPC Global Dark Mode (No Sprite Inversion)",
-    description: "Applies a non-inverting dark theme across all TPPC pages with a persistent on/off toggle.",
+    description:
+      "Applies a non-inverting dark theme across all TPPC pages with persistent Dracula/Monokai theme support.",
     code: `// ==UserScript==
 // @name         TPPC Global Dark Mode
 // @namespace    https://www.tppcrpg.net/
-// @version      1.1
-// @description  Dracula-inspired non-inverting dark mode for TPPC with a per-browser persistent toggle.
+// @version      1.7
+// @description  Non-inverting dark mode for TPPC with persistent Dracula/Monokai theme toggle.
 // @match        https://www.tppcrpg.net/*
 // @match        https://tppcrpg.net/*
 // @grant        none
@@ -272,10 +273,24 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
   "use strict";
 
   const STORAGE_KEY = "tppc_dark_mode_enabled_v1";
+  const THEME_STORAGE_KEY = "tppc_dark_mode_theme_v1";
   const ROOT_CLASS = "tppc-dark-mode";
+  const READY_CLASS = "tppc-dark-ready";
+  const THEME_ATTR = "data-tppc-dark-theme";
   const STYLE_ID = "tppc-dark-mode-style";
   const TOGGLE_ID = "tppc-dark-mode-toggle";
+  const THEME_TOGGLE_ID = "tppc-dark-mode-theme-toggle";
   const DEFAULT_ENABLED = true;
+  const THEMES = ["dracula", "monokai"];
+  const THEME_LABELS = {
+    dracula: "Dracula",
+    monokai: "Monokai"
+  };
+  const LEGACY_BG_ATTR_BY_RGB = {
+    "rgb(243, 240, 233)": "data-tppc-bg-f3f0e9",
+    "rgb(238, 255, 187)": "data-tppc-bg-eeffbb"
+  };
+  let observerStarted = false;
 
   function getStoredEnabled() {
     try {
@@ -295,6 +310,30 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     }
   }
 
+  function normalizeTheme(theme) {
+    return THEMES.includes(theme) ? theme : "dracula";
+  }
+
+  function getStoredTheme() {
+    try {
+      return normalizeTheme(localStorage.getItem(THEME_STORAGE_KEY) || "dracula");
+    } catch {
+      return "dracula";
+    }
+  }
+
+  function setStoredTheme(theme) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, normalizeTheme(theme));
+    } catch {
+      // ignore
+    }
+  }
+
+  function getCurrentTheme() {
+    return normalizeTheme(document.documentElement.getAttribute(THEME_ATTR) || "");
+  }
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
 
@@ -303,16 +342,58 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     style.textContent = [
       ":root." + ROOT_CLASS + " {",
       "  color-scheme: dark;",
-      "  --tppc-bg: #282a36;",
-      "  --tppc-surface: #303341;",
-      "  --tppc-surface-2: #373b4b;",
+      "}",
+      ":root." + ROOT_CLASS + "[" + THEME_ATTR + "='dracula'] {",
+      "  --tppc-bg: #282a36; /* Background */",
+      "  --tppc-current-line: #44475a; /* Current line */",
+      "  --tppc-text: #f8f8f2; /* Foreground */",
+      "  --tppc-comment: #6272a4; /* Comment */",
+      "  --tppc-cyan: #8be9fd;",
+      "  --tppc-green: #50fa7b;",
+      "  --tppc-orange: #ffb86c;",
+      "  --tppc-pink: #ff79c6;",
+      "  --tppc-purple: #bd93f9;",
+      "  --tppc-red: #ff5555;",
+      "  --tppc-yellow: #f1fa8c;",
+      "  --tppc-surface: #343746;",
+      "  --tppc-surface-2: #3a3d4d;",
       "  --tppc-surface-3: #44475a;",
-      "  --tppc-border: #535a72;",
-      "  --tppc-text: #f3f4fb;",
-      "  --tppc-muted: #ccd2e7;",
-      "  --tppc-link: #8be9fd;",
-      "  --tppc-link-visited: #bd93f9;",
-      "  --tppc-header-chip: #5a3b4f;",
+      "  --tppc-border: #6272a4;",
+      "  --tppc-muted: #d2d7eb;",
+      "  --tppc-link: var(--tppc-cyan);",
+      "  --tppc-link-visited: var(--tppc-purple);",
+      "  --tppc-header-chip: #5b3f6a;",
+      "  --tppc-side-link: #c9d6ff;",
+      "  --tppc-side-link-hover: #f8f8f2;",
+      "}",
+      ":root." + ROOT_CLASS + "[" + THEME_ATTR + "='monokai'] {",
+      "  --tppc-bg: #272822;",
+      "  --tppc-current-line: #3e3d32;",
+      "  --tppc-text: #f8f8f2;",
+      "  --tppc-comment: #75715e;",
+      "  --tppc-cyan: #66d9ef;",
+      "  --tppc-green: #a6e22e;",
+      "  --tppc-orange: #fd971f;",
+      "  --tppc-pink: #f92672;",
+      "  --tppc-purple: #ae81ff;",
+      "  --tppc-red: #f44747;",
+      "  --tppc-yellow: #e6db74;",
+      "  --tppc-surface: #2f3129;",
+      "  --tppc-surface-2: #363830;",
+      "  --tppc-surface-3: #49483e;",
+      "  --tppc-border: #75715e;",
+      "  --tppc-muted: #cdcfbf;",
+      "  --tppc-link: var(--tppc-cyan);",
+      "  --tppc-link-visited: var(--tppc-purple);",
+      "  --tppc-header-chip: #5f3e2b;",
+      "  --tppc-side-link: #d6f598;",
+      "  --tppc-side-link-hover: #f8f8f2;",
+      "}",
+      ":root." + ROOT_CLASS + ":not(." + READY_CLASS + ") {",
+      "  background: var(--tppc-bg) !important;",
+      "}",
+      ":root." + ROOT_CLASS + ":not(." + READY_CLASS + ") body {",
+      "  visibility: hidden !important;",
       "}",
       ":root." + ROOT_CLASS + ", :root." + ROOT_CLASS + " body {",
       "  background: var(--tppc-bg) !important;",
@@ -326,6 +407,15 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
       ":root." + ROOT_CLASS + " #footer p {",
       "  background: var(--tppc-surface) !important;",
       "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #tAoDp,",
+      ":root." + ROOT_CLASS + " #tAoDp2,",
+      ":root." + ROOT_CLASS + " #footer_clear {",
+      "  background: var(--tppc-surface-2) !important;",
+      "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " :is(#tAoDp, #tAoDp2) ins.adsbygoogle {",
+      "  background: transparent !important;",
       "}",
       ":root." + ROOT_CLASS + " #inner,",
       ":root." + ROOT_CLASS + " #left > ul,",
@@ -351,6 +441,70 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
       ":root." + ROOT_CLASS + " #right li {",
       "  border-color: var(--tppc-border) !important;",
       "}",
+      ":root." + ROOT_CLASS + " #left li :is(a, span),",
+      ":root." + ROOT_CLASS + " #right li :is(a, span) {",
+      "  color: var(--tppc-side-link) !important;",
+      "  background: transparent !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #left li.r0 a,",
+      ":root." + ROOT_CLASS + " #right li.r0 a {",
+      "  display: block !important;",
+      "  background: var(--tppc-surface) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #left li.r1 a,",
+      ":root." + ROOT_CLASS + " #right li.r1 a {",
+      "  display: block !important;",
+      "  background: var(--tppc-surface-2) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #left li a:hover,",
+      ":root." + ROOT_CLASS + " #right li a:hover {",
+      "  color: var(--tppc-side-link-hover) !important;",
+      "  text-decoration: underline;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner .r0 {",
+      "  background-color: var(--tppc-surface) !important;",
+      "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner .r1 {",
+      "  background-color: var(--tppc-surface-2) !important;",
+      "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner :is(.r0, .r1) :is(td, th, div, span, p, strong, b, a, label) {",
+      "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner table.ranks thead th,",
+      ":root." + ROOT_CLASS + " #inner table.ranks thead td {",
+      "  background: #5b2437 !important;",
+      "  color: var(--tppc-text) !important;",
+      "  border-color: var(--tppc-border) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner table.ranks tbody td {",
+      "  border-color: var(--tppc-border) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner :is(.notice, .error, .success, .account_note, .maintenance, #cBox) {",
+      "  background-color: var(--tppc-surface-2) !important;",
+      "  color: var(--tppc-text) !important;",
+      "  border-color: var(--tppc-border) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner :is(.notice div, .error div, .success div, .account_note div, .maintenance div) {",
+      "  background-color: var(--tppc-current-line) !important;",
+      "  color: var(--tppc-text) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " [data-tppc-bg-f3f0e9='1'],",
+      ":root." + ROOT_CLASS + " [data-tppc-bg-eeffbb='1'] {",
+      "  background-color: var(--tppc-surface-2) !important;",
+      "  color: var(--tppc-text) !important;",
+      "  border-color: var(--tppc-border) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner .disabled {",
+      "  color: var(--tppc-comment) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner .green {",
+      "  color: var(--tppc-green) !important;",
+      "}",
+      ":root." + ROOT_CLASS + " #inner .red {",
+      "  color: var(--tppc-red) !important;",
+      "}",
       ":root." + ROOT_CLASS + " #inner hr,",
       ":root." + ROOT_CLASS + " #footer hr,",
       ":root." + ROOT_CLASS + " hr {",
@@ -361,7 +515,7 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
       "  border: 1px solid var(--tppc-border) !important;",
       "}",
       ":root." + ROOT_CLASS + " #profile > li .i {",
-      "  background-color: #d8d6d1 !important;",
+      "  background-color: #c5c2bc !important;",
       "}",
       ":root." + ROOT_CLASS + " #allPoke {",
       "  background: #2d3140 !important;",
@@ -431,6 +585,40 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     (document.head || document.documentElement).appendChild(style);
   }
 
+  function tagElementIfLegacyBg(el) {
+    if (!(el instanceof HTMLElement)) return;
+    if (el.hasAttribute("data-tppc-bg-f3f0e9") || el.hasAttribute("data-tppc-bg-eeffbb")) return;
+
+    const attr = LEGACY_BG_ATTR_BY_RGB[getComputedStyle(el).backgroundColor];
+    if (!attr) return;
+    el.setAttribute(attr, "1");
+  }
+
+  function tagLegacyLightBackgrounds(rootNode) {
+    const scope = rootNode instanceof HTMLElement ? rootNode : document.body;
+    if (!scope) return;
+
+    tagElementIfLegacyBg(scope);
+    const all = scope.querySelectorAll("*");
+    for (const el of all) tagElementIfLegacyBg(el);
+  }
+
+  function startBackgroundObserver() {
+    if (observerStarted || !document.documentElement) return;
+    observerStarted = true;
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          if (!(node instanceof HTMLElement)) continue;
+          tagLegacyLightBackgrounds(node);
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   function refreshToggleButton(enabled) {
     const btn = document.getElementById(TOGGLE_ID);
     if (!btn) return;
@@ -439,10 +627,42 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     btn.style.opacity = enabled ? "1" : "0.72";
   }
 
+  function refreshThemeButton(theme, enabled) {
+    const btn = document.getElementById(THEME_TOGGLE_ID);
+    if (!btn) return;
+    const safeTheme = normalizeTheme(theme);
+    const label = THEME_LABELS[safeTheme] || "Dracula";
+
+    btn.textContent = "Theme: " + label;
+    btn.setAttribute("aria-label", "Cycle dark theme");
+    btn.style.opacity = enabled ? "1" : "0.78";
+    btn.style.background =
+      safeTheme === "monokai"
+        ? "linear-gradient(135deg, #49483e, #272822)"
+        : "linear-gradient(135deg, #44475a, #282a36)";
+  }
+
+  function applyTheme(theme) {
+    const nextTheme = normalizeTheme(theme);
+    document.documentElement.setAttribute(THEME_ATTR, nextTheme);
+    setStoredTheme(nextTheme);
+    refreshThemeButton(nextTheme, document.documentElement.classList.contains(ROOT_CLASS));
+  }
+
+  function cycleTheme() {
+    const current = getCurrentTheme();
+    const idx = THEMES.indexOf(current);
+    const next = THEMES[(idx + 1) % THEMES.length];
+    applyTheme(next);
+  }
+
   function setDarkModeEnabled(enabled) {
+    if (enabled) tagLegacyLightBackgrounds();
     document.documentElement.classList.toggle(ROOT_CLASS, enabled);
+    if (enabled) document.documentElement.classList.add(READY_CLASS);
     setStoredEnabled(enabled);
     refreshToggleButton(enabled);
+    refreshThemeButton(getCurrentTheme(), enabled);
   }
 
   function buildToggleButton() {
@@ -464,7 +684,7 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     btn.style.fontWeight = "700";
     btn.style.lineHeight = "1";
     btn.style.cursor = "pointer";
-    btn.style.background = "linear-gradient(135deg, #44475a, #3a3d4d)";
+    btn.style.background = "linear-gradient(135deg, #44475a, #282a36)";
     btn.style.color = "#f8f8f2";
     btn.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.32)";
 
@@ -476,15 +696,59 @@ export const USER_SCRIPTS: readonly UserscriptSnippet[] = [
     refreshToggleButton(document.documentElement.classList.contains(ROOT_CLASS));
   }
 
+  function buildThemeButton() {
+    if (document.getElementById(THEME_TOGGLE_ID) || !document.body) return;
+
+    const btn = document.createElement("button");
+    btn.id = THEME_TOGGLE_ID;
+    btn.type = "button";
+    btn.title = "Cycle dark theme";
+    btn.style.position = "fixed";
+    btn.style.right = "14px";
+    btn.style.bottom = "52px";
+    btn.style.zIndex = "2147483647";
+    btn.style.border = "1px solid #6272a4";
+    btn.style.borderRadius = "999px";
+    btn.style.padding = "7px 12px";
+    btn.style.fontFamily = "Verdana, Arial, sans-serif";
+    btn.style.fontSize = "12px";
+    btn.style.fontWeight = "700";
+    btn.style.lineHeight = "1";
+    btn.style.cursor = "pointer";
+    btn.style.color = "#f8f8f2";
+    btn.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.32)";
+
+    btn.addEventListener("click", () => {
+      cycleTheme();
+      if (document.documentElement.classList.contains(ROOT_CLASS)) {
+        tagLegacyLightBackgrounds();
+      }
+    });
+
+    document.body.appendChild(btn);
+    refreshThemeButton(
+      getCurrentTheme(),
+      document.documentElement.classList.contains(ROOT_CLASS)
+    );
+  }
+
+  const initialTheme = getStoredTheme();
+  document.documentElement.setAttribute(THEME_ATTR, initialTheme);
   const initialEnabled = getStoredEnabled();
   if (initialEnabled) {
     document.documentElement.classList.add(ROOT_CLASS);
   }
   injectStyle();
+  startBackgroundObserver();
 
   const initUI = () => {
+    tagLegacyLightBackgrounds(document.body || undefined);
+    document.documentElement.classList.add(READY_CLASS);
+    buildThemeButton();
     buildToggleButton();
     refreshToggleButton(document.documentElement.classList.contains(ROOT_CLASS));
+    refreshThemeButton(getCurrentTheme(), document.documentElement.classList.contains(ROOT_CLASS));
+    window.setTimeout(() => tagLegacyLightBackgrounds(document.body || undefined), 0);
   };
 
   if (document.readyState === "loading") {
