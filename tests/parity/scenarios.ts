@@ -271,7 +271,7 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
   {
     id: "ungendered-families-basic",
     slug: "ungendered-families",
-    legacyPath: "/sort_ungendered_families/index.html",
+    legacyPath: "/sort_ungendered_families/",
     canonicalPath: "/tools/ungendered-families/",
     async run(page) {
       await page.waitForSelector("#inputList");
