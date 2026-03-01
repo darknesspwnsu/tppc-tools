@@ -29,11 +29,7 @@
   padding: 0.78rem 0.82rem;
   border-radius: 0.78rem;
   border: 1px solid color-mix(in oklab, var(--color-border), transparent 8%);
-  background: linear-gradient(
-    165deg,
-    color-mix(in oklab, var(--color-bg-elev), #09131f 32%),
-    color-mix(in oklab, var(--color-bg-elev), #0f1a2a 38%)
-  );
+  background: #fff;
   color: var(--color-text);
   max-height: 26rem;
   overflow: auto;
@@ -48,30 +44,62 @@
 }
 
 .userscript-code .token-comment {
-  color: #7f8fb3;
+  color: #6b7392;
   font-style: italic;
 }
 
 .userscript-code .token-meta {
-  color: #71d6ff;
+  color: #1e74c4;
 }
 
 .userscript-code .token-string {
-  color: #8be28f;
+  color: #1f7f4b;
 }
 
 .userscript-code .token-keyword {
-  color: #ff8bc7;
+  color: #a33a8d;
   font-weight: 600;
 }
 
 .userscript-code .token-number {
-  color: #ffbe78;
+  color: #b0691d;
 }
 
 .userscript-code .token-literal {
-  color: #b29dff;
+  color: #5b49b8;
   font-weight: 600;
+}
+
+[data-theme="dark"] .userscript-code {
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--color-bg-elev), #09131f 32%),
+    color-mix(in oklab, var(--color-bg-elev), #0f1a2a 38%)
+  );
+}
+
+[data-theme="dark"] .userscript-code .token-comment {
+  color: #7f8fb3;
+}
+
+[data-theme="dark"] .userscript-code .token-meta {
+  color: #71d6ff;
+}
+
+[data-theme="dark"] .userscript-code .token-string {
+  color: #8be28f;
+}
+
+[data-theme="dark"] .userscript-code .token-keyword {
+  color: #ff8bc7;
+}
+
+[data-theme="dark"] .userscript-code .token-number {
+  color: #ffbe78;
+}
+
+[data-theme="dark"] .userscript-code .token-literal {
+  color: #b29dff;
 }
 
 .userscript-actions {
