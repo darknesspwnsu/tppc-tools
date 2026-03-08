@@ -32,6 +32,26 @@ function normalizePokespriteBbcode(v: string) {
   );
 }
 
+function normalizeRainbowDexExtras(v: string) {
+  const text = normalizeText(v);
+  const duplicatesSection =
+    text.match(/=== Duplicates in input \(ignoring gender and level, aggregated by mon\) ===[\s\S]*$/)?.[0] ??
+    "=== Duplicates in input (ignoring gender and level, aggregated by mon) ===\n<missing>";
+
+  const markers = [
+    text.includes("=== Missing (overall rarity > 10) per variant; up to 20 shown per variant ===")
+      ? "missing-section:present"
+      : "missing-section:absent",
+    text.includes("Goldens are included in the missing list.") ? "goldens-note:present" : "goldens-note:absent",
+    text.includes("--- Golden ---") ? "golden-variant:present" : "golden-variant:absent",
+    text.includes("--- Shiny ---") ? "shiny-variant:present" : "shiny-variant:absent",
+    text.includes("--- Dark ---") ? "dark-variant:present" : "dark-variant:absent",
+    text.includes("--- Normal ---") ? "normal-variant:present" : "normal-variant:absent"
+  ];
+
+  return [...markers, "", duplicatesSection].join("\n");
+}
+
 async function setChecked(page: Page, selector: string, checked: boolean) {
   await page.$eval(
     selector,
@@ -347,7 +367,9 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
     async extract(page) {
       return {
         outputChecklist: normalizeText(await page.$eval("#outputChecklist", (el) => (el as HTMLTextAreaElement).value)),
-        outputExtras: normalizeText(await page.$eval("#outputExtras", (el) => (el as HTMLTextAreaElement).value))
+        outputExtras: normalizeRainbowDexExtras(
+          await page.$eval("#outputExtras", (el) => (el as HTMLTextAreaElement).value)
+        )
       };
     }
   }
