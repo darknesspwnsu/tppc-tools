@@ -39,6 +39,8 @@
   ],
   "pokesprite-generator": [
     "pokeInput",
+    "shinyToggle",
+    "formSelect",
     "sizePreset",
     "resMode",
     "cols",
@@ -46,6 +48,9 @@
     "renderBtn",
     "copyBtn",
     "exportBtn",
+    "resolved",
+    "spriteUrl",
+    "status",
     "previewPane",
     "previewCanvas",
     "bbcodeOut"

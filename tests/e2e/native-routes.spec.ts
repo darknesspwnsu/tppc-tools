@@ -48,7 +48,9 @@ test("pokesprite copy and export actions work", async ({ page }) => {
   await page.goto(withParityBasePath("/tools/pokesprite-generator/"), { waitUntil: "domcontentloaded" });
 
   await expect(page.locator("#status")).toContainText("Loaded");
-  await page.fill("#pokeInput", "Pikachu");
+  await page.fill("#pokeInput", "Shiny Mega Charizard X");
+  await expect(page.locator("#shinyToggle")).toBeChecked();
+  await expect(page.locator("#formSelect")).toHaveValue("mega-x");
   await page.click("#renderBtn");
   await page.waitForFunction(() => {
     const out = document.querySelector("#bbcodeOut") as HTMLTextAreaElement | null;
@@ -65,7 +67,7 @@ test("pokesprite copy and export actions work", async ({ page }) => {
     page.waitForEvent("download"),
     page.click("#exportBtn")
   ]);
-  expect(download.suggestedFilename()).toBe("pikachu.png");
+  expect(download.suggestedFilename()).toBe("charizard-mega-x-shiny.png");
 });
 
 test("evolution viewer copy action works", async ({ page }) => {

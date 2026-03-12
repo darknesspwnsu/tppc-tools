@@ -1,0 +1,9 @@
+{
+  "owner": "darknesspwnsu",
+  "repo": "pokesprite-v2",
+  "tag": "v0.1.0",
+  "manifestPath": "/vendor/pokesprite-v2/pokemon.json",
+  "manifestRawUrl": "https://raw.githubusercontent.com/darknesspwnsu/pokesprite-v2/v0.1.0/data/pokemon.json",
+  "regularBaseUrl": "https://raw.githubusercontent.com/darknesspwnsu/pokesprite-v2/v0.1.0/pokemon/regular/",
+  "shinyBaseUrl": "https://raw.githubusercontent.com/darknesspwnsu/pokesprite-v2/v0.1.0/pokemon/shiny/"
+}

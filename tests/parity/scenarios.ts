@@ -11,11 +11,125 @@ export type ParityScenario = {
 };
 
 const POKEMON_JSON_FIXTURE = {
-  "25": {
-    idx: 25,
-    slug: { eng: "pikachu" },
-    name: { eng: "Pikachu" }
-  }
+  metadata: {
+    repo_owner: "darknesspwnsu",
+    repo_name: "pokesprite-v2",
+    default_branch: "main",
+    version: "0.1.0",
+    generated_at: "2026-03-12T00:00:00Z"
+  },
+  pokemon: [
+    {
+      species_id: "0025",
+      dex: 25,
+      species_name: "Pikachu",
+      species_slug: "pikachu",
+      species_aliases: ["Pikachu"],
+      generation: 1,
+      default_form: "base",
+      forms: [
+        {
+          id: "base",
+          label: "Base",
+          aliases: ["default", "regular", "normal"],
+          file_slug: "pikachu",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "msikma/pokesprite"
+        }
+      ]
+    },
+    {
+      species_id: "0006",
+      dex: 6,
+      species_name: "Charizard",
+      species_slug: "charizard",
+      species_aliases: ["Charizard"],
+      generation: 1,
+      default_form: "base",
+      forms: [
+        {
+          id: "base",
+          label: "Base",
+          aliases: ["default", "regular", "normal"],
+          file_slug: "charizard",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "msikma/pokesprite"
+        },
+        {
+          id: "mega-x",
+          label: "Mega X",
+          aliases: ["Mega X", "megax"],
+          file_slug: "charizard-mega-x",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "msikma/pokesprite"
+        }
+      ]
+    },
+    {
+      species_id: "0026",
+      dex: 26,
+      species_name: "Raichu",
+      species_slug: "raichu",
+      species_aliases: ["Raichu"],
+      generation: 1,
+      default_form: "base",
+      forms: [
+        {
+          id: "base",
+          label: "Base",
+          aliases: ["default", "regular", "normal"],
+          file_slug: "raichu",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "msikma/pokesprite"
+        },
+        {
+          id: "alola",
+          label: "Alolan",
+          aliases: ["Alolan", "alola"],
+          file_slug: "raichu-alola",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "msikma/pokesprite"
+        }
+      ]
+    },
+    {
+      species_id: "0906",
+      dex: 906,
+      species_name: "Sprigatito",
+      species_slug: "sprigatito",
+      species_aliases: ["Sprigatito"],
+      generation: 9,
+      default_form: "base",
+      forms: [
+        {
+          id: "base",
+          label: "Base",
+          aliases: ["default", "regular", "normal"],
+          file_slug: "sprigatito",
+          canonical_form: null,
+          has_regular: true,
+          has_shiny: true,
+          is_generated: false,
+          source: "bamq/pokemon-sprites"
+        }
+      ]
+    }
+  ]
 };
 
 const PNG_BASE64 =
@@ -70,7 +184,7 @@ export async function installDeterministicNetwork(page: Page) {
     await route.abort();
   });
 
-  await page.route("https://raw.githubusercontent.com/msikma/pokesprite/master/data/pokemon.json", async (route) => {
+  await page.route("**/vendor/pokesprite-v2/pokemon.json", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -78,7 +192,7 @@ export async function installDeterministicNetwork(page: Page) {
     });
   });
 
-  await page.route("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/pikachu.png", async (route) => {
+  await page.route("https://raw.githubusercontent.com/darknesspwnsu/pokesprite-v2/v0.1.0/pokemon/**/*.png", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "image/png",
@@ -95,6 +209,26 @@ export async function waitForToolRuntime(page: Page) {
     if (typeof marker === "undefined") return document.readyState === "complete";
     return marker === true;
   });
+}
+
+async function waitForPokespriteRender(page: Page) {
+  await page.waitForFunction(() => {
+    const out = document.querySelector("#bbcodeOut") as HTMLTextAreaElement | null;
+    return Boolean(out && out.value.trim().length > 0);
+  });
+}
+
+async function extractPokespriteSnapshot(page: Page) {
+  return {
+    resolved: normalizeText(await page.textContent("#resolved")),
+    status: normalizeText(await page.textContent("#status")),
+    spriteUrl: normalizeText(await page.textContent("#spriteUrl")),
+    formSelect: normalizeText(await page.$eval("#formSelect", (el) => (el as HTMLSelectElement).value)),
+    shinyToggle: String(await page.$eval("#shinyToggle", (el) => (el as HTMLInputElement).checked)),
+    bbcodeOut: normalizePokespriteBbcode(
+      await page.$eval("#bbcodeOut", (el) => (el as HTMLTextAreaElement).value)
+    )
+  };
 }
 
 export const PARITY_SCENARIOS: readonly ParityScenario[] = [
@@ -211,19 +345,86 @@ export const PARITY_SCENARIOS: readonly ParityScenario[] = [
 
       await page.fill("#pokeInput", "Pikachu");
       await page.click("#renderBtn");
-      await page.waitForFunction(() => {
-        const out = document.querySelector("#bbcodeOut") as HTMLTextAreaElement | null;
-        return Boolean(out && out.value.trim().length > 0);
-      });
+      await waitForPokespriteRender(page);
     },
     async extract(page) {
-      return {
-        resolved: normalizeText(await page.textContent("#resolved")),
-        status: normalizeText(await page.textContent("#status")),
-        bbcodeOut: normalizePokespriteBbcode(
-          await page.$eval("#bbcodeOut", (el) => (el as HTMLTextAreaElement).value)
-        )
-      };
+      return extractPokespriteSnapshot(page);
+    }
+  },
+  {
+    id: "pokesprite-generator-shiny",
+    slug: "pokesprite-generator",
+    canonicalPath: "/tools/pokesprite-generator/",
+    async run(page) {
+      await page.waitForSelector("#pokeInput");
+      await page.waitForFunction(() => {
+        const status = document.querySelector("#status");
+        return Boolean(status && /Loaded/i.test(status.textContent || ""));
+      });
+
+      await page.fill("#pokeInput", "Shiny Pikachu");
+      await page.click("#renderBtn");
+      await waitForPokespriteRender(page);
+    },
+    async extract(page) {
+      return extractPokespriteSnapshot(page);
+    }
+  },
+  {
+    id: "pokesprite-generator-mega",
+    slug: "pokesprite-generator",
+    canonicalPath: "/tools/pokesprite-generator/",
+    async run(page) {
+      await page.waitForSelector("#pokeInput");
+      await page.waitForFunction(() => {
+        const status = document.querySelector("#status");
+        return Boolean(status && /Loaded/i.test(status.textContent || ""));
+      });
+
+      await page.fill("#pokeInput", "Mega Charizard X");
+      await page.click("#renderBtn");
+      await waitForPokespriteRender(page);
+    },
+    async extract(page) {
+      return extractPokespriteSnapshot(page);
+    }
+  },
+  {
+    id: "pokesprite-generator-alt-form",
+    slug: "pokesprite-generator",
+    canonicalPath: "/tools/pokesprite-generator/",
+    async run(page) {
+      await page.waitForSelector("#pokeInput");
+      await page.waitForFunction(() => {
+        const status = document.querySelector("#status");
+        return Boolean(status && /Loaded/i.test(status.textContent || ""));
+      });
+
+      await page.fill("#pokeInput", "Alolan Raichu");
+      await page.click("#renderBtn");
+      await waitForPokespriteRender(page);
+    },
+    async extract(page) {
+      return extractPokespriteSnapshot(page);
+    }
+  },
+  {
+    id: "pokesprite-generator-gen9",
+    slug: "pokesprite-generator",
+    canonicalPath: "/tools/pokesprite-generator/",
+    async run(page) {
+      await page.waitForSelector("#pokeInput");
+      await page.waitForFunction(() => {
+        const status = document.querySelector("#status");
+        return Boolean(status && /Loaded/i.test(status.textContent || ""));
+      });
+
+      await page.fill("#pokeInput", "Sprigatito");
+      await page.click("#renderBtn");
+      await waitForPokespriteRender(page);
+    },
+    async extract(page) {
+      return extractPokespriteSnapshot(page);
     }
   },
   {

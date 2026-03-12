@@ -1,52 +1,311 @@
+import sourceConfig from "./source-config.json";
 import type {
+  ParsedPokemonInput,
+  PokemonVariantResolution,
+  PokemonVariantSelection,
   PokespriteData,
+  PokespriteFormEntry,
+  PokespriteManifest,
+  PokespriteSourceConfig,
+  PokespriteSpeciesEntry,
   RenderSamplingOptions,
   ResolvedPokemon,
   ResolutionMode
 } from "./types";
 
-export const POKEMON_JSON_URL = "https://raw.githubusercontent.com/msikma/pokesprite/master/data/pokemon.json";
-export const SPRITE_BASE = "https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/";
-export const GEN9_BASE = "https://raw.githubusercontent.com/bamq/pokemon-sprites/main/pokemon/regular/";
+const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+const withBasePath = (path: string) => `${BASE_PATH}${path.startsWith("/") ? path : `/${path}`}`;
+
+export const POKESPRITE_SOURCE = sourceConfig as PokespriteSourceConfig;
+export const POKEMON_JSON_URL = withBasePath(POKESPRITE_SOURCE.manifestPath);
+export const SPRITE_BASE = POKESPRITE_SOURCE.regularBaseUrl;
+export const SHINY_SPRITE_BASE = POKESPRITE_SOURCE.shinyBaseUrl;
 
 const DEFAULT_CROP_PAD = 1;
+const SHINY_TOKEN = "shiny";
+
+type ManifestIndex = {
+  speciesByKey: Map<string, PokespriteSpeciesEntry>;
+  speciesBySlug: Map<string, PokespriteSpeciesEntry>;
+  variantByKey: Map<string, { species: PokespriteSpeciesEntry; form: PokespriteFormEntry }>;
+};
+
+const manifestIndexCache = new WeakMap<PokespriteManifest, ManifestIndex>();
 
 export function normalizeName(s: string) {
-  return String(s || "").trim().toLowerCase();
+  return String(s || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/gi, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
-function resolveDexNumber(id: string, idx: number | undefined) {
-  if (Number.isFinite(idx)) return Number(idx);
-  const parsed = Number(id);
-  return Number.isFinite(parsed) ? parsed : 0;
+function addUniqueKey<T>(map: Map<string, T>, key: string, value: T) {
+  const normalized = normalizeName(key);
+  if (!normalized || map.has(normalized)) return;
+  map.set(normalized, value);
 }
 
-export function resolvePokemonByName(input: string, data: PokespriteData): ResolvedPokemon | null {
-  const q = normalizeName(input);
-  if (!q) return null;
+function getSpeciesKeys(species: PokespriteSpeciesEntry) {
+  return [
+    species.species_name,
+    species.species_slug,
+    ...(species.species_aliases || [])
+  ];
+}
 
-  for (const [id, entry] of Object.entries(data || {})) {
-    const name = String(entry?.name?.eng || "").trim();
-    const slug = String(entry?.slug?.eng || "").trim();
-    if (!name || !slug) continue;
+function getFormKeys(form: PokespriteFormEntry) {
+  return [
+    form.id,
+    form.label,
+    form.file_slug,
+    ...(form.aliases || [])
+  ];
+}
 
-    if (normalizeName(name) === q || normalizeName(slug) === q) {
-      const dex = resolveDexNumber(id, entry.idx);
-      return {
-        id,
-        name,
-        slug,
-        generationLabel: dex >= 906 ? "Gen 9" : "Gen 1-8"
-      };
+export function getCanonicalForm(species: PokespriteSpeciesEntry, form: PokespriteFormEntry) {
+  if (!form.canonical_form) return form;
+  return species.forms.find((entry) => entry.id === form.canonical_form) ?? form;
+}
+
+export function getDefaultForm(species: PokespriteSpeciesEntry) {
+  return (
+    species.forms.find((entry) => entry.id === species.default_form) ??
+    species.forms.find((entry) => entry.id === "base") ??
+    species.forms[0] ??
+    null
+  );
+}
+
+export function getPokemonForms(species: PokespriteSpeciesEntry) {
+  const seen = new Set<string>();
+  const forms: PokespriteFormEntry[] = [];
+
+  for (const entry of species.forms) {
+    const canonical = getCanonicalForm(species, entry);
+    if (seen.has(canonical.id)) continue;
+    seen.add(canonical.id);
+    forms.push(canonical);
+  }
+
+  const defaultFormId = getDefaultForm(species)?.id;
+  return forms.sort((a, b) => {
+    if (a.id === defaultFormId) return -1;
+    if (b.id === defaultFormId) return 1;
+    return a.label.localeCompare(b.label);
+  });
+}
+
+export function getPokemonBySlug(data: PokespriteManifest, slug: string | null | undefined) {
+  if (!slug) return null;
+  return getManifestIndex(data).speciesBySlug.get(normalizeName(slug)) ?? null;
+}
+
+export function getFormForSpecies(species: PokespriteSpeciesEntry, formId: string | null | undefined) {
+  const defaultForm = getDefaultForm(species);
+  if (!formId) return defaultForm;
+
+  const query = normalizeName(formId);
+  if (!query) return defaultForm;
+
+  for (const form of species.forms) {
+    const keys = getFormKeys(form);
+    if (keys.some((key) => normalizeName(key) === query)) {
+      return getCanonicalForm(species, form);
     }
   }
 
   return null;
 }
 
+function buildVariantKeys(speciesKey: string, formKey: string) {
+  const species = normalizeName(speciesKey);
+  const form = normalizeName(formKey);
+  if (!species || !form) return [];
+
+  const keys = new Set<string>([
+    `${species} ${form}`,
+    `${form} ${species}`
+  ]);
+
+  const formParts = form.split(" ");
+  if (formParts.length > 1) {
+    keys.add(`${formParts[0]} ${species} ${formParts.slice(1).join(" ")}`);
+  }
+
+  return [...keys];
+}
+
+function getManifestIndex(data: PokespriteManifest): ManifestIndex {
+  const cached = manifestIndexCache.get(data);
+  if (cached) return cached;
+
+  const speciesByKey = new Map<string, PokespriteSpeciesEntry>();
+  const speciesBySlug = new Map<string, PokespriteSpeciesEntry>();
+  const variantByKey = new Map<string, { species: PokespriteSpeciesEntry; form: PokespriteFormEntry }>();
+
+  for (const species of data.pokemon || []) {
+    for (const key of getSpeciesKeys(species)) {
+      addUniqueKey(speciesByKey, key, species);
+    }
+    addUniqueKey(speciesBySlug, species.species_slug, species);
+
+    for (const rawForm of species.forms || []) {
+      const form = getCanonicalForm(species, rawForm);
+      for (const speciesKey of getSpeciesKeys(species)) {
+        for (const formKey of getFormKeys(rawForm)) {
+          for (const variantKey of buildVariantKeys(speciesKey, formKey)) {
+            addUniqueKey(variantByKey, variantKey, { species, form });
+          }
+        }
+      }
+    }
+  }
+
+  const index = { speciesByKey, speciesBySlug, variantByKey };
+  manifestIndexCache.set(data, index);
+  return index;
+}
+
+function formatGenerationLabel(generation: number) {
+  return generation > 0 ? `Gen ${generation}` : "Unknown Gen";
+}
+
+function buildSpriteUrl(fileSlug: string, isShiny: boolean) {
+  return `${isShiny ? SHINY_SPRITE_BASE : SPRITE_BASE}${fileSlug}.png`;
+}
+
+function makeResolvedPokemon(
+  species: PokespriteSpeciesEntry,
+  rawForm: PokespriteFormEntry,
+  isShiny: boolean
+): ResolvedPokemon {
+  const form = getCanonicalForm(species, rawForm);
+  return {
+    speciesId: species.species_id,
+    dex: species.dex,
+    generation: species.generation,
+    generationLabel: formatGenerationLabel(species.generation),
+    name: species.species_name,
+    speciesSlug: species.species_slug,
+    formId: form.id,
+    formLabel: form.label,
+    formFileSlug: form.file_slug,
+    isShiny,
+    source: form.source,
+    spriteUrl: buildSpriteUrl(form.file_slug, isShiny)
+  };
+}
+
+function variantAvailabilityError(species: PokespriteSpeciesEntry, form: PokespriteFormEntry, isShiny: boolean) {
+  if (isShiny && !form.has_shiny) {
+    return `Shiny is not available for ${species.species_name} (${form.label}).`;
+  }
+  if (!isShiny && !form.has_regular) {
+    return `Regular is not available for ${species.species_name} (${form.label}).`;
+  }
+  return null;
+}
+
+export function parsePokemonInput(input: string, data: PokespriteData): ParsedPokemonInput {
+  const normalizedInput = normalizeName(input);
+  if (!normalizedInput) {
+    return {
+      input,
+      normalizedQuery: "",
+      species: null,
+      form: null,
+      isShiny: false
+    };
+  }
+
+  const tokens = normalizedInput.split(" ");
+  const filteredTokens = tokens.filter((token) => token !== SHINY_TOKEN);
+  const isShiny = filteredTokens.length !== tokens.length;
+  const query = filteredTokens.join(" ").trim();
+
+  if (!query) {
+    return {
+      input,
+      normalizedQuery: "",
+      species: null,
+      form: null,
+      isShiny
+    };
+  }
+
+  const index = getManifestIndex(data);
+  const variant = index.variantByKey.get(query);
+  if (variant) {
+    return {
+      input,
+      normalizedQuery: query,
+      species: variant.species,
+      form: variant.form,
+      isShiny
+    };
+  }
+
+  const species = index.speciesByKey.get(query) ?? null;
+  return {
+    input,
+    normalizedQuery: query,
+    species,
+    form: species ? getDefaultForm(species) : null,
+    isShiny
+  };
+}
+
+export function resolvePokemonByName(input: string, data: PokespriteData): ResolvedPokemon | null {
+  const parsed = parsePokemonInput(input, data);
+  if (!parsed.species || !parsed.form) return null;
+  return makeResolvedPokemon(parsed.species, parsed.form, parsed.isShiny);
+}
+
 export function spriteUrlForPokemon(target: ResolvedPokemon) {
-  const base = target.generationLabel === "Gen 9" ? GEN9_BASE : SPRITE_BASE;
-  return `${base}${target.slug}.png`;
+  return target.spriteUrl;
+}
+
+export function describeResolvedPokemon(target: ResolvedPokemon) {
+  return `${target.name} (${target.generationLabel}, ${target.formLabel}, ${target.isShiny ? "Shiny" : "Regular"}) -> ${target.formFileSlug}`;
+}
+
+export function resolvePokemonVariant(
+  data: PokespriteManifest,
+  selection: PokemonVariantSelection
+): PokemonVariantResolution {
+  const species = getPokemonBySlug(data, selection.speciesSlug);
+  if (!species) {
+    return {
+      pokemon: null,
+      error: "Pick a Pokemon from autocomplete or enter a supported form name."
+    };
+  }
+
+  const form = getFormForSpecies(species, selection.formId ?? species.default_form);
+  if (!form) {
+    return {
+      pokemon: null,
+      error: `${species.species_name} does not have that form in pokesprite-v2.`
+    };
+  }
+
+  const isShiny = Boolean(selection.isShiny);
+  const availabilityError = variantAvailabilityError(species, form, isShiny);
+  if (availabilityError) {
+    return {
+      pokemon: null,
+      error: availabilityError
+    };
+  }
+
+  return {
+    pokemon: makeResolvedPokemon(species, form, isShiny),
+    error: null
+  };
 }
 
 export async function loadImage(src: string) {

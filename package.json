@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start",
     "sync:gold-data": "node scripts/sync-gold-data.mjs",
+    "sync:pokesprite-data": "node scripts/sync-pokesprite-v2-manifest.mjs",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:ci",
     "test:unit": "vitest run",
@@ -13,7 +14,9 @@
     "test:parity:native": "playwright test tests/parity",
     "test:parity:basepath": "NEXT_PUBLIC_BASE_PATH=/tppc-tools PARITY_BASE_PATH=/tppc-tools playwright test tests/parity",
     "test:ci": "npm run typecheck && npm run test:unit && npm run test:e2e && npm run test:parity && NEXT_PUBLIC_BASE_PATH=/tppc-tools npm run build",
-    "capture:parity-fixtures": "tsx scripts/capture-parity-fixtures.ts"
+    "capture:parity-fixtures": "tsx scripts/capture-parity-fixtures.ts",
+    "codex:quick": "npm run typecheck && npm run test:unit",
+    "codex:verify": "npm run test:ci"
   },
   "dependencies": {
     "next": "^16.1.6",

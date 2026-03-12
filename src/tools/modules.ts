@@ -14,7 +14,7 @@ import { UngenderedSorterTool } from "@/components/tools/UngenderedSorterTool";
 import { normalizeEvolutionDb, lookupEvolution } from "@/features/evolution-viewer/core";
 import { exp2Level, level2Exp, levelDifference } from "@/features/exp-utilities/core";
 import { findOptimalTrainers } from "@/features/perfect-exp/core";
-import { imageDataToBbcode, resolvePokemonByName } from "@/features/pokesprite-generator/core";
+import { imageDataToBbcode, parsePokemonInput } from "@/features/pokesprite-generator/core";
 import { parseInputList, runRainbowDexChecklist } from "@/features/rainbow-dex/core";
 import { computeSellGuide, parseMoneyToDollars } from "@/features/sell-guide/core";
 import { runUngenderedSorter } from "@/features/ungendered-sorter/core";
@@ -163,10 +163,12 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
       id: tool.slug,
       slug: tool.slug,
       Component: PokespriteGeneratorTool as ComponentType<Record<string, never>>,
-      parse: resolvePokemonByName,
+      parse: parsePokemonInput,
       compute: imageDataToBbcode,
       initialState: {
         pokeInput: "",
+        shinyToggle: false,
+        formSelect: "base",
         sizePreset: 2,
         resolutionMode: "auto",
         customColumns: 120,

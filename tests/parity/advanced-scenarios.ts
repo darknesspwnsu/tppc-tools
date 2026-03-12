@@ -56,6 +56,10 @@ export const ADVANCED_PARITY_SCENARIOS: readonly ParityScenario[] = [
     canonicalPath: "/tools/pokesprite-generator/",
     async run(page) {
       await page.waitForSelector("#pokeInput");
+      await page.waitForFunction(() => {
+        const status = document.querySelector("#status");
+        return Boolean(status && /Loaded/i.test(status.textContent || ""));
+      });
       await page.fill("#pokeInput", "Pikachu");
       await page.evaluate(() => {
         const details = Array.from(document.querySelectorAll("details")).find((el) =>
