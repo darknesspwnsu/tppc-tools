@@ -2,6 +2,12 @@
 
 Native Next.js static-export site for TPPC utility tools.
 
+## Local Runtime
+
+- Use `nvm use` before running repo commands.
+- The repo is pinned to Node `22.22.0` in `.nvmrc`.
+- CI and Pages workflows read the same Node version file.
+
 ## Architecture (Native-Only)
 
 - `app/tools/<slug>/page.tsx`
