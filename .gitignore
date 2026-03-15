@@ -141,7 +141,5 @@ test-results/
 
 # Local Codex/task-state artifacts that should stay machine-local
 AGENTS.md
-dev/README.md
-dev/active/*
-dev/templates/
+dev/
 scripts/codex/
