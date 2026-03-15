@@ -5,12 +5,45 @@ import { useEffect, useMemo, useState } from "react";
 import { usePersistentOptions } from "@/hooks/usePersistentOptions";
 import { PREFS_KEYS } from "@/lib/prefs-keys";
 import type {
+  GoldOrganizerEvolutionRaw,
   GoldenRarity,
   GoldenTimelineItemRaw,
   GoldOrganizerOpts,
+  GoldOrganizerReferenceData,
   GoldOrganizerResult
 } from "@/lib/gold-organizer";
-import { organizeGold, parseInput } from "@/lib/gold-organizer";
+import { buildGoldOrganizerReferenceData, organizeGold, parseInput } from "@/lib/gold-organizer";
+
+const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+
+function withBasePath(path: string) {
+  return `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
+}
+
+let goldOrganizerReferenceDataPromise: Promise<GoldOrganizerReferenceData> | null = null;
+
+async function loadGoldOrganizerReferenceData() {
+  if (goldOrganizerReferenceDataPromise) return goldOrganizerReferenceDataPromise;
+
+  goldOrganizerReferenceDataPromise = (async () => {
+    const [evolutionRes, level4Res] = await Promise.all([
+      fetch(withBasePath("/data/pokemon_evolution.json")),
+      fetch(withBasePath("/data/level4_rarity.txt"))
+    ]);
+
+    if (!evolutionRes.ok) throw new Error("Failed to load data/pokemon_evolution.json");
+    if (!level4Res.ok) throw new Error("Failed to load data/level4_rarity.txt");
+
+    const evolutionRaw = (await evolutionRes.json()) as GoldOrganizerEvolutionRaw;
+    const level4Text = await level4Res.text();
+    return buildGoldOrganizerReferenceData(evolutionRaw, level4Text);
+  })().catch((error) => {
+    goldOrganizerReferenceDataPromise = null;
+    throw error;
+  });
+
+  return goldOrganizerReferenceDataPromise;
+}
 
 type Prefs = Pick<
   GoldOrganizerOpts,
@@ -20,6 +53,8 @@ type Prefs = Pick<
   | "missingRows"
   | "includeStruckMissing"
   | "dropDupes"
+  | "highlightRarity"
+  | "annotateRarity"
   | "preferredGender"
   | "goldColor"
 >;
@@ -31,6 +66,8 @@ const DEFAULT_PREFS: Prefs = {
   missingRows: false,
   includeStruckMissing: false,
   dropDupes: false,
+  highlightRarity: true,
+  annotateRarity: false,
   preferredGender: "U",
   goldColor: ""
 };
@@ -72,13 +109,14 @@ export function GoldOrganizer({
 }) {
   const [input, setInput] = useState("");
   const [prefs, setPrefs] = usePersistentOptions<Prefs>(PREFS_KEYS.goldOrganizer, DEFAULT_PREFS, {
-    version: 1,
+    version: 2,
     migrate: (raw) => {
       if (!raw || typeof raw !== "object") return DEFAULT_PREFS;
       return { ...DEFAULT_PREFS, ...(raw as Partial<Prefs>) };
     }
   });
   const [status, setStatus] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
 
   const [output, setOutput] = useState("");
   const [droppedOutput, setDroppedOutput] = useState("");
@@ -93,28 +131,39 @@ export function GoldOrganizer({
     setStatus(`Loaded timeline with ${fmt(timelineCount)} gold releases.`);
   }, [timelineCount]);
 
-  const run = () => {
+  const run = async () => {
     const entries = parseInput(input);
     const opts: GoldOrganizerOpts = {
       ...prefs,
+      annotateRarity: prefs.highlightRarity && prefs.annotateRarity,
       preferredGender: prefs.preferredGender
     };
 
-    const result: GoldOrganizerResult = organizeGold(entries, opts, timelineRaw, rarity);
-    setOutput(result.output);
-    setDroppedOutput(result.droppedOutput);
-    setMissingOutput(result.missingOutput);
+    setIsRunning(true);
+    setStatus("Loading rarity reference data...");
 
-    setStatus(
-      `Parsed ${fmt(result.parsedCount)} entries, kept ` +
-        `${fmt(result.keptGoldCount)} gold entries (` +
-        `${fmt(result.matchedCount)} in reference, ` +
-        `${fmt(result.ignoredCount)} ignored not-in-reference). ` +
-        `Inserted ${fmt(result.missingRowsCount)} missing rows. ` +
-        `Missing panel shows ${fmt(result.missingPanelCount)} of ${fmt(result.missingTotalCount)} missing species. ` +
-        `Completion ${result.completionPercent}% (${result.completionCaught}/${result.completionTotal}). ` +
-        `Dropped ${fmt(result.droppedCount)} duplicate entries.`
-    );
+    try {
+      const referenceData = await loadGoldOrganizerReferenceData();
+      const result: GoldOrganizerResult = organizeGold(entries, opts, timelineRaw, rarity, referenceData);
+      setOutput(result.output);
+      setDroppedOutput(result.droppedOutput);
+      setMissingOutput(result.missingOutput);
+
+      setStatus(
+        `Parsed ${fmt(result.parsedCount)} entries, kept ` +
+          `${fmt(result.keptGoldCount)} gold entries (` +
+          `${fmt(result.matchedCount)} in reference, ` +
+          `${fmt(result.ignoredCount)} ignored not-in-reference). ` +
+          `Inserted ${fmt(result.missingRowsCount)} missing rows. ` +
+          `Missing panel shows ${fmt(result.missingPanelCount)} of ${fmt(result.missingTotalCount)} missing species. ` +
+          `Completion ${result.completionPercent}% (${result.completionCaught}/${result.completionTotal}). ` +
+          `Dropped ${fmt(result.droppedCount)} duplicate entries.`
+      );
+    } catch (error) {
+      setStatus(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   const clear = () => {
@@ -151,7 +200,7 @@ export function GoldOrganizer({
             />
 
             <div className="mt-3 d-flex flex-wrap gap-2">
-              <button className="btn-primary-soft" type="button" onClick={run}>
+              <button className="btn-primary-soft" type="button" disabled={isRunning} onClick={() => void run()}>
                 Sort Golds
               </button>
               <button className="btn-outline-soft" type="button" onClick={clear}>
@@ -237,6 +286,32 @@ export function GoldOrganizer({
                 />
                 <label className="form-check-label" htmlFor="dropDupes">
                   Drop duplicates per species (keep only one, lowest level)
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="highlightRarity"
+                  checked={prefs.highlightRarity}
+                  onChange={(e) => setPrefs({ highlightRarity: e.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="highlightRarity">
+                  Highlight rarity
+                </label>
+              </div>
+
+              <div className={prefs.highlightRarity ? "form-check mb-2" : "d-none"}>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="annotateRarity"
+                  checked={prefs.annotateRarity}
+                  onChange={(e) => setPrefs({ annotateRarity: e.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="annotateRarity">
+                  Annotate rarity
                 </label>
               </div>
 

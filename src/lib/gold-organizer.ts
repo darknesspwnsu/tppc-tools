@@ -10,6 +10,8 @@ export type GoldOrganizerOpts = {
   missingRows: boolean;
   includeStruckMissing: boolean;
   dropDupes: boolean;
+  highlightRarity: boolean;
+  annotateRarity: boolean;
   preferredGender: "M" | "F" | "U";
   goldColor: string;
 };
@@ -29,8 +31,32 @@ export type GoldenTimelineItem = {
   dateText: string;
 };
 
+export type GoldenRarityForm = {
+  name?: string;
+  total?: number;
+};
+
+export type GoldenRarityRecord = {
+  name?: string;
+  total?: number;
+  forms?: GoldenRarityForm[];
+};
+
 export type GoldenRarity = {
-  timeline_by_key?: Record<string, { total?: number }>;
+  timeline_by_key?: Record<string, GoldenRarityRecord>;
+};
+
+export type GoldOrganizerEvolutionRaw = {
+  pokemon_name?: Record<string, string>;
+  evolutions?: Record<string, Array<{ pokemon_name?: string }>>;
+};
+
+export type GoldOrganizerReferenceData = {
+  parentsByKey: Map<string, Set<string>>;
+  depthByKey: Record<string, number>;
+  speciesDisplayByKey: Record<string, string>;
+  nameToDexByKey: Record<string, number>;
+  level4RarityByKey: Map<string, number>;
 };
 
 export type GoldOrganizerResult = {
@@ -108,6 +134,24 @@ function stripLeadingShinyDark(name: string) {
   if (RE_SHINY_PREFIX.test(name)) return name.replace(RE_SHINY_PREFIX, "").trim();
   if (RE_DARK_PREFIX.test(name)) return name.replace(RE_DARK_PREFIX, "").trim();
   return name;
+}
+
+function stripLeadingVariantPrefixes(name: string) {
+  let out = String(name || "").trim();
+  if (RE_SHINY_PREFIX.test(out)) out = out.replace(RE_SHINY_PREFIX, "").trim();
+  if (RE_DARK_PREFIX.test(out)) out = out.replace(RE_DARK_PREFIX, "").trim();
+  if (RE_GOLD_PREFIX.test(out)) out = out.replace(RE_GOLD_PREFIX, "").trim();
+  return out;
+}
+
+function speciesFromVariantName(name: string) {
+  return stripTrailingForm(stripLeadingVariantPrefixes(name));
+}
+
+function extractForm(name: string) {
+  const match = stripLeadingVariantPrefixes(name).match(/\(([^)]+)\)/);
+  if (!match) return "";
+  return (match[1] || "").trim();
 }
 
 function looksGold(name: string) {
@@ -225,15 +269,167 @@ function colorizeName(name: string, color: string) {
   return `[color=${c}]${name}[/color]`;
 }
 
+function wrapRaritySizeIfNeeded(text: string, cumulativeRarity: number, highlightRarity: boolean) {
+  if (!highlightRarity) return text;
+  if (cumulativeRarity >= 1 && cumulativeRarity <= 20) return `[b][size="5"]${text}[/size][/b]`;
+  if (cumulativeRarity >= 21 && cumulativeRarity <= 100) return `[b][size="4"]${text}[/size][/b]`;
+  if (cumulativeRarity >= 101 && cumulativeRarity <= 130) return `[b]${text}[/b]`;
+  return text;
+}
+
+export function parseLevel4RarityText(raw: string) {
+  const out = new Map<string, number>();
+  const re = /(.+?)\s*-\s*(\d+)\b/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = re.exec(raw || "")) !== null) {
+    const name = (match[1] || "").trim();
+    const total = parseInt(match[2], 10);
+    if (!name || !Number.isFinite(total)) continue;
+    out.set(canonicalForMatch(name), total);
+  }
+
+  return out;
+}
+
+function ensureSet<K>(map: Map<K, Set<K>>, key: K) {
+  const existing = map.get(key);
+  if (existing) return existing;
+  const created = new Set<K>();
+  map.set(key, created);
+  return created;
+}
+
+export function buildGoldOrganizerReferenceData(
+  evolutionRaw: GoldOrganizerEvolutionRaw,
+  level4RarityText: string
+): GoldOrganizerReferenceData {
+  const pokemonName = evolutionRaw?.pokemon_name ?? {};
+  const evolutions = evolutionRaw?.evolutions ?? {};
+
+  const graph = new Map<string, Set<string>>();
+  const parentsByKey = new Map<string, Set<string>>();
+  const childrenByKey = new Map<string, Set<string>>();
+  const speciesDisplayByKey: Record<string, string> = {};
+  const nameToDexByKey: Record<string, number> = {};
+
+  for (const [idxStr, rawName] of Object.entries(pokemonName)) {
+    const speciesName = String(rawName || "").trim();
+    if (!speciesName) continue;
+
+    const speciesKey = canonicalForMatch(speciesName);
+    const idxNum = Number.parseInt(idxStr, 10);
+    const dexNum = Number.isFinite(idxNum) ? idxNum + 1 : Number.POSITIVE_INFINITY;
+
+    if (!speciesDisplayByKey[speciesKey]) speciesDisplayByKey[speciesKey] = speciesName;
+    if (!(speciesKey in nameToDexByKey) || dexNum < nameToDexByKey[speciesKey]) {
+      nameToDexByKey[speciesKey] = dexNum;
+    }
+
+    ensureSet(graph, speciesKey);
+
+    const evoList = Array.isArray(evolutions[idxStr]) ? evolutions[idxStr] : [];
+    for (const evo of evoList) {
+      const evoName = String(evo?.pokemon_name || "").trim();
+      if (!evoName) continue;
+
+      const evoKey = canonicalForMatch(evoName);
+      if (!speciesDisplayByKey[evoKey]) speciesDisplayByKey[evoKey] = evoName;
+
+      ensureSet(graph, speciesKey).add(evoKey);
+      ensureSet(graph, evoKey).add(speciesKey);
+      ensureSet(childrenByKey, speciesKey).add(evoKey);
+      ensureSet(parentsByKey, evoKey).add(speciesKey);
+    }
+  }
+
+  const depthByKey: Record<string, number> = {};
+  const visited = new Set<string>();
+
+  for (const startKey of graph.keys()) {
+    if (visited.has(startKey)) continue;
+
+    const component = new Set<string>();
+    const stack = [startKey];
+
+    while (stack.length > 0) {
+      const key = stack.pop()!;
+      if (component.has(key)) continue;
+      component.add(key);
+      visited.add(key);
+
+      const neighbors = graph.get(key) ?? new Set<string>();
+      for (const nextKey of neighbors) {
+        if (!component.has(nextKey)) stack.push(nextKey);
+      }
+    }
+
+    const roots = Array.from(component).filter((key) => {
+      const parentSet = parentsByKey.get(key);
+      return !parentSet || !Array.from(parentSet).some((parentKey) => component.has(parentKey));
+    });
+
+    if (!roots.length) {
+      roots.push(
+        Array.from(component).sort(
+          (a, b) => (nameToDexByKey[a] ?? Number.POSITIVE_INFINITY) - (nameToDexByKey[b] ?? Number.POSITIVE_INFINITY)
+        )[0]!
+      );
+    }
+
+    const queue: Array<[string, number]> = roots.map((key) => [key, 0]);
+    const seenLocal = new Set<string>();
+
+    while (queue.length > 0) {
+      const [key, depth] = queue.shift()!;
+      if (seenLocal.has(key)) continue;
+      seenLocal.add(key);
+
+      if (depthByKey[key] === undefined || depth < depthByKey[key]) {
+        depthByKey[key] = depth;
+      }
+
+      const childSet = childrenByKey.get(key) ?? new Set<string>();
+      for (const childKey of childSet) {
+        if (component.has(childKey)) queue.push([childKey, depth + 1]);
+      }
+    }
+  }
+
+  return {
+    parentsByKey,
+    depthByKey,
+    speciesDisplayByKey,
+    nameToDexByKey,
+    level4RarityByKey: parseLevel4RarityText(level4RarityText)
+  };
+}
+
+type GoldRarityMeta = {
+  cumulativeRarity: number;
+  hasPreEvoContribution: boolean;
+  usedLv4ForThisRow: boolean;
+};
+
 function formatLine(
-  entry: GoldEntry & { count?: number },
-  opts: Pick<GoldOrganizerOpts, "plainLevel" | "combine">,
+  entry: GoldEntry & { count?: number; rarityMeta?: GoldRarityMeta },
+  opts: Pick<GoldOrganizerOpts, "plainLevel" | "combine" | "highlightRarity" | "annotateRarity">,
   goldColor: string
 ) {
-  const nm = colorizeName(entry.name, goldColor);
+  const meta = entry.rarityMeta;
+  const nm = wrapRaritySizeIfNeeded(colorizeName(entry.name, goldColor), meta?.cumulativeRarity ?? 0, opts.highlightRarity);
   const lvl = fmtLevel(entry.levelNum);
-  const base = opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
-  if (opts.combine && entry.count && entry.count > 1) return `${base} x${entry.count}`;
+  let base = opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
+  if (opts.combine && entry.count && entry.count > 1) base = `${base} x${entry.count}`;
+
+  const isHighlighted = (meta?.cumulativeRarity ?? 0) >= 1 && (meta?.cumulativeRarity ?? 0) <= 130;
+  if (opts.highlightRarity && opts.annotateRarity && meta && isHighlighted) {
+    const ig = Math.round(meta.cumulativeRarity).toLocaleString("en-US");
+    const suffixAtLevel = meta.usedLv4ForThisRow ? " (at this level)" : "";
+    const suffixPreEvo = meta.hasPreEvoContribution ? " (including pre-evos)" : "";
+    base += ` [size="1"]- ${ig} ig${suffixAtLevel}${suffixPreEvo}[/size]`;
+  }
+
   return base;
 }
 
@@ -292,10 +488,27 @@ export function organizeGold(
   entries: GoldEntry[],
   opts: GoldOrganizerOpts,
   timelineRaw: readonly GoldenTimelineItemRaw[],
-  rarityRaw: GoldenRarity
+  rarityRaw: GoldenRarity,
+  referenceData?: GoldOrganizerReferenceData
 ): GoldOrganizerResult {
   const timeline = normalizeTimeline(timelineRaw);
   const rarityTimelineByKey = (rarityRaw && rarityRaw.timeline_by_key) || {};
+  const goldRarityByKey = new Map<string, number>();
+
+  for (const [timelineKey, record] of Object.entries(rarityTimelineByKey)) {
+    const total = Number.isFinite(Number(record?.total)) ? Number(record?.total) : 0;
+    goldRarityByKey.set(timelineKey, total);
+
+    const recordName = String(record?.name || "").trim();
+    if (recordName) goldRarityByKey.set(canonicalForMatch(recordName), total);
+
+    for (const formRecord of record?.forms ?? []) {
+      const formName = String(formRecord?.name || "").trim();
+      if (!formName) continue;
+      const formTotal = Number.isFinite(Number(formRecord?.total)) ? Number(formRecord.total) : total;
+      goldRarityByKey.set(canonicalForMatch(formName), formTotal);
+    }
+  }
 
   if (!timeline.length) {
     return {
@@ -318,10 +531,7 @@ export function organizeGold(
   }
 
   const rarityTotalForTimelineName = (timelineName: string) => {
-    const rec = rarityTimelineByKey[canonicalForMatch(timelineName)];
-    const totalRaw = rec?.total;
-    const total = Number.isFinite(Number(totalRaw)) ? Number(totalRaw) : 0;
-    return total;
+    return goldRarityByKey.get(canonicalForMatch(timelineName)) ?? 0;
   };
 
   const missingMeta = (timelineName: string) => {
@@ -340,11 +550,136 @@ export function organizeGold(
 
   const tlMap = buildTimelineMap(timeline);
 
+  const parentsByKey = referenceData?.parentsByKey ?? new Map<string, Set<string>>();
+  const depthByKey = referenceData?.depthByKey ?? {};
+  const speciesDisplayByKey = referenceData?.speciesDisplayByKey ?? {};
+  const nameToDexByKey = referenceData?.nameToDexByKey ?? {};
+  const level4RarityByKey = referenceData?.level4RarityByKey ?? new Map<string, number>();
+
   type GoldMatchedEntry = GoldEntry & {
     timelineIndex: number;
     timelineName: string;
     matched: boolean;
     speciesKey: string;
+    speciesName: string;
+    form: string;
+    rarityMeta: GoldRarityMeta;
+  };
+
+  const pickBestParent = (speciesKey: string) => {
+    const parentSet = parentsByKey.get(speciesKey);
+    if (!parentSet || parentSet.size === 0) return null;
+
+    let bestParent: string | null = null;
+    let bestDex = Number.POSITIVE_INFINITY;
+    for (const parentKey of parentSet) {
+      const dex = nameToDexByKey[parentKey] ?? Number.POSITIVE_INFINITY;
+      if (dex < bestDex) {
+        bestDex = dex;
+        bestParent = parentKey;
+      }
+    }
+    return bestParent;
+  };
+
+  const goldRarityForSpeciesKey = (
+    speciesKey: string,
+    fallbackSpeciesName: string,
+    form: string,
+    isInputLevel4: boolean
+  ) => {
+    const speciesDisplayName = speciesDisplayByKey[speciesKey] ?? fallbackSpeciesName;
+
+    let lookup = `Golden${speciesDisplayName}`;
+    if (form) lookup += ` (${form})`;
+
+    const isUnevolved = (depthByKey[speciesKey] ?? 0) === 0;
+    const lv4Key = canonicalForMatch(lookup);
+    if (isInputLevel4 && isUnevolved && level4RarityByKey.has(lv4Key)) {
+      return level4RarityByKey.get(lv4Key) ?? 0;
+    }
+
+    if (form) {
+      const formTotal = goldRarityByKey.get(canonicalForMatch(lookup)) ?? 0;
+      if (formTotal > 0) return formTotal;
+    }
+
+    return goldRarityByKey.get(canonicalForMatch(`Golden${speciesDisplayName}`)) ?? 0;
+  };
+
+  const cumulativeGoldRarityForSpecies = (
+    speciesKey: string,
+    fallbackSpeciesName: string,
+    form: string,
+    isInputLevel4: boolean
+  ) => {
+    let total = 0;
+    let currentKey = speciesKey;
+    const seen = new Set<string>();
+
+    while (!seen.has(currentKey)) {
+      seen.add(currentKey);
+      total += goldRarityForSpeciesKey(currentKey, fallbackSpeciesName, form, isInputLevel4);
+
+      const parentKey = pickBestParent(currentKey);
+      if (!parentKey) break;
+      currentKey = parentKey;
+    }
+
+    return total;
+  };
+
+  const goldPreEvoChainBreakdown = (
+    speciesKey: string,
+    fallbackSpeciesName: string,
+    form: string,
+    isInputLevel4: boolean
+  ) => {
+    const parts: Array<{ speciesKey: string; rarity: number }> = [];
+    let currentKey = speciesKey;
+    const seen = new Set<string>();
+
+    while (!seen.has(currentKey)) {
+      seen.add(currentKey);
+      parts.push({
+        speciesKey: currentKey,
+        rarity: goldRarityForSpeciesKey(currentKey, fallbackSpeciesName, form, isInputLevel4)
+      });
+
+      const parentKey = pickBestParent(currentKey);
+      if (!parentKey) break;
+      currentKey = parentKey;
+    }
+
+    return parts;
+  };
+
+  const buildRarityMeta = (entry: Omit<GoldMatchedEntry, "rarityMeta">): GoldRarityMeta => {
+    const isInputLevel4 = entry.levelNum === 4;
+    const cumulativeRarity = cumulativeGoldRarityForSpecies(
+      entry.speciesKey,
+      entry.speciesName,
+      entry.form,
+      isInputLevel4
+    );
+
+    const lookupSpeciesName = speciesDisplayByKey[entry.speciesKey] ?? entry.speciesName;
+    let lookupNameBase = `Golden${lookupSpeciesName}`;
+    if (entry.form) lookupNameBase += ` (${entry.form})`;
+
+    const usedLv4ForThisRow =
+      isInputLevel4 &&
+      (depthByKey[entry.speciesKey] ?? 0) === 0 &&
+      level4RarityByKey.has(canonicalForMatch(lookupNameBase));
+
+    const chain = goldPreEvoChainBreakdown(entry.speciesKey, entry.speciesName, entry.form, isInputLevel4);
+    const hasPreEvoContribution = chain.slice(1).some((part) => (part.rarity ?? 0) > 0);
+
+    return {
+      cumulativeRarity,
+      hasPreEvoContribution,
+      usedLv4ForThisRow
+    };
   };
 
   const goldOnly: GoldMatchedEntry[] = [];
@@ -353,15 +688,24 @@ export function organizeGold(
     if (!looksGold(e.name)) continue;
 
     const baseName = stripLeadingShinyDark(stripGender(e.name));
+    const speciesName = speciesFromVariantName(baseName);
+    const form = extractForm(baseName);
     const match = resolveTimelineMatch(baseName, tlMap);
     const timelineItem = match.timelineItem;
 
-    goldOnly.push({
+    const entryBase = {
       ...e,
       timelineIndex: timelineItem ? timelineItem.index : Number.POSITIVE_INFINITY,
       timelineName: timelineItem ? timelineItem.name : baseName,
       matched: Boolean(timelineItem),
-      speciesKey: match.speciesKey
+      speciesKey: canonicalForMatch(speciesName),
+      speciesName,
+      form
+    };
+
+    goldOnly.push({
+      ...entryBase,
+      rarityMeta: buildRarityMeta(entryBase)
     });
   }
 
@@ -441,7 +785,12 @@ export function organizeGold(
   if (opts.combine) droppedBucket = combineEntries(droppedBucket);
 
   const droppedLines = droppedBucket.map((e) => {
-    const singleOpts = { plainLevel: opts.plainLevel, combine: opts.combine };
+    const singleOpts = {
+      plainLevel: opts.plainLevel,
+      combine: opts.combine,
+      highlightRarity: opts.highlightRarity,
+      annotateRarity: opts.highlightRarity && opts.annotateRarity
+    };
     return formatLine(e, singleOpts, "");
   });
 
