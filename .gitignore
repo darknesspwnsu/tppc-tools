@@ -141,5 +141,6 @@ test-results/
 
 # Local Codex/task-state artifacts that should stay machine-local
 AGENTS.md
+.codex-artifacts/
 dev/
 scripts/codex/
