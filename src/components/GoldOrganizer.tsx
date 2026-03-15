@@ -261,7 +261,7 @@ export function GoldOrganizer({
                   onChange={(e) => setPrefs({ missingRows: e.target.checked })}
                 />
                 <label className="form-check-label" htmlFor="missingRows">
-                  Add missing release rows inline in grey
+                  Add missing release rows inline
                 </label>
               </div>
 
@@ -353,7 +353,7 @@ export function GoldOrganizer({
                 />
                 <div className="text-muted small mt-2">
                   Color applies to found names only via <code>[color=...]Name[/color]</code>. Missing rows are always
-                  grey.
+                  styled automatically in red or grey.
                 </div>
               </div>
 

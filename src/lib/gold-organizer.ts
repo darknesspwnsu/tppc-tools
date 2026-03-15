@@ -101,8 +101,9 @@ export type GoldOrganizerResult = {
 };
 
 const MISSING_COLOR = "gray";
-const MISSING_COLOR_NON_STRUCK = "red";
-const RARITY_STRIKE_THRESHOLD = 22;
+const MISSING_COLOR_NON_GRAY = "red";
+const MISSING_GRAY_THRESHOLD = 22;
+const MISSING_STRIKE_THRESHOLD = 10;
 const OVERALL_RARITY_BOLD_THRESHOLD = 50;
 const OVERALL_RARITY_SIZE5_THRESHOLD = 9;
 const OVERALL_RARITY_SIZE4_THRESHOLD = 29;
@@ -110,12 +111,11 @@ const LEVEL4_RARITY_BOLD_THRESHOLD = 50;
 const LEVEL4_RARITY_SIZE5_THRESHOLD = 9;
 const LEVEL4_RARITY_SIZE4_THRESHOLD = 19;
 
-const FORCE_STRIKE_MISSING = new Set([
+const EXCEPTIONALLY_HARD_TO_GET = new Set([
   "goldenhoundour",
   "goldenheracross",
   "goldengloom",
-  "goldeneevee",
-  "goldensandshrewalola"
+  "goldeneevee"
 ]);
 const BASE_RARITY_GOLD_FORM_SPECIES = new Set(["rotom", "deoxys"]);
 
@@ -623,9 +623,10 @@ export function organizeGold(
   const missingMeta = (timelineName: string) => {
     const total = rarityTotalForTimelineName(timelineName);
     const key = canonicalForMatch(timelineName);
-    const shouldStrike = FORCE_STRIKE_MISSING.has(key) || total <= RARITY_STRIKE_THRESHOLD;
+    const shouldStrike = total > 0 && total < MISSING_STRIKE_THRESHOLD;
+    const shouldGray = EXCEPTIONALLY_HARD_TO_GET.has(key) || (total > 0 && total < MISSING_GRAY_THRESHOLD);
     const label = shouldStrike ? `[s]${timelineName}[/s]` : timelineName;
-    const c = shouldStrike ? MISSING_COLOR : MISSING_COLOR_NON_STRUCK;
+    const c = shouldGray ? MISSING_COLOR : MISSING_COLOR_NON_GRAY;
     return {
       shouldStrike,
       total,

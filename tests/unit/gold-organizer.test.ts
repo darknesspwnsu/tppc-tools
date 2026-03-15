@@ -55,7 +55,37 @@ describe("organizeGold", () => {
     expect(result.output).toContain("Completion: 50.00%");
     expect(result.output).toContain("GoldenBulbasaur (Level: 5)");
     expect(result.output).toContain("GoldenIvysaur");
-    expect(result.missingOutput).toContain("(none)");
+    expect(result.missingOutput).toContain("GoldenIvysaur");
+  });
+
+  it("styles missing rows by the gray, strike, and exception thresholds", () => {
+    const timeline = [
+      { name: "GoldenBulbasaur" },
+      { name: "GoldenIvysaur" },
+      { name: "GoldenEevee" },
+      { name: "GoldenSandshrew (Alola)" }
+    ];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { name: "GoldenBulbasaur", total: 9 },
+        goldenivysaur: { name: "GoldenIvysaur", total: 10 },
+        goldeneevee: { name: "GoldenEevee", total: 200 },
+        goldensandshrewalola: { name: "GoldenSandshrew (Alola)", total: 200 }
+      }
+    };
+
+    const result = organizeGold([], DEFAULT_OPTS, timeline, rarity);
+
+    expect(result.output).toContain('[color=gray][s]GoldenBulbasaur[/s][/color]');
+    expect(result.output).toContain('[color=gray]GoldenIvysaur[/color]');
+    expect(result.output).toContain('[color=gray]GoldenEevee[/color]');
+    expect(result.output).toContain('[color=red]GoldenSandshrew (Alola)[/color]');
+
+    expect(result.missingOutput).not.toContain("GoldenBulbasaur");
+    expect(result.missingOutput).toContain("GoldenIvysaur");
+    expect(result.missingOutput).toContain("GoldenEevee");
+    expect(result.missingOutput).toContain("GoldenSandshrew (Alola)");
+    expect(result.missingFeasibleCount).toBe(3);
   });
 
   it("keeps distinct gold forms when dropping duplicates", () => {
