@@ -58,7 +58,7 @@ describe("organizeGold", () => {
     expect(result.missingOutput).toContain("(none)");
   });
 
-  it("annotates exact level 4 male gold rarity with overall gender context", () => {
+  it("does not annotate exact level 4 male gold rarity above the lv4 threshold", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {
       timeline_by_key: {
@@ -86,8 +86,9 @@ describe("organizeGold", () => {
     );
 
     expect(result.output).toContain("GoldenElectrike ♂ (Level: 4)");
-    expect(result.output).toContain("27 ig (at this level; 61 overall)");
     expect(result.output).not.toContain('[b][size="4"]GoldenElectrike ♂[/size][/b]');
+    expect(result.output).not.toContain("27 ig");
+    expect(result.output).not.toContain("61 overall");
     expect(result.output).not.toContain("116 ig");
   });
 
@@ -151,7 +152,7 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain("231 ig");
   });
 
-  it("annotates exact level 4 female gold rarity for GoldenTorchic without highlighting above the lv4 threshold", () => {
+  it("does not annotate exact level 4 female gold rarity above the lv4 threshold", () => {
     const timeline = [{ name: "GoldenTorchic" }];
     const rarity = {
       timeline_by_key: {
@@ -179,13 +180,14 @@ describe("organizeGold", () => {
     );
 
     expect(result.output).toContain("GoldenTorchic ♀ (Level: 4)");
-    expect(result.output).toContain("32 ig (at this level; 135 overall)");
     expect(result.output).not.toContain('[b][size="4"]GoldenTorchic ♀[/size][/b]');
+    expect(result.output).not.toContain("32 ig");
+    expect(result.output).not.toContain("135 overall");
     expect(result.output).not.toContain("135 ig");
     expect(result.output).not.toContain("371 ig");
   });
 
-  it("still requires an exact level 4 gold match and otherwise falls back to overall gender rarity", () => {
+  it("still requires an exact level 4 gold match and otherwise falls back to overall gender rarity thresholds", () => {
     const timeline = [{ name: "GoldenTorchic" }];
     const rarity = {
       timeline_by_key: {
@@ -213,7 +215,7 @@ describe("organizeGold", () => {
     );
 
     expect(result.output).toContain("GoldenTorchic ♀ (Level: 4)");
-    expect(result.output).toContain("135 ig");
+    expect(result.output).not.toContain("135 ig");
     expect(result.output).not.toContain("9 ig");
     expect(result.output).not.toContain("(at this level)");
   });
@@ -296,6 +298,27 @@ describe("organizeGold", () => {
     expect(result.output).toContain("36 ig");
     expect(result.output).not.toContain("10 ig");
     expect(result.output).not.toContain("(at this level)");
+  });
+
+  it("does not annotate no-symbol genderless golds above the overall threshold", () => {
+    const timeline = [{ name: "GoldenMewtwo" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenmewtwo: { name: "GoldenMewtwo", male: 0, female: 0, genderless: 346, ungendered: 30, total: 376 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenMewtwo 5"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain("GoldenMewtwo (Level: 5)");
+    expect(result.output).not.toContain("346 ig");
+    expect(result.output).not.toContain("30 ig");
+    expect(result.output).not.toContain('[b][size="4"]GoldenMewtwo[/size][/b]');
   });
 
   it("uses the genderless overall rarity bucket when a no-symbol genderless gold is annotated", () => {

@@ -483,12 +483,13 @@ function formatLine(
   goldColor: string
 ) {
   const meta = entry.rarityMeta;
+  const rarityQualified = isRarityHighlighted(meta, opts.highlightRarity);
   const nm = wrapRaritySizeIfNeeded(colorizeName(entry.name, goldColor), meta, opts.highlightRarity);
   const lvl = fmtLevel(entry.levelNum);
   let base = opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
   if (opts.combine && entry.count && entry.count > 1) base = `${base} x${entry.count}`;
 
-  if (opts.highlightRarity && opts.annotateRarity && meta && meta.rowRarity > 0) {
+  if (opts.annotateRarity && rarityQualified && meta) {
     base += ` [size="1"]- ${formatRarityAnnotation(meta)}[/size]`;
   }
 
