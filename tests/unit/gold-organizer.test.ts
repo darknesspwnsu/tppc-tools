@@ -103,7 +103,7 @@ describe("organizeGold", () => {
     expect(result.droppedOutput).toContain("(none)");
   });
 
-  it("does not annotate exact level 4 male gold rarity above the lv4 threshold", () => {
+  it("bolds and annotates exact level 4 male gold rarity within the lv4 threshold", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {
       timeline_by_key: {
@@ -130,10 +130,9 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain("GoldenElectrike ♂ (Level: 4)");
+    expect(result.output).toContain('[b]GoldenElectrike ♂[/b] (Level: 4)');
+    expect(result.output).toContain("27 ig (at this level; 61 overall)");
     expect(result.output).not.toContain('[b][size="4"]GoldenElectrike ♂[/size][/b]');
-    expect(result.output).not.toContain("27 ig");
-    expect(result.output).not.toContain("61 overall");
     expect(result.output).not.toContain("116 ig");
   });
 
@@ -161,7 +160,7 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenMantine ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain('[b]GoldenMantine ♀[/b] (Level: 4)');
     expect(result.output).toContain("17 ig (at this level; 87 overall)");
     expect(result.output).not.toContain("87 ig");
     expect(result.output).not.toContain("231 ig");
@@ -191,10 +190,41 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenMantine[/size][/b] (Level: 4)');
+    expect(result.output).toContain('[b]GoldenMantine[/b] (Level: 4)');
     expect(result.output).toContain("19 ig (at this level; 34 overall)");
     expect(result.output).not.toContain("34 ig");
     expect(result.output).not.toContain("231 ig");
+  });
+
+  it("uses size 4 emphasis for exact level 4 rarity of 10 or below", () => {
+    const timeline = [{ name: "GoldenElectrike" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenelectrike: { name: "GoldenElectrike", male: 61, female: 55, ungendered: 0, total: 116 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          GoldenElectrike: { male: 10, female: 29, genderless: 0, ungendered: 0, total: 39 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenElectrike ♂ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="4"]GoldenElectrike ♂[/size][/b] (Level: 4)');
+    expect(result.output).toContain("10 ig (at this level; 61 overall)");
   });
 
   it("does not annotate exact level 4 female gold rarity above the lv4 threshold", () => {
@@ -292,7 +322,7 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenLarvitar ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain('[b]GoldenLarvitar ♀[/b] (Level: 4)');
     expect(result.output).toContain("11 ig (at this level; 14 overall)");
     expect(result.output).not.toContain("38 ig");
   });
@@ -339,7 +369,7 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="4"]GoldenRaichu (Alola) ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain('[b]GoldenRaichu (Alola) ♀[/b] (Level: 4)');
     expect(result.output).toContain("36 ig");
     expect(result.output).not.toContain("10 ig");
     expect(result.output).not.toContain("(at this level)");
@@ -381,7 +411,7 @@ describe("organizeGold", () => {
       rarity
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenMewtwo[/size][/b] (Level: 5)');
+    expect(result.output).toContain('[b][size="4"]GoldenMewtwo[/size][/b] (Level: 5)');
     expect(result.output).toContain("12 ig");
     expect(result.output).not.toContain("30 ig");
   });

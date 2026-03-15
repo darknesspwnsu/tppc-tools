@@ -104,7 +104,9 @@ const MISSING_COLOR = "gray";
 const MISSING_COLOR_NON_STRUCK = "red";
 const RARITY_STRIKE_THRESHOLD = 22;
 const OVERALL_RARITY_HIGHLIGHT_THRESHOLD = 50;
-const LEVEL4_RARITY_HIGHLIGHT_THRESHOLD = 20;
+const OVERALL_RARITY_SIZE4_THRESHOLD = 20;
+const LEVEL4_RARITY_HIGHLIGHT_THRESHOLD = 30;
+const LEVEL4_RARITY_SIZE4_THRESHOLD = 10;
 
 const FORCE_STRIKE_MISSING = new Set([
   "goldenhoundour",
@@ -459,8 +461,13 @@ function wrapRaritySizeIfNeeded(
   if (!isRarityHighlighted(meta, highlightRarity)) return text;
 
   const rarity = meta?.rowRarity ?? 0;
-  if (rarity >= 1 && rarity <= 20) return `[b][size="5"]${text}[/size][/b]`;
-  if (rarity >= 21 && rarity < OVERALL_RARITY_HIGHLIGHT_THRESHOLD) {
+  if (meta?.usedLv4ForThisRow) {
+    if (rarity >= 1 && rarity <= LEVEL4_RARITY_SIZE4_THRESHOLD) {
+      return `[b][size="4"]${text}[/size][/b]`;
+    }
+    return `[b]${text}[/b]`;
+  }
+  if (rarity >= 1 && rarity <= OVERALL_RARITY_SIZE4_THRESHOLD) {
     return `[b][size="4"]${text}[/size][/b]`;
   }
   return `[b]${text}[/b]`;
