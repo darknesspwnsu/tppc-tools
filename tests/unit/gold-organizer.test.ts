@@ -168,6 +168,75 @@ describe("organizeGold", () => {
     expect(result.droppedOutput).toContain("(none)");
   });
 
+  it("uses the base gold rarity for item-switchable rotom forms", () => {
+    const timeline = [{ name: "GoldenRotom" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenrotom: {
+          name: "GoldenRotom",
+          genderless: 32,
+          ungendered: 0,
+          total: 32,
+          forms: [
+            { name: "GoldenRotom (Fan)", genderless: 7, ungendered: 0, total: 7 },
+            { name: "GoldenRotom (Heat)", genderless: 8, ungendered: 0, total: 8 }
+          ]
+        }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenRotom (Fan) 5"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain('[b]GoldenRotom (Fan)[/b] (Level: 5)');
+    expect(result.output).toContain("32 ig");
+    expect(result.output).not.toContain("7 ig");
+  });
+
+  it("uses the base lv4 rarity for item-switchable deoxys forms", () => {
+    const timeline = [{ name: "GoldenDeoxys" }];
+    const rarity = {
+      timeline_by_key: {
+        goldendeoxys: {
+          name: "GoldenDeoxys",
+          genderless: 33,
+          ungendered: 0,
+          total: 33,
+          forms: [
+            { name: "GoldenDeoxys (Attack)", genderless: 6, ungendered: 0, total: 6 },
+            { name: "GoldenDeoxys (Speed)", genderless: 5, ungendered: 0, total: 5 }
+          ]
+        }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      { pokemon_name: {}, evolutions: {} },
+      {
+        data: {
+          GoldenDeoxys: { genderless: 18, ungendered: 0, total: 18 },
+          "GoldenDeoxys (Attack)": { genderless: 4, ungendered: 0, total: 4 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenDeoxys (Attack) 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="4"]GoldenDeoxys (Attack)[/size][/b] (Level: 4)');
+    expect(result.output).toContain("18 ig (at this level; 33 overall)");
+    expect(result.output).not.toContain("4 ig");
+    expect(result.output).not.toContain("6 ig");
+  });
+
   it("bolds and annotates exact level 4 male gold rarity within the lv4 threshold", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {

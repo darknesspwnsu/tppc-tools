@@ -117,6 +117,7 @@ const FORCE_STRIKE_MISSING = new Set([
   "goldeneevee",
   "goldensandshrewalola"
 ]);
+const BASE_RARITY_GOLD_FORM_SPECIES = new Set(["rotom", "deoxys"]);
 
 const RE_GOLD_PREFIX = /^Golden(?=[A-Z(])/;
 const RE_SHINY_PREFIX = /^Shiny(?=[A-Z(])/;
@@ -177,6 +178,19 @@ function extractForm(name: string) {
   const match = stripLeadingVariantPrefixes(name).match(/\(([^)]+)\)/);
   if (!match) return "";
   return (match[1] || "").trim();
+}
+
+function goldBaseRarityName(name: string) {
+  return `Golden${speciesFromVariantName(name)}`;
+}
+
+function goldRarityLookupName(name: string) {
+  const form = extractForm(name);
+  const speciesKey = canonicalForMatch(speciesFromVariantName(name));
+  if (form && BASE_RARITY_GOLD_FORM_SPECIES.has(speciesKey)) {
+    return goldBaseRarityName(name);
+  }
+  return name;
 }
 
 function looksGold(name: string) {
@@ -660,10 +674,10 @@ export function organizeGold(
     rarityGenderBucket: GoldMatchedEntry["rarityGenderBucket"]
   ): GoldRarityMeta => {
     let overallRarity = 0;
-    const rarityLookupCandidates = [
-      fullName,
-      `Golden${speciesFromVariantName(fullName)}`
-    ];
+    const baseRarityName = goldBaseRarityName(fullName);
+    const primaryRarityName = goldRarityLookupName(fullName);
+    const rarityLookupCandidates =
+      primaryRarityName === baseRarityName ? [primaryRarityName] : [primaryRarityName, baseRarityName];
 
     const seenRarity = new Set<string>();
     for (const candidate of rarityLookupCandidates) {
@@ -683,7 +697,7 @@ export function organizeGold(
 
     let level4Rarity = 0;
     if (isInputLevel4) {
-      const exactLv4Key = canonicalForMatch(fullName);
+      const exactLv4Key = canonicalForMatch(goldRarityLookupName(fullName));
       const exactLv4Record = level4RarityByKey.get(exactLv4Key);
       level4Rarity = Number(exactLv4Record?.[rarityGenderBucket] ?? 0);
     }
