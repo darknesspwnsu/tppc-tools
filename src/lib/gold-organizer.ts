@@ -520,8 +520,17 @@ function formatLine(
   return base;
 }
 
-function wrapCodeBlock(lines: string[]) {
-  const body = lines.length ? lines.join("\n") : "";
+function formatLegendLine(goldColor: string) {
+  const color = String(goldColor || "").trim();
+  const done = color ? `[color="${color}"]done[/color]` : "done";
+  return `key: ${done}, [color="Red"]missing[/color], [color="grey"]unlikely[/color], [s][color="Gray"]ignore[/color][/s]`;
+}
+
+function wrapCodeBlock(lines: string[], footerLines: string[] = []) {
+  const sections: string[] = [];
+  if (lines.length) sections.push(lines.join("\n"));
+  if (footerLines.length) sections.push(footerLines.join("\n"));
+  const body = sections.join("\n\n");
   return `[code]\n${body}\n[/code]`;
 }
 
@@ -843,7 +852,7 @@ export function organizeGold(
     ` | Missing feasible: ${missingFeasibleCount}`;
 
   return {
-    output: `${statsLine}\n${wrapCodeBlock(lines)}`,
+    output: `${statsLine}\n${wrapCodeBlock(lines, [formatLegendLine(opts.goldColor)])}`,
     droppedOutput: opts.dropDupes ? wrapCodeBlock(droppedLines.length ? droppedLines : ["(none)"]) : "",
     missingOutput: wrapCodeBlock(missingPanelLines.length ? missingPanelLines : ["(none)"]),
     parsedCount: entries.length,

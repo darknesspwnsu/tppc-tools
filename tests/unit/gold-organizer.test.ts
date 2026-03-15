@@ -88,6 +88,41 @@ describe("organizeGold", () => {
     expect(result.missingFeasibleCount).toBe(3);
   });
 
+  it("appends an uncolored legend to the main output when no custom gold color is set", () => {
+    const timeline = [{ name: "GoldenBulbasaur" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { name: "GoldenBulbasaur", total: 100 }
+      }
+    };
+
+    const result = organizeGold(parseInput("GoldenBulbasaur 5"), DEFAULT_OPTS, timeline, rarity);
+
+    expect(result.output).toContain(
+      'key: done, [color="Red"]missing[/color], [color="grey"]unlikely[/color], [s][color="Gray"]ignore[/color][/s]'
+    );
+  });
+
+  it("appends a legend that reuses the custom gold color for done rows", () => {
+    const timeline = [{ name: "GoldenBulbasaur" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { name: "GoldenBulbasaur", total: 100 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenBulbasaur 5"),
+      { ...DEFAULT_OPTS, goldColor: "#DAA520" },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain(
+      'key: [color="#DAA520"]done[/color], [color="Red"]missing[/color], [color="grey"]unlikely[/color], [s][color="Gray"]ignore[/color][/s]'
+    );
+  });
+
   it("keeps distinct gold forms when dropping duplicates", () => {
     const timeline = [
       { name: "GoldenPumpkaboo (Small)" },
