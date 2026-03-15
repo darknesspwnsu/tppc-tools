@@ -58,6 +58,51 @@ describe("organizeGold", () => {
     expect(result.missingOutput).toContain("(none)");
   });
 
+  it("keeps distinct gold forms when dropping duplicates", () => {
+    const timeline = [
+      { name: "GoldenPumpkaboo (Small)" },
+      { name: "GoldenPumpkaboo (Average)" },
+      { name: "GoldenPumpkaboo (Large)" },
+      { name: "GoldenPumpkaboo (Super)" }
+    ];
+    const rarity = {
+      timeline_by_key: {
+        goldenpumpkaboosmall: { name: "GoldenPumpkaboo (Small)", male: 10, female: 8, ungendered: 0, total: 18 },
+        goldenpumpkabooaverage: {
+          name: "GoldenPumpkaboo (Average)",
+          male: 12,
+          female: 9,
+          ungendered: 0,
+          total: 21
+        },
+        goldenpumpkaboolarge: { name: "GoldenPumpkaboo (Large)", male: 14, female: 11, ungendered: 0, total: 25 },
+        goldenpumpkaboosuper: { name: "GoldenPumpkaboo (Super)", male: 16, female: 13, ungendered: 0, total: 29 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput(
+        [
+          "GoldenPumpkaboo (Small) ♂ 5",
+          "GoldenPumpkaboo (Average) ♂ 5",
+          "GoldenPumpkaboo (Large) ♂ 5",
+          "GoldenPumpkaboo (Super) ♂ 5"
+        ].join("\n")
+      ),
+      { ...DEFAULT_OPTS, dropDupes: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.keptGoldCount).toBe(4);
+    expect(result.droppedCount).toBe(0);
+    expect(result.output).toContain("GoldenPumpkaboo (Small) ♂ (Level: 5)");
+    expect(result.output).toContain("GoldenPumpkaboo (Average) ♂ (Level: 5)");
+    expect(result.output).toContain("GoldenPumpkaboo (Large) ♂ (Level: 5)");
+    expect(result.output).toContain("GoldenPumpkaboo (Super) ♂ (Level: 5)");
+    expect(result.droppedOutput).toContain("(none)");
+  });
+
   it("does not annotate exact level 4 male gold rarity above the lv4 threshold", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {

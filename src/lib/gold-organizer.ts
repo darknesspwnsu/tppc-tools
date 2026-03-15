@@ -736,17 +736,16 @@ export function organizeGold(
   let droppedEntries: GoldMatchedEntry[] = [];
 
   if (opts.dropDupes) {
-    const bySpecies = new Map<string, GoldMatchedEntry[]>();
+    const byTimelineEntry = new Map<number, GoldMatchedEntry[]>();
     for (const e of matchedOnly) {
-      const sk = e.speciesKey;
-      const arr = bySpecies.get(sk);
+      const arr = byTimelineEntry.get(e.timelineIndex);
       if (arr) arr.push(e);
-      else bySpecies.set(sk, [e]);
+      else byTimelineEntry.set(e.timelineIndex, [e]);
     }
 
     keptGold = [];
     droppedEntries = [];
-    for (const arr of bySpecies.values()) {
+    for (const arr of byTimelineEntry.values()) {
       const { kept, dropped } = chooseKeptAndDropped(arr, opts.preferredGender);
       if (kept) keptGold.push(kept);
       if (dropped.length) droppedEntries.push(...dropped);
