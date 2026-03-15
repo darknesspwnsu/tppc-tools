@@ -103,6 +103,71 @@ describe("organizeGold", () => {
     expect(result.droppedOutput).toContain("(none)");
   });
 
+  it("keeps deerling forms distinct when they fall back to the base timeline row", () => {
+    const timeline = [{ name: "GoldenDeerling" }];
+    const rarity = {
+      timeline_by_key: {
+        goldendeerling: {
+          name: "GoldenDeerling",
+          male: 40,
+          female: 36,
+          ungendered: 0,
+          total: 76,
+          forms: [
+            { name: "GoldenDeerling (Autumn)", male: 11, female: 9, ungendered: 0, total: 20 },
+            { name: "GoldenDeerling (Winter)", male: 13, female: 10, ungendered: 0, total: 23 }
+          ]
+        }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput(["GoldenDeerling (Autumn) ♂ 5", "GoldenDeerling (Winter) ♂ 5"].join("\n")),
+      { ...DEFAULT_OPTS, dropDupes: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.keptGoldCount).toBe(2);
+    expect(result.droppedCount).toBe(0);
+    expect(result.output).toContain("GoldenDeerling (Autumn) ♂ (Level: 5)");
+    expect(result.output).toContain("GoldenDeerling (Winter) ♂ (Level: 5)");
+    expect(result.droppedOutput).toContain("(none)");
+  });
+
+  it("keeps rotom appliance forms distinct when they fall back to the base timeline row", () => {
+    const timeline = [{ name: "GoldenRotom" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenrotom: {
+          name: "GoldenRotom",
+          genderless: 55,
+          ungendered: 0,
+          total: 55,
+          forms: [
+            { name: "GoldenRotom (Fan)", genderless: 7, ungendered: 0, total: 7 },
+            { name: "GoldenRotom (Heat)", genderless: 8, ungendered: 0, total: 8 },
+            { name: "GoldenRotom (Wash)", genderless: 9, ungendered: 0, total: 9 }
+          ]
+        }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput(["GoldenRotom (Fan) 5", "GoldenRotom (Heat) 5", "GoldenRotom (Wash) 5"].join("\n")),
+      { ...DEFAULT_OPTS, dropDupes: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.keptGoldCount).toBe(3);
+    expect(result.droppedCount).toBe(0);
+    expect(result.output).toContain("GoldenRotom (Fan) (Level: 5)");
+    expect(result.output).toContain("GoldenRotom (Heat) (Level: 5)");
+    expect(result.output).toContain("GoldenRotom (Wash) (Level: 5)");
+    expect(result.droppedOutput).toContain("(none)");
+  });
+
   it("bolds and annotates exact level 4 male gold rarity within the lv4 threshold", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {

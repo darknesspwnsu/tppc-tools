@@ -722,7 +722,7 @@ export function organizeGold(
       timelineIndex: timelineItem ? timelineItem.index : Number.POSITIVE_INFINITY,
       timelineName: timelineItem ? timelineItem.name : baseName,
       matched: Boolean(timelineItem),
-      speciesKey: canonicalForMatch(speciesName),
+      speciesKey: match.speciesKey,
       speciesName,
       form,
       rarityGenderBucket: rarityGenderBucketForName(e.name, raritySeedRecord)
@@ -746,16 +746,16 @@ export function organizeGold(
   let droppedEntries: GoldMatchedEntry[] = [];
 
   if (opts.dropDupes) {
-    const byTimelineEntry = new Map<number, GoldMatchedEntry[]>();
+    const bySpecies = new Map<string, GoldMatchedEntry[]>();
     for (const e of matchedOnly) {
-      const arr = byTimelineEntry.get(e.timelineIndex);
+      const arr = bySpecies.get(e.speciesKey);
       if (arr) arr.push(e);
-      else byTimelineEntry.set(e.timelineIndex, [e]);
+      else bySpecies.set(e.speciesKey, [e]);
     }
 
     keptGold = [];
     droppedEntries = [];
-    for (const arr of byTimelineEntry.values()) {
+    for (const arr of bySpecies.values()) {
       const { kept, dropped } = chooseKeptAndDropped(arr, opts.preferredGender);
       if (kept) keptGold.push(kept);
       if (dropped.length) droppedEntries.push(...dropped);
