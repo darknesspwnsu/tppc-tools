@@ -297,4 +297,24 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain("10 ig");
     expect(result.output).not.toContain("(at this level)");
   });
+
+  it("uses the genderless overall rarity bucket when a no-symbol genderless gold is annotated", () => {
+    const timeline = [{ name: "GoldenMewtwo" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenmewtwo: { name: "GoldenMewtwo", male: 0, female: 0, genderless: 12, ungendered: 30, total: 42 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenMewtwo 5"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain('[b][size="5"]GoldenMewtwo[/size][/b] (Level: 5)');
+    expect(result.output).toContain("12 ig");
+    expect(result.output).not.toContain("30 ig");
+  });
 });

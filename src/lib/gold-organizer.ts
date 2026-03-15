@@ -638,8 +638,8 @@ export function organizeGold(
     const genderless = Number(record?.genderless ?? 0);
     const ungendered = Number(record?.ungendered ?? 0);
 
-    if (ungendered > 0) return "ungendered";
     if (genderless > 0 && male === 0 && female === 0) return "genderless";
+    if (ungendered > 0) return "ungendered";
     return "ungendered";
   };
 
