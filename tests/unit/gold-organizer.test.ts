@@ -258,7 +258,7 @@ describe("organizeGold", () => {
     expect(result.output).toContain("10 ig (at this level; 61 overall)");
   });
 
-  it("does not annotate exact level 4 female gold rarity above the lv4 threshold", () => {
+  it("keeps exact level 4 annotation in sync with bold emphasis", () => {
     const timeline = [{ name: "GoldenTorchic" }];
     const rarity = {
       timeline_by_key: {
@@ -288,9 +288,7 @@ describe("organizeGold", () => {
     expect(result.output).toContain('[b]GoldenTorchic ♀[/b] (Level: 4)');
     expect(result.output).not.toContain('[b][size="4"]GoldenTorchic ♀[/size][/b]');
     expect(result.output).not.toContain('[b][size="5"]GoldenTorchic ♀[/size][/b]');
-    expect(result.output).not.toContain("32 ig");
-    expect(result.output).not.toContain("135 overall");
-    expect(result.output).not.toContain("135 ig");
+    expect(result.output).toContain("32 ig (at this level; 135 overall)");
     expect(result.output).not.toContain("371 ig");
   });
 
@@ -428,7 +426,7 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain('[b][size="4"]GoldenMewtwo[/size][/b]');
   });
 
-  it("uses bold emphasis for overall rarity between 10 and 49", () => {
+  it("uses size 4 emphasis for overall rarity between 10 and 29", () => {
     const timeline = [{ name: "GoldenMewtwo" }];
     const rarity = {
       timeline_by_key: {
@@ -443,12 +441,12 @@ describe("organizeGold", () => {
       rarity
     );
 
-    expect(result.output).toContain('[b]GoldenMewtwo[/b] (Level: 5)');
+    expect(result.output).toContain('[b][size="4"]GoldenMewtwo[/size][/b] (Level: 5)');
     expect(result.output).toContain("12 ig");
     expect(result.output).not.toContain("30 ig");
   });
 
-  it("uses size 4 emphasis for overall rarity of 9 or below", () => {
+  it("uses size 5 emphasis for overall rarity of 9 or below", () => {
     const timeline = [{ name: "GoldenMewtwo" }];
     const rarity = {
       timeline_by_key: {
@@ -463,8 +461,28 @@ describe("organizeGold", () => {
       rarity
     );
 
-    expect(result.output).toContain('[b][size="4"]GoldenMewtwo[/size][/b] (Level: 5)');
+    expect(result.output).toContain('[b][size="5"]GoldenMewtwo[/size][/b] (Level: 5)');
     expect(result.output).toContain("9 ig");
+    expect(result.output).not.toContain("30 ig");
+  });
+
+  it("uses bold emphasis for overall rarity between 30 and 49", () => {
+    const timeline = [{ name: "GoldenMewtwo" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenmewtwo: { name: "GoldenMewtwo", male: 0, female: 0, genderless: 32, ungendered: 30, total: 62 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenMewtwo 5"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain('[b]GoldenMewtwo[/b] (Level: 5)');
+    expect(result.output).toContain("32 ig");
     expect(result.output).not.toContain("30 ig");
   });
 });

@@ -103,10 +103,9 @@ export type GoldOrganizerResult = {
 const MISSING_COLOR = "gray";
 const MISSING_COLOR_NON_STRUCK = "red";
 const RARITY_STRIKE_THRESHOLD = 22;
-const OVERALL_RARITY_ANNOTATE_THRESHOLD = 50;
 const OVERALL_RARITY_BOLD_THRESHOLD = 50;
-const OVERALL_RARITY_SIZE4_THRESHOLD = 9;
-const LEVEL4_RARITY_ANNOTATE_THRESHOLD = 30;
+const OVERALL_RARITY_SIZE5_THRESHOLD = 9;
+const OVERALL_RARITY_SIZE4_THRESHOLD = 29;
 const LEVEL4_RARITY_BOLD_THRESHOLD = 50;
 const LEVEL4_RARITY_SIZE5_THRESHOLD = 9;
 const LEVEL4_RARITY_SIZE4_THRESHOLD = 19;
@@ -449,13 +448,6 @@ type GoldRarityMeta = {
   usedLv4ForThisRow: boolean;
 };
 
-function isRarityAnnotated(meta: GoldRarityMeta | undefined, annotateRarity: boolean) {
-  if (!annotateRarity || !meta) return false;
-  if (meta.rowRarity < 1) return false;
-  if (meta.usedLv4ForThisRow) return meta.rowRarity < LEVEL4_RARITY_ANNOTATE_THRESHOLD;
-  return meta.rowRarity < OVERALL_RARITY_ANNOTATE_THRESHOLD;
-}
-
 function rarityEmphasis(meta: GoldRarityMeta | undefined, highlightRarity: boolean) {
   if (!highlightRarity || !meta) return "none" as const;
   const rarity = meta.rowRarity;
@@ -468,17 +460,16 @@ function rarityEmphasis(meta: GoldRarityMeta | undefined, highlightRarity: boole
     return "none" as const;
   }
 
-  if (rarity >= 1 && rarity <= OVERALL_RARITY_SIZE4_THRESHOLD) return "size4" as const;
+  if (rarity >= 1 && rarity <= OVERALL_RARITY_SIZE5_THRESHOLD) return "size5" as const;
+  if (rarity >= 10 && rarity <= OVERALL_RARITY_SIZE4_THRESHOLD) return "size4" as const;
   if (rarity < OVERALL_RARITY_BOLD_THRESHOLD) return "bold" as const;
   return "none" as const;
 }
 
 function wrapRaritySizeIfNeeded(
   text: string,
-  meta: GoldRarityMeta | undefined,
-  highlightRarity: boolean
+  emphasis: ReturnType<typeof rarityEmphasis>
 ) {
-  const emphasis = rarityEmphasis(meta, highlightRarity);
   if (emphasis === "none") return text;
   if (emphasis === "size5") return `[b][size="5"]${text}[/size][/b]`;
   if (emphasis === "size4") return `[b][size="4"]${text}[/size][/b]`;
@@ -502,13 +493,13 @@ function formatLine(
   goldColor: string
 ) {
   const meta = entry.rarityMeta;
-  const rarityQualified = isRarityAnnotated(meta, opts.annotateRarity);
-  const nm = wrapRaritySizeIfNeeded(colorizeName(entry.name, goldColor), meta, opts.highlightRarity);
+  const emphasis = rarityEmphasis(meta, opts.highlightRarity);
+  const nm = wrapRaritySizeIfNeeded(colorizeName(entry.name, goldColor), emphasis);
   const lvl = fmtLevel(entry.levelNum);
   let base = opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;
   if (opts.combine && entry.count && entry.count > 1) base = `${base} x${entry.count}`;
 
-  if (opts.annotateRarity && rarityQualified && meta) {
+  if (opts.annotateRarity && emphasis !== "none" && meta) {
     base += ` [size="1"]- ${formatRarityAnnotation(meta)}[/size]`;
   }
 
