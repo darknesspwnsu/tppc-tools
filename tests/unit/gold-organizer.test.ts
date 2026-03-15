@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  buildGoldOrganizerReferenceData,
-  organizeGold,
-  parseInput,
-  type GoldOrganizerOpts
-} from "@/lib/gold-organizer";
+import { buildGoldOrganizerReferenceData, organizeGold, parseInput, type GoldOrganizerOpts } from "@/lib/gold-organizer";
 
 const DEFAULT_OPTS: GoldOrganizerOpts = {
   combine: false,
@@ -63,69 +58,243 @@ describe("organizeGold", () => {
     expect(result.missingOutput).toContain("(none)");
   });
 
-  it("highlights and annotates cumulative gold rarity including pre-evos", () => {
-    const timeline = [{ name: "GoldenCharmander" }, { name: "GoldenCharmeleon" }];
+  it("annotates exact level 4 male gold rarity with overall gender context", () => {
+    const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {
       timeline_by_key: {
-        goldencharmander: { name: "GoldenCharmander", total: 6 },
-        goldencharmeleon: { name: "GoldenCharmeleon", total: 5 }
+        goldenelectrike: { name: "GoldenElectrike", male: 61, female: 55, ungendered: 0, total: 116 }
       }
     };
     const referenceData = buildGoldOrganizerReferenceData(
       {
-        pokemon_name: {
-          "0": "Charmander",
-          "1": "Charmeleon"
-        },
-        evolutions: {
-          "0": [{ pokemon_name: "Charmeleon" }],
-          "1": []
-        }
+        pokemon_name: {},
+        evolutions: {}
       },
-      ""
+      {
+        data: {
+          GoldenElectrike: { male: 27, female: 29, genderless: 0, ungendered: 0, total: 56 }
+        }
+      }
     );
 
     const result = organizeGold(
-      parseInput("GoldenCharmeleon (Level: 5)"),
+      parseInput("GoldenElectrike ♂ 4"),
       { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
       timeline,
       rarity,
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenCharmeleon[/size][/b] (Level: 5)');
-    expect(result.output).toContain('11 ig (including pre-evos)');
+    expect(result.output).toContain("GoldenElectrike ♂ (Level: 4)");
+    expect(result.output).toContain("27 ig (at this level; 61 overall)");
+    expect(result.output).not.toContain('[b][size="4"]GoldenElectrike ♂[/size][/b]');
+    expect(result.output).not.toContain("116 ig");
   });
 
-  it("uses lv4 rarity for level 4 unevolved golds", () => {
-    const timeline = [{ name: "GoldenAbra" }];
+  it("uses exact level 4 female gold rarity from the faqbot feed", () => {
+    const timeline = [{ name: "GoldenMantine" }];
     const rarity = {
       timeline_by_key: {
-        goldenabra: { name: "GoldenAbra", total: 500 }
+        goldenmantine: { name: "GoldenMantine", male: 109, female: 87, genderless: 1, ungendered: 34, total: 231 }
       }
     };
     const referenceData = buildGoldOrganizerReferenceData(
+      { pokemon_name: {}, evolutions: {} },
       {
-        pokemon_name: {
-          "0": "Abra"
-        },
-        evolutions: {
-          "0": []
+        data: {
+          GoldenMantine: { male: 16, female: 17, genderless: 1, ungendered: 19, total: 53 }
         }
-      },
-      "GoldenAbra - 9"
+      }
     );
 
     const result = organizeGold(
-      parseInput("GoldenAbra (Level: 4)"),
+      parseInput("GoldenMantine ♀ 4"),
       { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
       timeline,
       rarity,
       referenceData
     );
 
-    expect(result.output).toContain('[b][size="5"]GoldenAbra[/size][/b] (Level: 4)');
-    expect(result.output).toContain("9 ig (at this level)");
-    expect(result.output).not.toContain("500 ig");
+    expect(result.output).toContain('[b][size="5"]GoldenMantine ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain("17 ig (at this level; 87 overall)");
+    expect(result.output).not.toContain("87 ig");
+    expect(result.output).not.toContain("231 ig");
+  });
+
+  it("uses lv4 rarity for exact ungendered level 4 gold matches", () => {
+    const timeline = [{ name: "GoldenMantine" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenmantine: { name: "GoldenMantine", male: 109, female: 87, genderless: 1, ungendered: 34, total: 231 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      { pokemon_name: {}, evolutions: {} },
+      {
+        data: {
+          GoldenMantine: { male: 16, female: 17, genderless: 1, ungendered: 19, total: 53 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenMantine 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="5"]GoldenMantine[/size][/b] (Level: 4)');
+    expect(result.output).toContain("19 ig (at this level; 34 overall)");
+    expect(result.output).not.toContain("34 ig");
+    expect(result.output).not.toContain("231 ig");
+  });
+
+  it("annotates exact level 4 female gold rarity for GoldenTorchic without highlighting above the lv4 threshold", () => {
+    const timeline = [{ name: "GoldenTorchic" }];
+    const rarity = {
+      timeline_by_key: {
+        goldentorchic: { name: "GoldenTorchic", male: 220, female: 135, genderless: 0, ungendered: 16, total: 371 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          GoldenTorchic: { male: 90, female: 32, genderless: 0, ungendered: 0, total: 122 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenTorchic ♀ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain("GoldenTorchic ♀ (Level: 4)");
+    expect(result.output).toContain("32 ig (at this level; 135 overall)");
+    expect(result.output).not.toContain('[b][size="4"]GoldenTorchic ♀[/size][/b]');
+    expect(result.output).not.toContain("135 ig");
+    expect(result.output).not.toContain("371 ig");
+  });
+
+  it("still requires an exact level 4 gold match and otherwise falls back to overall gender rarity", () => {
+    const timeline = [{ name: "GoldenTorchic" }];
+    const rarity = {
+      timeline_by_key: {
+        goldentorchic: { name: "GoldenTorchic", male: 220, female: 135, genderless: 0, ungendered: 16, total: 371 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          Torchic: { male: 11, female: 9, genderless: 0, ungendered: 0, total: 20 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenTorchic ♀ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain("GoldenTorchic ♀ (Level: 4)");
+    expect(result.output).toContain("135 ig");
+    expect(result.output).not.toContain("9 ig");
+    expect(result.output).not.toContain("(at this level)");
+  });
+
+  it("shows both level 4 and overall gender rarity for GoldenLarvitar ♀ 4", () => {
+    const timeline = [{ name: "GoldenLarvitar" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenlarvitar: { name: "GoldenLarvitar", male: 24, female: 14, genderless: 0, ungendered: 0, total: 38 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          GoldenLarvitar: { male: 13, female: 11, genderless: 0, ungendered: 0, total: 24 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenLarvitar ♀ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="5"]GoldenLarvitar ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain("11 ig (at this level; 14 overall)");
+    expect(result.output).not.toContain("38 ig");
+  });
+
+  it("requires an exact form-inclusive level 4 gold match before using lv4 rarity", () => {
+    const timeline = [{ name: "GoldenRaichu (Alola)" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenraichualola: {
+          name: "GoldenRaichu (Alola)",
+          male: 44,
+          female: 36,
+          genderless: 0,
+          ungendered: 8,
+          total: 88
+        },
+        goldenraichu: {
+          name: "GoldenRaichu",
+          male: 70,
+          female: 65,
+          genderless: 0,
+          ungendered: 12,
+          total: 147
+        }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          GoldenRaichu: { male: 12, female: 10, genderless: 0, ungendered: 4, total: 26 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenRaichu (Alola) ♀ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="4"]GoldenRaichu (Alola) ♀[/size][/b] (Level: 4)');
+    expect(result.output).toContain("36 ig");
+    expect(result.output).not.toContain("10 ig");
+    expect(result.output).not.toContain("(at this level)");
   });
 });

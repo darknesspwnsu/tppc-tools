@@ -9,12 +9,14 @@ import type {
   GoldenRarity,
   GoldenTimelineItemRaw,
   GoldOrganizerOpts,
+  Level4RarityJson,
   GoldOrganizerReferenceData,
   GoldOrganizerResult
 } from "@/lib/gold-organizer";
 import { buildGoldOrganizerReferenceData, organizeGold, parseInput } from "@/lib/gold-organizer";
 
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+const L4_RARITY_JSON_URL = "https://darknesspwnsu.github.io/tppc-data/data/l4_rarity.json";
 
 function withBasePath(path: string) {
   return `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
@@ -28,15 +30,15 @@ async function loadGoldOrganizerReferenceData() {
   goldOrganizerReferenceDataPromise = (async () => {
     const [evolutionRes, level4Res] = await Promise.all([
       fetch(withBasePath("/data/pokemon_evolution.json")),
-      fetch(withBasePath("/data/level4_rarity.txt"))
+      fetch(L4_RARITY_JSON_URL)
     ]);
 
     if (!evolutionRes.ok) throw new Error("Failed to load data/pokemon_evolution.json");
-    if (!level4Res.ok) throw new Error("Failed to load data/level4_rarity.txt");
+    if (!level4Res.ok) throw new Error("Failed to load gender-inclusive Level 4 rarity data");
 
     const evolutionRaw = (await evolutionRes.json()) as GoldOrganizerEvolutionRaw;
-    const level4Text = await level4Res.text();
-    return buildGoldOrganizerReferenceData(evolutionRaw, level4Text);
+    const level4Json = (await level4Res.json()) as Level4RarityJson;
+    return buildGoldOrganizerReferenceData(evolutionRaw, level4Json);
   })().catch((error) => {
     goldOrganizerReferenceDataPromise = null;
     throw error;
