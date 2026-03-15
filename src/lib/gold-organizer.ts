@@ -103,10 +103,13 @@ export type GoldOrganizerResult = {
 const MISSING_COLOR = "gray";
 const MISSING_COLOR_NON_STRUCK = "red";
 const RARITY_STRIKE_THRESHOLD = 22;
-const OVERALL_RARITY_HIGHLIGHT_THRESHOLD = 50;
-const OVERALL_RARITY_SIZE4_THRESHOLD = 20;
-const LEVEL4_RARITY_HIGHLIGHT_THRESHOLD = 30;
-const LEVEL4_RARITY_SIZE4_THRESHOLD = 10;
+const OVERALL_RARITY_ANNOTATE_THRESHOLD = 50;
+const OVERALL_RARITY_BOLD_THRESHOLD = 50;
+const OVERALL_RARITY_SIZE4_THRESHOLD = 9;
+const LEVEL4_RARITY_ANNOTATE_THRESHOLD = 30;
+const LEVEL4_RARITY_BOLD_THRESHOLD = 50;
+const LEVEL4_RARITY_SIZE5_THRESHOLD = 9;
+const LEVEL4_RARITY_SIZE4_THRESHOLD = 19;
 
 const FORCE_STRIKE_MISSING = new Set([
   "goldenhoundour",
@@ -446,11 +449,28 @@ type GoldRarityMeta = {
   usedLv4ForThisRow: boolean;
 };
 
-function isRarityHighlighted(meta: GoldRarityMeta | undefined, highlightRarity: boolean) {
-  if (!highlightRarity || !meta) return false;
+function isRarityAnnotated(meta: GoldRarityMeta | undefined, annotateRarity: boolean) {
+  if (!annotateRarity || !meta) return false;
   if (meta.rowRarity < 1) return false;
-  if (meta.usedLv4ForThisRow) return meta.rowRarity < LEVEL4_RARITY_HIGHLIGHT_THRESHOLD;
-  return meta.rowRarity < OVERALL_RARITY_HIGHLIGHT_THRESHOLD;
+  if (meta.usedLv4ForThisRow) return meta.rowRarity < LEVEL4_RARITY_ANNOTATE_THRESHOLD;
+  return meta.rowRarity < OVERALL_RARITY_ANNOTATE_THRESHOLD;
+}
+
+function rarityEmphasis(meta: GoldRarityMeta | undefined, highlightRarity: boolean) {
+  if (!highlightRarity || !meta) return "none" as const;
+  const rarity = meta.rowRarity;
+  if (rarity < 1) return "none" as const;
+
+  if (meta.usedLv4ForThisRow) {
+    if (rarity >= 1 && rarity <= LEVEL4_RARITY_SIZE5_THRESHOLD) return "size5" as const;
+    if (rarity >= 10 && rarity <= LEVEL4_RARITY_SIZE4_THRESHOLD) return "size4" as const;
+    if (rarity < LEVEL4_RARITY_BOLD_THRESHOLD) return "bold" as const;
+    return "none" as const;
+  }
+
+  if (rarity >= 1 && rarity <= OVERALL_RARITY_SIZE4_THRESHOLD) return "size4" as const;
+  if (rarity < OVERALL_RARITY_BOLD_THRESHOLD) return "bold" as const;
+  return "none" as const;
 }
 
 function wrapRaritySizeIfNeeded(
@@ -458,18 +478,10 @@ function wrapRaritySizeIfNeeded(
   meta: GoldRarityMeta | undefined,
   highlightRarity: boolean
 ) {
-  if (!isRarityHighlighted(meta, highlightRarity)) return text;
-
-  const rarity = meta?.rowRarity ?? 0;
-  if (meta?.usedLv4ForThisRow) {
-    if (rarity >= 1 && rarity <= LEVEL4_RARITY_SIZE4_THRESHOLD) {
-      return `[b][size="4"]${text}[/size][/b]`;
-    }
-    return `[b]${text}[/b]`;
-  }
-  if (rarity >= 1 && rarity <= OVERALL_RARITY_SIZE4_THRESHOLD) {
-    return `[b][size="4"]${text}[/size][/b]`;
-  }
+  const emphasis = rarityEmphasis(meta, highlightRarity);
+  if (emphasis === "none") return text;
+  if (emphasis === "size5") return `[b][size="5"]${text}[/size][/b]`;
+  if (emphasis === "size4") return `[b][size="4"]${text}[/size][/b]`;
   return `[b]${text}[/b]`;
 }
 
@@ -490,7 +502,7 @@ function formatLine(
   goldColor: string
 ) {
   const meta = entry.rarityMeta;
-  const rarityQualified = isRarityHighlighted(meta, opts.highlightRarity);
+  const rarityQualified = isRarityAnnotated(meta, opts.annotateRarity);
   const nm = wrapRaritySizeIfNeeded(colorizeName(entry.name, goldColor), meta, opts.highlightRarity);
   const lvl = fmtLevel(entry.levelNum);
   let base = opts.plainLevel ? `${nm} ${lvl}` : `${nm} (Level: ${lvl})`;

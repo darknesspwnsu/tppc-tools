@@ -136,7 +136,7 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain("116 ig");
   });
 
-  it("uses exact level 4 female gold rarity from the faqbot feed", () => {
+  it("uses size 4 emphasis for exact level 4 female rarity between 10 and 19", () => {
     const timeline = [{ name: "GoldenMantine" }];
     const rarity = {
       timeline_by_key: {
@@ -160,13 +160,13 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b]GoldenMantine ♀[/b] (Level: 4)');
+    expect(result.output).toContain('[b][size="4"]GoldenMantine ♀[/size][/b] (Level: 4)');
     expect(result.output).toContain("17 ig (at this level; 87 overall)");
     expect(result.output).not.toContain("87 ig");
     expect(result.output).not.toContain("231 ig");
   });
 
-  it("uses lv4 rarity for exact ungendered level 4 gold matches", () => {
+  it("uses size 4 emphasis for exact ungendered level 4 rarity between 10 and 19", () => {
     const timeline = [{ name: "GoldenMantine" }];
     const rarity = {
       timeline_by_key: {
@@ -190,13 +190,44 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b]GoldenMantine[/b] (Level: 4)');
+    expect(result.output).toContain('[b][size="4"]GoldenMantine[/size][/b] (Level: 4)');
     expect(result.output).toContain("19 ig (at this level; 34 overall)");
     expect(result.output).not.toContain("34 ig");
     expect(result.output).not.toContain("231 ig");
   });
 
-  it("uses size 4 emphasis for exact level 4 rarity of 10 or below", () => {
+  it("uses size 5 emphasis for exact level 4 rarity of 9 or below", () => {
+    const timeline = [{ name: "GoldenElectrike" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenelectrike: { name: "GoldenElectrike", male: 61, female: 55, ungendered: 0, total: 116 }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      {
+        pokemon_name: {},
+        evolutions: {}
+      },
+      {
+        data: {
+          GoldenElectrike: { male: 9, female: 29, genderless: 0, ungendered: 0, total: 38 }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenElectrike ♂ 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="5"]GoldenElectrike ♂[/size][/b] (Level: 4)');
+    expect(result.output).toContain("9 ig (at this level; 61 overall)");
+  });
+
+  it("uses size 4 emphasis for exact level 4 rarity between 10 and 19", () => {
     const timeline = [{ name: "GoldenElectrike" }];
     const rarity = {
       timeline_by_key: {
@@ -254,8 +285,9 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain("GoldenTorchic ♀ (Level: 4)");
+    expect(result.output).toContain('[b]GoldenTorchic ♀[/b] (Level: 4)');
     expect(result.output).not.toContain('[b][size="4"]GoldenTorchic ♀[/size][/b]');
+    expect(result.output).not.toContain('[b][size="5"]GoldenTorchic ♀[/size][/b]');
     expect(result.output).not.toContain("32 ig");
     expect(result.output).not.toContain("135 overall");
     expect(result.output).not.toContain("135 ig");
@@ -295,7 +327,7 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain("(at this level)");
   });
 
-  it("shows both level 4 and overall gender rarity for GoldenLarvitar ♀ 4", () => {
+  it("uses size 4 emphasis for exact level 4 female rarity between 10 and 19 with overall context", () => {
     const timeline = [{ name: "GoldenLarvitar" }];
     const rarity = {
       timeline_by_key: {
@@ -322,7 +354,7 @@ describe("organizeGold", () => {
       referenceData
     );
 
-    expect(result.output).toContain('[b]GoldenLarvitar ♀[/b] (Level: 4)');
+    expect(result.output).toContain('[b][size="4"]GoldenLarvitar ♀[/size][/b] (Level: 4)');
     expect(result.output).toContain("11 ig (at this level; 14 overall)");
     expect(result.output).not.toContain("38 ig");
   });
@@ -396,7 +428,7 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain('[b][size="4"]GoldenMewtwo[/size][/b]');
   });
 
-  it("uses the genderless overall rarity bucket when a no-symbol genderless gold is annotated", () => {
+  it("uses bold emphasis for overall rarity between 10 and 49", () => {
     const timeline = [{ name: "GoldenMewtwo" }];
     const rarity = {
       timeline_by_key: {
@@ -411,8 +443,28 @@ describe("organizeGold", () => {
       rarity
     );
 
-    expect(result.output).toContain('[b][size="4"]GoldenMewtwo[/size][/b] (Level: 5)');
+    expect(result.output).toContain('[b]GoldenMewtwo[/b] (Level: 5)');
     expect(result.output).toContain("12 ig");
+    expect(result.output).not.toContain("30 ig");
+  });
+
+  it("uses size 4 emphasis for overall rarity of 9 or below", () => {
+    const timeline = [{ name: "GoldenMewtwo" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenmewtwo: { name: "GoldenMewtwo", male: 0, female: 0, genderless: 9, ungendered: 30, total: 39 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput("GoldenMewtwo 5"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity
+    );
+
+    expect(result.output).toContain('[b][size="4"]GoldenMewtwo[/size][/b] (Level: 5)');
+    expect(result.output).toContain("9 ig");
     expect(result.output).not.toContain("30 ig");
   });
 });
