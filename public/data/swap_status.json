@@ -2158,8 +2158,8 @@
       "displayName": "DarkBlaziken",
       "species": "Blaziken",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": [
         "Blazikenite"
@@ -2805,8 +2805,8 @@
       "displayName": "DarkCombusken",
       "species": "Combusken",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -4521,8 +4521,8 @@
       "displayName": "DarkGrovyle",
       "species": "Grovyle",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -5880,8 +5880,8 @@
       "displayName": "DarkMarshtomp",
       "species": "Marshtomp",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -6217,8 +6217,8 @@
       "displayName": "DarkMudkip",
       "species": "Mudkip",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -7107,8 +7107,8 @@
       "displayName": "DarkQuagsire",
       "species": "Quagsire",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": [
         "Radiate"
@@ -7605,8 +7605,8 @@
       "displayName": "DarkSceptile",
       "species": "Sceptile",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": [
         "Sceptilite"
@@ -8834,8 +8834,8 @@
       "displayName": "DarkTorchic",
       "species": "Torchic",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -8951,8 +8951,8 @@
       "displayName": "DarkTreecko",
       "species": "Treecko",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -9797,8 +9797,8 @@
       "displayName": "DarkWooper",
       "species": "Wooper",
       "variant": "dark",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -24031,8 +24031,8 @@
       "displayName": "ShinyBlaziken",
       "species": "Blaziken",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": [
         "Blazikenite"
@@ -24680,8 +24680,8 @@
       "displayName": "ShinyCombusken",
       "species": "Combusken",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -26396,8 +26396,8 @@
       "displayName": "ShinyGrovyle",
       "species": "Grovyle",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -27755,8 +27755,8 @@
       "displayName": "ShinyMarshtomp",
       "species": "Marshtomp",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -28090,8 +28090,8 @@
       "displayName": "ShinyMudkip",
       "species": "Mudkip",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -28986,8 +28986,8 @@
       "displayName": "ShinyQuagsire",
       "species": "Quagsire",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
@@ -29478,8 +29478,8 @@
       "displayName": "ShinySceptile",
       "species": "Sceptile",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": [
         "Sceptilite"
@@ -30715,8 +30715,8 @@
       "displayName": "ShinyTorchic",
       "species": "Torchic",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -30832,8 +30832,8 @@
       "displayName": "ShinyTreecko",
       "species": "Treecko",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": true,
       "mapSources": []
     },
@@ -31680,8 +31680,8 @@
       "displayName": "ShinyWooper",
       "species": "Wooper",
       "variant": "shiny",
-      "currentSecretSwap": true,
-      "formerSecretSwap": false,
+      "currentSecretSwap": false,
+      "formerSecretSwap": true,
       "currentMap": false,
       "mapSources": []
     },
