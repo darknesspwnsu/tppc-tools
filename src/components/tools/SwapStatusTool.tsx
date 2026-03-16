@@ -51,6 +51,7 @@ export function SwapStatusTool() {
   const [filterInput, setFilterInput] = useState("");
   const [filterOutput, setFilterOutput] = useState("");
   const [filterMode, setFilterMode] = useState<SwapFilterMode>("swaps");
+  const [filterOutMaps, setFilterOutMaps] = useState(false);
   const [filterStatus, setFilterStatus] = useState("Paste a list, pick a mode, then apply the filter.");
   const [filterOutputStatus, setFilterOutputStatus] = useState("0 results filtered • 0 output items");
 
@@ -83,7 +84,7 @@ export function SwapStatusTool() {
       return;
     }
 
-    const filtered = filterSwapList(filterInput, filterMode, db);
+    const filtered = filterSwapList(filterInput, filterMode, db, { filterOutMaps });
     setFilterOutput(filtered.outputText);
     setFilterOutputStatus(
       `${filtered.filteredCount.toLocaleString("en-US")} results filtered • ${filtered.keptCount.toLocaleString("en-US")} output items`
@@ -95,11 +96,14 @@ export function SwapStatusTool() {
     }
 
     const filteredLabel = filterMode === "swaps" ? "swap" : "nonswap";
+    const mapSuffix = filterOutMaps
+      ? ` (mode: ${filtered.filteredByModeCount.toLocaleString("en-US")}, maps: ${filtered.filteredByMapCount.toLocaleString("en-US")})`
+      : "";
     const unknownSuffix =
       filtered.unknownCount > 0 ? ` ${filtered.unknownCount} unrecognized line(s) were kept.` : "";
 
     setFilterStatus(
-      `Kept ${filtered.keptCount}/${filtered.processedCount} lines. Filtered out ${filtered.filteredCount} ${filteredLabel} line(s).${unknownSuffix}`
+      `Kept ${filtered.keptCount}/${filtered.processedCount} lines. Filtered out ${filtered.filteredCount} ${filteredLabel} line(s).${mapSuffix}${unknownSuffix}`
     );
   };
 
@@ -219,6 +223,15 @@ export function SwapStatusTool() {
                   onChange={() => setFilterMode("nonswaps")}
                 />
                 Filter out nonswaps
+              </label>
+              <label className="chip">
+                <input
+                  id="filterOutMaps"
+                  type="checkbox"
+                  checked={filterOutMaps}
+                  onChange={(event) => setFilterOutMaps(event.target.checked)}
+                />
+                Filter out maps
               </label>
             </div>
 

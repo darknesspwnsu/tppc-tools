@@ -107,6 +107,8 @@ describe("swap-status core", () => {
     expect(result.processedCount).toBe(4);
     expect(result.keptCount).toBe(3);
     expect(result.filteredCount).toBe(1);
+    expect(result.filteredByModeCount).toBe(1);
+    expect(result.filteredByMapCount).toBe(0);
     expect(result.unknownCount).toBe(1);
   });
 
@@ -117,6 +119,8 @@ describe("swap-status core", () => {
     expect(result.processedCount).toBe(4);
     expect(result.keptCount).toBe(2);
     expect(result.filteredCount).toBe(2);
+    expect(result.filteredByModeCount).toBe(2);
+    expect(result.filteredByMapCount).toBe(0);
     expect(result.unknownCount).toBe(1);
   });
 
@@ -128,6 +132,20 @@ describe("swap-status core", () => {
     expect(result.processedCount).toBe(3);
     expect(result.keptCount).toBe(0);
     expect(result.filteredCount).toBe(3);
+    expect(result.filteredByModeCount).toBe(3);
+    expect(result.filteredByMapCount).toBe(0);
+    expect(result.unknownCount).toBe(0);
+  });
+
+  it("can independently filter out map-obtainable entries", () => {
+    const result = filterSwapList(["Absol", "GoldenOmanyte"].join("\n"), "swaps", TEST_DB, { filterOutMaps: true });
+
+    expect(result.outputText).toBe("GoldenOmanyte");
+    expect(result.processedCount).toBe(2);
+    expect(result.keptCount).toBe(1);
+    expect(result.filteredCount).toBe(1);
+    expect(result.filteredByModeCount).toBe(0);
+    expect(result.filteredByMapCount).toBe(1);
     expect(result.unknownCount).toBe(0);
   });
 });

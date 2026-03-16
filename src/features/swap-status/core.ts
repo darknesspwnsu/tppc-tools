@@ -3,11 +3,17 @@ import type { SwapLookupResult, SwapStatusDb, SwapStatusEntry } from "./types";
 
 export type SwapFilterMode = "swaps" | "nonswaps";
 
+export type SwapFilterOptions = {
+  filterOutMaps?: boolean;
+};
+
 export type SwapFilterResult = {
   outputText: string;
   processedCount: number;
   keptCount: number;
   filteredCount: number;
+  filteredByModeCount: number;
+  filteredByMapCount: number;
   unknownCount: number;
 };
 
@@ -96,12 +102,20 @@ function buildSummary(entry: SwapStatusEntry) {
   return "No. This pokemon is not currently obtainable via secret swap.";
 }
 
-export function filterSwapList(inputText: string, mode: SwapFilterMode, db: SwapStatusDb | null): SwapFilterResult {
+export function filterSwapList(
+  inputText: string,
+  mode: SwapFilterMode,
+  db: SwapStatusDb | null,
+  options: SwapFilterOptions = {}
+): SwapFilterResult {
   const lines = String(inputText || "").replace(/\r\n/g, "\n").split("\n");
   const outputLines: string[] = [];
+  const filterOutMaps = Boolean(options.filterOutMaps);
 
   let processedCount = 0;
   let filteredCount = 0;
+  let filteredByModeCount = 0;
+  let filteredByMapCount = 0;
   let unknownCount = 0;
 
   for (const rawLine of lines) {
@@ -124,9 +138,12 @@ export function filterSwapList(inputText: string, mode: SwapFilterMode, db: Swap
       continue;
     }
 
-    const shouldFilter = mode === "swaps" ? entry.currentSecretSwap : !entry.currentSecretSwap;
-    if (shouldFilter) {
+    const filteredByMode = mode === "swaps" ? entry.currentSecretSwap : !entry.currentSecretSwap;
+    const filteredByMap = filterOutMaps && entry.currentMap;
+    if (filteredByMode || filteredByMap) {
       filteredCount += 1;
+      if (filteredByMode) filteredByModeCount += 1;
+      if (filteredByMap) filteredByMapCount += 1;
       continue;
     }
 
@@ -138,6 +155,8 @@ export function filterSwapList(inputText: string, mode: SwapFilterMode, db: Swap
     processedCount,
     keptCount: outputLines.length,
     filteredCount,
+    filteredByModeCount,
+    filteredByMapCount,
     unknownCount
   };
 }
