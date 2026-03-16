@@ -2,11 +2,35 @@
 
 import { useEffect, useState } from "react";
 
-import { lookupSwapStatus } from "@/features/swap-status/core";
+import { filterSwapList, lookupSwapStatus, type SwapFilterMode } from "@/features/swap-status/core";
 import type { SwapLookupResult, SwapStatusDb } from "@/features/swap-status/types";
 
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
 const JSON_URL = `${BASE_PATH}/data/swap_status.json`;
+
+async function copyText(text: string) {
+  if (!text.trim()) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch {
+    // fallback below
+  }
+
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.left = "-9999px";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand("copy");
+  } catch {
+    // no-op
+  }
+  document.body.removeChild(ta);
+}
 
 function emptyResult(): SwapLookupResult {
   return {
@@ -24,6 +48,10 @@ export function SwapStatusTool() {
   const [db, setDb] = useState<SwapStatusDb | null>(null);
   const [statusLine, setStatusLine] = useState("Loading swap/map data...");
   const [result, setResult] = useState<SwapLookupResult>(emptyResult);
+  const [filterInput, setFilterInput] = useState("");
+  const [filterOutput, setFilterOutput] = useState("");
+  const [filterMode, setFilterMode] = useState<SwapFilterMode>("swaps");
+  const [filterStatus, setFilterStatus] = useState("Paste a list, pick a mode, then apply the filter.");
 
   useEffect(() => {
     const load = async () => {
@@ -46,6 +74,29 @@ export function SwapStatusTool() {
   const runLookup = () => {
     const next = lookupSwapStatus(query, db);
     setResult(next);
+  };
+
+  const runFilter = () => {
+    if (!db) {
+      setFilterStatus("Swap/map dataset is still loading.");
+      return;
+    }
+
+    const filtered = filterSwapList(filterInput, filterMode, db);
+    setFilterOutput(filtered.outputText);
+
+    if (filtered.processedCount === 0) {
+      setFilterStatus("No valid Pokemon lines found.");
+      return;
+    }
+
+    const filteredLabel = filterMode === "swaps" ? "swap" : "nonswap";
+    const unknownSuffix =
+      filtered.unknownCount > 0 ? ` ${filtered.unknownCount} unrecognized line(s) were kept.` : "";
+
+    setFilterStatus(
+      `Kept ${filtered.keptCount}/${filtered.processedCount} lines. Filtered out ${filtered.filteredCount} ${filteredLabel} line(s).${unknownSuffix}`
+    );
   };
 
   const generatedAt = db?.metadata?.generatedAt || "";
@@ -125,6 +176,90 @@ export function SwapStatusTool() {
           <div className="tool-status-line" id="swapStatusLine">
             {statusLine}
             {generatedAt ? ` Data timestamp: ${generatedAt}.` : ""}
+          </div>
+        </div>
+
+        <hr className="my-4" style={{ borderColor: "var(--color-border)", opacity: 0.55 }} />
+
+        <div className="tool-template-grid">
+          <div>
+            <label htmlFor="swapFilterInput" className="form-label fw-semibold">
+              Input List
+            </label>
+            <textarea
+              id="swapFilterInput"
+              className="field-area mono io-input"
+              rows={16}
+              placeholder="Paste one Pokemon per line..."
+              value={filterInput}
+              onChange={(event) => setFilterInput(event.target.value)}
+            />
+
+            <div className="stack" style={{ marginTop: "0.75rem", gap: "0.45rem" }}>
+              <label className="chip">
+                <input
+                  id="filterOutSwaps"
+                  name="swapFilterMode"
+                  type="radio"
+                  checked={filterMode === "swaps"}
+                  onChange={() => setFilterMode("swaps")}
+                />
+                Filter out swaps
+              </label>
+              <label className="chip">
+                <input
+                  id="filterOutNonswaps"
+                  name="swapFilterMode"
+                  type="radio"
+                  checked={filterMode === "nonswaps"}
+                  onChange={() => setFilterMode("nonswaps")}
+                />
+                Filter out nonswaps
+              </label>
+            </div>
+
+            <div className="tool-actions">
+              <button id="applySwapFilterBtn" type="button" className="btn-primary-soft" onClick={runFilter}>
+                Apply Filter
+              </button>
+              <button
+                id="clearSwapFilterBtn"
+                type="button"
+                className="btn-outline-soft"
+                onClick={() => {
+                  setFilterInput("");
+                  setFilterOutput("");
+                  setFilterStatus("Cleared.");
+                }}
+              >
+                Clear
+              </button>
+            </div>
+
+            <div id="swapFilterStatus" className="tool-status-line">
+              {filterStatus}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="swapFilterOutput" className="form-label fw-semibold">
+              Output
+            </label>
+            <textarea id="swapFilterOutput" className="field-area mono io-output" rows={22} readOnly value={filterOutput} />
+
+            <div className="tool-actions">
+              <button
+                id="copySwapFilterOutputBtn"
+                type="button"
+                className="btn-outline-soft"
+                onClick={async () => {
+                  await copyText(filterOutput);
+                  setFilterStatus(filterOutput.trim() ? "Copied output." : "Nothing to copy.");
+                }}
+              >
+                Copy Output
+              </button>
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lookupSwapStatus, normalizeSwapLookupKey, sanitizeSwapInput } from "@/features/swap-status/core";
+import { filterSwapList, lookupSwapStatus, normalizeSwapLookupKey, sanitizeSwapInput } from "@/features/swap-status/core";
 import type { SwapStatusDb } from "@/features/swap-status/types";
 
 const TEST_DB: SwapStatusDb = {
@@ -80,5 +80,25 @@ describe("swap-status core", () => {
   it("returns not-found for unknown pokemon", () => {
     const result = lookupSwapStatus("DefinitelyNotRealmon", TEST_DB);
     expect(result.status).toBe("not-found");
+  });
+
+  it("filters out current swaps from a list", () => {
+    const result = filterSwapList(["Pikachu", "Absol", "GoldenOmanyte", "DefinitelyNotRealmon"].join("\n"), "swaps", TEST_DB);
+
+    expect(result.outputText).toBe(["Absol", "GoldenOmanyte", "DefinitelyNotRealmon"].join("\n"));
+    expect(result.processedCount).toBe(4);
+    expect(result.keptCount).toBe(3);
+    expect(result.filteredCount).toBe(1);
+    expect(result.unknownCount).toBe(1);
+  });
+
+  it("filters out nonswaps from a list", () => {
+    const result = filterSwapList(["Pikachu", "Absol", "GoldenOmanyte", "DefinitelyNotRealmon"].join("\n"), "nonswaps", TEST_DB);
+
+    expect(result.outputText).toBe(["Pikachu", "DefinitelyNotRealmon"].join("\n"));
+    expect(result.processedCount).toBe(4);
+    expect(result.keptCount).toBe(2);
+    expect(result.filteredCount).toBe(2);
+    expect(result.unknownCount).toBe(1);
   });
 });

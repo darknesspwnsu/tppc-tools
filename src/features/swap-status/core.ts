@@ -1,5 +1,15 @@
 import type { SwapLookupResult, SwapStatusDb, SwapStatusEntry } from "./types";
 
+export type SwapFilterMode = "swaps" | "nonswaps";
+
+export type SwapFilterResult = {
+  outputText: string;
+  processedCount: number;
+  keptCount: number;
+  filteredCount: number;
+  unknownCount: number;
+};
+
 function stripDiacritics(value: string) {
   return value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -60,6 +70,51 @@ function buildSummary(entry: SwapStatusEntry) {
   }
 
   return "No. This pokemon is not currently obtainable via secret swap.";
+}
+
+export function filterSwapList(inputText: string, mode: SwapFilterMode, db: SwapStatusDb | null): SwapFilterResult {
+  const lines = String(inputText || "").replace(/\r\n/g, "\n").split("\n");
+  const outputLines: string[] = [];
+
+  let processedCount = 0;
+  let filteredCount = 0;
+  let unknownCount = 0;
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    processedCount += 1;
+
+    const key = normalizeSwapLookupKey(line);
+    if (!key || !db) {
+      outputLines.push(line);
+      unknownCount += 1;
+      continue;
+    }
+
+    const entry = db.entries[key];
+    if (!entry) {
+      outputLines.push(line);
+      unknownCount += 1;
+      continue;
+    }
+
+    const shouldFilter = mode === "swaps" ? entry.currentSecretSwap : !entry.currentSecretSwap;
+    if (shouldFilter) {
+      filteredCount += 1;
+      continue;
+    }
+
+    outputLines.push(line);
+  }
+
+  return {
+    outputText: outputLines.join("\n"),
+    processedCount,
+    keptCount: outputLines.length,
+    filteredCount,
+    unknownCount
+  };
 }
 
 export function lookupSwapStatus(input: string, db: SwapStatusDb | null): SwapLookupResult {
