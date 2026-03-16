@@ -99,11 +99,15 @@ export function SwapStatusTool() {
     const mapSuffix = filterOutMaps
       ? ` (mode: ${filtered.filteredByModeCount.toLocaleString("en-US")}, maps: ${filtered.filteredByMapCount.toLocaleString("en-US")})`
       : "";
+    const junkSuffix =
+      filtered.filteredByJunkCount > 0
+        ? ` Junk lines removed: ${filtered.filteredByJunkCount.toLocaleString("en-US")}.`
+        : "";
     const unknownSuffix =
       filtered.unknownCount > 0 ? ` ${filtered.unknownCount} unrecognized line(s) were kept.` : "";
 
     setFilterStatus(
-      `Kept ${filtered.keptCount}/${filtered.processedCount} lines. Filtered out ${filtered.filteredCount} ${filteredLabel} line(s).${mapSuffix}${unknownSuffix}`
+      `Kept ${filtered.keptCount}/${filtered.processedCount} lines. Filtered out ${filtered.filteredCount} ${filteredLabel} line(s).${mapSuffix}${junkSuffix}${unknownSuffix}`
     );
   };
 

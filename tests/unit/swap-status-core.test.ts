@@ -109,6 +109,7 @@ describe("swap-status core", () => {
     expect(result.filteredCount).toBe(1);
     expect(result.filteredByModeCount).toBe(1);
     expect(result.filteredByMapCount).toBe(0);
+    expect(result.filteredByJunkCount).toBe(0);
     expect(result.unknownCount).toBe(1);
   });
 
@@ -121,6 +122,7 @@ describe("swap-status core", () => {
     expect(result.filteredCount).toBe(2);
     expect(result.filteredByModeCount).toBe(2);
     expect(result.filteredByMapCount).toBe(0);
+    expect(result.filteredByJunkCount).toBe(0);
     expect(result.unknownCount).toBe(1);
   });
 
@@ -134,6 +136,7 @@ describe("swap-status core", () => {
     expect(result.filteredCount).toBe(3);
     expect(result.filteredByModeCount).toBe(3);
     expect(result.filteredByMapCount).toBe(0);
+    expect(result.filteredByJunkCount).toBe(0);
     expect(result.unknownCount).toBe(0);
   });
 
@@ -146,6 +149,21 @@ describe("swap-status core", () => {
     expect(result.filteredCount).toBe(1);
     expect(result.filteredByModeCount).toBe(0);
     expect(result.filteredByMapCount).toBe(1);
+    expect(result.filteredByJunkCount).toBe(0);
     expect(result.unknownCount).toBe(0);
+  });
+
+  it("drops known TPPC junk heading lines", () => {
+    const input = ["Trainer Information", "My Pokédex", "Pikachu", "DefinitelyNotRealmon"].join("\n");
+    const result = filterSwapList(input, "swaps", TEST_DB);
+
+    expect(result.outputText).toBe("DefinitelyNotRealmon");
+    expect(result.processedCount).toBe(4);
+    expect(result.keptCount).toBe(1);
+    expect(result.filteredCount).toBe(3);
+    expect(result.filteredByModeCount).toBe(1);
+    expect(result.filteredByMapCount).toBe(0);
+    expect(result.filteredByJunkCount).toBe(2);
+    expect(result.unknownCount).toBe(1);
   });
 });

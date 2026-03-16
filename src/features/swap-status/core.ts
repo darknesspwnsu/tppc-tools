@@ -14,8 +14,24 @@ export type SwapFilterResult = {
   filteredCount: number;
   filteredByModeCount: number;
   filteredByMapCount: number;
+  filteredByJunkCount: number;
   unknownCount: number;
 };
+
+const KNOWN_NON_POKEMON_HEADINGS = new Set([
+  "trainerinformation",
+  "trainerstatistics",
+  "myroster",
+  "setmovesitems",
+  "mypokedex",
+  "myfriends",
+  "mysettings",
+  "pokemoncenters",
+  "teamaqua",
+  "evolutioncenter",
+  "breedingcenter",
+  "researchlab"
+]);
 
 function stripDiacritics(value: string) {
   return value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
@@ -116,6 +132,7 @@ export function filterSwapList(
   let filteredCount = 0;
   let filteredByModeCount = 0;
   let filteredByMapCount = 0;
+  let filteredByJunkCount = 0;
   let unknownCount = 0;
 
   for (const rawLine of lines) {
@@ -125,6 +142,12 @@ export function filterSwapList(
 
     const lookupName = extractLookupNameFromLine(line);
     const key = normalizeSwapLookupKey(lookupName || line);
+    if (KNOWN_NON_POKEMON_HEADINGS.has(key)) {
+      filteredCount += 1;
+      filteredByJunkCount += 1;
+      continue;
+    }
+
     if (!key || !db) {
       outputLines.push(line);
       unknownCount += 1;
@@ -157,6 +180,7 @@ export function filterSwapList(
     filteredCount,
     filteredByModeCount,
     filteredByMapCount,
+    filteredByJunkCount,
     unknownCount
   };
 }
