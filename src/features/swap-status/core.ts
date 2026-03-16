@@ -1,3 +1,4 @@
+import { parseBoxInput } from "@/features/box-organizer/core";
 import type { SwapLookupResult, SwapStatusDb, SwapStatusEntry } from "./types";
 
 export type SwapFilterMode = "swaps" | "nonswaps";
@@ -31,6 +32,29 @@ export function normalizeSwapLookupKey(raw: string) {
     .replace(/[’'`".,_:\-\/\\()[\]{}]/g, "")
     .replace(/\s+/g, "")
     .replace(/[^a-z0-9!?]/g, "");
+}
+
+function extractLookupNameFromLine(rawLine: string) {
+  const trimmed = String(rawLine || "").trim();
+  if (!trimmed) return "";
+
+  const parsedBox = parseBoxInput(trimmed);
+  if (parsedBox.length > 0 && parsedBox[0]?.name) {
+    return parsedBox[0].name.trim();
+  }
+
+  const tabCols = trimmed
+    .split(/\t+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  let candidate = (tabCols[0] || trimmed).trim();
+
+  candidate = candidate.replace(/\((?:level|lvl)\s*:?\s*\d+\)\s*$/i, "");
+  candidate = candidate.replace(/\b(?:level|lvl)\s*:?\s*\d+\s*$/i, "");
+  candidate = candidate.replace(/\s+[\d,]+\s*$/, "");
+  candidate = candidate.replace(/\s*(?:\u2642|\u2640|\(\?\))\s*$/i, "");
+
+  return candidate.trim();
 }
 
 function joinMapSources(sources: string[]) {
@@ -85,7 +109,8 @@ export function filterSwapList(inputText: string, mode: SwapFilterMode, db: Swap
     if (!line) continue;
     processedCount += 1;
 
-    const key = normalizeSwapLookupKey(line);
+    const lookupName = extractLookupNameFromLine(line);
+    const key = normalizeSwapLookupKey(lookupName || line);
     if (!key || !db) {
       outputLines.push(line);
       unknownCount += 1;

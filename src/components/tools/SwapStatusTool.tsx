@@ -52,6 +52,7 @@ export function SwapStatusTool() {
   const [filterOutput, setFilterOutput] = useState("");
   const [filterMode, setFilterMode] = useState<SwapFilterMode>("swaps");
   const [filterStatus, setFilterStatus] = useState("Paste a list, pick a mode, then apply the filter.");
+  const [filterOutputStatus, setFilterOutputStatus] = useState("0 results filtered • 0 output items");
 
   useEffect(() => {
     const load = async () => {
@@ -84,6 +85,9 @@ export function SwapStatusTool() {
 
     const filtered = filterSwapList(filterInput, filterMode, db);
     setFilterOutput(filtered.outputText);
+    setFilterOutputStatus(
+      `${filtered.filteredCount.toLocaleString("en-US")} results filtered • ${filtered.keptCount.toLocaleString("en-US")} output items`
+    );
 
     if (filtered.processedCount === 0) {
       setFilterStatus("No valid Pokemon lines found.");
@@ -230,6 +234,7 @@ export function SwapStatusTool() {
                   setFilterInput("");
                   setFilterOutput("");
                   setFilterStatus("Cleared.");
+                  setFilterOutputStatus("0 results filtered • 0 output items");
                 }}
               >
                 Clear
@@ -259,6 +264,10 @@ export function SwapStatusTool() {
               >
                 Copy Output
               </button>
+            </div>
+
+            <div id="swapFilterOutputStatus" className="tool-status-line">
+              {filterOutputStatus}
             </div>
           </div>
         </div>

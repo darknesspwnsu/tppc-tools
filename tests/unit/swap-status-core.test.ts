@@ -13,7 +13,7 @@ const TEST_DB: SwapStatusDb = {
     mapPokemonCount: 0,
     secretSwapPokemonCount: 0,
     wikiPokemonPagesParsed: 0,
-    entryCount: 3
+    entryCount: 5
   },
   entries: {
     pikachu: {
@@ -39,6 +39,24 @@ const TEST_DB: SwapStatusDb = {
       species: "Omanyte",
       variant: "golden",
       currentSecretSwap: false,
+      formerSecretSwap: false,
+      currentMap: false,
+      mapSources: []
+    },
+    darkzigzagoon: {
+      displayName: "DarkZigzagoon",
+      species: "Zigzagoon",
+      variant: "dark",
+      currentSecretSwap: true,
+      formerSecretSwap: false,
+      currentMap: false,
+      mapSources: []
+    },
+    shinyzigzagoon: {
+      displayName: "ShinyZigzagoon",
+      species: "Zigzagoon",
+      variant: "shiny",
+      currentSecretSwap: true,
       formerSecretSwap: false,
       currentMap: false,
       mapSources: []
@@ -100,5 +118,16 @@ describe("swap-status core", () => {
     expect(result.keptCount).toBe(2);
     expect(result.filteredCount).toBe(2);
     expect(result.unknownCount).toBe(1);
+  });
+
+  it("filters tab-separated box-style lines that include plain level columns", () => {
+    const input = ["DarkZigzagoon ♂\t5", "ShinyZigzagoon ♀\t5", "ShinyZigzagoon ♂\t5"].join("\n");
+    const result = filterSwapList(input, "swaps", TEST_DB);
+
+    expect(result.outputText).toBe("");
+    expect(result.processedCount).toBe(3);
+    expect(result.keptCount).toBe(0);
+    expect(result.filteredCount).toBe(3);
+    expect(result.unknownCount).toBe(0);
   });
 });
