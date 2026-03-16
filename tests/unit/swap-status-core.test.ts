@@ -13,7 +13,7 @@ const TEST_DB: SwapStatusDb = {
     mapPokemonCount: 0,
     secretSwapPokemonCount: 0,
     wikiPokemonPagesParsed: 0,
-    entryCount: 5
+    entryCount: 7
   },
   entries: {
     pikachu: {
@@ -55,6 +55,24 @@ const TEST_DB: SwapStatusDb = {
     shinyzigzagoon: {
       displayName: "ShinyZigzagoon",
       species: "Zigzagoon",
+      variant: "shiny",
+      currentSecretSwap: true,
+      formerSecretSwap: false,
+      currentMap: false,
+      mapSources: []
+    },
+    darkabra: {
+      displayName: "DarkAbra",
+      species: "Abra",
+      variant: "dark",
+      currentSecretSwap: true,
+      formerSecretSwap: false,
+      currentMap: false,
+      mapSources: []
+    },
+    shinyabra: {
+      displayName: "ShinyAbra",
+      species: "Abra",
       variant: "shiny",
       currentSecretSwap: true,
       formerSecretSwap: false,
@@ -165,5 +183,29 @@ describe("swap-status core", () => {
     expect(result.filteredByMapCount).toBe(0);
     expect(result.filteredByJunkCount).toBe(2);
     expect(result.unknownCount).toBe(1);
+  });
+
+  it("drops narrative/header lines automatically when structured box rows are present", () => {
+    const input = [
+      "my profilemy friendstppc trainer's cornerchat room",
+      "I Want To Trade...",
+      "Tired of people sending you private messages and trying to trade for Pokémon you'd never trade away in a million years?",
+      "Would You Trade This Pokémon?",
+      "Pokémon\tLevel\tYes\tNo\tUndecided",
+      "DarkAbra ♂\t5",
+      "ShinyAbra ♂\t5",
+      "DarkAbra ♂\t5"
+    ].join("\n");
+
+    const result = filterSwapList(input, "swaps", TEST_DB);
+
+    expect(result.outputText).toBe("");
+    expect(result.processedCount).toBe(8);
+    expect(result.keptCount).toBe(0);
+    expect(result.filteredCount).toBe(8);
+    expect(result.filteredByModeCount).toBe(3);
+    expect(result.filteredByMapCount).toBe(0);
+    expect(result.filteredByJunkCount).toBe(5);
+    expect(result.unknownCount).toBe(0);
   });
 });

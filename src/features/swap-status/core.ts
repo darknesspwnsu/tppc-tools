@@ -79,6 +79,12 @@ function extractLookupNameFromLine(rawLine: string) {
   return candidate.trim();
 }
 
+function isStructuredBoxLine(rawLine: string) {
+  const trimmed = String(rawLine || "").trim();
+  if (!trimmed) return false;
+  return parseBoxInput(trimmed).length > 0;
+}
+
 function joinMapSources(sources: string[]) {
   if (sources.length === 0) return "";
   if (sources.length === 1) return sources[0];
@@ -127,6 +133,7 @@ export function filterSwapList(
   const lines = String(inputText || "").replace(/\r\n/g, "\n").split("\n");
   const outputLines: string[] = [];
   const filterOutMaps = Boolean(options.filterOutMaps);
+  const hasStructuredRows = lines.some((line) => isStructuredBoxLine(line));
 
   let processedCount = 0;
   let filteredCount = 0;
@@ -140,8 +147,17 @@ export function filterSwapList(
     if (!line) continue;
     processedCount += 1;
 
+    const structuredLine = isStructuredBoxLine(line);
     const lookupName = extractLookupNameFromLine(line);
     const key = normalizeSwapLookupKey(lookupName || line);
+    const entry = key && db ? db.entries[key] : undefined;
+
+    if (hasStructuredRows && !structuredLine && !entry) {
+      filteredCount += 1;
+      filteredByJunkCount += 1;
+      continue;
+    }
+
     if (KNOWN_NON_POKEMON_HEADINGS.has(key)) {
       filteredCount += 1;
       filteredByJunkCount += 1;
@@ -154,7 +170,6 @@ export function filterSwapList(
       continue;
     }
 
-    const entry = db.entries[key];
     if (!entry) {
       outputLines.push(line);
       unknownCount += 1;
