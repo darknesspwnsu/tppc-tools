@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
 import type { Page } from "@playwright/test";
 
 export type ScenarioSnapshot = Record<string, string>;
@@ -135,6 +138,15 @@ const POKEMON_JSON_FIXTURE = {
 const PNG_BASE64 =
   "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFUlEQVR42mP8z8Dwn4GBgYGJAQoACl8DA2h4JqkAAAAASUVORK5CYII=";
 
+const RAINBOW_RARITY_HTML_FIXTURE = readFileSync(
+  path.join(process.cwd(), "tests/parity/fixtures/rainbow-rarity.html"),
+  "utf8"
+);
+const RAINBOW_NAME_TO_DEX_FIXTURE = readFileSync(
+  path.join(process.cwd(), "tests/parity/fixtures/rainbow-name-to-dex.json"),
+  "utf8"
+);
+
 function normalizeText(v: string | null | undefined) {
   return String(v || "").replace(/\r\n/g, "\n").trim();
 }
@@ -182,6 +194,22 @@ async function setChecked(page: Page, selector: string, checked: boolean) {
 export async function installDeterministicNetwork(page: Page) {
   await page.route("https://wiki.tppc.info/**", async (route) => {
     await route.abort();
+  });
+
+  await page.route("**/data/rarity.html", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/html; charset=utf-8",
+      body: RAINBOW_RARITY_HTML_FIXTURE
+    });
+  });
+
+  await page.route("**/data/name_to_dex.json", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: RAINBOW_NAME_TO_DEX_FIXTURE
+    });
   });
 
   await page.route("**/vendor/pokesprite-v2/pokemon.json", async (route) => {
