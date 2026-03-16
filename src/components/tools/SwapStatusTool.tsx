@@ -108,7 +108,7 @@ export function SwapStatusTool() {
         <h1 className="page-title">Check Swap Status</h1>
         <p className="page-subtitle">
           Check whether a Pokemon is currently obtainable via Secret Swap. Examples: <code>Pikachu</code>,
-          <code> ShinyMachop</code>, <code>DarkShelgon</code>, <code>GoldenOmanyte</code>.
+          <code> ShinyMachop</code>, <code>DarkShelgon</code>.
         </p>
 
         <div style={{ marginTop: "1rem", display: "grid", gap: "0.55rem" }}>
