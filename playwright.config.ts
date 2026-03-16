@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
     trace: "on-first-retry"
   },
   webServer: {
-    command: `npm run dev -- --port ${PORT}`,
+    command: `node scripts/serve-out.mjs --port ${PORT} --dir out`,
     url: `http://127.0.0.1:${PORT}${READY_PATH}`,
     reuseExistingServer: false,
     timeout: 180_000

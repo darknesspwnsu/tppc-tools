@@ -57,6 +57,14 @@ export const TOOLS: readonly Tool[] = [
     status: "active"
   },
   {
+    slug: "swap-status",
+    name: "Check Swap Status",
+    desc: "Check if a Pokemon/form is currently obtainable via Secret Swap, with map and former-swap notes.",
+    tags: ["lookup", "swap", "secret", "maps"],
+    route: "/tools/swap-status/",
+    status: "active"
+  },
+  {
     slug: "ungendered-sorter",
     name: "Ungendered (?) Collection Sorter",
     desc: "Sorts ungendered Pokemon collections by families and lists missing Pokemon.",

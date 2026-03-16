@@ -8,6 +8,7 @@ import { PerfectExpTool } from "@/components/tools/PerfectExpTool";
 import { PokespriteGeneratorTool } from "@/components/tools/PokespriteGeneratorTool";
 import { RainbowDexTool } from "@/components/tools/RainbowDexTool";
 import { SellGuideTool } from "@/components/tools/SellGuideTool";
+import { SwapStatusTool } from "@/components/tools/SwapStatusTool";
 import { UngenderedDiffTool } from "@/components/tools/UngenderedDiffTool";
 import { UngenderedFamiliesTool } from "@/components/tools/UngenderedFamiliesTool";
 import { UngenderedSorterTool } from "@/components/tools/UngenderedSorterTool";
@@ -173,6 +174,17 @@ export const TOOL_MODULES: readonly ToolModule[] = TOOLS.map((tool) => {
         resolutionMode: "auto",
         customColumns: 120,
         alphaThreshold: 30
+      }
+    };
+  }
+
+  if (tool.slug === "swap-status") {
+    return {
+      id: tool.slug,
+      slug: tool.slug,
+      Component: SwapStatusTool as ComponentType<Record<string, never>>,
+      initialState: {
+        query: ""
       }
     };
   }

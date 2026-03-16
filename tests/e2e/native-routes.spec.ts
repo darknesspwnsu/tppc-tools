@@ -13,6 +13,7 @@ const NATIVE_TOOL_ROUTES = [
   "/tools/pokesprite-generator/",
   "/tools/rainbow-dex/",
   "/tools/sell-guide/",
+  "/tools/swap-status/",
   "/tools/ungendered-diff/",
   "/tools/ungendered-families/",
   "/tools/ungendered-sorter/"
