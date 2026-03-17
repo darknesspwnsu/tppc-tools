@@ -82,6 +82,8 @@ export function SellGuideTool() {
   const moneyHint = useMemo(() => moneyHintText(exactAmount), [exactAmount]);
   const formulaLatex = useMemo(() => formulaLatexText(moneyMeaning, ppControlled), [moneyMeaning, ppControlled]);
   const formulaNodeRef = useRef<HTMLDivElement>(null);
+  const formulaRenderVersionRef = useRef(0);
+  const [isFormulaRenderReady, setIsFormulaRenderReady] = useState(false);
 
   const updateOutputsForLevel = (level: bigint | null, meaning = moneyMeaning, pp = ppForOutputs) => {
     if (level === null) {
@@ -199,20 +201,44 @@ export function SellGuideTool() {
     updateOutputsForLevel(null, next.moneyMeaning, next.moneyMeaning === "seller" ? true : next.ppControlled);
   };
 
-  const typesetFormula = useCallback(() => {
+  const typesetFormula = useCallback(async (renderVersion: number) => {
     const node = formulaNodeRef.current;
     if (!node) return;
     const mathJax = window.MathJax;
     if (!mathJax?.typesetPromise) return;
-    mathJax.typesetClear?.([node]);
-    void mathJax.typesetPromise([node]).catch(() => undefined);
+    try {
+      mathJax.typesetClear?.([node]);
+      await mathJax.typesetPromise([node]);
+    } finally {
+      if (formulaRenderVersionRef.current === renderVersion) {
+        setIsFormulaRenderReady(true);
+      }
+    }
   }, []);
 
   useEffect(() => {
     const node = formulaNodeRef.current;
     if (!node) return;
+
+    const renderVersion = formulaRenderVersionRef.current + 1;
+    formulaRenderVersionRef.current = renderVersion;
+    setIsFormulaRenderReady(false);
     node.innerHTML = formulaLatex;
-    typesetFormula();
+
+    if (window.MathJax?.typesetPromise) {
+      void typesetFormula(renderVersion).catch(() => undefined);
+      return;
+    }
+
+    const fallbackTimer = window.setTimeout(() => {
+      if (formulaRenderVersionRef.current === renderVersion) {
+        setIsFormulaRenderReady(true);
+      }
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+    };
   }, [formulaLatex, typesetFormula]);
 
   return (
@@ -222,7 +248,10 @@ export function SellGuideTool() {
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
         strategy="afterInteractive"
         onLoad={() => {
-          typesetFormula();
+          void typesetFormula(formulaRenderVersionRef.current).catch(() => undefined);
+        }}
+        onError={() => {
+          setIsFormulaRenderReady(true);
         }}
       />
 
@@ -399,7 +428,13 @@ export function SellGuideTool() {
             </span>
           </div>
 
-          <div id="formulaLatex" className="mono formula-latex" ref={formulaNodeRef} style={{ minHeight: "7.75rem" }} />
+          <div
+            id="formulaLatex"
+            className={`mono formula-latex ${isFormulaRenderReady ? "is-ready" : "is-pending"}`}
+            ref={formulaNodeRef}
+            style={{ minHeight: "7.75rem" }}
+            aria-busy={!isFormulaRenderReady}
+          />
 
           <div className="tool-status-line" style={{ marginTop: "0.4rem" }}>
             Note: PP control affects the <b>buyer price only</b>. Seller still receives half of the original (non-discounted) market price.

@@ -609,6 +609,14 @@ textarea.form-control.io-output {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 120ms ease-out;
+}
+
+.formula-latex.is-pending {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .cloud-tooltip {
