@@ -389,115 +389,243 @@ export function UngenderedFamiliesTool() {
               </div>
 
               <div className="surface-strong mt-3" style={{ padding: "0.8rem", borderRadius: "0.75rem" }}>
-                <div className="stack" style={{ gap: "0.45rem" }}>
-                  <label className="chip">
-                    <input id="partitionOutput" type="checkbox" checked={prefs.partitionOutput} onChange={(event) => setPrefs({ partitionOutput: event.target.checked })} />
+                <div className="fw-semibold mb-2">Options</div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="partitionOutput"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.partitionOutput}
+                    onChange={(event) => setPrefs({ partitionOutput: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="partitionOutput">
                     Partition output into Families vs Singles/Sets
                   </label>
-                  <label className="chip">
-                    <input
-                      id="missingOnlyFamilyNeeded"
-                      type="checkbox"
-                      checked={prefs.missingOnlyFamilyNeeded}
-                      onChange={(event) => setPrefs({ missingOnlyFamilyNeeded: event.target.checked })}
-                    />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="missingOnlyFamilyNeeded"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.missingOnlyFamilyNeeded}
+                    onChange={(event) => setPrefs({ missingOnlyFamilyNeeded: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="missingOnlyFamilyNeeded">
                     Missing list only for incomplete families
                   </label>
-                  <label className="chip">
-                    <input id="addMissingInline" type="checkbox" checked={prefs.addMissingInline} onChange={(event) => setPrefs({ addMissingInline: event.target.checked })} />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="addMissingInline"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.addMissingInline}
+                    onChange={(event) => setPrefs({ addMissingInline: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="addMissingInline">
                     Add missing items inline
                   </label>
-                  <label className="chip">
-                    <input id="noGroupSpacing" type="checkbox" checked={prefs.noGroupSpacing} onChange={(event) => setPrefs({ noGroupSpacing: event.target.checked })} />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="noGroupSpacing"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.noGroupSpacing}
+                    onChange={(event) => setPrefs({ noGroupSpacing: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="noGroupSpacing">
                     No space between family groups
                   </label>
-                  <label className="chip">
-                    <input id="showLevelLabel" type="checkbox" checked={prefs.showLevelLabel} onChange={(event) => setPrefs({ showLevelLabel: event.target.checked })} />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="showLevelLabel"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.showLevelLabel}
+                    onChange={(event) => setPrefs({ showLevelLabel: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="showLevelLabel">
                     Show level as (Level: X)
                   </label>
-                  <label className="chip">
-                    <input id="dropDuplicates" type="checkbox" checked={prefs.dropDuplicates} onChange={(event) => setPrefs({ dropDuplicates: event.target.checked })} />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="dropDuplicates"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.dropDuplicates}
+                    onChange={(event) => setPrefs({ dropDuplicates: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="dropDuplicates">
                     Drop duplicates (keep lowest level)
                   </label>
-                  <label className="chip">
-                    <input id="highlightRarity" type="checkbox" checked={prefs.highlightRarity} onChange={(event) => setPrefs({ highlightRarity: event.target.checked })} />
+                </div>
+
+                <div className="form-check mb-2">
+                  <input
+                    id="highlightRarity"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.highlightRarity}
+                    onChange={(event) => setPrefs({ highlightRarity: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="highlightRarity">
                     Highlight rarity
                   </label>
+                </div>
 
-                  <div id="annotateRarityWrap" className={prefs.highlightRarity ? "" : "d-none"}>
-                    <label className="chip">
-                      <input id="annotateRarity" type="checkbox" checked={prefs.annotateRarity} onChange={(event) => setPrefs({ annotateRarity: event.target.checked })} />
-                      Annotate rarity
-                    </label>
-                  </div>
+                <div id="annotateRarityWrap" className={prefs.highlightRarity ? "form-check mb-2" : "d-none"}>
+                  <input
+                    id="annotateRarity"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.annotateRarity}
+                    onChange={(event) => setPrefs({ annotateRarity: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="annotateRarity">
+                    Annotate rarity
+                  </label>
+                </div>
 
-                  <label className="chip">
-                    <input id="omitSummaryStats" type="checkbox" checked={prefs.omitSummaryStats} onChange={(event) => setPrefs({ omitSummaryStats: event.target.checked })} />
+                <div className="form-check mb-2">
+                  <input
+                    id="omitSummaryStats"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.omitSummaryStats}
+                    onChange={(event) => setPrefs({ omitSummaryStats: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="omitSummaryStats">
                     Omit summary stats
                   </label>
+                </div>
 
-                  <label className="chip">
-                    <input id="visualizeCloud" type="checkbox" checked={prefs.visualizeCloud} onChange={(event) => setPrefs({ visualizeCloud: event.target.checked })} />
+                <div className="form-check mb-0">
+                  <input
+                    id="visualizeCloud"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={prefs.visualizeCloud}
+                    onChange={(event) => setPrefs({ visualizeCloud: event.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="visualizeCloud">
                     Visualize output (tag cloud sample)
                   </label>
+                </div>
 
-                  <div id="cloudSampleControls" className={prefs.visualizeCloud ? "" : "d-none"}>
-                    <label htmlFor="cloudSampleSize" className="form-label mb-1">Tag cloud sample size</label>
-                    <input
-                      id="cloudSampleSize"
-                      type="number"
-                      className="field mono"
-                      min={1}
-                      step={1}
-                      value={prefs.cloudSampleSize}
-                      onChange={(event) => setPrefs({ cloudSampleSize: event.target.value })}
-                    />
-                    <div id="cloudRuntimeStatus" className="tool-status-line" style={{ marginTop: "0.4rem" }}>
-                      {prefs.visualizeCloud
-                        ? cloudRuntime === "ready"
-                          ? "Cloud runtime ready."
-                          : cloudRuntime === "loading"
-                          ? "Loading cloud runtime..."
-                          : cloudRuntime === "error"
-                          ? `Cloud runtime error: ${cloudError}`
-                          : "Cloud runtime idle."
-                        : ""}
-                    </div>
+                <div id="cloudSampleControls" className={prefs.visualizeCloud ? "mt-3" : "mt-3 d-none"}>
+                  <label htmlFor="cloudSampleSize" className="form-label mb-1">Tag cloud sample size</label>
+                  <input
+                    id="cloudSampleSize"
+                    type="number"
+                    className="field mono"
+                    min={1}
+                    step={1}
+                    value={prefs.cloudSampleSize}
+                    onChange={(event) => setPrefs({ cloudSampleSize: event.target.value })}
+                  />
+                  <div id="cloudRuntimeStatus" className="tool-status-line" style={{ marginTop: "0.4rem" }}>
+                    {prefs.visualizeCloud
+                      ? cloudRuntime === "ready"
+                        ? "Cloud runtime ready."
+                        : cloudRuntime === "loading"
+                        ? "Loading cloud runtime..."
+                        : cloudRuntime === "error"
+                        ? `Cloud runtime error: ${cloudError}`
+                        : "Cloud runtime idle."
+                      : ""}
                   </div>
                 </div>
 
-                <div className="tool-template-grid mt-3">
-                  <div>
+                <div className="row g-2 mt-3">
+                  <div className="col-12 col-md-6">
                     <label htmlFor="minUngendered" className="form-label fw-semibold">Min Ungendered</label>
                     <input id="minUngendered" className="field mono" type="number" value={prefs.minUngendered} onChange={(event) => setPrefs({ minUngendered: event.target.value })} />
                   </div>
-                  <div>
+                  <div className="col-12 col-md-6">
                     <label htmlFor="maxMissing" className="form-label fw-semibold">Max Missing</label>
                     <input id="maxMissing" className="field mono" type="number" value={prefs.maxMissing} onChange={(event) => setPrefs({ maxMissing: event.target.value })} />
                   </div>
                 </div>
 
-                <div className="stack mt-3" style={{ gap: "0.45rem" }}>
-                  <label className="chip"><input id="filterGolds" type="checkbox" checked={prefs.filterGolds} onChange={(event) => setPrefs({ filterGolds: event.target.checked })} /> Filter Goldens</label>
-                  <label className="chip"><input id="filterNormals" type="checkbox" checked={prefs.filterNormals} onChange={(event) => setPrefs({ filterNormals: event.target.checked })} /> Filter Normals</label>
-                  <label className="chip"><input id="filterShinys" type="checkbox" checked={prefs.filterShinys} onChange={(event) => setPrefs({ filterShinys: event.target.checked })} /> Filter Shinys</label>
-                  <label className="chip"><input id="filterDarks" type="checkbox" checked={prefs.filterDarks} onChange={(event) => setPrefs({ filterDarks: event.target.checked })} /> Filter Darks</label>
+                <div className="mt-3">
+                  <div className="fw-semibold mb-2">Variant filters</div>
+
+                  <div className="form-check mb-2">
+                    <input
+                      id="filterGolds"
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={prefs.filterGolds}
+                      onChange={(event) => setPrefs({ filterGolds: event.target.checked })}
+                    />
+                    <label className="form-check-label" htmlFor="filterGolds">
+                      Filter Goldens
+                    </label>
+                  </div>
+
+                  <div className="form-check mb-2">
+                    <input
+                      id="filterNormals"
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={prefs.filterNormals}
+                      onChange={(event) => setPrefs({ filterNormals: event.target.checked })}
+                    />
+                    <label className="form-check-label" htmlFor="filterNormals">
+                      Filter Normals
+                    </label>
+                  </div>
+
+                  <div className="form-check mb-2">
+                    <input
+                      id="filterShinys"
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={prefs.filterShinys}
+                      onChange={(event) => setPrefs({ filterShinys: event.target.checked })}
+                    />
+                    <label className="form-check-label" htmlFor="filterShinys">
+                      Filter Shinys
+                    </label>
+                  </div>
+
+                  <div className="form-check mb-0">
+                    <input
+                      id="filterDarks"
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={prefs.filterDarks}
+                      onChange={(event) => setPrefs({ filterDarks: event.target.checked })}
+                    />
+                    <label className="form-check-label" htmlFor="filterDarks">
+                      Filter Darks
+                    </label>
+                  </div>
                 </div>
 
-                <div className="tool-template-grid mt-3">
-                  <div>
+                <div className="row g-2 mt-3">
+                  <div className="col-12 col-md-6">
                     <label htmlFor="colorGolden" className="form-label fw-semibold">Gold color</label>
                     <input id="colorGolden" className="field" value={prefs.colorGolden} onChange={(event) => setPrefs({ colorGolden: event.target.value })} />
                   </div>
-                  <div>
+                  <div className="col-12 col-md-6">
                     <label htmlFor="colorShiny" className="form-label fw-semibold">Shiny color</label>
                     <input id="colorShiny" className="field" value={prefs.colorShiny} onChange={(event) => setPrefs({ colorShiny: event.target.value })} />
                   </div>
-                  <div>
+                  <div className="col-12 col-md-6">
                     <label htmlFor="colorDark" className="form-label fw-semibold">Dark color</label>
                     <input id="colorDark" className="field" value={prefs.colorDark} onChange={(event) => setPrefs({ colorDark: event.target.value })} />
                   </div>
-                  <div>
+                  <div className="col-12 col-md-6">
                     <label htmlFor="colorNormal" className="form-label fw-semibold">Normal color</label>
                     <input id="colorNormal" className="field" value={prefs.colorNormal} onChange={(event) => setPrefs({ colorNormal: event.target.value })} />
                   </div>

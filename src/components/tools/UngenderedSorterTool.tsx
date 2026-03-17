@@ -155,8 +155,10 @@ export function UngenderedSorterTool() {
             </div>
 
             <div className="surface-strong mt-3" style={{ padding: "0.8rem", borderRadius: "0.75rem" }}>
-              <div className="tool-template-grid">
-                <div>
+              <div className="fw-semibold mb-2">Options</div>
+
+              <div className="row g-2">
+                <div className="col-12 col-md-6">
                   <label htmlFor="minUngendered" className="form-label fw-semibold">Min Ungendered</label>
                   <input
                     id="minUngendered"
@@ -166,7 +168,7 @@ export function UngenderedSorterTool() {
                     onChange={(event) => setPrefs({ minUngendered: event.target.value })}
                   />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="maxMissing" className="form-label fw-semibold">Max Missing</label>
                   <input
                     id="maxMissing"
@@ -178,27 +180,33 @@ export function UngenderedSorterTool() {
                 </div>
               </div>
 
-              <div className="tool-actions">
-                <label className="chip">
-                  <input id="includeGolds" type="checkbox" checked={prefs.includeGolds} onChange={(event) => setPrefs({ includeGolds: event.target.checked })} />
+              <div className="form-check mt-3">
+                <input
+                  id="includeGolds"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.includeGolds}
+                  onChange={(event) => setPrefs({ includeGolds: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="includeGolds">
                   Include Goldens in missing list
                 </label>
               </div>
 
-              <div id="colorBox" className="tool-template-grid mt-3">
-                <div>
+              <div id="colorBox" className="row g-2 mt-3">
+                <div className="col-12 col-md-6">
                   <label htmlFor="colorGolden" className="form-label">Golden color</label>
                   <input id="colorGolden" className="field" value={prefs.colorGolden} onChange={(event) => setPrefs({ colorGolden: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="colorShiny" className="form-label">Shiny color</label>
                   <input id="colorShiny" className="field" value={prefs.colorShiny} onChange={(event) => setPrefs({ colorShiny: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="colorDark" className="form-label">Dark color</label>
                   <input id="colorDark" className="field" value={prefs.colorDark} onChange={(event) => setPrefs({ colorDark: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="colorNormal" className="form-label">Normal color</label>
                   <input id="colorNormal" className="field" value={prefs.colorNormal} onChange={(event) => setPrefs({ colorNormal: event.target.value })} />
                 </div>

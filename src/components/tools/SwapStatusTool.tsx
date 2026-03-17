@@ -207,36 +207,47 @@ export function SwapStatusTool() {
               onChange={(event) => setFilterInput(event.target.value)}
             />
 
-            <div className="stack" style={{ marginTop: "0.75rem", gap: "0.45rem" }}>
-              <label className="chip">
-                <input
-                  id="filterOutSwaps"
-                  name="swapFilterMode"
-                  type="radio"
-                  checked={filterMode === "swaps"}
-                  onChange={() => setFilterMode("swaps")}
-                />
-                Filter out swaps
-              </label>
-              <label className="chip">
-                <input
-                  id="filterOutNonswaps"
-                  name="swapFilterMode"
-                  type="radio"
-                  checked={filterMode === "nonswaps"}
-                  onChange={() => setFilterMode("nonswaps")}
-                />
-                Filter out nonswaps
-              </label>
-              <label className="chip">
+            <div className="surface-strong mt-3" style={{ padding: "0.9rem", borderRadius: "0.75rem" }}>
+              <div className="fw-semibold mb-2">Filter options</div>
+
+              <div className="d-flex align-items-center gap-3 flex-wrap mb-2">
+                <div className="fw-semibold">Mode</div>
+                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="filterOutSwaps">
+                  <input
+                    id="filterOutSwaps"
+                    name="swapFilterMode"
+                    className="form-check-input mt-0"
+                    type="radio"
+                    checked={filterMode === "swaps"}
+                    onChange={() => setFilterMode("swaps")}
+                  />
+                  <span>filter out swaps</span>
+                </label>
+                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="filterOutNonswaps">
+                  <input
+                    id="filterOutNonswaps"
+                    name="swapFilterMode"
+                    className="form-check-input mt-0"
+                    type="radio"
+                    checked={filterMode === "nonswaps"}
+                    onChange={() => setFilterMode("nonswaps")}
+                  />
+                  <span>filter out nonswaps</span>
+                </label>
+              </div>
+
+              <div className="form-check mb-0">
                 <input
                   id="filterOutMaps"
+                  className="form-check-input"
                   type="checkbox"
                   checked={filterOutMaps}
                   onChange={(event) => setFilterOutMaps(event.target.checked)}
                 />
-                Filter out maps
-              </label>
+                <label className="form-check-label" htmlFor="filterOutMaps">
+                  Filter out maps
+                </label>
+              </div>
             </div>
 
             <div className="tool-actions">

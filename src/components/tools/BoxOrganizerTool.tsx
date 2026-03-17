@@ -198,72 +198,130 @@ export function BoxOrganizerTool() {
               </button>
             </div>
 
-            <div className="stack" style={{ marginTop: "0.75rem", gap: "0.45rem" }}>
-              <label className="chip">
-                <input id="combine" type="checkbox" checked={prefs.combine} onChange={(event) => setPrefs({ combine: event.target.checked })} />
-                Combine Pokemon with same gender and level
-              </label>
-              <label className="chip">
-                <input id="dupeDesc" type="checkbox" checked={prefs.dupeDesc} onChange={(event) => setPrefs({ dupeDesc: event.target.checked })} />
-                Sort dupes by level descending
-              </label>
-              <label className="chip">
-                <input id="plainLevel" type="checkbox" checked={prefs.plainLevel} onChange={(event) => setPrefs({ plainLevel: event.target.checked })} />
-                Display level as X instead of (Level: X)
-              </label>
-              <label className="chip">
-                <input id="combineSD" type="checkbox" checked={prefs.combineSD} onChange={(event) => setPrefs({ combineSD: event.target.checked })} />
-                Combine Shiny and Dark into one section
-              </label>
-              <label className="chip">
+            <div className="surface-strong mt-3" style={{ padding: "0.9rem", borderRadius: "0.75rem" }}>
+              <div className="fw-semibold mb-2">Options</div>
+
+              <div className="form-check mb-2">
+                <input
+                  id="combine"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.combine}
+                  onChange={(event) => setPrefs({ combine: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="combine">
+                  Combine Pokemon with same gender and level
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
+                <input
+                  id="dupeDesc"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.dupeDesc}
+                  onChange={(event) => setPrefs({ dupeDesc: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="dupeDesc">
+                  Sort dupes by level descending
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
+                <input
+                  id="plainLevel"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.plainLevel}
+                  onChange={(event) => setPrefs({ plainLevel: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="plainLevel">
+                  Display level as X instead of (Level: X)
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
+                <input
+                  id="combineSD"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.combineSD}
+                  onChange={(event) => setPrefs({ combineSD: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="combineSD">
+                  Combine Shiny and Dark into one section
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
                 <input
                   id="dedicatedUnknown"
+                  className="form-check-input"
                   type="checkbox"
                   checked={prefs.dedicatedUnknown}
                   onChange={(event) => setPrefs({ dedicatedUnknown: event.target.checked })}
                 />
-                Dedicated (?) section
-              </label>
-              <label className="chip">
+                <label className="form-check-label" htmlFor="dedicatedUnknown">
+                  Dedicated (?) section
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
                 <input
                   id="dedicatedLegends"
+                  className="form-check-input"
                   type="checkbox"
                   checked={prefs.dedicatedLegends}
                   onChange={(event) => setPrefs({ dedicatedLegends: event.target.checked })}
                 />
-                Dedicated Legends/Mythicals section
-              </label>
-              <label className="chip">
+                <label className="form-check-label" htmlFor="dedicatedLegends">
+                  Dedicated Legends/Mythicals section
+                </label>
+              </div>
+
+              <div className="form-check mb-2">
                 <input
                   id="keepGoldsInGolden"
+                  className="form-check-input"
                   type="checkbox"
                   checked={prefs.keepGoldsInGolden}
                   onChange={(event) => setPrefs({ keepGoldsInGolden: event.target.checked })}
                 />
-                Keep all golds inside Golden category
-              </label>
-              <label className="chip">
-                <input id="filterJunk" type="checkbox" checked={prefs.filterJunk} onChange={(event) => setPrefs({ filterJunk: event.target.checked })} />
-                Filter maps/swaps junk under level 1000
-              </label>
+                <label className="form-check-label" htmlFor="keepGoldsInGolden">
+                  Keep all golds inside Golden category
+                </label>
+              </div>
+
+              <div className="form-check mb-0">
+                <input
+                  id="filterJunk"
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={prefs.filterJunk}
+                  onChange={(event) => setPrefs({ filterJunk: event.target.checked })}
+                />
+                <label className="form-check-label" htmlFor="filterJunk">
+                  Filter maps/swaps junk under level 1000
+                </label>
+              </div>
             </div>
 
             <div id="colorBox" className="surface-strong mt-3" style={{ padding: "0.8rem", borderRadius: "0.75rem" }}>
               <div className="fw-semibold mb-2">Optional colors (leave blank for none)</div>
-              <div className="tool-template-grid" style={{ gap: "0.6rem" }}>
-                <div>
+              <div className="row g-2">
+                <div className="col-12 col-md-6">
                   <label htmlFor="cGold" className="form-label">Gold color</label>
                   <input id="cGold" className="field" value={prefs.colorGolden} onChange={(event) => setPrefs({ colorGolden: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="cShiny" className="form-label">Shiny color</label>
                   <input id="cShiny" className="field" value={prefs.colorShiny} onChange={(event) => setPrefs({ colorShiny: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="cDark" className="form-label">Dark color</label>
                   <input id="cDark" className="field" value={prefs.colorDark} onChange={(event) => setPrefs({ colorDark: event.target.value })} />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label htmlFor="cNormal" className="form-label">Normal color</label>
                   <input id="cNormal" className="field" value={prefs.colorNormal} onChange={(event) => setPrefs({ colorNormal: event.target.value })} />
                 </div>

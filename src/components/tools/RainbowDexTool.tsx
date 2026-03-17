@@ -114,16 +114,20 @@ export function RainbowDexTool() {
               </div>
             </div>
 
-            <div className="tool-actions">
-              <label className="chip">
+            <div className="surface-strong mt-3" style={{ padding: "0.8rem", borderRadius: "0.75rem" }}>
+              <div className="fw-semibold mb-2">Options</div>
+              <div className="form-check mb-0">
                 <input
                   id="includeGolds"
+                  className="form-check-input"
                   type="checkbox"
                   checked={prefs.includeGolds}
                   onChange={(e) => setPrefs({ includeGolds: e.target.checked })}
                 />
-                Include Goldens in missing list
-              </label>
+                <label className="form-check-label" htmlFor="includeGolds">
+                  Include Goldens in missing list
+                </label>
+              </div>
             </div>
 
             <div className="tool-actions">
