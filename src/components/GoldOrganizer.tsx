@@ -215,9 +215,13 @@ export function GoldOrganizer({
             <div className="panel-muted mt-3 p-3">
               <div className="fw-semibold mb-2">Options</div>
 
-              <div className="d-flex align-items-center gap-3 flex-wrap mb-2">
-                <div className="fw-semibold">Sort mode</div>
-                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="sortModeTimeline">
+              <div className="d-flex align-items-center gap-2 flex-wrap mb-2">
+                <span className="text-muted small">Sort mode:</span>
+                <label
+                  className="d-inline-flex align-items-center mb-0 px-1"
+                  style={{ gap: "0.45rem" }}
+                  htmlFor="sortModeTimeline"
+                >
                   <input
                     className="form-check-input mt-0"
                     type="radio"
@@ -226,9 +230,13 @@ export function GoldOrganizer({
                     checked={prefs.sortMode === "timeline"}
                     onChange={() => setPrefs({ sortMode: "timeline" })}
                   />
-                  <span>timeline</span>
+                  <span style={{ marginInlineStart: "0.2rem" }}>timeline</span>
                 </label>
-                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="sortModeAlphabetical">
+                <label
+                  className="d-inline-flex align-items-center mb-0 px-1"
+                  style={{ gap: "0.45rem" }}
+                  htmlFor="sortModeAlphabetical"
+                >
                   <input
                     className="form-check-input mt-0"
                     type="radio"
@@ -237,7 +245,7 @@ export function GoldOrganizer({
                     checked={prefs.sortMode === "alphabetical"}
                     onChange={() => setPrefs({ sortMode: "alphabetical" })}
                   />
-                  <span>alphabetical</span>
+                  <span style={{ marginInlineStart: "0.2rem" }}>alphabetical</span>
                 </label>
               </div>
 
