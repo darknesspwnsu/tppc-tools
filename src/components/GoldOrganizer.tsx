@@ -52,6 +52,7 @@ type Prefs = Pick<
   | "combine"
   | "dupeDesc"
   | "plainLevel"
+  | "sortMode"
   | "missingRows"
   | "includeStruckMissing"
   | "dropDupes"
@@ -62,6 +63,7 @@ type Prefs = Pick<
 >;
 
 const DEFAULT_PREFS: Prefs = {
+  sortMode: "timeline",
   combine: false,
   dupeDesc: false,
   plainLevel: false,
@@ -111,7 +113,7 @@ export function GoldOrganizer({
 }) {
   const [input, setInput] = useState("");
   const [prefs, setPrefs] = usePersistentOptions<Prefs>(PREFS_KEYS.goldOrganizer, DEFAULT_PREFS, {
-    version: 2,
+    version: 3,
     migrate: (raw) => {
       if (!raw || typeof raw !== "object") return DEFAULT_PREFS;
       return { ...DEFAULT_PREFS, ...(raw as Partial<Prefs>) };
@@ -182,7 +184,7 @@ export function GoldOrganizer({
         <h1 className="page-title">Gold Organizer</h1>
         <div className="page-subtitle">
           Uses the same input formats as Box Organizer, keeps only <code>Golden...</code> Pokemon,
-          and outputs them in chronological release order.
+          and outputs them in timeline or alphabetical order.
         </div>
       </section>
 
@@ -212,6 +214,32 @@ export function GoldOrganizer({
 
             <div className="panel-muted mt-3 p-3">
               <div className="fw-semibold mb-2">Options</div>
+
+              <div className="d-flex align-items-center gap-3 flex-wrap mb-2">
+                <div className="fw-semibold">Sort mode</div>
+                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="sortModeTimeline">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    id="sortModeTimeline"
+                    name="sortMode"
+                    checked={prefs.sortMode === "timeline"}
+                    onChange={() => setPrefs({ sortMode: "timeline" })}
+                  />
+                  <span>timeline</span>
+                </label>
+                <label className="d-inline-flex align-items-center gap-1 mb-0" htmlFor="sortModeAlphabetical">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    id="sortModeAlphabetical"
+                    name="sortMode"
+                    checked={prefs.sortMode === "alphabetical"}
+                    onChange={() => setPrefs({ sortMode: "alphabetical" })}
+                  />
+                  <span>alphabetical</span>
+                </label>
+              </div>
 
               <div className="form-check mb-2">
                 <input

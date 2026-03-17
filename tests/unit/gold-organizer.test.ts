@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { buildGoldOrganizerReferenceData, organizeGold, parseInput, type GoldOrganizerOpts } from "@/lib/gold-organizer";
 
 const DEFAULT_OPTS: GoldOrganizerOpts = {
+  sortMode: "timeline",
   combine: false,
   dupeDesc: false,
   plainLevel: false,
@@ -56,6 +57,23 @@ describe("organizeGold", () => {
     expect(result.output).toContain("GoldenBulbasaur (Level: 5)");
     expect(result.output).toContain("GoldenIvysaur");
     expect(result.missingOutput).toContain("GoldenIvysaur");
+  });
+
+  it("supports alphabetical sort mode for output rows", () => {
+    const timeline = [{ name: "GoldenBulbasaur" }, { name: "GoldenAbra" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { total: 100 },
+        goldenabra: { total: 100 }
+      }
+    };
+
+    const entries = parseInput(["GoldenBulbasaur (Level: 5)", "GoldenAbra (Level: 5)"].join("\n"));
+    const result = organizeGold(entries, { ...DEFAULT_OPTS, sortMode: "alphabetical", missingRows: false }, timeline, rarity);
+
+    expect(result.output.indexOf("GoldenAbra (Level: 5)")).toBeLessThan(
+      result.output.indexOf("GoldenBulbasaur (Level: 5)")
+    );
   });
 
   it("styles missing rows by the gray, strike, and exception thresholds", () => {

@@ -4,6 +4,7 @@ export type GoldEntry = {
 };
 
 export type GoldOrganizerOpts = {
+  sortMode: "timeline" | "alphabetical";
   combine: boolean;
   dupeDesc: boolean;
   plainLevel: boolean;
@@ -802,7 +803,11 @@ export function organizeGold(
   let missingFeasibleCount = 0;
   let missingRowsCount = 0;
 
-  for (const item of timeline) {
+  const timelineOrder = opts.sortMode === "alphabetical"
+    ? timeline.slice().sort((a, b) => a.name.localeCompare(b.name))
+    : timeline;
+
+  for (const item of timelineOrder) {
     let group = matchedGroups.get(item.index) || [];
     if (!group.length) {
       const miss = missingMeta(item.name);
