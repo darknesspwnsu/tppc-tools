@@ -88,6 +88,31 @@ describe("organizeGold", () => {
     expect(result.missingFeasibleCount).toBe(3);
   });
 
+  it("treats total=0 rarity entries as impossible (ignored/struck, not feasible missing)", () => {
+    const timeline = [{ name: "GoldenGolett" }, { name: "GoldenDruddigon" }, { name: "GoldenBulbasaur" }];
+    const rarity = {
+      timeline_by_key: {
+        goldengolett: { name: "GoldenGolett", total: 0 },
+        goldendruddigon: { name: "GoldenDruddigon", total: 0 },
+        goldenbulbasaur: { name: "GoldenBulbasaur", total: 100 }
+      }
+    };
+
+    const result = organizeGold([], DEFAULT_OPTS, timeline, rarity);
+
+    expect(result.output).toContain('[color=gray][s]GoldenGolett[/s][/color]');
+    expect(result.output).toContain('[color=gray][s]GoldenDruddigon[/s][/color]');
+    expect(result.output).toContain('[color=red]GoldenBulbasaur[/color]');
+
+    expect(result.missingOutput).not.toContain("GoldenGolett");
+    expect(result.missingOutput).not.toContain("GoldenDruddigon");
+    expect(result.missingOutput).toContain("GoldenBulbasaur");
+
+    expect(result.missingFeasibleCount).toBe(1);
+    expect(result.completionTotal).toBe(3);
+    expect(result.completionPercent).toBe("0.00");
+  });
+
   it("appends an uncolored legend to the main output when no custom gold color is set", () => {
     const timeline = [{ name: "GoldenBulbasaur" }];
     const rarity = {

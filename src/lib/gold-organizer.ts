@@ -629,11 +629,14 @@ export function organizeGold(
     return Number.isFinite(Number(rec?.total)) ? Number(rec?.total) : 0;
   };
 
+  const isImpossibleRarity = (timelineName: string) => rarityTotalForTimelineName(timelineName) <= 0;
+
   const missingMeta = (timelineName: string) => {
     const total = rarityTotalForTimelineName(timelineName);
     const key = canonicalForMatch(timelineName);
-    const shouldStrike = total > 0 && total < MISSING_STRIKE_THRESHOLD;
-    const shouldGray = EXCEPTIONALLY_HARD_TO_GET.has(key) || (total > 0 && total < MISSING_GRAY_THRESHOLD);
+    const isImpossible = total <= 0;
+    const shouldStrike = isImpossible || (total > 0 && total < MISSING_STRIKE_THRESHOLD);
+    const shouldGray = isImpossible || EXCEPTIONALLY_HARD_TO_GET.has(key) || (total > 0 && total < MISSING_GRAY_THRESHOLD);
     const label = shouldStrike ? `[s]${timelineName}[/s]` : timelineName;
     const c = shouldGray ? MISSING_COLOR : MISSING_COLOR_NON_GRAY;
     return {
