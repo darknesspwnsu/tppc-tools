@@ -5,7 +5,9 @@ import type { UngenderedSorterRunOptions, UngenderedSorterRunResult } from "./ty
 export {
   stripPrefixes,
   speciesFromFullName,
-  canonicalKey
+  canonicalKey,
+  buildGoldenizedKeySet,
+  isEffectivelyUeugNormal
 } from "./core-engine";
 
 export async function runUngenderedSorter(options: UngenderedSorterRunOptions): Promise<UngenderedSorterRunResult> {

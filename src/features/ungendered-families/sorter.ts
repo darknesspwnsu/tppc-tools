@@ -13,7 +13,9 @@ import {
   boldLowLevels,
   parseLeadingLevelFromRemainder,
   decorateMissingInline,
-  isVariantFiltered
+  isVariantFiltered,
+  buildGoldenizedKeySet,
+  isEffectivelyUeugNormal
 } from "./utils";
 
 import {
@@ -293,11 +295,13 @@ export async function runDexSorter({
   statusEl.textContent = "Fetching UE/UG list...";
   const ueugSet = await fetchUEUGSet();
 
+  statusEl.textContent = "Fetching rarity...";
+  const rarityRowsAll = await fetchRarityTable();
+  const goldenizedKeySet = buildGoldenizedKeySet(rarityRowsAll);
+
   function decorateName(fullName) {
     const cat = colorCategory(fullName);
-    const baseForUeug = stripPrefixes(fullName);
-    const key = canonicalKey(baseForUeug);
-    const isUeugNormal = cat === "normal" && ueugSet.has(key);
+    const isUeugNormal = isEffectivelyUeugNormal(fullName, ueugSet, goldenizedKeySet);
 
     const wrapColor = (color, text) =>
       color && color.trim().length > 0 ? `[color="${color.trim()}"]${text}[/color]` : text;
@@ -310,9 +314,6 @@ export async function runDexSorter({
     if (isUeugNormal) name = `[B]${name}[/B]`;
     return wrapColor(colors.normal, name);
   }
-
-  statusEl.textContent = "Fetching rarity...";
-  const rarityRowsAll = await fetchRarityTable();
 
   statusEl.textContent = "Fetching Level 4 rarity list...";
   const level4RarityByKey = await fetchLevel4RarityMap();
@@ -705,7 +706,7 @@ export async function runDexSorter({
     const prefix = (cat === "golden") ? "Golden" : (cat === "shiny") ? "Shiny" : (cat === "dark") ? "Dark" : "";
     const form = extractForm(pokeName);
 
-    const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(pokeName)));
+    const isUeugNormal = isEffectivelyUeugNormal(pokeName, ueugSet, goldenizedKeySet);
     const lv4Eligible = (cat === "shiny" || cat === "dark" || isUeugNormal);
 
     // Missing list entries do NOT have an input level, so they can never qualify for LV4 rarity override.
@@ -744,7 +745,7 @@ export async function runDexSorter({
     const form = extractForm(fullName);
 
     const cat = colorCategory(fullName);
-    const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(fullName)));
+    const isUeugNormal = isEffectivelyUeugNormal(fullName, ueugSet, goldenizedKeySet);
     const lv4Eligible = (cat === "shiny" || cat === "dark" || isUeugNormal);
 
     const isInputLevel4 = (r.levelNum === 4);
@@ -913,8 +914,7 @@ export async function runDexSorter({
     else if (cat === "golden") goldenKeys.add(baseKey);
     else {
       normalKeys.add(baseKey);
-      const keyUeug = canonicalKey(stripPrefixes(fullName));
-      if (ueugSet.has(keyUeug)) ueugNormalKeys.add(baseKey);
+      if (isEffectivelyUeugNormal(fullName, ueugSet, goldenizedKeySet)) ueugNormalKeys.add(baseKey);
     }
   }
 
@@ -975,7 +975,7 @@ export async function runDexSorter({
         const prefix = (cat === "golden") ? "Golden" : (cat === "shiny") ? "Shiny" : (cat === "dark") ? "Dark" : "";
         const form = extractForm(name);
 
-        const isUeugNormal = (cat === "normal") && ueugSet.has(canonicalKey(stripPrefixes(name)));
+        const isUeugNormal = isEffectivelyUeugNormal(name, ueugSet, goldenizedKeySet);
         const lv4Eligible = (cat === "shiny" || cat === "dark" || isUeugNormal);
 
         const hasPreEvo = hasPreEvoWithNonZeroRarity(sk, prefix, missSpecies, form, lv4Eligible);
@@ -1081,8 +1081,7 @@ export async function runDexSorter({
     const form = extractForm(r.full_name);
 
     const cat = colorCategory(r.full_name);
-    const baseForUeug = stripPrefixes(r.full_name);
-    const isUeug = ueugSet.has(canonicalKey(baseForUeug));
+    const isUeug = isEffectivelyUeugNormal(r.full_name, ueugSet, goldenizedKeySet);
     const lv4Eligible = (cat === "shiny" || cat === "dark" || (cat === "normal" && isUeug));
 
     const isInputLevel4 = (r.levelNum === 4);

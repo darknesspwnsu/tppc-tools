@@ -75,6 +75,21 @@ function isGoldenName(name) {
   return name.trim().toLowerCase().startsWith("golden");
 }
 
+function buildGoldenizedKeySet(rarityRows) {
+  const goldenized = new Set();
+  for (const row of rarityRows || []) {
+    if (colorCategory(row?.pokemon || "") !== "golden") continue;
+    goldenized.add(canonicalKey(stripPrefixes(row.pokemon)));
+  }
+  return goldenized;
+}
+
+function isEffectivelyUeugNormal(name, ueugSet, goldenizedKeySet) {
+  if (colorCategory(name) !== "normal") return false;
+  const key = canonicalKey(stripPrefixes(name));
+  return ueugSet.has(key) && !goldenizedKeySet.has(key);
+}
+
 // Compare two "tuple" arrays lexicographically
 function compareTuple(a, b) {
   const len = Math.min(a.length, b.length);
@@ -499,13 +514,14 @@ async function runDexSorter({
   // Fetch UE/UG list
   statusEl.textContent = "Fetching UE/UG list...";
   const ueugSet = await fetchUEUGSet();
+  statusEl.textContent = "Fetching rarity...";
+  const rarityRows = await fetchRarityTable();
+  const goldenizedKeySet = buildGoldenizedKeySet(rarityRows);
 
   // Build BBCode output (decorated names), with configurable colors
   function decorateName(fullName) {
     const cat = colorCategory(fullName);
-    const baseForUeug = stripPrefixes(fullName);
-    const key = canonicalKey(baseForUeug);
-    const isUeugNormal = cat === "normal" && ueugSet.has(key);
+    const isUeugNormal = isEffectivelyUeugNormal(fullName, ueugSet, goldenizedKeySet);
 
     const wrapColor = (color, text) =>
       color && color.trim().length > 0
@@ -583,9 +599,7 @@ async function runDexSorter({
       goldenKeys.add(baseKey);
     } else {
       normalKeys.add(baseKey);
-      const baseForUeug = stripPrefixes(fullName);
-      const keyUeug = canonicalKey(baseForUeug);
-      if (ueugSet.has(keyUeug)) {
+      if (isEffectivelyUeugNormal(fullName, ueugSet, goldenizedKeySet)) {
         ueugNormalKeys.add(baseKey);
       }
     }
@@ -606,8 +620,7 @@ async function runDexSorter({
     finalSortedOutput,
     "[/code]"
   ]; // Missing Ungendered (per variant)
-  statusEl.textContent = "Fetching rarity & computing missing list...";
-  const rarityRows = await fetchRarityTable();
+  statusEl.textContent = "Computing missing list...";
 
   // Keys you have (keep color/forms distinct)
   const haveKeys = new Set(rows.map((r) => canonicalKey(r.full_name)));
@@ -641,8 +654,7 @@ async function runDexSorter({
     if (haveKeys.has(key)) continue;
 
     if (cat === "normal") {
-      // Only match normals against UE/UG list
-      if (ueugSet.has(key)) {
+      if (isEffectivelyUeugNormal(pokeName, ueugSet, goldenizedKeySet)) {
         missingNormalUeug.push({ name: pokeName, u: row.ungendered });
       } else {
         missingNormalOther.push({ name: pokeName, u: row.ungendered });
@@ -727,5 +739,7 @@ export {
   stripPrefixes,
   speciesFromFullName,
   canonicalKey,
+  buildGoldenizedKeySet,
+  isEffectivelyUeugNormal,
   runDexSorter
 };

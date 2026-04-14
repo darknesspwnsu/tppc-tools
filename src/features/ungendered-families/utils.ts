@@ -53,6 +53,21 @@ export function colorRank(name) {
   return 0;
 }
 
+export function buildGoldenizedKeySet(rarityRows) {
+  const goldenized = new Set();
+  for (const row of rarityRows || []) {
+    if (colorCategory(row?.pokemon || "") !== "golden") continue;
+    goldenized.add(canonicalKey(stripPrefixes(row.pokemon)));
+  }
+  return goldenized;
+}
+
+export function isEffectivelyUeugNormal(name, ueugSet, goldenizedKeySet) {
+  if (colorCategory(name) !== "normal") return false;
+  const key = canonicalKey(stripPrefixes(name));
+  return ueugSet.has(key) && !goldenizedKeySet.has(key);
+}
+
 export function compareTuple(a, b) {
   const len = Math.min(a.length, b.length);
   for (let i = 0; i < len; i++) {
