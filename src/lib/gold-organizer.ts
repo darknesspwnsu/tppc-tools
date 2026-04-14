@@ -83,6 +83,7 @@ export type GoldOrganizerResult = {
   output: string;
   droppedOutput: string;
   missingOutput: string;
+  ignoredOutput: string;
 
   parsedCount: number;
   keptGoldCount: number;
@@ -610,6 +611,7 @@ export function organizeGold(
       output: "",
       droppedOutput: "",
       missingOutput: "",
+      ignoredOutput: "",
       parsedCount: entries.length,
       keptGoldCount: 0,
       matchedCount: 0,
@@ -687,19 +689,19 @@ export function organizeGold(
     isInputLevel4: boolean,
     rarityGenderBucket: GoldMatchedEntry["rarityGenderBucket"]
   ): GoldRarityMeta => {
-    let overallRarity = 0;
     const baseRarityName = goldBaseRarityName(fullName);
     const primaryRarityName = goldRarityLookupName(fullName);
     const rarityLookupCandidates =
       primaryRarityName === baseRarityName ? [primaryRarityName] : [primaryRarityName, baseRarityName];
 
+    let overallRarity = 0;
     const seenRarity = new Set<string>();
     for (const candidate of rarityLookupCandidates) {
       const candidateKey = canonicalForMatch(candidate);
       if (seenRarity.has(candidateKey)) continue;
       seenRarity.add(candidateKey);
 
-      const record = goldRarityRecordByKey.get(candidateKey);
+      const record = candidateKey === "" ? null : goldRarityRecordByKey.get(candidateKey);
       if (!record) continue;
 
       const value = Number(record[rarityGenderBucket] ?? 0);
@@ -725,6 +727,22 @@ export function organizeGold(
     };
   };
 
+  const hasGoldRarityRecordForEntry = (fullName: string) => {
+    const baseRarityName = goldBaseRarityName(fullName);
+    const primaryRarityName = goldRarityLookupName(fullName);
+    const rarityLookupCandidates =
+      primaryRarityName === baseRarityName ? [primaryRarityName] : [primaryRarityName, baseRarityName];
+
+    const seenRarity = new Set<string>();
+    for (const candidate of rarityLookupCandidates) {
+      const candidateKey = canonicalForMatch(candidate);
+      if (seenRarity.has(candidateKey)) continue;
+      seenRarity.add(candidateKey);
+      if (goldRarityRecordByKey.has(candidateKey)) return true;
+    }
+    return false;
+  };
+
   const buildRarityMeta = (entry: Omit<GoldMatchedEntry, "rarityMeta">): GoldRarityMeta =>
     directGoldRarityForEntry(
       `Golden${entry.speciesName}${entry.form ? ` (${entry.form})` : ""}`,
@@ -742,7 +760,10 @@ export function organizeGold(
     const form = extractForm(baseName);
     const match = resolveTimelineMatch(baseName, tlMap);
     const timelineItem = match.timelineItem;
-    const rarityLookupName = `Golden${speciesName}${form ? ` (${form})` : ""}`;
+    const fullGoldName = `Golden${speciesName}${form ? ` (${form})` : ""}`;
+    if (!timelineItem && !hasGoldRarityRecordForEntry(fullGoldName)) continue;
+
+    const rarityLookupName = fullGoldName;
     const raritySeedRecord = goldRarityRecordByKey.get(canonicalForMatch(rarityLookupName));
 
     const entryBase = {
@@ -850,6 +871,30 @@ export function organizeGold(
     return formatLine(e, singleOpts, "");
   });
 
+  let ignoredBucket = goldOnly
+    .filter((entry) => !entry.matched)
+    .slice()
+    .sort((a, b) => compareWithinSpecies(a, b, opts.dupeDesc)) as Array<GoldEntry & { count?: number }>;
+
+  if (opts.combine) ignoredBucket = combineEntries(ignoredBucket);
+
+  const ignoredLines = ignoredBucket.map((entry) =>
+    formatLine(
+      entry,
+      {
+        plainLevel: opts.plainLevel,
+        combine: opts.combine,
+        highlightRarity: false,
+        annotateRarity: false
+      },
+      opts.goldColor
+    )
+  );
+
+  if (opts.sortMode === "timeline" && ignoredLines.length) {
+    lines.push(...ignoredLines);
+  }
+
   const completionTotal = timeline.length;
   const completionCaught = completionCaughtSet.size;
   const completionPercent = completionTotal
@@ -863,6 +908,7 @@ export function organizeGold(
     output: `${statsLine}\n${wrapCodeBlock(lines, [formatLegendLine(opts.goldColor)])}`,
     droppedOutput: opts.dropDupes ? wrapCodeBlock(droppedLines.length ? droppedLines : ["(none)"]) : "",
     missingOutput: wrapCodeBlock(missingPanelLines.length ? missingPanelLines : ["(none)"]),
+    ignoredOutput: wrapCodeBlock(ignoredLines.length ? ignoredLines : ["(none)"]),
     parsedCount: entries.length,
     keptGoldCount: keptGold.length,
     matchedCount: keptGold.length,

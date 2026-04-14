@@ -1078,5 +1078,11 @@
     "release_date": "2026-02-14",
     "event": "Valentine's Day 2026 reward for hatching 30 eggs at the Breeding Center",
     "date_text": "February 14, 2026 - February 15, 2026"
+  },
+  {
+    "name": "GoldenGossifleur",
+    "release_date": "2026-04-05",
+    "event": "Flower Power Easter Mission",
+    "date_text": "April 5 - April 11, 2026"
   }
 ]
