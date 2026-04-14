@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { buildGoldOrganizerReferenceData, organizeGold, parseInput, type GoldOrganizerOpts } from "@/lib/gold-organizer";
+import {
+  buildGoldOrganizerReferenceData,
+  organizeGold,
+  parseInput,
+  type GoldOrganizerOpts
+} from "@/lib/gold-organizer";
 
 const DEFAULT_OPTS: GoldOrganizerOpts = {
   sortMode: "timeline",
@@ -57,8 +62,59 @@ describe("organizeGold", () => {
     expect(result.output).toContain("GoldenBulbasaur (Level: 5)");
     expect(result.output).toContain("GoldenIvysaur");
     expect(result.missingOutput).toContain("GoldenIvysaur");
+    expect(result.ignoredOutput).toContain("(none)");
   });
 
+  it("appends golds missing from the reference at the end of timeline mode and lists them in ignored output", () => {
+    const timeline = [{ name: "GoldenBulbasaur" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { total: 100 },
+        goldengossifleur: { total: 25 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput(["GoldenBulbasaur (Level: 5)", "GoldenGossifleur (Level: 5)"].join("\n")),
+      DEFAULT_OPTS,
+      timeline,
+      rarity
+    );
+
+    expect(result.keptGoldCount).toBe(1);
+    expect(result.ignoredCount).toBe(1);
+    expect(result.output).toContain("GoldenBulbasaur (Level: 5)");
+    expect(result.output).toContain("GoldenGossifleur (Level: 5)");
+    expect(result.output.indexOf("GoldenBulbasaur (Level: 5)")).toBeLessThan(
+      result.output.indexOf("GoldenGossifleur (Level: 5)")
+    );
+    expect(result.ignoredOutput).toContain("GoldenGossifleur (Level: 5)");
+  });
+
+  it("does not organize arbitrary golden-looking names when they are absent from the rarity list", () => {
+    const timeline = [{ name: "GoldenBulbasaur" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenbulbasaur: { total: 100 }
+      }
+    };
+
+    const result = organizeGold(
+      parseInput(["GoldenBulbasaur (Level: 5)", "GoldenPoop123 (?) (Level: 69,420)"].join("\n")),
+      DEFAULT_OPTS,
+      timeline,
+      rarity
+    );
+
+    expect(result.keptGoldCount).toBe(1);
+    expect(result.ignoredCount).toBe(0);
+    expect(result.output).toContain("GoldenBulbasaur (Level: 5)");
+    expect(result.output).not.toContain("GoldenPoop123");
+    expect(result.ignoredOutput).toContain("(none)");
+  });
+});
+
+describe("organizeGold", () => {
   it("supports alphabetical sort mode for output rows", () => {
     const timeline = [{ name: "GoldenBulbasaur" }, { name: "GoldenAbra" }];
     const rarity = {

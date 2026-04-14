@@ -125,6 +125,7 @@ export function GoldOrganizer({
   const [output, setOutput] = useState("");
   const [droppedOutput, setDroppedOutput] = useState("");
   const [missingOutput, setMissingOutput] = useState("");
+  const [ignoredOutput, setIgnoredOutput] = useState("");
 
   const timelineCount = useMemo(
     () => (Array.isArray(timelineRaw) ? timelineRaw.filter((x) => x && x.name).length : 0),
@@ -152,12 +153,13 @@ export function GoldOrganizer({
       setOutput(result.output);
       setDroppedOutput(result.droppedOutput);
       setMissingOutput(result.missingOutput);
+      setIgnoredOutput(result.ignoredOutput);
 
       setStatus(
         `Parsed ${fmt(result.parsedCount)} entries, kept ` +
-          `${fmt(result.keptGoldCount)} gold entries (` +
-          `${fmt(result.matchedCount)} in reference, ` +
-          `${fmt(result.ignoredCount)} ignored not-in-reference). ` +
+          `${fmt(result.keptGoldCount)} gold entries. ` +
+          `${fmt(result.matchedCount)} matched the reference. ` +
+          `${fmt(result.ignoredCount)} did not match; timeline mode appends them at the end and the Untracked Golds panel lists them separately. ` +
           `Inserted ${fmt(result.missingRowsCount)} missing rows. ` +
           `Missing panel shows ${fmt(result.missingPanelCount)} of ${fmt(result.missingTotalCount)} missing species. ` +
           `Completion ${result.completionPercent}% (${result.completionCaught}/${result.completionTotal}). ` +
@@ -175,6 +177,7 @@ export function GoldOrganizer({
     setOutput("");
     setDroppedOutput("");
     setMissingOutput("");
+    setIgnoredOutput("");
     setStatus("");
   };
 
@@ -446,6 +449,29 @@ export function GoldOrganizer({
               >
                 Copy Not-Shown List
               </button>
+            </div>
+          </div>
+
+          <div className="panel mt-3">
+            <label className="form-label fw-semibold" htmlFor="ignoredOutput">
+              Untracked Golds
+            </label>
+            <textarea id="ignoredOutput" className="field-area mono io-output" rows={8} readOnly value={ignoredOutput} />
+            <div className="mt-3 d-flex flex-wrap gap-2">
+              <button
+                className="btn-outline-soft"
+                type="button"
+                onClick={async () => {
+                  await copyToClipboard(ignoredOutput);
+                  setStatus("Copied untracked gold list.");
+                }}
+              >
+                Copy Untracked Golds
+              </button>
+            </div>
+            <div className="text-muted small mt-2">
+              Gold entries pasted in by the user but missing from the organizer reference timeline appear here instead of
+              being silently filtered out.
             </div>
           </div>
 

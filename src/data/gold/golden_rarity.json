@@ -2,13 +2,14 @@
   "source_url": "https://www.tppcrpg.net/rarity.html",
   "source_last_updated": "02-14-2026 06:32",
   "extracted_at": "2026-02-15T07:33:25.868889+00:00",
-  "golden_rarity_count": 395,
-  "timeline_count": 180,
-  "timeline_missing_count": 3,
+  "golden_rarity_count": 396,
+  "timeline_count": 181,
+  "timeline_missing_count": 4,
   "timeline_missing_names": [
     "GoldenGolett",
     "GoldenDruddigon",
-    "GoldenAudino"
+    "GoldenAudino",
+    "GoldenGossifleur"
   ],
   "timeline_by_key": {
     "goldenlugia": {
@@ -4452,6 +4453,19 @@
     },
     "goldenaudino": {
       "name": "GoldenAudino",
+      "found": false,
+      "matched_mode": "none",
+      "matched_name": "",
+      "rank": 0,
+      "male": 0,
+      "female": 0,
+      "genderless": 0,
+      "ungendered": 0,
+      "total": 0,
+      "forms": []
+    },
+    "goldengossifleur": {
+      "name": "GoldenGossifleur",
       "found": false,
       "matched_mode": "none",
       "matched_name": "",
@@ -8906,6 +8920,19 @@
     },
     {
       "name": "GoldenAudino",
+      "found": false,
+      "matched_mode": "none",
+      "matched_name": "",
+      "rank": 0,
+      "male": 0,
+      "female": 0,
+      "genderless": 0,
+      "ungendered": 0,
+      "total": 0,
+      "forms": []
+    },
+    {
+      "name": "GoldenGossifleur",
       "found": false,
       "matched_mode": "none",
       "matched_name": "",
