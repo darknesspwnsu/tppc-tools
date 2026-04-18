@@ -678,9 +678,14 @@ export function organizeGold(
     const female = Number(record?.female ?? 0);
     const genderless = Number(record?.genderless ?? 0);
     const ungendered = Number(record?.ungendered ?? 0);
+    const hasMale = male > 0;
+    const hasFemale = female > 0;
+    const hasSingleExplicitGender = hasMale !== hasFemale;
 
-    if (genderless > 0 && male === 0 && female === 0) return "genderless";
+    if (genderless > 0 && (!hasMale && !hasFemale)) return "genderless";
+    if (genderless > 0 && hasSingleExplicitGender) return "genderless";
     if (ungendered > 0) return "ungendered";
+    if (genderless > 0) return "genderless";
     return "ungendered";
   };
 

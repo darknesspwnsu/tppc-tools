@@ -724,6 +724,49 @@ describe("organizeGold", () => {
     expect(result.output).not.toContain('[b][size="4"]GoldenMewtwo[/size][/b]');
   });
 
+  it("prefers genderless rarity for no-symbol single-gender species", () => {
+    const timeline = [{ name: "GoldenKangaskhan" }];
+    const rarity = {
+      timeline_by_key: {
+        goldenkangaskhan: {
+          name: "GoldenKangaskhan",
+          male: 0,
+          female: 571,
+          genderless: 110,
+          ungendered: 17,
+          total: 698
+        }
+      }
+    };
+    const referenceData = buildGoldOrganizerReferenceData(
+      { pokemon_name: {}, evolutions: {} },
+      {
+        data: {
+          GoldenKangaskhan: {
+            male: 0,
+            female: 13,
+            genderless: 6,
+            ungendered: 2,
+            total: 21
+          }
+        }
+      }
+    );
+
+    const result = organizeGold(
+      parseInput("GoldenKangaskhan 4"),
+      { ...DEFAULT_OPTS, highlightRarity: true, annotateRarity: true, missingRows: false },
+      timeline,
+      rarity,
+      referenceData
+    );
+
+    expect(result.output).toContain('[b][size="5"]GoldenKangaskhan[/size][/b] (Level: 4)');
+    expect(result.output).toContain("6 ig (at this level; 110 overall)");
+    expect(result.output).not.toContain("2 ig");
+    expect(result.output).not.toContain("17 ig");
+  });
+
   it("uses size 4 emphasis for overall rarity between 10 and 29", () => {
     const timeline = [{ name: "GoldenMewtwo" }];
     const rarity = {
