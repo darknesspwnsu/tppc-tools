@@ -138,6 +138,12 @@ public/data/golden_pokemon_genders_meta.json
 
 # Playwright local artifacts
 test-results/
+.playwright-cli/
+output/
+
+# Local raw inputs/caches for swap-status regeneration
+data/wiki.xml
+data/forum-post-11515898.html
 
 # Local Codex/task-state artifacts that should stay machine-local
 AGENTS.md
