@@ -53,6 +53,8 @@ export type GoldenRarityRecord = {
 
 export type GoldenRarity = {
   timeline_by_key?: Record<string, GoldenRarityRecord>;
+  rarity_only?: GoldenRarityRecord[];
+  rarity_only_by_key?: Record<string, GoldenRarityRecord>;
 };
 
 export type Level4RarityJson = {
@@ -201,8 +203,9 @@ function looksGold(name: string) {
   return RE_GOLD_PREFIX.test(stripped);
 }
 
-export function normalizeTimeline(raw: readonly GoldenTimelineItemRaw[]): GoldenTimelineItem[] {
-  return (Array.isArray(raw) ? raw : [])
+export function normalizeTimeline(raw: readonly GoldenTimelineItemRaw[], rarityRaw?: GoldenRarity): GoldenTimelineItem[] {
+  const seen = new Set<string>();
+  const timeline = (Array.isArray(raw) ? raw : [])
     .map((x, i) => ({
       index: i,
       name: String((x && x.name) || "").trim(),
@@ -210,7 +213,28 @@ export function normalizeTimeline(raw: readonly GoldenTimelineItemRaw[]): Golden
       event: String((x && x.event) || "").trim(),
       dateText: String((x && x.date_text) || "").trim()
     }))
-    .filter((x) => x.name);
+    .filter((x) => x.name)
+    .map((x) => {
+      seen.add(canonicalForMatch(x.name));
+      return x;
+    });
+
+  const rarityOnly = Array.isArray(rarityRaw?.rarity_only) ? rarityRaw.rarity_only : [];
+  for (const record of rarityOnly) {
+    const name = String(record?.name || "").trim();
+    const key = canonicalForMatch(name);
+    if (!name || seen.has(key)) continue;
+    seen.add(key);
+    timeline.push({
+      index: timeline.length,
+      name,
+      releaseDate: "",
+      event: "Rarity list only",
+      dateText: "Rarity list only"
+    });
+  }
+
+  return timeline;
 }
 
 export function parseInput(raw: string): GoldEntry[] {
@@ -589,7 +613,7 @@ export function organizeGold(
   rarityRaw: GoldenRarity,
   referenceData?: GoldOrganizerReferenceData
 ): GoldOrganizerResult {
-  const timeline = normalizeTimeline(timelineRaw);
+  const timeline = normalizeTimeline(timelineRaw, rarityRaw);
   const rarityTimelineByKey = (rarityRaw && rarityRaw.timeline_by_key) || {};
   const goldRarityRecordByKey = new Map<string, GoldenRarityRecord | GoldenRarityForm>();
 

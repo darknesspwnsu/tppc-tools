@@ -1,0 +1,60 @@
+name: Update gold rarity data
+
+on:
+  # Run weekly after the daily rarity.html mirror has had time to refresh.
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: write
+
+jobs:
+  update-gold-rarity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download latest rarity.html
+        run: |
+          mkdir -p public/data
+          curl -L --fail --silent --show-error \
+            -H "User-Agent: tppc-tools-gold-rarity-sync/1.0" \
+            "https://www.tppcrpg.net/rarity.html" \
+            -o public/data/rarity.html
+
+      - name: Generate gold rarity data
+        run: npm run sync:gold-rarity
+
+      - name: Verify generated data
+        run: npm run codex:quick
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [[ -n "$(git status --porcelain public/data/rarity.html src/data/gold/golden_rarity.json)" ]]; then
+            git add public/data/rarity.html src/data/gold/golden_rarity.json
+            git commit -m "Update gold rarity data (automated)"
+            git pull --rebase
+            git push
+          else
+            echo "No gold rarity data changes"
+          fi

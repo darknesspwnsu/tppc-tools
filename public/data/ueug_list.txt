@@ -149,7 +149,6 @@ Indeedee
 Inkay
 Jangmo-o
 Joltik
-Kangaskhan
 Karrablast
 Kartana
 Kecleon
@@ -282,7 +281,6 @@ Spinda
 Spiritomb
 Spoink
 Stakataka
-Stantler
 Starly
 Staryu
 Stonjourner

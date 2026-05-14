@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "sync:gold-data": "node scripts/sync-gold-data.mjs",
+    "sync:gold-rarity": "node scripts/generate-gold-rarity.mjs",
     "sync:swap-status-data": "node scripts/sync-swap-status-data.mjs",
     "sync:pokesprite-data": "node scripts/sync-pokesprite-v2-manifest.mjs",
     "typecheck": "tsc --noEmit",
