@@ -35,6 +35,7 @@ describe("UE/UG source list", () => {
         "Kangaskhan",
         "Meowth (Alola)",
         "Phione",
+        "Skwovet",
         "Stantler",
         "Mew"
       ])
