@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+import { buildValidatedUeugSet } from "../ueug/gold-validation";
+
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
 const withBasePath = (path) => `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
 // ===============================
@@ -142,8 +144,7 @@ async function fetchUEUGSet() {
     entries = text.match(re) || [];
   }
 
-  const ueugSet = new Set(entries.map((n) => canonicalKey(n)));
-  return ueugSet;
+  return buildValidatedUeugSet(entries, canonicalKey);
 }
 
 // 4) TPPC rarity table (mirrored into this repo for same-origin fetches)

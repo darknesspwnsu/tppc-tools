@@ -5,6 +5,7 @@ import type {
   BoxOrganizerOptions,
   BoxOrganizerResult
 } from "./types";
+import { buildValidatedUeugSet } from "../ueug/gold-validation";
 
 // Use strict prefix matching so names like Darkrai are not treated as "Dark" prefixed variants.
 const RE_GOLD_PREFIX = /^Golden(?=[A-Z(])/;
@@ -445,7 +446,18 @@ export async function loadJunkLists(basePath = "") {
 
 export async function loadUeugList(basePath = "") {
   const cleanBase = String(basePath || "").replace(/\/+$/, "");
-  return loadTextSetFromPublic(`${cleanBase}/data/ueug_list.txt`);
+  try {
+    const response = await fetch(`${cleanBase}/data/ueug_list.txt`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
+    const entries = text
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    return buildValidatedUeugSet(entries, normalizeUEUGCandidateName);
+  } catch {
+    return new Set<string>();
+  }
 }
 
 export function organizeBox(entriesIn: BoxEntry[], opts: BoxOrganizerOptions, ctx: BoxOrganizerContext = {}): BoxOrganizerResult {

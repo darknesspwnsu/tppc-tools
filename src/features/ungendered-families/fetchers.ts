@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import { canonicalKey } from "./utils";
+import { buildValidatedUeugSet } from "../ueug/gold-validation";
 
 const BASE_PATH = String(process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
 const siteUrl = (path) => `${BASE_PATH}/${String(path || "").replace(/^\/+/, "")}`;
@@ -31,7 +32,7 @@ export async function fetchUEUGSet() {
     const t = line.trim();
     if (t) names.push(t);
   }
-  return new Set(names.map((n) => canonicalKey(n)));
+  return buildValidatedUeugSet(names, canonicalKey);
 }
 
 export async function fetchRarityTable() {
