@@ -1,7 +1,7 @@
 {
   "source_url": "https://www.tppcrpg.net/rarity.html",
-  "source_last_updated": "05-14-2026 06:34",
-  "extracted_at": "2026-05-14T11:38:26.189Z",
+  "source_last_updated": "05-17-2026 06:34",
+  "extracted_at": "2026-05-18T08:42:21.877Z",
   "golden_rarity_count": 399,
   "timeline_count": 181,
   "timeline_missing_count": 2,
@@ -19,21 +19,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSkwovet",
-      "rank": 326,
-      "male": 3,
+      "rank": 355,
+      "male": 4,
       "female": 4,
       "genderless": 0,
       "ungendered": 0,
-      "total": 7,
+      "total": 8,
       "forms": [
         {
           "name": "GoldenSkwovet",
-          "rank": 326,
-          "male": 3,
+          "rank": 355,
+          "male": 4,
           "female": 4,
           "genderless": 0,
           "ungendered": 0,
-          "total": 7
+          "total": 8
         }
       ]
     }
@@ -44,21 +44,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSkwovet",
-      "rank": 326,
-      "male": 3,
+      "rank": 355,
+      "male": 4,
       "female": 4,
       "genderless": 0,
       "ungendered": 0,
-      "total": 7,
+      "total": 8,
       "forms": [
         {
           "name": "GoldenSkwovet",
-          "rank": 326,
-          "male": 3,
+          "rank": 355,
+          "male": 4,
           "female": 4,
           "genderless": 0,
           "ungendered": 0,
-          "total": 7
+          "total": 8
         }
       ]
     }
@@ -138,7 +138,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLapras",
-      "rank": 243,
+      "rank": 241,
       "male": 0,
       "female": 0,
       "genderless": 0,
@@ -147,7 +147,7 @@
       "forms": [
         {
           "name": "GoldenLapras",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 0,
@@ -184,7 +184,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHoundour",
-      "rank": 817,
+      "rank": 816,
       "male": 2,
       "female": 4,
       "genderless": 0,
@@ -193,7 +193,7 @@
       "forms": [
         {
           "name": "GoldenHoundour",
-          "rank": 817,
+          "rank": 816,
           "male": 2,
           "female": 4,
           "genderless": 0,
@@ -207,21 +207,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMeowth",
-      "rank": 1104,
+      "rank": 1105,
       "male": 10,
       "female": 10,
       "genderless": 3,
-      "ungendered": 246,
-      "total": 269,
+      "ungendered": 247,
+      "total": 270,
       "forms": [
         {
           "name": "GoldenMeowth",
-          "rank": 1104,
+          "rank": 1105,
           "male": 10,
           "female": 10,
           "genderless": 3,
-          "ungendered": 246,
-          "total": 269
+          "ungendered": 247,
+          "total": 270
         }
       ]
     },
@@ -253,7 +253,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDelibird",
-      "rank": 916,
+      "rank": 915,
       "male": 7,
       "female": 4,
       "genderless": 0,
@@ -262,7 +262,7 @@
       "forms": [
         {
           "name": "GoldenDelibird",
-          "rank": 916,
+          "rank": 915,
           "male": 7,
           "female": 4,
           "genderless": 0,
@@ -276,7 +276,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWooper",
-      "rank": 882,
+      "rank": 881,
       "male": 3,
       "female": 5,
       "genderless": 0,
@@ -285,7 +285,7 @@
       "forms": [
         {
           "name": "GoldenWooper",
-          "rank": 882,
+          "rank": 881,
           "male": 3,
           "female": 5,
           "genderless": 0,
@@ -322,7 +322,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHeracross",
-      "rank": 784,
+      "rank": 783,
       "male": 10,
       "female": 5,
       "genderless": 0,
@@ -331,7 +331,7 @@
       "forms": [
         {
           "name": "GoldenHeracross",
-          "rank": 784,
+          "rank": 783,
           "male": 10,
           "female": 5,
           "genderless": 0,
@@ -437,7 +437,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenShroomish",
-      "rank": 1412,
+      "rank": 1411,
       "male": 309,
       "female": 225,
       "genderless": 0,
@@ -446,7 +446,7 @@
       "forms": [
         {
           "name": "GoldenShroomish",
-          "rank": 1412,
+          "rank": 1411,
           "male": 309,
           "female": 225,
           "genderless": 0,
@@ -460,7 +460,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMareep",
-      "rank": 1500,
+      "rank": 1501,
       "male": 313,
       "female": 276,
       "genderless": 0,
@@ -469,7 +469,7 @@
       "forms": [
         {
           "name": "GoldenMareep",
-          "rank": 1500,
+          "rank": 1501,
           "male": 313,
           "female": 276,
           "genderless": 0,
@@ -483,7 +483,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMiltank",
-      "rank": 1170,
+      "rank": 1169,
       "male": 0,
       "female": 311,
       "genderless": 0,
@@ -492,7 +492,7 @@
       "forms": [
         {
           "name": "GoldenMiltank",
-          "rank": 1170,
+          "rank": 1169,
           "male": 0,
           "female": 311,
           "genderless": 0,
@@ -552,7 +552,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSpheal",
-      "rank": 1578,
+      "rank": 1575,
       "male": 419,
       "female": 309,
       "genderless": 0,
@@ -561,7 +561,7 @@
       "forms": [
         {
           "name": "GoldenSpheal",
-          "rank": 1578,
+          "rank": 1575,
           "male": 419,
           "female": 309,
           "genderless": 0,
@@ -575,7 +575,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSlowpoke",
-      "rank": 1351,
+      "rank": 1350,
       "male": 209,
       "female": 261,
       "genderless": 0,
@@ -584,7 +584,7 @@
       "forms": [
         {
           "name": "GoldenSlowpoke",
-          "rank": 1351,
+          "rank": 1350,
           "male": 209,
           "female": 261,
           "genderless": 0,
@@ -690,7 +690,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBeldum",
-      "rank": 1170,
+      "rank": 1169,
       "male": 0,
       "female": 0,
       "genderless": 299,
@@ -699,7 +699,7 @@
       "forms": [
         {
           "name": "GoldenBeldum",
-          "rank": 1170,
+          "rank": 1169,
           "male": 0,
           "female": 0,
           "genderless": 299,
@@ -736,7 +736,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenAron",
-      "rank": 1559,
+      "rank": 1558,
       "male": 385,
       "female": 337,
       "genderless": 0,
@@ -745,7 +745,7 @@
       "forms": [
         {
           "name": "GoldenAron",
-          "rank": 1559,
+          "rank": 1558,
           "male": 385,
           "female": 337,
           "genderless": 0,
@@ -759,7 +759,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenGeodude",
-      "rank": 1439,
+      "rank": 1438,
       "male": 302,
       "female": 241,
       "genderless": 0,
@@ -768,7 +768,7 @@
       "forms": [
         {
           "name": "GoldenGeodude",
-          "rank": 1439,
+          "rank": 1438,
           "male": 302,
           "female": 241,
           "genderless": 0,
@@ -782,21 +782,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSunkern",
-      "rank": 1351,
-      "male": 207,
+      "rank": 1354,
+      "male": 209,
       "female": 213,
       "genderless": 0,
       "ungendered": 50,
-      "total": 470,
+      "total": 472,
       "forms": [
         {
           "name": "GoldenSunkern",
-          "rank": 1351,
-          "male": 207,
+          "rank": 1354,
+          "male": 209,
           "female": 213,
           "genderless": 0,
           "ungendered": 50,
-          "total": 470
+          "total": 472
         }
       ]
     },
@@ -828,7 +828,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDratini",
-      "rank": 1836,
+      "rank": 1835,
       "male": 927,
       "female": 653,
       "genderless": 0,
@@ -837,7 +837,7 @@
       "forms": [
         {
           "name": "GoldenDratini",
-          "rank": 1836,
+          "rank": 1835,
           "male": 927,
           "female": 653,
           "genderless": 0,
@@ -874,7 +874,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRalts",
-      "rank": 1411,
+      "rank": 1410,
       "male": 258,
       "female": 220,
       "genderless": 0,
@@ -883,7 +883,7 @@
       "forms": [
         {
           "name": "GoldenRalts",
-          "rank": 1411,
+          "rank": 1410,
           "male": 258,
           "female": 220,
           "genderless": 0,
@@ -966,7 +966,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSnover",
-      "rank": 1611,
+      "rank": 1610,
       "male": 542,
       "female": 344,
       "genderless": 0,
@@ -975,7 +975,7 @@
       "forms": [
         {
           "name": "GoldenSnover",
-          "rank": 1611,
+          "rank": 1610,
           "male": 542,
           "female": 344,
           "genderless": 0,
@@ -1081,7 +1081,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBagon",
-      "rank": 1440,
+      "rank": 1439,
       "male": 303,
       "female": 238,
       "genderless": 0,
@@ -1090,7 +1090,7 @@
       "forms": [
         {
           "name": "GoldenBagon",
-          "rank": 1440,
+          "rank": 1439,
           "male": 303,
           "female": 238,
           "genderless": 0,
@@ -1105,20 +1105,20 @@
       "matched_mode": "exact",
       "matched_name": "GoldenCacnea",
       "rank": 1880,
-      "male": 1045,
+      "male": 1044,
       "female": 846,
       "genderless": 0,
       "ungendered": 71,
-      "total": 1962,
+      "total": 1961,
       "forms": [
         {
           "name": "GoldenCacnea",
           "rank": 1880,
-          "male": 1045,
+          "male": 1044,
           "female": 846,
           "genderless": 0,
           "ungendered": 71,
-          "total": 1962
+          "total": 1961
         }
       ]
     },
@@ -1150,7 +1150,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMagnemite",
-      "rank": 1587,
+      "rank": 1585,
       "male": 0,
       "female": 0,
       "genderless": 772,
@@ -1159,7 +1159,7 @@
       "forms": [
         {
           "name": "GoldenMagnemite",
-          "rank": 1587,
+          "rank": 1585,
           "male": 0,
           "female": 0,
           "genderless": 772,
@@ -1173,7 +1173,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTimburr",
-      "rank": 846,
+      "rank": 843,
       "male": 42,
       "female": 51,
       "genderless": 0,
@@ -1182,7 +1182,7 @@
       "forms": [
         {
           "name": "GoldenTimburr",
-          "rank": 846,
+          "rank": 843,
           "male": 42,
           "female": 51,
           "genderless": 0,
@@ -1196,7 +1196,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSnivy",
-      "rank": 243,
+      "rank": 241,
       "male": 3,
       "female": 2,
       "genderless": 0,
@@ -1205,7 +1205,7 @@
       "forms": [
         {
           "name": "GoldenSnivy",
-          "rank": 243,
+          "rank": 241,
           "male": 3,
           "female": 2,
           "genderless": 0,
@@ -1288,7 +1288,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRoggenrola",
-      "rank": 1582,
+      "rank": 1580,
       "male": 410,
       "female": 390,
       "genderless": 0,
@@ -1297,7 +1297,7 @@
       "forms": [
         {
           "name": "GoldenRoggenrola",
-          "rank": 1582,
+          "rank": 1580,
           "male": 410,
           "female": 390,
           "genderless": 0,
@@ -1370,7 +1370,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMagikarp",
-      "rank": 1405,
+      "rank": 1404,
       "male": 264,
       "female": 222,
       "genderless": 1,
@@ -1379,7 +1379,7 @@
       "forms": [
         {
           "name": "GoldenMagikarp",
-          "rank": 1405,
+          "rank": 1404,
           "male": 264,
           "female": 222,
           "genderless": 1,
@@ -1475,7 +1475,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHeatmor",
-      "rank": 243,
+      "rank": 241,
       "male": 2,
       "female": 3,
       "genderless": 0,
@@ -1484,7 +1484,7 @@
       "forms": [
         {
           "name": "GoldenHeatmor",
-          "rank": 243,
+          "rank": 241,
           "male": 2,
           "female": 3,
           "genderless": 0,
@@ -1498,7 +1498,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLarvesta",
-      "rank": 458,
+      "rank": 455,
       "male": 7,
       "female": 5,
       "genderless": 0,
@@ -1507,7 +1507,7 @@
       "forms": [
         {
           "name": "GoldenLarvesta",
-          "rank": 458,
+          "rank": 455,
           "male": 7,
           "female": 5,
           "genderless": 0,
@@ -1567,7 +1567,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBulbasaur",
-      "rank": 1420,
+      "rank": 1419,
       "male": 359,
       "female": 112,
       "genderless": 2,
@@ -1576,7 +1576,7 @@
       "forms": [
         {
           "name": "GoldenBulbasaur",
-          "rank": 1420,
+          "rank": 1419,
           "male": 359,
           "female": 112,
           "genderless": 2,
@@ -1613,7 +1613,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenCubone",
-      "rank": 1544,
+      "rank": 1543,
       "male": 358,
       "female": 320,
       "genderless": 0,
@@ -1622,7 +1622,7 @@
       "forms": [
         {
           "name": "GoldenCubone",
-          "rank": 1544,
+          "rank": 1543,
           "male": 358,
           "female": 320,
           "genderless": 0,
@@ -1636,7 +1636,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLitwick",
-      "rank": 1215,
+      "rank": 1214,
       "male": 169,
       "female": 181,
       "genderless": 0,
@@ -1645,7 +1645,7 @@
       "forms": [
         {
           "name": "GoldenLitwick",
-          "rank": 1215,
+          "rank": 1214,
           "male": 169,
           "female": 181,
           "genderless": 0,
@@ -1774,7 +1774,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSquirtle",
-      "rank": 1166,
+      "rank": 1165,
       "male": 174,
       "female": 84,
       "genderless": 0,
@@ -1783,7 +1783,7 @@
       "forms": [
         {
           "name": "GoldenSquirtle",
-          "rank": 1166,
+          "rank": 1165,
           "male": 174,
           "female": 84,
           "genderless": 0,
@@ -1843,7 +1843,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWailmer",
-      "rank": 1196,
+      "rank": 1193,
       "male": 155,
       "female": 150,
       "genderless": 0,
@@ -1852,7 +1852,7 @@
       "forms": [
         {
           "name": "GoldenWailmer",
-          "rank": 1196,
+          "rank": 1193,
           "male": 155,
           "female": 150,
           "genderless": 0,
@@ -1912,7 +1912,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSwinub",
-      "rank": 1215,
+      "rank": 1214,
       "male": 156,
       "female": 152,
       "genderless": 0,
@@ -1921,7 +1921,7 @@
       "forms": [
         {
           "name": "GoldenSwinub",
-          "rank": 1215,
+          "rank": 1214,
           "male": 156,
           "female": 152,
           "genderless": 0,
@@ -1935,7 +1935,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenShinx",
-      "rank": 1425,
+      "rank": 1424,
       "male": 288,
       "female": 261,
       "genderless": 0,
@@ -1944,7 +1944,7 @@
       "forms": [
         {
           "name": "GoldenShinx",
-          "rank": 1425,
+          "rank": 1424,
           "male": 288,
           "female": 261,
           "genderless": 0,
@@ -1958,7 +1958,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTauros",
-      "rank": 1483,
+      "rank": 1482,
       "male": 519,
       "female": 85,
       "genderless": 0,
@@ -1967,7 +1967,7 @@
       "forms": [
         {
           "name": "GoldenTauros",
-          "rank": 1483,
+          "rank": 1482,
           "male": 519,
           "female": 85,
           "genderless": 0,
@@ -2192,7 +2192,7 @@
         },
         {
           "name": "GoldenZygarde (10%)",
-          "rank": 356,
+          "rank": 355,
           "male": 0,
           "female": 0,
           "genderless": 8,
@@ -2275,21 +2275,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenScatterbug",
-      "rank": 1113,
+      "rank": 1114,
       "male": 144,
-      "female": 130,
+      "female": 131,
       "genderless": 0,
       "ungendered": 0,
-      "total": 274,
+      "total": 275,
       "forms": [
         {
           "name": "GoldenScatterbug",
-          "rank": 1113,
+          "rank": 1114,
           "male": 144,
-          "female": 130,
+          "female": 131,
           "genderless": 0,
           "ungendered": 0,
-          "total": 274
+          "total": 275
         }
       ]
     },
@@ -2321,7 +2321,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenFeebas",
-      "rank": 793,
+      "rank": 792,
       "male": 30,
       "female": 30,
       "genderless": 0,
@@ -2330,7 +2330,7 @@
       "forms": [
         {
           "name": "GoldenFeebas",
-          "rank": 793,
+          "rank": 792,
           "male": 30,
           "female": 30,
           "genderless": 0,
@@ -2344,7 +2344,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTyrunt",
-      "rank": 1188,
+      "rank": 1186,
       "male": 208,
       "female": 121,
       "genderless": 0,
@@ -2353,7 +2353,7 @@
       "forms": [
         {
           "name": "GoldenTyrunt",
-          "rank": 1188,
+          "rank": 1186,
           "male": 208,
           "female": 121,
           "genderless": 0,
@@ -2367,7 +2367,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPichu",
-      "rank": 1347,
+      "rank": 1348,
       "male": 195,
       "female": 185,
       "genderless": 1,
@@ -2376,7 +2376,7 @@
       "forms": [
         {
           "name": "GoldenPichu",
-          "rank": 1347,
+          "rank": 1348,
           "male": 195,
           "female": 185,
           "genderless": 1,
@@ -2390,7 +2390,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenOmanyte",
-      "rank": 1435,
+      "rank": 1434,
       "male": 480,
       "female": 83,
       "genderless": 0,
@@ -2399,7 +2399,7 @@
       "forms": [
         {
           "name": "GoldenOmanyte",
-          "rank": 1435,
+          "rank": 1434,
           "male": 480,
           "female": 83,
           "genderless": 0,
@@ -2413,7 +2413,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenZorua",
-      "rank": 1009,
+      "rank": 1008,
       "male": 108,
       "female": 78,
       "genderless": 0,
@@ -2422,7 +2422,7 @@
       "forms": [
         {
           "name": "GoldenZorua",
-          "rank": 1009,
+          "rank": 1008,
           "male": 108,
           "female": 78,
           "genderless": 0,
@@ -2459,7 +2459,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHappiny",
-      "rank": 508,
+      "rank": 507,
       "male": 0,
       "female": 15,
       "genderless": 0,
@@ -2468,7 +2468,7 @@
       "forms": [
         {
           "name": "GoldenHappiny",
-          "rank": 508,
+          "rank": 507,
           "male": 0,
           "female": 15,
           "genderless": 0,
@@ -2505,21 +2505,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenVolcanion",
-      "rank": 914,
+      "rank": 915,
       "male": 0,
       "female": 0,
-      "genderless": 127,
+      "genderless": 128,
       "ungendered": 0,
-      "total": 127,
+      "total": 128,
       "forms": [
         {
           "name": "GoldenVolcanion",
-          "rank": 914,
+          "rank": 915,
           "male": 0,
           "female": 0,
-          "genderless": 127,
+          "genderless": 128,
           "ungendered": 0,
-          "total": 127
+          "total": 128
         }
       ]
     },
@@ -2551,7 +2551,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMachop",
-      "rank": 1181,
+      "rank": 1179,
       "male": 163,
       "female": 119,
       "genderless": 0,
@@ -2560,7 +2560,7 @@
       "forms": [
         {
           "name": "GoldenMachop",
-          "rank": 1181,
+          "rank": 1179,
           "male": 163,
           "female": 119,
           "genderless": 0,
@@ -2873,7 +2873,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHorsea",
-      "rank": 356,
+      "rank": 355,
       "male": 3,
       "female": 5,
       "genderless": 0,
@@ -2882,7 +2882,7 @@
       "forms": [
         {
           "name": "GoldenHorsea",
-          "rank": 356,
+          "rank": 355,
           "male": 3,
           "female": 5,
           "genderless": 0,
@@ -2988,7 +2988,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRayquaza",
-      "rank": 1459,
+      "rank": 1457,
       "male": 0,
       "female": 0,
       "genderless": 579,
@@ -2997,7 +2997,7 @@
       "forms": [
         {
           "name": "GoldenRayquaza",
-          "rank": 1459,
+          "rank": 1457,
           "male": 0,
           "female": 0,
           "genderless": 579,
@@ -3126,7 +3126,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenComfey",
-      "rank": 439,
+      "rank": 438,
       "male": 7,
       "female": 4,
       "genderless": 0,
@@ -3135,7 +3135,7 @@
       "forms": [
         {
           "name": "GoldenComfey",
-          "rank": 439,
+          "rank": 438,
           "male": 7,
           "female": 4,
           "genderless": 0,
@@ -3213,7 +3213,7 @@
         },
         {
           "name": "GoldenHoopa (Confined)",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 5,
@@ -3250,7 +3250,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTotodile",
-      "rank": 1392,
+      "rank": 1391,
       "male": 258,
       "female": 150,
       "genderless": 0,
@@ -3259,7 +3259,7 @@
       "forms": [
         {
           "name": "GoldenTotodile",
-          "rank": 1392,
+          "rank": 1391,
           "male": 258,
           "female": 150,
           "genderless": 0,
@@ -3273,7 +3273,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPlusle",
-      "rank": 1418,
+      "rank": 1417,
       "male": 269,
       "female": 272,
       "genderless": 0,
@@ -3282,7 +3282,7 @@
       "forms": [
         {
           "name": "GoldenPlusle",
-          "rank": 1418,
+          "rank": 1417,
           "male": 269,
           "female": 272,
           "genderless": 0,
@@ -3296,7 +3296,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMinun",
-      "rank": 1429,
+      "rank": 1428,
       "male": 283,
       "female": 278,
       "genderless": 0,
@@ -3305,7 +3305,7 @@
       "forms": [
         {
           "name": "GoldenMinun",
-          "rank": 1429,
+          "rank": 1428,
           "male": 283,
           "female": 278,
           "genderless": 0,
@@ -3434,21 +3434,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenChimchar",
-      "rank": 1129,
-      "male": 150,
+      "rank": 1127,
+      "male": 149,
       "female": 141,
       "genderless": 0,
       "ungendered": 0,
-      "total": 291,
+      "total": 290,
       "forms": [
         {
           "name": "GoldenChimchar",
-          "rank": 1129,
-          "male": 150,
+          "rank": 1127,
+          "male": 149,
           "female": 141,
           "genderless": 0,
           "ungendered": 0,
-          "total": 291
+          "total": 290
         }
       ]
     },
@@ -3503,7 +3503,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenVulpix (Alola)",
-      "rank": 1177,
+      "rank": 1176,
       "male": 119,
       "female": 170,
       "genderless": 0,
@@ -3512,7 +3512,7 @@
       "forms": [
         {
           "name": "GoldenVulpix (Alola)",
-          "rank": 1177,
+          "rank": 1176,
           "male": 119,
           "female": 170,
           "genderless": 0,
@@ -3549,7 +3549,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPumpkaboo (Small)",
-      "rank": 1215,
+      "rank": 1214,
       "male": 171,
       "female": 179,
       "genderless": 0,
@@ -3558,7 +3558,7 @@
       "forms": [
         {
           "name": "GoldenPumpkaboo (Small)",
-          "rank": 1215,
+          "rank": 1214,
           "male": 171,
           "female": 179,
           "genderless": 0,
@@ -3664,7 +3664,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWeedle",
-      "rank": 1403,
+      "rank": 1402,
       "male": 220,
       "female": 214,
       "genderless": 0,
@@ -3673,7 +3673,7 @@
       "forms": [
         {
           "name": "GoldenWeedle",
-          "rank": 1403,
+          "rank": 1402,
           "male": 220,
           "female": 214,
           "genderless": 0,
@@ -3760,7 +3760,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDeoxys",
-      "rank": 243,
+      "rank": 241,
       "male": 0,
       "female": 0,
       "genderless": 5,
@@ -3769,7 +3769,7 @@
       "forms": [
         {
           "name": "GoldenDeoxys",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 5,
@@ -3852,7 +3852,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSneasel",
-      "rank": 1199,
+      "rank": 1196,
       "male": 148,
       "female": 100,
       "genderless": 0,
@@ -3861,7 +3861,7 @@
       "forms": [
         {
           "name": "GoldenSneasel",
-          "rank": 1199,
+          "rank": 1196,
           "male": 148,
           "female": 100,
           "genderless": 0,
@@ -3990,7 +3990,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBidoof",
-      "rank": 854,
+      "rank": 852,
       "male": 48,
       "female": 49,
       "genderless": 0,
@@ -3999,7 +3999,7 @@
       "forms": [
         {
           "name": "GoldenBidoof",
-          "rank": 854,
+          "rank": 852,
           "male": 48,
           "female": 49,
           "genderless": 0,
@@ -4013,7 +4013,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDiancie",
-      "rank": 1201,
+      "rank": 1200,
       "male": 0,
       "female": 0,
       "genderless": 341,
@@ -4022,7 +4022,7 @@
       "forms": [
         {
           "name": "GoldenDiancie",
-          "rank": 1201,
+          "rank": 1200,
           "male": 0,
           "female": 0,
           "genderless": 341,
@@ -4151,7 +4151,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenStantler",
-      "rank": 1421,
+      "rank": 1420,
       "male": 208,
       "female": 211,
       "genderless": 0,
@@ -4160,7 +4160,7 @@
       "forms": [
         {
           "name": "GoldenStantler",
-          "rank": 1421,
+          "rank": 1420,
           "male": 208,
           "female": 211,
           "genderless": 0,
@@ -4243,7 +4243,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenGossifleur",
-      "rank": 982,
+      "rank": 981,
       "male": 76,
       "female": 90,
       "genderless": 0,
@@ -4252,7 +4252,7 @@
       "forms": [
         {
           "name": "GoldenGossifleur",
-          "rank": 982,
+          "rank": 981,
           "male": 76,
           "female": 90,
           "genderless": 0,
@@ -4337,7 +4337,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLapras",
-      "rank": 243,
+      "rank": 241,
       "male": 0,
       "female": 0,
       "genderless": 0,
@@ -4346,7 +4346,7 @@
       "forms": [
         {
           "name": "GoldenLapras",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 0,
@@ -4383,7 +4383,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHoundour",
-      "rank": 817,
+      "rank": 816,
       "male": 2,
       "female": 4,
       "genderless": 0,
@@ -4392,7 +4392,7 @@
       "forms": [
         {
           "name": "GoldenHoundour",
-          "rank": 817,
+          "rank": 816,
           "male": 2,
           "female": 4,
           "genderless": 0,
@@ -4406,21 +4406,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMeowth",
-      "rank": 1104,
+      "rank": 1105,
       "male": 10,
       "female": 10,
       "genderless": 3,
-      "ungendered": 246,
-      "total": 269,
+      "ungendered": 247,
+      "total": 270,
       "forms": [
         {
           "name": "GoldenMeowth",
-          "rank": 1104,
+          "rank": 1105,
           "male": 10,
           "female": 10,
           "genderless": 3,
-          "ungendered": 246,
-          "total": 269
+          "ungendered": 247,
+          "total": 270
         }
       ]
     },
@@ -4452,7 +4452,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDelibird",
-      "rank": 916,
+      "rank": 915,
       "male": 7,
       "female": 4,
       "genderless": 0,
@@ -4461,7 +4461,7 @@
       "forms": [
         {
           "name": "GoldenDelibird",
-          "rank": 916,
+          "rank": 915,
           "male": 7,
           "female": 4,
           "genderless": 0,
@@ -4475,7 +4475,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWooper",
-      "rank": 882,
+      "rank": 881,
       "male": 3,
       "female": 5,
       "genderless": 0,
@@ -4484,7 +4484,7 @@
       "forms": [
         {
           "name": "GoldenWooper",
-          "rank": 882,
+          "rank": 881,
           "male": 3,
           "female": 5,
           "genderless": 0,
@@ -4521,7 +4521,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHeracross",
-      "rank": 784,
+      "rank": 783,
       "male": 10,
       "female": 5,
       "genderless": 0,
@@ -4530,7 +4530,7 @@
       "forms": [
         {
           "name": "GoldenHeracross",
-          "rank": 784,
+          "rank": 783,
           "male": 10,
           "female": 5,
           "genderless": 0,
@@ -4636,7 +4636,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenShroomish",
-      "rank": 1412,
+      "rank": 1411,
       "male": 309,
       "female": 225,
       "genderless": 0,
@@ -4645,7 +4645,7 @@
       "forms": [
         {
           "name": "GoldenShroomish",
-          "rank": 1412,
+          "rank": 1411,
           "male": 309,
           "female": 225,
           "genderless": 0,
@@ -4659,7 +4659,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMareep",
-      "rank": 1500,
+      "rank": 1501,
       "male": 313,
       "female": 276,
       "genderless": 0,
@@ -4668,7 +4668,7 @@
       "forms": [
         {
           "name": "GoldenMareep",
-          "rank": 1500,
+          "rank": 1501,
           "male": 313,
           "female": 276,
           "genderless": 0,
@@ -4682,7 +4682,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMiltank",
-      "rank": 1170,
+      "rank": 1169,
       "male": 0,
       "female": 311,
       "genderless": 0,
@@ -4691,7 +4691,7 @@
       "forms": [
         {
           "name": "GoldenMiltank",
-          "rank": 1170,
+          "rank": 1169,
           "male": 0,
           "female": 311,
           "genderless": 0,
@@ -4751,7 +4751,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSpheal",
-      "rank": 1578,
+      "rank": 1575,
       "male": 419,
       "female": 309,
       "genderless": 0,
@@ -4760,7 +4760,7 @@
       "forms": [
         {
           "name": "GoldenSpheal",
-          "rank": 1578,
+          "rank": 1575,
           "male": 419,
           "female": 309,
           "genderless": 0,
@@ -4774,7 +4774,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSlowpoke",
-      "rank": 1351,
+      "rank": 1350,
       "male": 209,
       "female": 261,
       "genderless": 0,
@@ -4783,7 +4783,7 @@
       "forms": [
         {
           "name": "GoldenSlowpoke",
-          "rank": 1351,
+          "rank": 1350,
           "male": 209,
           "female": 261,
           "genderless": 0,
@@ -4889,7 +4889,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBeldum",
-      "rank": 1170,
+      "rank": 1169,
       "male": 0,
       "female": 0,
       "genderless": 299,
@@ -4898,7 +4898,7 @@
       "forms": [
         {
           "name": "GoldenBeldum",
-          "rank": 1170,
+          "rank": 1169,
           "male": 0,
           "female": 0,
           "genderless": 299,
@@ -4935,7 +4935,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenAron",
-      "rank": 1559,
+      "rank": 1558,
       "male": 385,
       "female": 337,
       "genderless": 0,
@@ -4944,7 +4944,7 @@
       "forms": [
         {
           "name": "GoldenAron",
-          "rank": 1559,
+          "rank": 1558,
           "male": 385,
           "female": 337,
           "genderless": 0,
@@ -4958,7 +4958,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenGeodude",
-      "rank": 1439,
+      "rank": 1438,
       "male": 302,
       "female": 241,
       "genderless": 0,
@@ -4967,7 +4967,7 @@
       "forms": [
         {
           "name": "GoldenGeodude",
-          "rank": 1439,
+          "rank": 1438,
           "male": 302,
           "female": 241,
           "genderless": 0,
@@ -4981,21 +4981,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSunkern",
-      "rank": 1351,
-      "male": 207,
+      "rank": 1354,
+      "male": 209,
       "female": 213,
       "genderless": 0,
       "ungendered": 50,
-      "total": 470,
+      "total": 472,
       "forms": [
         {
           "name": "GoldenSunkern",
-          "rank": 1351,
-          "male": 207,
+          "rank": 1354,
+          "male": 209,
           "female": 213,
           "genderless": 0,
           "ungendered": 50,
-          "total": 470
+          "total": 472
         }
       ]
     },
@@ -5027,7 +5027,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDratini",
-      "rank": 1836,
+      "rank": 1835,
       "male": 927,
       "female": 653,
       "genderless": 0,
@@ -5036,7 +5036,7 @@
       "forms": [
         {
           "name": "GoldenDratini",
-          "rank": 1836,
+          "rank": 1835,
           "male": 927,
           "female": 653,
           "genderless": 0,
@@ -5073,7 +5073,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRalts",
-      "rank": 1411,
+      "rank": 1410,
       "male": 258,
       "female": 220,
       "genderless": 0,
@@ -5082,7 +5082,7 @@
       "forms": [
         {
           "name": "GoldenRalts",
-          "rank": 1411,
+          "rank": 1410,
           "male": 258,
           "female": 220,
           "genderless": 0,
@@ -5165,7 +5165,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSnover",
-      "rank": 1611,
+      "rank": 1610,
       "male": 542,
       "female": 344,
       "genderless": 0,
@@ -5174,7 +5174,7 @@
       "forms": [
         {
           "name": "GoldenSnover",
-          "rank": 1611,
+          "rank": 1610,
           "male": 542,
           "female": 344,
           "genderless": 0,
@@ -5280,7 +5280,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBagon",
-      "rank": 1440,
+      "rank": 1439,
       "male": 303,
       "female": 238,
       "genderless": 0,
@@ -5289,7 +5289,7 @@
       "forms": [
         {
           "name": "GoldenBagon",
-          "rank": 1440,
+          "rank": 1439,
           "male": 303,
           "female": 238,
           "genderless": 0,
@@ -5304,20 +5304,20 @@
       "matched_mode": "exact",
       "matched_name": "GoldenCacnea",
       "rank": 1880,
-      "male": 1045,
+      "male": 1044,
       "female": 846,
       "genderless": 0,
       "ungendered": 71,
-      "total": 1962,
+      "total": 1961,
       "forms": [
         {
           "name": "GoldenCacnea",
           "rank": 1880,
-          "male": 1045,
+          "male": 1044,
           "female": 846,
           "genderless": 0,
           "ungendered": 71,
-          "total": 1962
+          "total": 1961
         }
       ]
     },
@@ -5349,7 +5349,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMagnemite",
-      "rank": 1587,
+      "rank": 1585,
       "male": 0,
       "female": 0,
       "genderless": 772,
@@ -5358,7 +5358,7 @@
       "forms": [
         {
           "name": "GoldenMagnemite",
-          "rank": 1587,
+          "rank": 1585,
           "male": 0,
           "female": 0,
           "genderless": 772,
@@ -5372,7 +5372,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTimburr",
-      "rank": 846,
+      "rank": 843,
       "male": 42,
       "female": 51,
       "genderless": 0,
@@ -5381,7 +5381,7 @@
       "forms": [
         {
           "name": "GoldenTimburr",
-          "rank": 846,
+          "rank": 843,
           "male": 42,
           "female": 51,
           "genderless": 0,
@@ -5395,7 +5395,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSnivy",
-      "rank": 243,
+      "rank": 241,
       "male": 3,
       "female": 2,
       "genderless": 0,
@@ -5404,7 +5404,7 @@
       "forms": [
         {
           "name": "GoldenSnivy",
-          "rank": 243,
+          "rank": 241,
           "male": 3,
           "female": 2,
           "genderless": 0,
@@ -5487,7 +5487,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRoggenrola",
-      "rank": 1582,
+      "rank": 1580,
       "male": 410,
       "female": 390,
       "genderless": 0,
@@ -5496,7 +5496,7 @@
       "forms": [
         {
           "name": "GoldenRoggenrola",
-          "rank": 1582,
+          "rank": 1580,
           "male": 410,
           "female": 390,
           "genderless": 0,
@@ -5569,7 +5569,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMagikarp",
-      "rank": 1405,
+      "rank": 1404,
       "male": 264,
       "female": 222,
       "genderless": 1,
@@ -5578,7 +5578,7 @@
       "forms": [
         {
           "name": "GoldenMagikarp",
-          "rank": 1405,
+          "rank": 1404,
           "male": 264,
           "female": 222,
           "genderless": 1,
@@ -5674,7 +5674,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHeatmor",
-      "rank": 243,
+      "rank": 241,
       "male": 2,
       "female": 3,
       "genderless": 0,
@@ -5683,7 +5683,7 @@
       "forms": [
         {
           "name": "GoldenHeatmor",
-          "rank": 243,
+          "rank": 241,
           "male": 2,
           "female": 3,
           "genderless": 0,
@@ -5697,7 +5697,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLarvesta",
-      "rank": 458,
+      "rank": 455,
       "male": 7,
       "female": 5,
       "genderless": 0,
@@ -5706,7 +5706,7 @@
       "forms": [
         {
           "name": "GoldenLarvesta",
-          "rank": 458,
+          "rank": 455,
           "male": 7,
           "female": 5,
           "genderless": 0,
@@ -5766,7 +5766,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBulbasaur",
-      "rank": 1420,
+      "rank": 1419,
       "male": 359,
       "female": 112,
       "genderless": 2,
@@ -5775,7 +5775,7 @@
       "forms": [
         {
           "name": "GoldenBulbasaur",
-          "rank": 1420,
+          "rank": 1419,
           "male": 359,
           "female": 112,
           "genderless": 2,
@@ -5812,7 +5812,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenCubone",
-      "rank": 1544,
+      "rank": 1543,
       "male": 358,
       "female": 320,
       "genderless": 0,
@@ -5821,7 +5821,7 @@
       "forms": [
         {
           "name": "GoldenCubone",
-          "rank": 1544,
+          "rank": 1543,
           "male": 358,
           "female": 320,
           "genderless": 0,
@@ -5835,7 +5835,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenLitwick",
-      "rank": 1215,
+      "rank": 1214,
       "male": 169,
       "female": 181,
       "genderless": 0,
@@ -5844,7 +5844,7 @@
       "forms": [
         {
           "name": "GoldenLitwick",
-          "rank": 1215,
+          "rank": 1214,
           "male": 169,
           "female": 181,
           "genderless": 0,
@@ -5973,7 +5973,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSquirtle",
-      "rank": 1166,
+      "rank": 1165,
       "male": 174,
       "female": 84,
       "genderless": 0,
@@ -5982,7 +5982,7 @@
       "forms": [
         {
           "name": "GoldenSquirtle",
-          "rank": 1166,
+          "rank": 1165,
           "male": 174,
           "female": 84,
           "genderless": 0,
@@ -6042,7 +6042,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWailmer",
-      "rank": 1196,
+      "rank": 1193,
       "male": 155,
       "female": 150,
       "genderless": 0,
@@ -6051,7 +6051,7 @@
       "forms": [
         {
           "name": "GoldenWailmer",
-          "rank": 1196,
+          "rank": 1193,
           "male": 155,
           "female": 150,
           "genderless": 0,
@@ -6111,7 +6111,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSwinub",
-      "rank": 1215,
+      "rank": 1214,
       "male": 156,
       "female": 152,
       "genderless": 0,
@@ -6120,7 +6120,7 @@
       "forms": [
         {
           "name": "GoldenSwinub",
-          "rank": 1215,
+          "rank": 1214,
           "male": 156,
           "female": 152,
           "genderless": 0,
@@ -6134,7 +6134,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenShinx",
-      "rank": 1425,
+      "rank": 1424,
       "male": 288,
       "female": 261,
       "genderless": 0,
@@ -6143,7 +6143,7 @@
       "forms": [
         {
           "name": "GoldenShinx",
-          "rank": 1425,
+          "rank": 1424,
           "male": 288,
           "female": 261,
           "genderless": 0,
@@ -6157,7 +6157,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTauros",
-      "rank": 1483,
+      "rank": 1482,
       "male": 519,
       "female": 85,
       "genderless": 0,
@@ -6166,7 +6166,7 @@
       "forms": [
         {
           "name": "GoldenTauros",
-          "rank": 1483,
+          "rank": 1482,
           "male": 519,
           "female": 85,
           "genderless": 0,
@@ -6391,7 +6391,7 @@
         },
         {
           "name": "GoldenZygarde (10%)",
-          "rank": 356,
+          "rank": 355,
           "male": 0,
           "female": 0,
           "genderless": 8,
@@ -6474,21 +6474,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenScatterbug",
-      "rank": 1113,
+      "rank": 1114,
       "male": 144,
-      "female": 130,
+      "female": 131,
       "genderless": 0,
       "ungendered": 0,
-      "total": 274,
+      "total": 275,
       "forms": [
         {
           "name": "GoldenScatterbug",
-          "rank": 1113,
+          "rank": 1114,
           "male": 144,
-          "female": 130,
+          "female": 131,
           "genderless": 0,
           "ungendered": 0,
-          "total": 274
+          "total": 275
         }
       ]
     },
@@ -6520,7 +6520,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenFeebas",
-      "rank": 793,
+      "rank": 792,
       "male": 30,
       "female": 30,
       "genderless": 0,
@@ -6529,7 +6529,7 @@
       "forms": [
         {
           "name": "GoldenFeebas",
-          "rank": 793,
+          "rank": 792,
           "male": 30,
           "female": 30,
           "genderless": 0,
@@ -6543,7 +6543,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTyrunt",
-      "rank": 1188,
+      "rank": 1186,
       "male": 208,
       "female": 121,
       "genderless": 0,
@@ -6552,7 +6552,7 @@
       "forms": [
         {
           "name": "GoldenTyrunt",
-          "rank": 1188,
+          "rank": 1186,
           "male": 208,
           "female": 121,
           "genderless": 0,
@@ -6566,7 +6566,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPichu",
-      "rank": 1347,
+      "rank": 1348,
       "male": 195,
       "female": 185,
       "genderless": 1,
@@ -6575,7 +6575,7 @@
       "forms": [
         {
           "name": "GoldenPichu",
-          "rank": 1347,
+          "rank": 1348,
           "male": 195,
           "female": 185,
           "genderless": 1,
@@ -6589,7 +6589,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenOmanyte",
-      "rank": 1435,
+      "rank": 1434,
       "male": 480,
       "female": 83,
       "genderless": 0,
@@ -6598,7 +6598,7 @@
       "forms": [
         {
           "name": "GoldenOmanyte",
-          "rank": 1435,
+          "rank": 1434,
           "male": 480,
           "female": 83,
           "genderless": 0,
@@ -6612,7 +6612,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenZorua",
-      "rank": 1009,
+      "rank": 1008,
       "male": 108,
       "female": 78,
       "genderless": 0,
@@ -6621,7 +6621,7 @@
       "forms": [
         {
           "name": "GoldenZorua",
-          "rank": 1009,
+          "rank": 1008,
           "male": 108,
           "female": 78,
           "genderless": 0,
@@ -6658,7 +6658,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHappiny",
-      "rank": 508,
+      "rank": 507,
       "male": 0,
       "female": 15,
       "genderless": 0,
@@ -6667,7 +6667,7 @@
       "forms": [
         {
           "name": "GoldenHappiny",
-          "rank": 508,
+          "rank": 507,
           "male": 0,
           "female": 15,
           "genderless": 0,
@@ -6704,21 +6704,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenVolcanion",
-      "rank": 914,
+      "rank": 915,
       "male": 0,
       "female": 0,
-      "genderless": 127,
+      "genderless": 128,
       "ungendered": 0,
-      "total": 127,
+      "total": 128,
       "forms": [
         {
           "name": "GoldenVolcanion",
-          "rank": 914,
+          "rank": 915,
           "male": 0,
           "female": 0,
-          "genderless": 127,
+          "genderless": 128,
           "ungendered": 0,
-          "total": 127
+          "total": 128
         }
       ]
     },
@@ -6750,7 +6750,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMachop",
-      "rank": 1181,
+      "rank": 1179,
       "male": 163,
       "female": 119,
       "genderless": 0,
@@ -6759,7 +6759,7 @@
       "forms": [
         {
           "name": "GoldenMachop",
-          "rank": 1181,
+          "rank": 1179,
           "male": 163,
           "female": 119,
           "genderless": 0,
@@ -7072,7 +7072,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenHorsea",
-      "rank": 356,
+      "rank": 355,
       "male": 3,
       "female": 5,
       "genderless": 0,
@@ -7081,7 +7081,7 @@
       "forms": [
         {
           "name": "GoldenHorsea",
-          "rank": 356,
+          "rank": 355,
           "male": 3,
           "female": 5,
           "genderless": 0,
@@ -7187,7 +7187,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenRayquaza",
-      "rank": 1459,
+      "rank": 1457,
       "male": 0,
       "female": 0,
       "genderless": 579,
@@ -7196,7 +7196,7 @@
       "forms": [
         {
           "name": "GoldenRayquaza",
-          "rank": 1459,
+          "rank": 1457,
           "male": 0,
           "female": 0,
           "genderless": 579,
@@ -7325,7 +7325,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenComfey",
-      "rank": 439,
+      "rank": 438,
       "male": 7,
       "female": 4,
       "genderless": 0,
@@ -7334,7 +7334,7 @@
       "forms": [
         {
           "name": "GoldenComfey",
-          "rank": 439,
+          "rank": 438,
           "male": 7,
           "female": 4,
           "genderless": 0,
@@ -7412,7 +7412,7 @@
         },
         {
           "name": "GoldenHoopa (Confined)",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 5,
@@ -7449,7 +7449,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenTotodile",
-      "rank": 1392,
+      "rank": 1391,
       "male": 258,
       "female": 150,
       "genderless": 0,
@@ -7458,7 +7458,7 @@
       "forms": [
         {
           "name": "GoldenTotodile",
-          "rank": 1392,
+          "rank": 1391,
           "male": 258,
           "female": 150,
           "genderless": 0,
@@ -7472,7 +7472,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPlusle",
-      "rank": 1418,
+      "rank": 1417,
       "male": 269,
       "female": 272,
       "genderless": 0,
@@ -7481,7 +7481,7 @@
       "forms": [
         {
           "name": "GoldenPlusle",
-          "rank": 1418,
+          "rank": 1417,
           "male": 269,
           "female": 272,
           "genderless": 0,
@@ -7495,7 +7495,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenMinun",
-      "rank": 1429,
+      "rank": 1428,
       "male": 283,
       "female": 278,
       "genderless": 0,
@@ -7504,7 +7504,7 @@
       "forms": [
         {
           "name": "GoldenMinun",
-          "rank": 1429,
+          "rank": 1428,
           "male": 283,
           "female": 278,
           "genderless": 0,
@@ -7633,21 +7633,21 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenChimchar",
-      "rank": 1129,
-      "male": 150,
+      "rank": 1127,
+      "male": 149,
       "female": 141,
       "genderless": 0,
       "ungendered": 0,
-      "total": 291,
+      "total": 290,
       "forms": [
         {
           "name": "GoldenChimchar",
-          "rank": 1129,
-          "male": 150,
+          "rank": 1127,
+          "male": 149,
           "female": 141,
           "genderless": 0,
           "ungendered": 0,
-          "total": 291
+          "total": 290
         }
       ]
     },
@@ -7702,7 +7702,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenVulpix (Alola)",
-      "rank": 1177,
+      "rank": 1176,
       "male": 119,
       "female": 170,
       "genderless": 0,
@@ -7711,7 +7711,7 @@
       "forms": [
         {
           "name": "GoldenVulpix (Alola)",
-          "rank": 1177,
+          "rank": 1176,
           "male": 119,
           "female": 170,
           "genderless": 0,
@@ -7748,7 +7748,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenPumpkaboo (Small)",
-      "rank": 1215,
+      "rank": 1214,
       "male": 171,
       "female": 179,
       "genderless": 0,
@@ -7757,7 +7757,7 @@
       "forms": [
         {
           "name": "GoldenPumpkaboo (Small)",
-          "rank": 1215,
+          "rank": 1214,
           "male": 171,
           "female": 179,
           "genderless": 0,
@@ -7863,7 +7863,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenWeedle",
-      "rank": 1403,
+      "rank": 1402,
       "male": 220,
       "female": 214,
       "genderless": 0,
@@ -7872,7 +7872,7 @@
       "forms": [
         {
           "name": "GoldenWeedle",
-          "rank": 1403,
+          "rank": 1402,
           "male": 220,
           "female": 214,
           "genderless": 0,
@@ -7959,7 +7959,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDeoxys",
-      "rank": 243,
+      "rank": 241,
       "male": 0,
       "female": 0,
       "genderless": 5,
@@ -7968,7 +7968,7 @@
       "forms": [
         {
           "name": "GoldenDeoxys",
-          "rank": 243,
+          "rank": 241,
           "male": 0,
           "female": 0,
           "genderless": 5,
@@ -8051,7 +8051,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenSneasel",
-      "rank": 1199,
+      "rank": 1196,
       "male": 148,
       "female": 100,
       "genderless": 0,
@@ -8060,7 +8060,7 @@
       "forms": [
         {
           "name": "GoldenSneasel",
-          "rank": 1199,
+          "rank": 1196,
           "male": 148,
           "female": 100,
           "genderless": 0,
@@ -8189,7 +8189,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenBidoof",
-      "rank": 854,
+      "rank": 852,
       "male": 48,
       "female": 49,
       "genderless": 0,
@@ -8198,7 +8198,7 @@
       "forms": [
         {
           "name": "GoldenBidoof",
-          "rank": 854,
+          "rank": 852,
           "male": 48,
           "female": 49,
           "genderless": 0,
@@ -8212,7 +8212,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenDiancie",
-      "rank": 1201,
+      "rank": 1200,
       "male": 0,
       "female": 0,
       "genderless": 341,
@@ -8221,7 +8221,7 @@
       "forms": [
         {
           "name": "GoldenDiancie",
-          "rank": 1201,
+          "rank": 1200,
           "male": 0,
           "female": 0,
           "genderless": 341,
@@ -8350,7 +8350,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenStantler",
-      "rank": 1421,
+      "rank": 1420,
       "male": 208,
       "female": 211,
       "genderless": 0,
@@ -8359,7 +8359,7 @@
       "forms": [
         {
           "name": "GoldenStantler",
-          "rank": 1421,
+          "rank": 1420,
           "male": 208,
           "female": 211,
           "genderless": 0,
@@ -8442,7 +8442,7 @@
       "found": true,
       "matched_mode": "exact",
       "matched_name": "GoldenGossifleur",
-      "rank": 982,
+      "rank": 981,
       "male": 76,
       "female": 90,
       "genderless": 0,
@@ -8451,7 +8451,7 @@
       "forms": [
         {
           "name": "GoldenGossifleur",
-          "rank": 982,
+          "rank": 981,
           "male": 76,
           "female": 90,
           "genderless": 0,
